@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ai_setu/core/constants/colors.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 
 class ColorHelper {
   /// Returns a color based on a condition, defaulting to theme-aware colors
@@ -16,7 +16,7 @@ class ColorHelper {
     if (isError) return AppColors.error;
 
     return defaultColor ??
-        (Get.isDarkMode
+        (ThemeService().isDarkMode
             ? AppColors.darkTextSecondary
             : AppColors.lightTextSecondary);
   }
@@ -36,7 +36,7 @@ class ColorHelper {
       case 'error':
         return AppColors.error;
       default:
-        return Get.isDarkMode
+        return ThemeService().isDarkMode
             ? AppColors.darkTextSecondary
             : AppColors.lightTextSecondary;
     }

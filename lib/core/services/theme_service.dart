@@ -13,6 +13,9 @@ class ThemeService {
   /// Get the current theme mode
   ThemeMode get theme => _loadThemeFromBox() ? ThemeMode.dark : ThemeMode.light;
 
+  /// Check if the app is currently in Dark Mode (abstracts Get.isDarkMode)
+  bool get isDarkMode => Get.isDarkMode;
+
   /// Load theme from local storage
   bool _loadThemeFromBox() => _storage.read<bool>(_key) ?? false;
 

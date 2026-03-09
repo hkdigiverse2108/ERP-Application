@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/constants/images.dart';
 import 'package:flutter/material.dart';
 
 class Splash extends StatelessWidget {
@@ -5,6 +6,27 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Splash")));
+    return Scaffold(
+      body: Stack(
+        children: [
+          Image.asset(
+            Images.splashBg,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Center(
+            child: Text(
+              "AI Setu",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
