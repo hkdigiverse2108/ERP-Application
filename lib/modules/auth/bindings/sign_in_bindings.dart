@@ -4,6 +4,6 @@ import 'package:get/instance_manager.dart';
 class SignInBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => SignInController());
+    Get.lazyPut<SignInController>(() => SignInController());
   }
 }

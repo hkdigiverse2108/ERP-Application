@@ -1,79 +1,78 @@
 import 'package:ai_setu/core/constants/images.dart';
+import 'package:ai_setu/core/constants/strings.dart';
+import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/modules/auth/controllers/sign_in_controller.dart';
+import 'package:ai_setu/shared/widgets/buttons/common_button.dart';
+import 'package:ai_setu/shared/widgets/text_fields/normal_field.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/state_manager.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends GetView<SignInController> {
   const SignIn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  Images.splashBg,
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Images.splashBg),
                   fit: BoxFit.cover,
-                  height: 300,
-                  width: double.infinity,
                 ),
-                Positioned(
-                  top: 120,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Text(
-                      "AI Setu",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                "AI Setu",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 50),
-
-            // Sign In
-            Padding(
+          ),
+          Expanded(
+            flex: 4,
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 10,
                 children: [
-                  Text(
-                    "Sign In",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Gap(20),
+                  Text(Strings.login, style: TextHelper.h2),
+                  Text(Strings.loginMsg, style: TextHelper.label),
+                  Gap(18),
+                  NormalField(
+                    labelFloating: true,
+                    labelText: "Email ID",
+                    controller: controller.email,
+                    hintText: "Enter Your Email",
                   ),
-                  Text(
-                    "Sign in to your account",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  Gap(18),
+                  NormalField(
+                    labelFloating: true,
+                    labelText: "Password",
+                    controller: controller.email,
+                    hintText: "Enter Your Password",
                   ),
-
-                  Text("Email", style: TextStyle(fontSize: 14)),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Enter your email",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Enter your Password",
-                      border: OutlineInputBorder(),
-                    ),
+                  Gap(20),
+                  CommonButton(
+                    onPressed: () {},
+                    text: Strings.login.toUpperCase(),
                   ),
                 ],
               ),
             ),
-            SizedBox(),
-            ElevatedButton(onPressed: () {}, child: Text("Sign In")),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

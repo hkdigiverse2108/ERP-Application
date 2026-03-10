@@ -50,4 +50,8 @@ class Sizes {
   static const double textSizeXXL = 20.0;
   static const double textSizeXXXL = 24.0;
   static double textSizeCustom(double textSize) => textSize;
+
+  // space Size
+  static const double smallSpace = 8.0;
+  static const double fieldSpace = 12.0;
 }

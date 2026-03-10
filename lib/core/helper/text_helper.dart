@@ -67,7 +67,7 @@ class TextHelper {
     color: AppColors.error,
   );
   static TextStyle get button =>
-      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white);
+      TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
 
   // Context-aware methods for dynamic theme updates
   static TextStyle h1Style(BuildContext context) =>

@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatelessWidget {
@@ -12,14 +13,14 @@ class CommonButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, Sizes.borderRadiusM),
+        minimumSize: Size(double.infinity, Sizes.buttonHeightM),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
         ),
       ),
-      child: Text(text),
+      child: Text(text, style: TextHelper.button),
     );
   }
 }

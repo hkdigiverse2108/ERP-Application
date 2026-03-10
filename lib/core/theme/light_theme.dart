@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 
@@ -30,21 +31,25 @@ class LightTheme {
         color: AppColors.lightBorder,
         thickness: 1,
       ),
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(),
         filled: true,
         fillColor: Colors.transparent,
         labelStyle: TextStyle(),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
           borderSide: BorderSide(color: AppColors.lightBorder),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
           borderSide: BorderSide(color: AppColors.primary),
         ),
         errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
           borderSide: BorderSide(color: AppColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
           borderSide: BorderSide(color: AppColors.error),
         ),
       ),
