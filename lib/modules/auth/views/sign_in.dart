@@ -6,7 +6,9 @@ import 'package:ai_setu/shared/widgets/buttons/common_button.dart';
 import 'package:ai_setu/shared/widgets/text_fields/normal_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/state_manager.dart';
+import 'package:ai_setu/app/app_routes.dart';
+import 'package:get/get.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SignIn extends GetView<SignInController> {
   const SignIn({super.key});
@@ -57,15 +59,30 @@ class SignIn extends GetView<SignInController> {
                     hintText: "Enter Your Email",
                   ),
                   Gap(18),
-                  NormalField(
-                    labelFloating: true,
-                    labelText: "Password",
-                    controller: controller.email,
-                    hintText: "Enter Your Password",
+                  Obx(
+                    () => NormalField(
+                      labelFloating: true,
+                      labelText: "Password",
+                      controller: controller.password,
+                      hintText: "Enter Your Password",
+                      obscureText: !controller.show.value,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          controller.show.value
+                              ? PhosphorIconsBold.eyeClosed
+                              : PhosphorIconsBold.eye,
+                        ),
+                        onPressed: () {
+                          controller.show.value = !controller.show.value;
+                        },
+                      ),
+                    ),
                   ),
                   Gap(20),
                   CommonButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAllNamed(Routes.home);
+                    },
                     text: Strings.login.toUpperCase(),
                   ),
                 ],

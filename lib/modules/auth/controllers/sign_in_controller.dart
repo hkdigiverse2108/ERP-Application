@@ -7,8 +7,15 @@ class SignInController extends GetxController {
 
   final show = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
+  void login() {
+    if (email.text.isEmpty || password.text.isEmpty) {
+      Get.snackbar("Error", "Please fill all the fields");
+      return;
+    }
+    Get.toNamed("Home Page");
+  }
+
+  void showPassword() {
+    show.toggle();
   }
 }

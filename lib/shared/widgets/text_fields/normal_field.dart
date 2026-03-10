@@ -13,6 +13,7 @@ class NormalField extends StatelessWidget {
   final bool enabled;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final Widget? suffixIcon;
 
   const NormalField({
     super.key,
@@ -24,6 +25,7 @@ class NormalField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.labelFloating = false,
+    this.suffixIcon,
   });
 
   @override
@@ -49,6 +51,7 @@ class NormalField extends StatelessWidget {
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               hintText: hintText,
+              suffixIcon: suffixIcon,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 12,

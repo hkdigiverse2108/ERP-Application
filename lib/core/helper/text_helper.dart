@@ -69,6 +69,9 @@ class TextHelper {
   static TextStyle get button =>
       TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
 
+  static TextStyle get buttonThin =>
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white);
+
   // Context-aware methods for dynamic theme updates
   static TextStyle h1Style(BuildContext context) =>
       h1.copyWith(color: Theme.of(context).colorScheme.onSurface);
