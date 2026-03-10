@@ -1,3 +1,5 @@
+import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
+import 'package:ai_setu/modules/auth/views/sign_in.dart';
 import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
@@ -14,7 +16,12 @@ class AppPages {
       binding: SplashBindings(),
     ),
     GetPage(
-      name: Routes.home,
+      name: Routes.signIn,
+      page: () => SignIn(),
+      binding: SignInBindings(),
+    ),
+    GetPage(
+      name: Routes.signIn,
       page: () => const Scaffold(body: Center(child: Text("Home"))),
     ),
   ];
