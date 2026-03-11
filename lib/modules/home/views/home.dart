@@ -42,64 +42,110 @@ class Home extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          QuickAction(),
-          Padding(
-            padding: EdgeInsets.all(Sizes.paddingM),
-            child: BorderContainer(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Gap(10),
-                              Text("Select Location"),
-                              Spacer(),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(PhosphorIconsLight.caretDown),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Gap(Sizes.smallSpace),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Gap(10),
-                              Text("Select Channel"),
-                              Spacer(),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(PhosphorIconsLight.caretDown),
-                              ),
-                            ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            QuickAction(),
+            Padding(
+              padding: EdgeInsets.all(Sizes.paddingM),
+              child: BorderContainer(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Gap(10),
+                                Text("Select Location"),
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.caretDown),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Gap(Sizes.defHorizontalSpace),
-                  DateSection(),
-                ],
+                        Gap(Sizes.smallSpace),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Gap(10),
+                                Text("Select Channel"),
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.caretDown),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gap(Sizes.defHorizontalSpace),
+                    DateSection(),
+                    Gap(Sizes.defHorizontalSpace),
+
+                    // Section Container
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 2.0,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
+                          ),
+                      itemCount: 24,
+                      itemBuilder: (context, index) {
+                        return _buildSectionSalesCard();
+                      },
+                    ),
+                    Gap(Sizes.defHorizontalSpace),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionSalesCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.lightSectionSell,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '₹ 100',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            Text("Total Sales", style: TextHelper.bodyMedium),
+          ],
+        ),
       ),
     );
   }

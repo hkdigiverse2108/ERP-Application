@@ -52,7 +52,7 @@ class SignIn extends GetView<SignInController> {
                   Text(Strings.login, style: TextHelper.h2),
                   Text(Strings.loginMsg, style: TextHelper.label),
                   Gap(18),
-                  NormalField(
+                  NormalField( 
                     labelFloating: true,
                     labelText: "Email ID",
                     controller: controller.email,

@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
-import 'package:ai_setu/core/services/theme_service.dart';
+// import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 
 class BorderContainer extends StatelessWidget {
@@ -23,7 +23,7 @@ class BorderContainer extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         border: Border.all(
-          color: ThemeService().isDarkMode
+          color: Theme.of(context).brightness == Brightness.dark
               ? AppColors.darkBorder
               : AppColors.lightBorder,
         ),
