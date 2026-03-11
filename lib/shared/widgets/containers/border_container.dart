@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
-// import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class BorderContainer extends StatelessWidget {
@@ -18,19 +19,19 @@ class BorderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? AppColors.darkBorder
-              : AppColors.lightBorder,
+    return Obx(
+      () => Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: context.responsive(AppColors.lightBorder, AppColors.darkBorder),
+          ),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
         ),
-        borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+        padding: padding ?? EdgeInsets.all(Sizes.paddingS),
+        child: child,
       ),
-      padding: padding ?? EdgeInsets.all(Sizes.paddingS),
-      child: child,
     );
   }
 }

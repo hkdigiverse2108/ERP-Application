@@ -6,6 +6,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
+import 'package:ai_setu/shared/widgets/stat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -99,9 +100,10 @@ class Home extends StatelessWidget {
                     Gap(Sizes.defHorizontalSpace),
 
                     // Section Container
-                    GridView.builder(
+                    GridView(
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.zero,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: 2.0,
@@ -109,41 +111,17 @@ class Home extends StatelessWidget {
                             crossAxisSpacing: 16.0,
                             mainAxisSpacing: 16.0,
                           ),
-                      itemCount: 24,
-                      itemBuilder: (context, index) {
-                        return _buildSectionSalesCard();
-                      },
+                      children: [
+                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
+                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
+                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
+                      ],
                     ),
-                    Gap(Sizes.defHorizontalSpace),
+                    // Gap(Sizes.defHorizontalSpace),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionSalesCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.lightSectionSell,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              '₹ 100',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            Text("Total Sales", style: TextHelper.bodyMedium),
           ],
         ),
       ),

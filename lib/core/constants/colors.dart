@@ -42,9 +42,4 @@ class AppColors {
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFDC3545);
   static const Color info = Color(0xFF17A2B8);
-
-  // // button Color
-  // static const Color btnPrimary = Color.fromARGB(255, 71, 92, 232);
-  // static const Color btnSecondary = Color(0xFF161950);
-  // static const Color btnTertiary = Color(0xFF161950);
 }

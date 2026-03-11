@@ -3,6 +3,7 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -13,66 +14,67 @@ class QuickAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            spreadRadius: 1,
-            blurRadius: 2,
-            color: ThemeService().isDarkMode
-                ? AppColors.darkShadow
-                : AppColors.lightShadow,
-          ),
-        ],
-        color: ThemeService().isDarkMode
-            ? AppColors.darkBackground
-            : AppColors.lightBackground,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Row(
-        children: [
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Quick Action",
-              style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
+    return Obx(
+      () => Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 1,
+              blurRadius: 2,
+              color: context.responsive(AppColors.lightShadow, AppColors.darkShadow),
             ),
-          ),
-          Icon(PhosphorIconsBold.funnelSimple),
-          Spacer(),
-          _buildRoundedIconButton(
-            icon: PhosphorIconsBold.magnifyingGlass,
-            onPressed: () {},
-          ),
-          Gap(8),
-          _buildRoundedIconButton(
-            icon: PhosphorIconsBold.moon,
-            onPressed: () {},
-          ),
-          Gap(8),
-          _buildRoundedIconButton(
-            icon: null,
-            svg: AppIcons.cashCounter,
-            onPressed: () {},
-          ),
-        ],
+          ],
+          color: context.responsive(AppColors.lightBackground, AppColors.darkBackground),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Quick Action",
+                style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Icon(PhosphorIconsBold.funnelSimple),
+            Spacer(),
+            _buildRoundedIconButton(
+              context: context,
+              icon: PhosphorIconsBold.magnifyingGlass,
+              onPressed: () {},
+            ),
+            Gap(8),
+            _buildRoundedIconButton(
+              context: context,
+              icon: context.responsive(PhosphorIconsBold.moon, PhosphorIconsBold.sun),
+              onPressed: () => ThemeService().switchTheme(),
+            ),
+            Gap(8),
+            _buildRoundedIconButton(
+              context: context,
+              icon: null,
+              svg: AppIcons.cashCounter,
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 Widget _buildRoundedIconButton({
+  required BuildContext context,
   String? svg,
   IconData? icon,
   required VoidCallback onPressed,
 }) {
   return GestureDetector(
+    onTap: onPressed,
     child: Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: ThemeService().isDarkMode
-              ? AppColors.darkBorder
-              : AppColors.lightBorder,
+          color: context.responsive(AppColors.lightBorder, AppColors.darkBorder),
         ),
         shape: BoxShape.circle,
       ),
@@ -81,17 +83,13 @@ Widget _buildRoundedIconButton({
           ? SvgPicture.asset(
               svg,
               colorFilter: ColorFilter.mode(
-                ThemeService().isDarkMode
-                    ? AppColors.darkIconSecondary
-                    : AppColors.lightIconSecondary,
+                context.responsive(AppColors.lightIconSecondary, AppColors.darkIconSecondary),
                 BlendMode.srcIn,
               ),
             )
           : Icon(
               icon,
-              color: ThemeService().isDarkMode
-                  ? AppColors.darkIconSecondary
-                  : AppColors.lightIconSecondary,
+              color: context.responsive(AppColors.lightIconSecondary, AppColors.darkIconSecondary),
             ),
     ),
   );

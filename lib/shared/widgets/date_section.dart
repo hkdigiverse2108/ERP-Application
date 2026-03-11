@@ -1,8 +1,9 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-// import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class DateSection extends StatelessWidget {
@@ -23,24 +24,30 @@ class DateSection extends StatelessWidget {
   }
 }
 
-Widget _dateButton({required BuildContext context, required String date, VoidCallback? onPressed}) {
-  bool isDark = Theme.of(context).brightness == Brightness.dark;
-  return Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: onPressed,
-          icon: Icon(
-            PhosphorIconsLight.calendarDots,
-            color: isDark
-                ? AppColors.primaryDark
-                : AppColors.primaryLight,
+Widget _dateButton({
+  required BuildContext context,
+  required String date,
+  VoidCallback? onPressed,
+}) {
+  return Obx(
+    () => Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: onPressed,
+            icon: Icon(
+              PhosphorIconsLight.calendarDots,
+              color: context.responsive(
+                AppColors.primaryLight,
+                AppColors.primaryDark,
+              ),
+            ),
           ),
-        ),
-        Text(date, style: TextHelper.bodyBoldStyle(context)),
-      ],
+          Text(date, style: TextHelper.bodyBoldStyle(context)),
+        ],
+      ),
     ),
   );
 }

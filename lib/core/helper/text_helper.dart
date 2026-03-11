@@ -3,11 +3,12 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 
 class TextHelper {
-  static bool get _isDark => ThemeService().isDarkMode;
-  static Color get _primaryTextColor =>
-      _isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
-  static Color get _secondaryTextColor =>
-      _isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
+  static Color get _primaryTextColor => ThemeService().isDarkMode
+      ? AppColors.darkTextPrimary
+      : AppColors.lightTextPrimary;
+  static Color get _secondaryTextColor => ThemeService().isDarkMode
+      ? AppColors.darkTextSecondary
+      : AppColors.lightTextSecondary;
 
   // Headings
   static TextStyle get h1 => TextStyle(
