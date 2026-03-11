@@ -7,4 +7,5 @@ class Images {
 
 class AppIcons {
   static const String menuBar = "assets/icons/menu.svg";
+  static const String cashCounter = "assets/icons/cashCounter.svg";
 }

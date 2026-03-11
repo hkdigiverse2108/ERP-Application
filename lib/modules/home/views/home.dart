@@ -2,6 +2,7 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/quick_action/views/quick_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -24,7 +25,7 @@ class Home extends StatelessWidget {
         actions: [
           Row(
             children: [
-              SvgPicture.asset(AppIcons.menuBar),
+              SvgPicture.asset(AppIcons.menuBar, height: 40, width: 40),
               Gap(10),
               Icon(PhosphorIconsFill.bell, color: Colors.white),
               Gap(20),
@@ -38,7 +39,117 @@ class Home extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(child: Text("Home", style: TextHelper.h2)),
+      body: Column(
+        children: [
+          QuickAction(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Gap(10),
+                                Text("Select Location"),
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.caretDown),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Gap(10),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Gap(10),
+                                Text("Select Channel"),
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.caretDown),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.calendarDots),
+                                ),
+                                const Text("11-02-2024"),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(PhosphorIconsLight.calendarDots),
+                                ),
+                                const Text("11-02-2024"),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
