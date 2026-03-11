@@ -40,8 +40,8 @@ Widget _dateButton({
             icon: Icon(
               PhosphorIconsLight.calendarDots,
               color: context.responsive(
-                AppColors.primaryLight,
-                AppColors.primaryDark,
+                light: AppColors.primaryLight,
+                dark: AppColors.primaryDark,
               ),
             ),
           ),

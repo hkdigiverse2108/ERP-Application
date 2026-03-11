@@ -20,32 +20,35 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        final cardColor = color ?? context.responsive(AppColors.lightBackground, AppColors.darkBackground);
-        return Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  (tag == null) ? value.toString() : "$tag $value",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+    return Obx(() {
+      final cardColor =
+          color ??
+          context.responsive(
+            light: AppColors.lightBackground,
+            dark: AppColors.darkBackground,
+          );
+      return Container(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                (tag == null) ? value.toString() : "$tag $value",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                Text(title, style: TextHelper.bodyMedium),
-              ],
-            ),
+              ),
+              Text(title, style: TextHelper.bodyMedium),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 }

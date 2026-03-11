@@ -3,6 +3,7 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -10,6 +11,7 @@ import 'package:ai_setu/shared/widgets/stat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Home extends StatelessWidget {
@@ -112,9 +114,35 @@ class Home extends StatelessWidget {
                             mainAxisSpacing: 16.0,
                           ),
                       children: [
-                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
-                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
-                        StatCard(title: "Total Sales", value: 100, tag: "₹"),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Sales",
+                            value: 100,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
+                          ),
+                        ),
+                        StatCard(
+                          title: "Total Sales",
+                          value: 100,
+                          tag: "₹",
+                          color: context.responsive(
+                            light: AppColors.lightSectionSell,
+                            dark: AppColors.darkSectionSell,
+                          ),
+                        ),
+                        StatCard(
+                          title: "Total Sales",
+                          value: 100,
+                          tag: "₹",
+                          color: context.responsive(
+                            light: AppColors.lightSectionSell,
+                            dark: AppColors.darkSectionSell,
+                          ),
+                        ),
                       ],
                     ),
                     // Gap(Sizes.defHorizontalSpace),

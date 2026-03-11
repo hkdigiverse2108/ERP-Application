@@ -25,7 +25,10 @@ class BorderContainer extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           border: Border.all(
-            color: context.responsive(AppColors.lightBorder, AppColors.darkBorder),
+            color: context.responsive(
+              light: AppColors.lightBorder,
+              dark: AppColors.darkBorder,
+            ),
           ),
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
         ),

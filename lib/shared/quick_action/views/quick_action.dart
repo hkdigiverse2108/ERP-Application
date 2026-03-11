@@ -21,10 +21,16 @@ class QuickAction extends StatelessWidget {
             BoxShadow(
               spreadRadius: 1,
               blurRadius: 2,
-              color: context.responsive(AppColors.lightShadow, AppColors.darkShadow),
+              color: context.responsive(
+                light: AppColors.lightShadow,
+                dark: AppColors.darkShadow,
+              ),
             ),
           ],
-          color: context.responsive(AppColors.lightBackground, AppColors.darkBackground),
+          color: context.responsive(
+            light: AppColors.lightBackground,
+            dark: AppColors.darkBackground,
+          ),
         ),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Row(
@@ -46,7 +52,10 @@ class QuickAction extends StatelessWidget {
             Gap(8),
             _buildRoundedIconButton(
               context: context,
-              icon: context.responsive(PhosphorIconsBold.moon, PhosphorIconsBold.sun),
+              icon: context.responsive(
+                light: PhosphorIconsBold.moon,
+                dark: PhosphorIconsBold.sun,
+              ),
               onPressed: () => ThemeService().switchTheme(),
             ),
             Gap(8),
@@ -74,7 +83,10 @@ Widget _buildRoundedIconButton({
     child: Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.responsive(AppColors.lightBorder, AppColors.darkBorder),
+          color: context.responsive(
+            light: AppColors.lightBorder,
+            dark: AppColors.darkBorder,
+          ),
         ),
         shape: BoxShape.circle,
       ),
@@ -83,13 +95,19 @@ Widget _buildRoundedIconButton({
           ? SvgPicture.asset(
               svg,
               colorFilter: ColorFilter.mode(
-                context.responsive(AppColors.lightIconSecondary, AppColors.darkIconSecondary),
+                context.responsive(
+                  light: AppColors.lightIconSecondary,
+                  dark: AppColors.darkIconSecondary,
+                ),
                 BlendMode.srcIn,
               ),
             )
           : Icon(
               icon,
-              color: context.responsive(AppColors.lightIconSecondary, AppColors.darkIconSecondary),
+              color: context.responsive(
+                light: AppColors.lightIconSecondary,
+                dark: AppColors.darkIconSecondary,
+              ),
             ),
     ),
   );
