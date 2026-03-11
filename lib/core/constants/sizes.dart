@@ -52,6 +52,9 @@ class Sizes {
   static double textSizeCustom(double textSize) => textSize;
 
   // space Size
+  static const double def = 16.0;
   static const double smallSpace = 8.0;
   static const double fieldSpace = 12.0;
+  static const double defVerticalSpace = 14.0;
+  static const double defHorizontalSpace = 12.0;
 }

@@ -1,8 +1,11 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/quick_action/views/quick_action.dart';
+import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
+import 'package:ai_setu/shared/widgets/containers/border_container.dart';
+import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -43,107 +46,55 @@ class Home extends StatelessWidget {
         children: [
           QuickAction(),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
-              ),
+            padding: EdgeInsets.all(Sizes.paddingM),
+            child: BorderContainer(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                Gap(10),
-                                Text("Select Location"),
-                                Spacer(),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(PhosphorIconsLight.caretDown),
-                                ),
-                              ],
-                            ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ),
-                        Gap(10),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                Gap(10),
-                                Text("Select Channel"),
-                                Spacer(),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(PhosphorIconsLight.caretDown),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
+                          child: Row(
+                            children: [
+                              Gap(10),
+                              Text("Select Location"),
+                              Spacer(),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(PhosphorIconsLight.caretDown),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(PhosphorIconsLight.calendarDots),
-                                ),
-                                const Text("11-02-2024"),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                bottomRight: Radius.circular(8),
+                      ),
+                      Gap(Sizes.smallSpace),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Gap(10),
+                              Text("Select Channel"),
+                              Spacer(),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(PhosphorIconsLight.caretDown),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(PhosphorIconsLight.calendarDots),
-                                ),
-                                const Text("11-02-2024"),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  Gap(Sizes.defHorizontalSpace),
+                  DateSection(),
                 ],
               ),
             ),
