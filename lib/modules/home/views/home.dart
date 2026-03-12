@@ -47,6 +47,8 @@ class Home extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuickAction(),
             Padding(
@@ -383,6 +385,27 @@ class Home extends StatelessWidget {
                     ),
 
                     // Gap(Sizes.defHorizontalSpace),
+                  ],
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.all(Sizes.paddingM),
+              child: Text(
+                "Sales and Purchase",
+                style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(Sizes.paddingM),
+
+              child: BorderContainer(
+                child: Column(
+                  children: [
+                    Gap(Sizes.defHorizontalSpace),
+                    DateSection(),
+                    Gap(Sizes.defHorizontalSpace),
                   ],
                 ),
               ),
