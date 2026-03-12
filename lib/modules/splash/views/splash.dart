@@ -15,7 +15,7 @@ class Splash extends StatelessWidget {
             height: double.infinity,
             width: double.infinity,
           ),
-          Center(child: Image.asset(AppLogo.lightAisetuLogo)),
+          Center(child: Image.asset(Images.lightAisetuLogo)),
         ],
       ),
     );
