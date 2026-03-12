@@ -2,7 +2,6 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
@@ -365,35 +364,34 @@ class Home extends StatelessWidget {
                   );
                 }),
               ),
-          
 
-            Padding(
-              padding: EdgeInsets.all(Sizes.paddingM),
-              child: Text(
-                "Sales and Purchase",
-                style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(Sizes.paddingM),
-
-              child: BorderContainer(
-                child: Column(
-                  children: [
-                    Gap(Sizes.defHorizontalSpace),
-                    DateSection(),
-                    Gap(Sizes.defHorizontalSpace),
-                  ],
+              Padding(
+                padding: EdgeInsets.all(Sizes.paddingM),
+                child: Text(
+                  "Sales and Purchase",
+                  style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.all(Sizes.paddingM),
 
-            Gap(Sizes.defHorizontalSpace),
-            // ProductItemModel(name: "Aman  ", price: 100, quantity: 1)
-            ProductItems(),
-          ],
+                child: BorderContainer(
+                  child: Column(
+                    children: [
+                      DateSection(),
+                      Gap(Sizes.defHorizontalSpace),
+                      ProductItems(),
+                    ],
+                  ),
+                ),
+              ),
+
+              Gap(Sizes.defHorizontalSpace),
+
+              // ProductItemModel(name: "Aman  ", price: 100, quantity: 1)
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
