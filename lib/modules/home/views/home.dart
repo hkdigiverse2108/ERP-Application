@@ -83,7 +83,10 @@ class Home extends StatelessWidget {
                         ],
                       ),
                       Gap(Sizes.defHorizontalSpace),
-                      DateSection(),
+                      Obx(() => RangedDatePicker(
+                            initialDateRange: homeController.selectedDateRange.value,
+                            onChanged: (range) => homeController.selectedDateRange.value = range,
+                          )),
                       Gap(Sizes.defHorizontalSpace),
 
                       // Section Container
@@ -105,7 +108,10 @@ class Home extends StatelessWidget {
                   return BorderContainer(
                     child: Column(
                       children: [
-                        DateSection(),
+                        RangedDatePicker(
+                          initialDateRange: homeController.selectedDateRange.value,
+                          onChanged: (range) => homeController.selectedDateRange.value = range,
+                        ),
                         Gap(Sizes.lgHorizontalSpace),
                         AppBarChart(
                           values: [45, 80, 65, 30, 90, 50, 70],
@@ -135,7 +141,10 @@ class Home extends StatelessWidget {
                   return BorderContainer(
                     child: Column(
                       children: [
-                        DateSection(),
+                        RangedDatePicker(
+                          initialDateRange: homeController.selectedDateRange.value,
+                          onChanged: (range) => homeController.selectedDateRange.value = range,
+                        ),
                         Gap(Sizes.defHorizontalSpace),
                         CommonTable<ProductItemModel>(
                           items: [

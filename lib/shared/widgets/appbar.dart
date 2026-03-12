@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -16,22 +17,21 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       centerTitle: false,
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(Images.lightAisetuLogo),
-          Gap(10),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              border: Border.all(color: AppColors.lightIconSecondary),
+          Image.asset(Images.lightAiLogo, height: 30, width: 30),
+          Gap(Sizes.defVerticalSpace),
+          BorderContainer(
+            padding: EdgeInsets.symmetric(
+              horizontal: Sizes.paddingM,
+              vertical: Sizes.paddingS,
             ),
-            child: Padding(
-              padding: EdgeInsets.all(Sizes.paddingS),
-              child: Text(
-                '2025-2026',
-                style: TextStyle(
-                  color: AppColors.lightIconSecondary,
-                  fontSize: Sizes.textSizeXL,
-                ),
+            child: Text(
+              '2025-2026',
+              style: TextStyle(
+                color: AppColors.lightIconSecondary,
+                fontSize: Sizes.textSizeM,
               ),
             ),
           ),
