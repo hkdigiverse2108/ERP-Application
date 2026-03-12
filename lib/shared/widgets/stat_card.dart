@@ -3,14 +3,17 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class StatCard extends StatelessWidget {
-  final int value;
+  final String? image;
+  final double value;
   final String title;
   final String? tag;
   final Color? color;
 
   const StatCard({
+    this.image,
     super.key,
     required this.value,
     required this.title,
@@ -36,6 +39,8 @@ class StatCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            if (image != null) Image.asset(image!, height: 60, width: 60),
+            if (image != null) Gap(Sizes.smallSpace),
             Text(
               (tag == null) ? value.toString() : "$tag $value",
               style: const TextStyle(
@@ -43,6 +48,7 @@ class StatCard extends StatelessWidget {
                 fontSize: Sizes.textSizeM,
               ),
             ),
+            Gap(Sizes.smallSpace),
             Text(
               title,
               style: TextHelper.bodyMedium.copyWith(

@@ -4,6 +4,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/modules/home/controllers/home_conteroller.dart';
 import 'package:ai_setu/modules/home/widgets/dashboard_stat_widget.dart';
+import 'package:ai_setu/modules/home/widgets/repost_cart.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -263,7 +264,12 @@ class Home extends StatelessWidget {
                 }),
               ),
 
-              Gap(Sizes.defHorizontalSpace),
+              _buildSectionTitle("Customer Report"),
+
+              Padding(
+                padding: EdgeInsets.all(Sizes.paddingM),
+                child: BorderContainer(child: Column(children: [ReportCart()])),
+              ),
             ],
           ),
         ),
