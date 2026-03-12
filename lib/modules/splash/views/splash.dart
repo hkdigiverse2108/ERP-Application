@@ -15,16 +15,7 @@ class Splash extends StatelessWidget {
             height: double.infinity,
             width: double.infinity,
           ),
-          Center(
-            child: Text(
-              "AI Setu",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          Center(child: Image.asset(AppLogo.lightAisetuLogo)),
         ],
       ),
     );

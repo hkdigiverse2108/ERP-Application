@@ -30,16 +30,10 @@ class SignIn extends GetView<SignInController> {
                 ),
               ),
               alignment: Alignment.center,
-              child: Text(
-                "AI Setu",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              child: Image.asset(AppLogo.lightAisetuLogo),
             ),
           ),
+
           Expanded(
             flex: 4,
             child: Padding(
@@ -52,7 +46,7 @@ class SignIn extends GetView<SignInController> {
                   Text(Strings.login, style: TextHelper.h2),
                   Text(Strings.loginMsg, style: TextHelper.label),
                   Gap(18),
-                  NormalField( 
+                  NormalField(
                     labelFloating: true,
                     labelText: "Email ID",
                     controller: controller.email,
