@@ -4,10 +4,12 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/stat_card.dart';
+import 'package:ai_setu/shared/widgets/table/product_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -364,6 +366,10 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
+
+            Gap(Sizes.defHorizontalSpace),
+            // ProductItemModel(name: "Aman  ", price: 100, quantity: 1)
+            ProductItems(),
           ],
         ),
       ),
