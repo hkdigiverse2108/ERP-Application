@@ -30,7 +30,7 @@ class SignIn extends GetView<SignInController> {
                 ),
               ),
               alignment: Alignment.center,
-              child: Image.asset(AppLogo.lightAisetuLogo),
+              child: Image.asset(Images.lightAisetuLogo),
             ),
           ),
 
