@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -16,19 +17,22 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Row(
         children: [
-          Image.asset(Images.lightAiLogo),
+          Image.asset(Images.lightAisetuLogo),
+          Gap(10),
           Container(
             decoration: BoxDecoration(
-              // color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              border: Border.all(color: AppColors.lightIconSecondary),
             ),
-            child: Row(
-              children: [
-                Icon(PhosphorIconsFill.bell, color: AppColors.primary),
-                Gap(10),
-                Icon(PhosphorIconsFill.bell, color: AppColors.primary),
-              ],
+            child: Padding(
+              padding: EdgeInsets.all(Sizes.paddingS),
+              child: Text(
+                '2025-2026',
+                style: TextStyle(
+                  color: AppColors.lightIconSecondary,
+                  fontSize: Sizes.textSizeXL,
+                ),
+              ),
             ),
           ),
         ],
