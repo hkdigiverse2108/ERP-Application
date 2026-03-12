@@ -26,6 +26,7 @@ class Sizes {
   static const double iconSizeM = 24.0;
   static const double iconSizeL = 32.0;
   static const double iconSizeXL = 40.0;
+  static const double iconSizeXXL = 60.0;
   static double iconSizeCustom(double iconSize) => iconSize;
 
   // Button Size

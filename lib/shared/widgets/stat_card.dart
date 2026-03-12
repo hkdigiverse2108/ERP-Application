@@ -39,7 +39,12 @@ class StatCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (image != null) Image.asset(image!, height: 60, width: 60),
+            if (image != null)
+              Image.asset(
+                image!,
+                height: Sizes.iconSizeXXL,
+                width: Sizes.iconSizeXXL,
+              ),
             if (image != null) Gap(Sizes.smallSpace),
             Text(
               (tag == null) ? value.toString() : "$tag $value",
