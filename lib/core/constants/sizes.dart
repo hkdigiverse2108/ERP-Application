@@ -57,4 +57,6 @@ class Sizes {
   static const double fieldSpace = 12.0;
   static const double defVerticalSpace = 14.0;
   static const double defHorizontalSpace = 12.0;
+  static const double lgHorizontalSpace = 22.0;
+  static const double lgVerticalSpace = 16.0;
 }
