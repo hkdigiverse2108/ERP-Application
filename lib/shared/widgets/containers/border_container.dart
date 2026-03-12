@@ -9,17 +9,21 @@ class BorderContainer extends StatelessWidget {
   final double? height;
   final double? width;
   final EdgeInsets? padding;
+  final VoidCallback? onTap;
+  final GestureTapDownCallback? onTapDown;
   const BorderContainer({
     super.key,
     this.child,
     this.padding,
     this.height,
     this.width,
+    this.onTap,
+    this.onTapDown,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
+    final container = Obx(
       () => Container(
         height: height,
         width: width,
@@ -37,5 +41,10 @@ class BorderContainer extends StatelessWidget {
         child: child,
       ),
     );
+
+    if (onTap != null || onTapDown != null) {
+      return GestureDetector(onTap: onTap, onTapDown: onTapDown, child: container);
+    }
+    return container;
   }
 }
