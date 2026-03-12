@@ -94,19 +94,7 @@ class Home extends StatelessWidget {
                 ),
               ),
 
-              Padding(
-                padding: EdgeInsets.only(
-                  top: Sizes.paddingM,
-                  left: Sizes.paddingM,
-                  right: Sizes.paddingM,
-                ),
-                child: Obx(
-                  () => Text(
-                    "Sales and Purchase",
-                    style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
+              _buildSectionTitle('Sales and Purchase'),
               Padding(
                 padding: EdgeInsets.all(Sizes.paddingM),
 
@@ -137,19 +125,7 @@ class Home extends StatelessWidget {
                 }),
               ),
 
-              Padding(
-                padding: EdgeInsets.only(
-                  top: Sizes.paddingM,
-                  left: Sizes.paddingM,
-                  right: Sizes.paddingM,
-                ),
-                child: Obx(
-                  () => Text(
-                    "Top Selling Items",
-                    style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
+              _buildSectionTitle('Top Selling Items'),
               Padding(
                 padding: EdgeInsets.all(Sizes.paddingM),
 
@@ -288,10 +264,24 @@ class Home extends StatelessWidget {
               ),
 
               Gap(Sizes.defHorizontalSpace),
-
-              // ProductItemModel(name: "Aman  ", price: 100, quantity: 1)
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Sizes.paddingS,
+        left: Sizes.paddingM,
+        right: Sizes.paddingM,
+      ),
+      child: Obx(
+        () => Text(
+          title,
+          style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
         ),
       ),
     );
