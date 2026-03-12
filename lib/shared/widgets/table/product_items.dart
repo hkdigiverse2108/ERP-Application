@@ -22,6 +22,28 @@ class ProductItems extends StatelessWidget {
     this.onEditItem,
   });
 
+  // Fixed column widths for horizontal scrolling
+  static const double _colSerial = 40;
+  static const double _colItem = 140;
+  static const double _colQty = 80;
+  static const double _colPrice = 100;
+  static const double _colAmount = 100;
+  static const double _colDiscount = 100;
+  static const double _colTax = 100;
+  static const double _colTotal = 100;
+  static const double _colActions = 40;
+
+  double get _totalTableWidth =>
+      _colSerial +
+      _colItem +
+      _colQty +
+      _colPrice +
+      _colAmount +
+      _colDiscount +
+      _colTax +
+      _colTotal +
+      ((onRemoveItem != null || onEditItem != null) ? _colActions : 0);
+
   @override
   Widget build(BuildContext context) {
     final borderColor = context.responsive(
@@ -44,31 +66,44 @@ class ProductItems extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Table Header + Body
+        // Scrollable Table (horizontal + vertical)
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
           ),
           clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: [
-              // Header Row
-              _buildHeaderRow(headerBg, borderColor),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: _totalTableWidth,
+              child: Column(
+                children: [
+                  // Header Row (stays at top)
+                  _buildHeaderRow(headerBg),
 
-              // Data Rows
-              if (items.isEmpty)
-                _buildEmptyState(surfaceColor)
-              else
-                ...List.generate(items.length, (index) {
-                  return _buildDataRow(
-                    context,
-                    index,
-                    index.isEven ? surfaceColor : stripColor,
-                    borderColor,
-                  );
-                }),
-            ],
+                  // Data Rows (vertical scroll)
+                  if (items.isEmpty)
+                    _buildEmptyState(surfaceColor)
+                  else
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 300),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(items.length, (index) {
+                            return _buildDataRow(
+                              context,
+                              index,
+                              index.isEven ? surfaceColor : stripColor,
+                              borderColor,
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
 
@@ -87,7 +122,7 @@ class ProductItems extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderRow(Color headerBg, Color borderColor) {
+  Widget _buildHeaderRow(Color headerBg) {
     return Container(
       color: headerBg,
       padding: const EdgeInsets.symmetric(
@@ -96,21 +131,24 @@ class ProductItems extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _headerCell('#', flex: 1),
-          _headerCell('Item', flex: 4),
-          _headerCell('Qty', flex: 2, align: TextAlign.center),
-          _headerCell('Price', flex: 3, align: TextAlign.right),
-          _headerCell('Amount', flex: 3, align: TextAlign.right),
+          _headerCell('#', width: _colSerial),
+          _headerCell('Item', width: _colItem),
+          _headerCell('Qty', width: _colQty, align: TextAlign.center),
+          _headerCell('Price', width: _colPrice, align: TextAlign.right),
+          _headerCell('Amount', width: _colAmount, align: TextAlign.right),
+          _headerCell('Discount', width: _colDiscount, align: TextAlign.right),
+          _headerCell('Tax', width: _colTax, align: TextAlign.right),
+          // _headerCell('Total', width: _colTotal, align: TextAlign.right),
           if (onRemoveItem != null || onEditItem != null)
-            const SizedBox(width: 40),
+            SizedBox(width: _colActions),
         ],
       ),
     );
   }
 
-  Widget _headerCell(String text, {int flex = 1, TextAlign? align}) {
-    return Expanded(
-      flex: flex,
+  Widget _headerCell(String text, {required double width, TextAlign? align}) {
+    return SizedBox(
+      width: width,
       child: Text(
         text,
         textAlign: align ?? TextAlign.left,
@@ -139,14 +177,14 @@ class ProductItems extends StatelessWidget {
         child: Row(
           children: [
             // Serial No
-            Expanded(
-              flex: 1,
+            SizedBox(
+              width: _colSerial,
               child: Text('${index + 1}', style: TextHelper.bodySmall),
             ),
 
             // Item Name + SKU
-            Expanded(
-              flex: 4,
+            SizedBox(
+              width: _colItem,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -170,8 +208,8 @@ class ProductItems extends StatelessWidget {
             ),
 
             // Quantity + Unit
-            Expanded(
-              flex: 2,
+            SizedBox(
+              width: _colQty,
               child: Text(
                 '${item.quantity} ${item.unit}',
                 textAlign: TextAlign.center,
@@ -180,8 +218,8 @@ class ProductItems extends StatelessWidget {
             ),
 
             // Price
-            Expanded(
-              flex: 3,
+            SizedBox(
+              width: _colPrice,
               child: Text(
                 '₹${item.price.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
@@ -190,8 +228,42 @@ class ProductItems extends StatelessWidget {
             ),
 
             // Amount
-            Expanded(
-              flex: 3,
+            SizedBox(
+              width: _colAmount,
+              child: Text(
+                '₹${item.subtotal.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextHelper.bodySmall,
+              ),
+            ),
+
+            // Discount
+            SizedBox(
+              width: _colDiscount,
+              child: Text(
+                item.discount > 0
+                    ? '${item.discount.toStringAsFixed(1)}%'
+                    : '-',
+                textAlign: TextAlign.right,
+                style: TextHelper.bodySmall.copyWith(
+                  color: item.discount > 0 ? AppColors.success : null,
+                ),
+              ),
+            ),
+
+            // Tax
+            SizedBox(
+              width: _colTax,
+              child: Text(
+                item.tax > 0 ? '${item.tax.toStringAsFixed(1)}%' : '-',
+                textAlign: TextAlign.right,
+                style: TextHelper.bodySmall,
+              ),
+            ),
+
+            // Total
+            SizedBox(
+              width: _colTotal,
               child: Text(
                 '₹${item.total.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
@@ -204,7 +276,7 @@ class ProductItems extends StatelessWidget {
             // Actions
             if (onRemoveItem != null || onEditItem != null)
               SizedBox(
-                width: 40,
+                width: _colActions,
                 child: PopupMenuButton<String>(
                   padding: EdgeInsets.zero,
                   iconSize: 18,
