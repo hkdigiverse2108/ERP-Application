@@ -148,6 +148,7 @@ class DashboardStatWidget extends StatelessWidget {
             title: "Avg. Profit margin (%)",
             value: 0,
             // tag: "₹",
+            showDecimal: true,
             color: profitColor,
           ),
           StatCard(

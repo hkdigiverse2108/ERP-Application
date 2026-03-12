@@ -11,6 +11,7 @@ class StatCard extends StatelessWidget {
   final String title;
   final String? tag;
   final Color? color;
+  final bool showDecimal;
 
   const StatCard({
     this.image,
@@ -19,6 +20,7 @@ class StatCard extends StatelessWidget {
     required this.title,
     this.tag,
     this.color,
+    this.showDecimal = false,
   });
 
   @override
@@ -47,8 +49,12 @@ class StatCard extends StatelessWidget {
               ),
             if (image != null) Gap(Sizes.smallSpace),
             Text(
-              (tag == null) ? value.toString() : "$tag $value",
-              style: const TextStyle(
+              (tag == null)
+                  ? (showDecimal
+                        ? value.toStringAsFixed(2)
+                        : value.toStringAsFixed(0))
+                  : "$tag ${showDecimal ? value.toStringAsFixed(2) : value.toStringAsFixed(0)}",
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: Sizes.textSizeM,
               ),
