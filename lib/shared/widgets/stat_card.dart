@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/colors.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:get/get.dart';
@@ -40,11 +41,16 @@ class StatCard extends StatelessWidget {
               Text(
                 (tag == null) ? value.toString() : "$tag $value",
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                  fontSize: Sizes.textSizeM,
                 ),
               ),
-              Text(title, style: TextHelper.bodyMedium),
+              Text(
+                title,
+                style: TextHelper.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ],
           ),
         ),

@@ -117,7 +117,7 @@ class Home extends StatelessWidget {
                         Obx(
                           () => StatCard(
                             title: "Total Sales",
-                            value: 100,
+                            value: 0,
                             tag: "₹",
                             color: context.responsive(
                               light: AppColors.lightSectionSell,
@@ -125,26 +125,263 @@ class Home extends StatelessWidget {
                             ),
                           ),
                         ),
-                        StatCard(
-                          title: "Total Sales",
-                          value: 100,
-                          tag: "₹",
-                          color: context.responsive(
-                            light: AppColors.lightSectionSell,
-                            dark: AppColors.darkSectionSell,
+                        Obx(
+                          () => StatCard(
+                            title: "Total Invoice",
+                            value: 0,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
                           ),
                         ),
-                        StatCard(
-                          title: "Total Sales",
-                          value: 100,
-                          tag: "₹",
-                          color: context.responsive(
-                            light: AppColors.lightSectionSell,
-                            dark: AppColors.darkSectionSell,
+                        Obx(
+                          () => StatCard(
+                            title: "Sold Qty",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Customer",
+                            value: 4,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "To Receive",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Sales Return",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSell,
+                              dark: AppColors.darkSectionSell,
+                            ),
+                          ),
+                        ),
+
+                        Obx(
+                          () => StatCard(
+                            title: "Total Purchase",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Bills",
+                            value: 0,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Purchase Qty",
+                            value: 0,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Suppliers",
+                            value: 0,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "To Pay",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Purchase Return",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionSellPurchase,
+                              dark: AppColors.darkSectionSellPurchase,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Paid",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Expense",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Total Products",
+                            value: 43,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Stock Qty",
+                            value: 56,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Stock Value",
+                            value: 100,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Cash in Hand",
+                            value: 100,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionPaid,
+                              dark: AppColors.darkSectionPaid,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Gross Profit",
+                            value: 100,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Avg. Profit Margin",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Avg. Profit margin (%)",
+                            value: 0,
+                            // tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Avg. Cart Value",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Avg. Bills (Nos.)",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => StatCard(
+                            title: "Bank Access",
+                            value: 0,
+                            tag: "₹",
+                            color: context.responsive(
+                              light: AppColors.lightSectionProfit,
+                              dark: AppColors.darkSectionProfit,
+                            ),
                           ),
                         ),
                       ],
                     ),
+
                     // Gap(Sizes.defHorizontalSpace),
                   ],
                 ),
