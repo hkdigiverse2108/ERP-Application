@@ -14,7 +14,26 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.primary,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      title: Image.asset(Images.lightAiLogo),
+      title: Row(
+        children: [
+          Image.asset(Images.lightAiLogo),
+          Container(
+            decoration: BoxDecoration(
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white),
+            ),
+            child: Row(
+              children: [
+                Icon(PhosphorIconsFill.bell, color: AppColors.primary),
+                Gap(10),
+                Icon(PhosphorIconsFill.bell, color: AppColors.primary),
+              ],
+            ),
+          ),
+        ],
+      ),
+
       actions: [
         Row(
           children: [

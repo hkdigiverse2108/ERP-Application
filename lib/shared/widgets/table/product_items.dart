@@ -138,7 +138,7 @@ class ProductItems extends StatelessWidget {
           _headerCell('Amount', width: _colAmount, align: TextAlign.right),
           _headerCell('Discount', width: _colDiscount, align: TextAlign.right),
           _headerCell('Tax', width: _colTax, align: TextAlign.right),
-          // _headerCell('Total', width: _colTotal, align: TextAlign.right),
+          _headerCell('Total', width: _colTotal, align: TextAlign.right),
           if (onRemoveItem != null || onEditItem != null)
             SizedBox(width: _colActions),
         ],
