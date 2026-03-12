@@ -2,7 +2,6 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class StatCard extends StatelessWidget {
@@ -21,40 +20,38 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final cardColor =
-          color ??
-          context.responsive(
-            light: AppColors.lightBackground,
-            dark: AppColors.darkBackground,
-          );
-      return Container(
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                (tag == null) ? value.toString() : "$tag $value",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: Sizes.textSizeM,
-                ),
+    final cardColor =
+        color ??
+        context.responsive(
+          light: AppColors.lightBackground,
+          dark: AppColors.darkBackground,
+        );
+    return Container(
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              (tag == null) ? value.toString() : "$tag $value",
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: Sizes.textSizeM,
               ),
-              Text(
-                title,
-                style: TextHelper.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w400,
-                ),
+            ),
+            Text(
+              title,
+              style: TextHelper.bodyMedium.copyWith(
+                fontWeight: FontWeight.w400,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

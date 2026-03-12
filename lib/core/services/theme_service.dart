@@ -41,5 +41,6 @@ extension ThemeContext on BuildContext {
   bool get isDarkMode => ThemeService().isDarkMode;
 
   /// Shortcut for responsive values
-  T responsive<T>({required T light, required T dark}) => isDarkMode ? dark : light;
+  T responsive<T>({required T light, required T dark}) =>
+      isDarkMode ? dark : light;
 }

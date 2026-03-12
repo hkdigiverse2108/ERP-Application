@@ -104,20 +104,20 @@ class Home extends StatelessWidget {
                     Gap(Sizes.defHorizontalSpace),
 
                     // Section Container
-                    GridView(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 2.0,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16.0,
-                            mainAxisSpacing: 16.0,
-                          ),
-                      children: [
-                        Obx(
-                          () => StatCard(
+                    Obx(
+                      () => GridView(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 2.0,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16.0,
+                              mainAxisSpacing: 16.0,
+                            ),
+                        children: [
+                          StatCard(
                             title: "Total Sales",
                             value: 0,
                             tag: "₹",
@@ -126,9 +126,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Invoice",
                             value: 0,
                             // tag: "₹",
@@ -137,9 +135,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Sold Qty",
                             value: 0,
                             tag: "₹",
@@ -148,9 +144,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Customer",
                             value: 4,
                             // tag: "₹",
@@ -159,9 +153,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "To Receive",
                             value: 0,
                             tag: "₹",
@@ -170,9 +162,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Sales Return",
                             value: 0,
                             tag: "₹",
@@ -181,10 +171,8 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSell,
                             ),
                           ),
-                        ),
 
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Purchase",
                             value: 0,
                             tag: "₹",
@@ -193,9 +181,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Bills",
                             value: 0,
                             // tag: "₹",
@@ -204,9 +190,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Purchase Qty",
                             value: 0,
                             // tag: "₹",
@@ -215,9 +199,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Suppliers",
                             value: 0,
                             // tag: "₹",
@@ -226,9 +208,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "To Pay",
                             value: 0,
                             tag: "₹",
@@ -237,9 +217,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Purchase Return",
                             value: 0,
                             tag: "₹",
@@ -248,9 +226,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionSellPurchase,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Paid",
                             value: 0,
                             tag: "₹",
@@ -259,9 +235,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Expense",
                             value: 0,
                             tag: "₹",
@@ -270,9 +244,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Total Products",
                             value: 43,
                             // tag: "₹",
@@ -281,9 +253,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Stock Qty",
                             value: 56,
                             // tag: "₹",
@@ -292,9 +262,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Stock Value",
                             value: 100,
                             tag: "₹",
@@ -303,9 +271,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Cash in Hand",
                             value: 100,
                             tag: "₹",
@@ -314,9 +280,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionPaid,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Gross Profit",
                             value: 100,
                             tag: "₹",
@@ -325,9 +289,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Avg. Profit Margin",
                             value: 0,
                             tag: "₹",
@@ -336,9 +298,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Avg. Profit margin (%)",
                             value: 0,
                             // tag: "₹",
@@ -347,9 +307,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Avg. Cart Value",
                             value: 0,
                             tag: "₹",
@@ -358,9 +316,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Avg. Bills (Nos.)",
                             value: 0,
                             tag: "₹",
@@ -369,9 +325,7 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => StatCard(
+                          StatCard(
                             title: "Bank Access",
                             value: 0,
                             tag: "₹",
@@ -380,8 +334,8 @@ class Home extends StatelessWidget {
                               dark: AppColors.darkSectionProfit,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
                     // Gap(Sizes.defHorizontalSpace),
