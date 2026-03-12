@@ -2,13 +2,15 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/modules/home/controllers/home_conteroller.dart';
+import 'package:ai_setu/modules/home/widgets/dashboard_stat_widget.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
+import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/charts/app_bar_chart.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
-import 'package:ai_setu/shared/widgets/stat_card.dart';
-import 'package:ai_setu/shared/widgets/table/product_items.dart';
+import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -19,6 +21,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
+
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -82,239 +86,7 @@ class Home extends StatelessWidget {
                       Gap(Sizes.defHorizontalSpace),
 
                       // Section Container
-                      Obx(
-                        () => GridView(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 2.0,
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 16.0,
-                                mainAxisSpacing: 16.0,
-                              ),
-                          children: [
-                            StatCard(
-                              title: "Total Sales",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Invoice",
-                              value: 0,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Sold Qty",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Customer",
-                              value: 4,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-                            StatCard(
-                              title: "To Receive",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Sales Return",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSell,
-                                dark: AppColors.darkSectionSell,
-                              ),
-                            ),
-
-                            StatCard(
-                              title: "Total Purchase",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Bills",
-                              value: 0,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Purchase Qty",
-                              value: 0,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Suppliers",
-                              value: 0,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "To Pay",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Purchase Return",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionSellPurchase,
-                                dark: AppColors.darkSectionSellPurchase,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Paid",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Expense",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Total Products",
-                              value: 43,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Stock Qty",
-                              value: 56,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Stock Value",
-                              value: 100,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Cash in Hand",
-                              value: 100,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionPaid,
-                                dark: AppColors.darkSectionPaid,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Gross Profit",
-                              value: 100,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Avg. Profit Margin",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Avg. Profit margin (%)",
-                              value: 0,
-                              // tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Avg. Cart Value",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Avg. Bills (Nos.)",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                            StatCard(
-                              title: "Bank Access",
-                              value: 0,
-                              tag: "₹",
-                              color: context.responsive(
-                                light: AppColors.lightSectionProfit,
-                                dark: AppColors.darkSectionProfit,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      DashboardStatWidget(),
 
                       // Gap(Sizes.defHorizontalSpace),
                     ],
@@ -366,24 +138,153 @@ class Home extends StatelessWidget {
               ),
 
               Padding(
-                padding: EdgeInsets.all(Sizes.paddingM),
-                child: Text(
-                  "Sales and Purchase",
-                  style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
+                padding: EdgeInsets.only(
+                  top: Sizes.paddingM,
+                  left: Sizes.paddingM,
+                  right: Sizes.paddingM,
+                ),
+                child: Obx(
+                  () => Text(
+                    "Top Selling Items",
+                    style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(Sizes.paddingM),
 
-                child: BorderContainer(
-                  child: Column(
-                    children: [
-                      DateSection(),
-                      Gap(Sizes.defHorizontalSpace),
-                      ProductItems(),
-                    ],
-                  ),
-                ),
+                child: Obx(() {
+                  ThemeService().isDarkMode;
+                  return BorderContainer(
+                    child: Column(
+                      children: [
+                        DateSection(),
+                        Gap(Sizes.defHorizontalSpace),
+                        CommonTable<ProductItemModel>(
+                          items: [
+                            ProductItemModel(
+                              name: 'Wireless Mouse',
+                              sku: 'MS-001',
+                              price: 500,
+                              quantity: 2,
+                              discount: 10,
+                              tax: 18,
+                            ),
+                            ProductItemModel(
+                              name: 'Mechanical Keyboard',
+                              sku: 'KB-002',
+                              price: 2500,
+                              quantity: 1,
+                              discount: 5,
+                              tax: 18,
+                            ),
+                          ],
+                          columns: [
+                            TableColumn(
+                              title: 'Item',
+                              width: 140,
+                              cellBuilder: (context, item, index) => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    style: TextHelper.bodySmall.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if (item.sku.isNotEmpty)
+                                    Text(
+                                      item.sku,
+                                      style: TextHelper.caption,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Qty',
+                              width: 80,
+                              alignment: TextAlign.center,
+                              cellBuilder: (context, item, index) => Text(
+                                '${item.quantity} ${item.unit}',
+                                textAlign: TextAlign.center,
+                                style: TextHelper.bodySmall,
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Price',
+                              width: 100,
+                              alignment: TextAlign.right,
+                              cellBuilder: (context, item, index) => Text(
+                                '₹${item.price.toStringAsFixed(2)}',
+                                textAlign: TextAlign.right,
+                                style: TextHelper.bodySmall,
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Amount',
+                              width: 100,
+                              alignment: TextAlign.right,
+                              cellBuilder: (context, item, index) => Text(
+                                '₹${item.subtotal.toStringAsFixed(2)}',
+                                textAlign: TextAlign.right,
+                                style: TextHelper.bodySmall,
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Discount',
+                              width: 100,
+                              alignment: TextAlign.right,
+                              cellBuilder: (context, item, index) => Text(
+                                item.discount > 0
+                                    ? '${item.discount.toStringAsFixed(1)}%'
+                                    : '-',
+                                textAlign: TextAlign.right,
+                                style: TextHelper.bodySmall.copyWith(
+                                  color: item.discount > 0
+                                      ? AppColors.success
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Tax',
+                              width: 100,
+                              alignment: TextAlign.right,
+                              cellBuilder: (context, item, index) => Text(
+                                item.tax > 0
+                                    ? '${item.tax.toStringAsFixed(1)}%'
+                                    : '-',
+                                textAlign: TextAlign.right,
+                                style: TextHelper.bodySmall,
+                              ),
+                            ),
+                            TableColumn(
+                              title: 'Total',
+                              width: 100,
+                              alignment: TextAlign.right,
+                              cellBuilder: (context, item, index) => Text(
+                                '₹${item.total.toStringAsFixed(2)}',
+                                textAlign: TextAlign.right,
+                                style: TextHelper.bodySmall.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                          currentPage: homeController.currentPage.value,
+                          totalPages: 5,
+                          totalItems: 43,
+                          onPageChanged: (page) =>
+                              homeController.currentPage.value = page,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ),
 
               Gap(Sizes.defHorizontalSpace),

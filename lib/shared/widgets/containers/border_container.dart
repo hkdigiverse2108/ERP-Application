@@ -33,6 +33,7 @@ class BorderContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
         ),
         padding: padding ?? EdgeInsets.all(Sizes.paddingS),
+        clipBehavior: Clip.antiAlias,
         child: child,
       ),
     );
