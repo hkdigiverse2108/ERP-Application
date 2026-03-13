@@ -229,12 +229,31 @@ class CommonTable<T> extends StatelessWidget {
   Widget _headerCell(String text, {required double width, TextAlign? align}) {
     return SizedBox(
       width: width,
-      child: Text(
-        text,
-        textAlign: align ?? TextAlign.left,
-        style: TextHelper.bodySmall.copyWith(fontWeight: FontWeight.w700),
+      child: Align(
+        alignment: _getAlignment(align ?? TextAlign.left),
+        child: Text(
+          text,
+          textAlign: align ?? TextAlign.left,
+          style: TextHelper.bodySmall.copyWith(fontWeight: FontWeight.w700),
+        ),
       ),
     );
+  }
+
+  Alignment _getAlignment(TextAlign alignment) {
+    switch (alignment) {
+      case TextAlign.center:
+        return Alignment.center;
+      case TextAlign.right:
+        return Alignment.centerRight;
+      case TextAlign.left:
+      case TextAlign.start:
+        return Alignment.centerLeft;
+      case TextAlign.end:
+        return Alignment.centerRight;
+      case TextAlign.justify:
+        return Alignment.centerLeft;
+    }
   }
 
   Widget _buildDataRow(
@@ -266,7 +285,10 @@ class CommonTable<T> extends StatelessWidget {
           ...columns.map(
             (col) => SizedBox(
               width: col.width,
-              child: col.cellBuilder(context, item, index),
+              child: Align(
+                alignment: _getAlignment(col.alignment),
+                child: col.cellBuilder(context, item, index),
+              ),
             ),
           ),
 
