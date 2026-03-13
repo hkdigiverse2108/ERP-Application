@@ -16,7 +16,7 @@ class QuickActionDropdown extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.75,
-        height: double.infinity,
+        height: 675,
         child: Material(
           color: context.responsive(
             light: AppColors.lightSurface,
