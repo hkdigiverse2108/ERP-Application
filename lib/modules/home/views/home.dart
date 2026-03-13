@@ -11,7 +11,6 @@ import 'package:ai_setu/data/model/payable_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/modules/home/widgets/dashboard_stat_widget.dart';
 import 'package:ai_setu/modules/home/widgets/report_cart.dart';
-import 'package:ai_setu/shared/widgets/sidebar/sidebar.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -35,7 +34,6 @@ class Home extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: DefAppBar(),
-        // drawer: const SideBar(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
