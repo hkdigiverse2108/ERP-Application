@@ -103,7 +103,6 @@ class _QuickActionItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.back();
-        // TODO: Handle navigation for each action
       },
       borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
       child: Padding(

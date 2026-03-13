@@ -2,6 +2,7 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/shared/widgets/financial_year_dropdown.dart';
+import 'package:ai_setu/shared/widgets/sidebar/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +32,10 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Row(
           children: [
-            SvgPicture.asset(AppIcons.menuBar, height: 40, width: 40),
+            GestureDetector(
+              onTap: () {},
+              child: SvgPicture.asset(AppIcons.menuBar, height: 40, width: 40),
+            ),
             Gap(10),
             Icon(PhosphorIconsFill.bell, color: Colors.white, size: 20),
             Gap(20),

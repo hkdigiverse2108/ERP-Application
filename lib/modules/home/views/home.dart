@@ -11,6 +11,7 @@ import 'package:ai_setu/data/model/payable_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/modules/home/widgets/dashboard_stat_widget.dart';
 import 'package:ai_setu/modules/home/widgets/report_cart.dart';
+import 'package:ai_setu/shared/widgets/sidebar/sidebar.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/data/model/product_item_model.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -34,6 +35,7 @@ class Home extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: DefAppBar(),
+        // drawer: const SideBar(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -135,6 +137,42 @@ class Home extends StatelessWidget {
                             'Fri',
                             'Sat',
                             'Sun',
+                          ],
+                        ),
+                        Gap(Sizes.lgVerticalSpace),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+
+              _buildSectionTitle('Transaction'),
+              Padding(
+                padding: EdgeInsets.all(Sizes.paddingM),
+
+                child: Obx(() {
+                  // Explicitly access the observable to register the listener
+                  ThemeService().isDarkMode;
+                  return BorderContainer(
+                    child: Column(
+                      children: [
+                        RangedDatePicker(
+                          initialDateRange:
+                              homeController.selectedDateRange.value,
+                          onChanged: (range) =>
+                              homeController.selectedDateRange.value = range,
+                        ),
+                        Gap(Sizes.lgHorizontalSpace),
+                        AppBarChart(
+                          values: [15, 60, 65, 45, 62, 20, 40],
+                          labels: [
+                            '1 Mar',
+                            '5 Mar',
+                            '10 Mar',
+                            '15 Mar',
+                            '20 Mar',
+                            '25 Mar',
+                            '30 Mar',
                           ],
                         ),
                         Gap(Sizes.lgVerticalSpace),
@@ -882,7 +920,7 @@ class Home extends StatelessWidget {
                               ),
                             ),
                             TableColumn(
-                              title: 'Unique Coupons Count',
+                              title: 'UsedCount',
                               width: 100,
                               alignment: TextAlign.right,
                               cellBuilder: (context, item, index) => Text(
@@ -933,9 +971,10 @@ class Home extends StatelessWidget {
                         CommonTable<CustomersModel>(
                           items: [
                             CustomersModel(
-                              customerName: 'Electronics',
-                              invoiceNo: '1234567890',
-                              pendingAmount: '2500',
+                              customerName: '0',
+                              invoiceNo: '0',
+                              noofBill: '0',
+                              pendingAmount: '0',
                             ),
                           ],
                           columns: [
@@ -981,7 +1020,7 @@ class Home extends StatelessWidget {
                               width: 100,
                               alignment: TextAlign.right,
                               cellBuilder: (context, item, index) => Text(
-                                '₹${item.totalAmount}',
+                                '₹${item.totalAmount ?? '0.00'}',
                                 textAlign: TextAlign.right,
                                 style: TextHelper.bodySmall.copyWith(
                                   fontWeight: FontWeight.w600,
