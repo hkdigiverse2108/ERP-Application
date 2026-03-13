@@ -25,20 +25,6 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
           const FinancialYearDropdown(),
 
           Gap(Sizes.defVerticalSpace),
-          // BorderContainer(
-
-          // padding: EdgeInsets.symmetric(
-          //   horizontal: Sizes.paddingM,
-          //   vertical: Sizes.paddingS,
-          // ),
-          // child: Text(
-          //   '2025-2026',
-          //   style: TextStyle(
-          //     color: AppColors.lightIconSecondary,
-          //     fontSize: Sizes.textSizeM,
-          //   ),
-          // ),
-          // ),
         ],
       ),
 

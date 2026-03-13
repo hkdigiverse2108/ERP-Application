@@ -1,4 +1,4 @@
-import 'package:ai_setu/modules/home/controllers/home_conteroller.dart';
+import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class HomeBindings extends Bindings {

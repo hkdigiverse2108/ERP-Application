@@ -3,6 +3,7 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/shared/widgets/quick_action_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,8 +36,10 @@ class QuickAction extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Row(
           children: [
-            TextButton(
-              onPressed: () {},
+            GestureDetector(
+              onTap: () {
+                Get.dialog(QuickActionDropdown());
+              },
               child: Text(
                 "Quick Action",
                 style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
