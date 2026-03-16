@@ -34,7 +34,6 @@ class Home extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: DefAppBar(),
-        // drawer: const SideBar(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
