@@ -1353,7 +1353,7 @@ class Home extends StatelessWidget {
                                   TableColumn(
                                     title: 'Date',
                                     width: 100,
-                                    alignment: TextAlign.right,
+                                    alignment: TextAlign.center,
                                     cellBuilder: (context, item, index) => Text(
                                       item.date ?? '',
                                       textAlign: TextAlign.right,
@@ -1363,7 +1363,7 @@ class Home extends StatelessWidget {
                                   TableColumn(
                                     title: 'Bill No',
                                     width: 100,
-                                    alignment: TextAlign.right,
+                                    alignment: TextAlign.center,
                                     cellBuilder: (context, item, index) => Text(
                                       item.noOfBills ?? '',
                                       textAlign: TextAlign.right,

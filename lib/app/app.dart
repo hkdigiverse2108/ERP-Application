@@ -18,6 +18,15 @@ class App extends StatelessWidget {
       themeMode: ThemeService().theme,
       getPages: AppPages.routes,
       initialRoute: AppPages.initial,
+      transitionDuration: Duration(milliseconds: 500),
+      defaultTransition: Transition.fadeIn,
+      builder: (context, child) {
+        return AnimatedTheme(
+          data: context.theme,
+          duration: ThemeService.themeTransitionDuration,
+          child: child!,
+        );
+      },
     );
   }
 }

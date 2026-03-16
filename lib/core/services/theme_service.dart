@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/theme/theme_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'storage_service.dart';
@@ -5,6 +6,7 @@ import 'storage_service.dart';
 class ThemeService {
   static final ThemeService _instance = ThemeService._internal();
   factory ThemeService() => _instance;
+  static const Duration themeTransitionDuration = Duration(milliseconds: 300);
 
   late final RxBool isDarkModeObs;
 
@@ -39,6 +41,10 @@ class ThemeService {
 extension ThemeContext on BuildContext {
   /// Convenient way to access ThemeService().isDarkMode
   bool get isDarkMode => ThemeService().isDarkMode;
+
+  /// Access custom app colors defined in ThemeExtensions
+  AppColorsExtension get appColors =>
+      Theme.of(this).extension<AppColorsExtension>()!;
 
   /// Shortcut for responsive values
   T responsive<T>({required T light, required T dark}) =>

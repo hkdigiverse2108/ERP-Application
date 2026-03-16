@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -25,13 +24,9 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor =
-        color ??
-        context.responsive(
-          light: AppColors.lightBackground,
-          dark: AppColors.darkBackground,
-        );
-    return Container(
+    final cardColor = color ?? context.appColors.background;
+    return AnimatedContainer(
+      duration: ThemeService.themeTransitionDuration,
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(12),

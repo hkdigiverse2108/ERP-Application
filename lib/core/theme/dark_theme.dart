@@ -2,9 +2,12 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 
+import 'package:ai_setu/core/theme/theme_extensions.dart';
+
 class DarkTheme {
   static ThemeData get theme {
     return ThemeData(
+      extensions: [AppColorsExtension.dark],
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(

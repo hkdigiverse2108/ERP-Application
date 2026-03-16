@@ -36,16 +36,38 @@ class QuickAction extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                Get.dialog(QuickActionDropdown());
+            Builder(
+              builder: (buttonContext) {
+                return GestureDetector(
+                  onTap: () {
+                    final RenderBox renderBox =
+                        buttonContext.findRenderObject() as RenderBox;
+                    final offset = renderBox.localToGlobal(Offset.zero);
+                    final size = renderBox.size;
+
+                    Get.dialog(
+                      QuickActionDropdown(
+                        topOffset: offset.dy + size.height + 16,
+                      ),
+                      useSafeArea: false,
+                      barrierColor: Colors.black.withValues(alpha: 0.1),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "Quick Action",
+                        style: TextHelper.h4.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Gap(10),
+                      Icon(PhosphorIconsBold.funnelSimple),
+                    ],
+                  ),
+                );
               },
-              child: Text(
-                "Quick Action",
-                style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
-              ),
             ),
-            Icon(PhosphorIconsBold.funnelSimple),
             Spacer(),
             _buildRoundedIconButton(
               context: context,

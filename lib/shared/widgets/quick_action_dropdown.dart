@@ -8,52 +8,61 @@ import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class QuickActionDropdown extends StatelessWidget {
-  const QuickActionDropdown({super.key});
+  final double topOffset;
+  const QuickActionDropdown({super.key, required this.topOffset});
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        height: 675,
-        child: Material(
-          color: context.responsive(
-            light: AppColors.lightSurface,
-            dark: AppColors.darkSurface,
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.paddingM,
-                vertical: Sizes.paddingM,
+    return Stack(
+      children: [
+        Positioned(
+          top: topOffset,
+          left: Sizes.paddingM,
+          child: Material(
+            borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+            elevation: 8,
+            clipBehavior: Clip.antiAlias,
+            color: context.responsive(
+              light: AppColors.lightSurface,
+              dark: AppColors.darkSurface,
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.80,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height - topOffset - 20,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  _ExpandableSection(
-                    title: "Sales",
-                    items: ["Invoice", "Credit Note"],
-                  ),
-                  _ExpandableSection(
-                    title: "Bank / Cash",
-                    items: ["Bank", "Bank Transaction", "Receipt", "Payment"],
-                  ),
-                  _ExpandableSection(
-                    title: "Purchase",
-                    items: ["Supplier Bill", "Debit Note"],
-                  ),
-                  _ExpandableSection(title: "Content", items: ["Contact"]),
-                  _ExpandableSection(
-                    title: "Inventory",
-                    items: ["Product", "Stock Transfer", "Price Master"],
-                  ),
-                ],
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.paddingM,
+                  vertical: Sizes.paddingM,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    _ExpandableSection(
+                      title: "Sales",
+                      items: ["Invoice", "Credit Note"],
+                    ),
+                    _ExpandableSection(
+                      title: "Bank / Cash",
+                      items: ["Bank", "Bank Transaction", "Receipt", "Payment"],
+                    ),
+                    _ExpandableSection(
+                      title: "Purchase",
+                      items: ["Supplier Bill", "Debit Note"],
+                    ),
+                    _ExpandableSection(title: "Content", items: ["Contact"]),
+                    _ExpandableSection(
+                      title: "Inventory",
+                      items: ["Product", "Stock Transfer", "Price Master"],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
