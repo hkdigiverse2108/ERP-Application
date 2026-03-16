@@ -169,7 +169,7 @@ class UserTable extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Get.to(() => EditUser());
+                            Get.toNamed(Routes.editUser);
                           },
                           icon: const Icon(PhosphorIconsLight.pencil),
                         ),

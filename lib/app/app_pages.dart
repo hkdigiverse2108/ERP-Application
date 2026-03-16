@@ -2,6 +2,8 @@ import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
 import 'package:ai_setu/modules/auth/views/sign_in.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
+import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
+import 'package:ai_setu/modules/inventory/views/inventory.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
@@ -11,8 +13,9 @@ import 'package:ai_setu/modules/splash/views/splash.dart';
 import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
 
 class AppPages {
-  static const initial = Routes.user;
+  // static const initial = Routes.user;
   // static const initial = Routes.splash;
+  static const initial = Routes.inventory;
 
   static final routes = [
     GetPage(
@@ -29,6 +32,11 @@ class AppPages {
       name: Routes.signIn,
       page: () => SignIn(),
       binding: SignInBindings(),
+    ),
+    GetPage(
+      name: Routes.inventory,
+      page: () => Inventory(),
+      binding: InventoryBindings(),
     ),
     GetPage(name: Routes.user, page: () => User(), binding: UserBinding()),
     GetPage(name: Routes.home, page: () => Home(), binding: HomeBindings()),
