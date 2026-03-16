@@ -3,6 +3,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserController extends GetxController {
+  final RxBool isPasswordVisible = false.obs;
+
+  void togglePasswordVisibility() {
+    isPasswordVisible.value = !isPasswordVisible.value;
+  }
+
   final fullNameController = TextEditingController();
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
