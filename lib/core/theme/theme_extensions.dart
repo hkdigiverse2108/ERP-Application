@@ -59,7 +59,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     }
     return AppColorsExtension(
       sectionSell: Color.lerp(sectionSell, other.sectionSell, t)!,
-      sectionSellPurchase: Color.lerp(sectionSellPurchase, other.sectionSellPurchase, t)!,
+      sectionSellPurchase: Color.lerp(
+        sectionSellPurchase,
+        other.sectionSellPurchase,
+        t,
+      )!,
       sectionPaid: Color.lerp(sectionPaid, other.sectionPaid, t)!,
       sectionProfit: Color.lerp(sectionProfit, other.sectionProfit, t)!,
       border: Color.lerp(border, other.border, t)!,

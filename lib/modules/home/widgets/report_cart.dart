@@ -10,25 +10,13 @@ class ReportCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final vipCustColor = context.responsive(
-        light: AppColors.lightSectionSell,
-        dark: AppColors.darkSectionSell,
-      );
+      final vipCustColor = context.appColors.sectionSell;
 
-      final regularCustColor = context.responsive(
-        light: AppColors.lightSectionSellPurchase,
-        dark: AppColors.darkSectionSellPurchase,
-      );
+      final regularCustColor = context.appColors.sectionSellPurchase;
 
-      final riskCustColor = context.responsive(
-        light: AppColors.lightSectionPaid,
-        dark: AppColors.darkSectionPaid,
-      );
+      final riskCustColor = context.appColors.sectionPaid;
 
-      final lostCustColor = context.responsive(
-        light: AppColors.lightSectionProfit,
-        dark: AppColors.darkSectionProfit,
-      );
+      final lostCustColor = context.appColors.sectionProfit;
 
       return GridView(
         shrinkWrap: true,
