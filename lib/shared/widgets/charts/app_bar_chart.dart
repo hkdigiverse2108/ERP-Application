@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +16,9 @@ class AppBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDarkMode;
-    final primaryColor = AppColors.primary;
-    final gridColor = isDark ? Colors.white10 : Colors.black12;
-    final textColor = isDark ? Colors.white70 : Colors.black54;
+    final primaryColor = context.appColors.sectionSell;
+    final gridColor = context.appColors.background;
+    final textColor = context.appColors.textPrimary;
 
     return AspectRatio(
       aspectRatio: 1.7,
@@ -35,9 +33,9 @@ class AppBarChart extends StatelessWidget {
           barTouchData: BarTouchData(
             enabled: true,
             touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) => isDark ? Colors.grey[800]! : Colors.white,
-              tooltipBorder: const BorderSide(
-                color: AppColors.primary,
+              getTooltipColor: (_) => context.appColors.background,
+              tooltipBorder: BorderSide(
+                color: context.appColors.border,
                 width: 1,
               ),
               getTooltipItem: (group, groupIndex, rod, rodIndex) {

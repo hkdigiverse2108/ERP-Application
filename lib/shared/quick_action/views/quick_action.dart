@@ -15,83 +15,93 @@ class QuickAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              spreadRadius: 1,
-              blurRadius: 2,
-              color: context.responsive(
-                light: AppColors.lightShadow,
-                dark: AppColors.darkShadow,
-              ),
-            ),
-          ],
-          color: context.responsive(
-            light: AppColors.lightBackground,
-            dark: AppColors.darkBackground,
-          ),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
-          children: [
-            Builder(
-              builder: (buttonContext) {
-                return GestureDetector(
-                  onTap: () {
-                    final RenderBox renderBox =
-                        buttonContext.findRenderObject() as RenderBox;
-                    final offset = renderBox.localToGlobal(Offset.zero);
-                    final size = renderBox.size;
+    // Access isDarkMode via ThemeService to avoid ambiguity with GetX extension
+    final bool isDark = ThemeService().isDarkMode;
+    const Duration animDuration = Duration(milliseconds: 300);
 
-                    Get.dialog(
-                      QuickActionDropdown(
-                        topOffset: offset.dy + size.height + 16,
+    return AnimatedContainer(
+      duration: animDuration,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            spreadRadius: 1,
+            blurRadius: 2,
+            color: isDark ? AppColors.darkShadow : AppColors.lightShadow,
+          ),
+        ],
+        color: context.appColors.background,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: Row(
+        children: [
+          Builder(
+            builder: (buttonContext) {
+              return GestureDetector(
+                onTap: () {
+                  final RenderBox renderBox =
+                      buttonContext.findRenderObject() as RenderBox;
+                  final offset = renderBox.localToGlobal(Offset.zero);
+                  final size = renderBox.size;
+
+                  Get.dialog(
+                    QuickActionDropdown(
+                      topOffset: offset.dy + size.height + 16,
+                    ),
+                    useSafeArea: false,
+                    barrierColor: Colors.black.withValues(alpha: 0.1),
+                  );
+                },
+                child: Row(
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: animDuration,
+                      style: TextHelper.h4.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: context.appColors.textPrimary,
                       ),
-                      useSafeArea: false,
-                      barrierColor: Colors.black.withValues(alpha: 0.1),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        "Quick Action",
-                        style: TextHelper.h4.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Gap(10),
-                      Icon(PhosphorIconsBold.funnelSimple),
-                    ],
-                  ),
-                );
+                      child: const Text("Quick Action"),
+                    ),
+                    const Gap(10),
+                    Icon(
+                      PhosphorIconsBold.funnelSimple,
+                      color: context.appColors.textPrimary,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const Spacer(),
+          _buildRoundedIconButton(
+            context: context,
+            icon: PhosphorIconsBold.magnifyingGlass,
+            onPressed: () {},
+          ),
+          const Gap(8),
+          _buildRoundedIconButton(
+            context: context,
+            icon: null,
+            onPressed: () => ThemeService().switchTheme(),
+            child: AnimatedSwitcher(
+              duration: animDuration,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
               },
-            ),
-            Spacer(),
-            _buildRoundedIconButton(
-              context: context,
-              icon: PhosphorIconsBold.magnifyingGlass,
-              onPressed: () {},
-            ),
-            Gap(8),
-            _buildRoundedIconButton(
-              context: context,
-              icon: context.responsive(
-                light: PhosphorIconsBold.moon,
-                dark: PhosphorIconsBold.sun,
+              child: Icon(
+                isDark ? PhosphorIconsBold.sun : PhosphorIconsBold.moon,
+                key: ValueKey(isDark),
+                color: context.appColors.textSecondary,
               ),
-              onPressed: () => ThemeService().switchTheme(),
             ),
-            Gap(8),
-            _buildRoundedIconButton(
-              context: context,
-              icon: null,
-              svg: AppIcons.cashCounter,
-              onPressed: () {},
-            ),
-          ],
-        ),
+          ),
+          const Gap(8),
+          _buildRoundedIconButton(
+            context: context,
+            icon: null,
+            svg: AppIcons.cashCounter,
+            onPressed: () {},
+          ),
+        ],
       ),
     );
   }
@@ -101,39 +111,30 @@ Widget _buildRoundedIconButton({
   required BuildContext context,
   String? svg,
   IconData? icon,
+  Widget? child,
   required VoidCallback onPressed,
 }) {
+  const Duration animDuration = Duration(milliseconds: 300);
   return GestureDetector(
     onTap: onPressed,
-    child: Container(
+    child: AnimatedContainer(
+      duration: animDuration,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: context.responsive(
-            light: AppColors.lightBorder,
-            dark: AppColors.darkBorder,
-          ),
-        ),
+        border: Border.all(color: context.appColors.border),
         shape: BoxShape.circle,
       ),
-      padding: EdgeInsets.all(Sizes.paddingS),
-      child: svg != null
-          ? SvgPicture.asset(
-              svg,
-              colorFilter: ColorFilter.mode(
-                context.responsive(
-                  light: AppColors.lightIconSecondary,
-                  dark: AppColors.darkIconSecondary,
-                ),
-                BlendMode.srcIn,
-              ),
-            )
-          : Icon(
-              icon,
-              color: context.responsive(
-                light: AppColors.lightIconSecondary,
-                dark: AppColors.darkIconSecondary,
-              ),
-            ),
+      padding: const EdgeInsets.all(Sizes.paddingS),
+      child:
+          child ??
+          (svg != null
+              ? SvgPicture.asset(
+                  svg,
+                  colorFilter: ColorFilter.mode(
+                    context.appColors.textSecondary,
+                    BlendMode.srcIn,
+                  ),
+                )
+              : Icon(icon, color: context.appColors.textSecondary)),
     ),
   );
 }

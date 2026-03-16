@@ -21,11 +21,7 @@ class App extends StatelessWidget {
       transitionDuration: Duration(milliseconds: 500),
       defaultTransition: Transition.fadeIn,
       builder: (context, child) {
-        return AnimatedTheme(
-          data: context.theme,
-          duration: ThemeService.themeTransitionDuration,
-          child: child!,
-        );
+        return child!;
       },
     );
   }
