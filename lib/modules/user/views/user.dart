@@ -12,8 +12,12 @@ class User extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefAppBar(),
-      body: Column(
-        children: [QuickAction(), _buildSectionTitle("User"), UserTable()],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [QuickAction(), _buildSectionTitle("User"), UserTable()],
+        ),
       ),
     );
   }

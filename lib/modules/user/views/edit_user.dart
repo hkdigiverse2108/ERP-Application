@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -19,14 +20,13 @@ class EditUser extends GetView<UserController> {
 
     return Scaffold(
       appBar: DefAppBar(),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
             QuickAction(),
             Form(
               key: formKey,
-              child: SingleChildScrollView(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,13 +86,23 @@ class EditUser extends GetView<UserController> {
                           _textFormField("PAN No.", controller.panController),
                           const Gap(Sizes.defVerticalSpace),
 
-                          _selectField("Branch"),
+                          _textFormField("Branch", controller.branchController),
                           const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Password",
-                            controller.passwordController,
-                            obscure: true,
+                          Obx(
+                            () => _textFormField(
+                              "Password",
+                              controller.passwordController,
+                              obscure: !controller.isPasswordVisible.value,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? PhosphorIconsLight.eye
+                                      : PhosphorIconsLight.eyeSlash,
+                                ),
+                                onPressed: controller.togglePasswordVisibility,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -113,13 +123,16 @@ class EditUser extends GetView<UserController> {
                           ),
                           const Gap(Sizes.defVerticalSpace),
 
-                          _selectField("Country"),
+                          _textFormField(
+                            "Country",
+                            controller.countryController,
+                          ),
                           const Gap(Sizes.defVerticalSpace),
 
-                          _selectField("State"),
+                          _textFormField("State", controller.stateController),
                           const Gap(Sizes.defVerticalSpace),
 
-                          _selectField("City"),
+                          _textFormField("City", controller.cityController),
                           const Gap(Sizes.defVerticalSpace),
 
                           _textFormField(
@@ -199,7 +212,7 @@ class EditUser extends GetView<UserController> {
                           _buildSectionTitle("Image"),
                           const Divider(),
                           const Gap(Sizes.defVerticalSpace),
-                          _imagePicker(),
+                          _imagePicker(context),
                         ],
                       ),
                     ),
@@ -210,14 +223,17 @@ class EditUser extends GetView<UserController> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildButton(),
+      bottomNavigationBar: _buildButton(context),
     );
   }
 
   /// SECTION WRAPPER
   Widget _section(Widget child) {
     return Padding(
-      padding: const EdgeInsets.all(Sizes.paddingM),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Sizes.paddingM,
+        vertical: Sizes.paddingS,
+      ),
       child: BorderContainer(
         padding: const EdgeInsets.all(Sizes.paddingM),
         child: child,
@@ -227,12 +243,9 @@ class EditUser extends GetView<UserController> {
 
   /// SECTION TITLE
   Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingM),
-      child: Text(
-        title,
-        style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-      ),
+    return Text(
+      title,
+      style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
     );
   }
 
@@ -241,77 +254,128 @@ class EditUser extends GetView<UserController> {
     String label,
     TextEditingController controller, {
     bool obscure = false,
+    Widget? suffixIcon,
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
+      style: TextHelper.bodyMedium,
       decoration: InputDecoration(
         labelText: label,
+        suffixIcon: suffixIcon,
+        labelStyle: TextHelper.bodySmall,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: Colors.grey, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
       ),
-    );
-  }
-
-  /// SELECT FIELD
-  Widget _selectField(String label) {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-        ),
-      ),
-      items: const [
-        DropdownMenuItem(value: "Option1", child: Text("Option 1")),
-        DropdownMenuItem(value: "Option2", child: Text("Option 2")),
-      ],
-      onChanged: (value) {},
     );
   }
 
   /// IMAGE PICKER
-  Widget _imagePicker() {
-    return Container(
-      height: 100,
-      width: 100,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-      ),
-      child: IconButton(onPressed: () {}, icon: Icon(PhosphorIconsLight.image)),
-    );
+  Widget _imagePicker(BuildContext context) {
+    return Obx(() {
+      final image = controller.selectedImage.value;
+      return Column(
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: controller.pickImageFromGallery,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
+                  child: image == null
+                      ? Icon(
+                          PhosphorIconsLight.plus,
+                          size: 32,
+                          color: Colors.grey,
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            Sizes.borderRadiusM,
+                          ),
+                          child: GetPlatform.isWeb
+                              ? Image.network(image.path, fit: BoxFit.cover)
+                              : Image.file(File(image.path), fit: BoxFit.cover),
+                        ),
+                ),
+              ),
+              const Gap(Sizes.defHorizontalSpace),
+              if (image != null)
+                IconButton(
+                  onPressed: controller.removeImage,
+                  icon: Icon(PhosphorIconsLight.trash, color: Colors.red),
+                ),
+            ],
+          ),
+          const Gap(Sizes.paddingS),
+          Text(
+            image == null ? "Tap to select an image" : "Tap to change image",
+            style: TextHelper.bodySmall,
+          ),
+        ],
+      );
+    });
   }
 
   /// BUTTONS
-  Widget _buildButton() {
+  Widget _buildButton(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(Sizes.paddingM),
+      decoration: BoxDecoration(
+        color: context.theme.scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: const Text("BACK"),
+          Expanded(
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+              ),
+              onPressed: () => Get.back(),
+              child: const Text("CANCEL"),
+            ),
           ),
           const Gap(Sizes.defHorizontalSpace),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkIconPrimary,
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+                elevation: 0,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("SAVE CHANGES"),
             ),
-            onPressed: () {},
-            child: const Text("Save"),
           ),
         ],
       ),

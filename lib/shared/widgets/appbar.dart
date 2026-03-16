@@ -13,6 +13,7 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: AppColors.primary,
       scrolledUnderElevation: 0,
       centerTitle: false,
