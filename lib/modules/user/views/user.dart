@@ -18,6 +18,7 @@ class User extends GetView<UserController> {
 
     return Scaffold(
       appBar: DefAppBar(),
+
       body: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -268,9 +269,6 @@ class User extends GetView<UserController> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkIconPrimary,
-            ),
             onPressed: () {
               Get.back();
             },

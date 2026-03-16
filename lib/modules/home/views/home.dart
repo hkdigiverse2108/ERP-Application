@@ -1578,11 +1578,9 @@ class Home extends StatelessWidget {
         left: Sizes.paddingM,
         right: Sizes.paddingM,
       ),
-      child: Obx(
-        () => Text(
-          title,
-          style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-        ),
+      child: Text(
+        title,
+        style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

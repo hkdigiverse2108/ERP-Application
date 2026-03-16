@@ -185,10 +185,7 @@ class _DatePickerBottomSheet extends StatelessWidget {
           ),
           const Divider(height: 32),
           ListTile(
-            leading: Icon(
-              PhosphorIconsLight.calendarPlus,
-              color: AppColors.primary,
-            ),
+            leading: Icon(PhosphorIconsLight.calendarPlus),
             title: Text(
               "Custom Range",
               style: TextHelper.bodyMediumStyle(context),

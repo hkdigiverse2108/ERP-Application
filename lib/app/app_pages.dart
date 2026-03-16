@@ -10,8 +10,8 @@ import 'package:ai_setu/modules/splash/views/splash.dart';
 import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
 
 class AppPages {
-  // static const initial = Routes.user;
-  static const initial = Routes.splash;
+  static const initial = Routes.user;
+  // static const initial = Routes.splash;
 
   static final routes = [
     GetPage(
