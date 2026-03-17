@@ -1,5 +1,8 @@
+import 'package:ai_setu/modules/accounting/views/cradit_page.dart';
+import 'package:ai_setu/modules/accounting/views/dabit_page.dart';
 import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
 import 'package:ai_setu/modules/auth/views/sign_in.dart';
+import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
 import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
@@ -67,6 +70,21 @@ class AppPages {
       name: Routes.materialConsumption,
       page: () => const MaterialConsumption(),
       binding: InventoryBindings(),
+    ),
+    GetPage(
+      name: Routes.debit,
+      page: () => const DebitPage(),
+      // binding: InventoryBindings(),
+    ),
+    GetPage(
+      name: Routes.credit,
+      page: () => const CraditPage(),
+      // binding: InventoryBindings(),
+    ),
+    GetPage(
+      name: Routes.contact,
+      page: () => const Contact(),
+      // binding: InventoryBindings(),
     ),
 
     GetPage(name: Routes.user, page: () => User(), binding: UserBinding()),

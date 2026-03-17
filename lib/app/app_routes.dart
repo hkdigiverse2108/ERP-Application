@@ -11,4 +11,7 @@ abstract class Routes {
   static const recipt = '/recipt';
   static const payment = '/payment';
   static const materialConsumption = '/material-consumption';
+  static const debit = '/debit';
+  static const credit = '/credit';
+  static const contact = '/contact';
 }

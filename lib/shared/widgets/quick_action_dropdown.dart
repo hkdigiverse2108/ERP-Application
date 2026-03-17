@@ -54,6 +54,19 @@ class QuickActionDropdown extends StatelessWidget {
                       ],
                     ),
                     _ExpandableSection(
+                      title: "Accounting",
+                      items: [
+                        QuickActionItem(
+                          title: "Cradit Note",
+                          route: Routes.credit,
+                        ),
+                        QuickActionItem(
+                          title: "Debit Note",
+                          route: Routes.debit,
+                        ),
+                      ],
+                    ),
+                    _ExpandableSection(
                       title: "Bank / Cash",
                       items: [
                         QuickActionItem(title: "Bank"),
@@ -71,7 +84,12 @@ class QuickActionDropdown extends StatelessWidget {
                     ),
                     _ExpandableSection(
                       title: "Contact",
-                      items: [QuickActionItem(title: "Contact")],
+                      items: [
+                        QuickActionItem(
+                          title: "Contact",
+                          route: Routes.contact,
+                        ),
+                      ],
                     ),
                     _ExpandableSection(
                       title: "Inventory",
