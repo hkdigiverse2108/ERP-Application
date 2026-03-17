@@ -1,12 +1,12 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/inventory/widgets/product_table.dart';
+import 'package:ai_setu/modules/inventory/widgets/bill_live_product_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
-class Inventory extends StatelessWidget {
-  const Inventory({super.key});
+class BillOfLive extends StatelessWidget {
+  const BillOfLive({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,8 @@ class Inventory extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuickAction(),
-            _buildSectionTitle('Product List'),
-            ProductTable(),
+            _buildSectionTitle('Bill of Live Product List'),
+            BillLiveProductTable(),
           ],
         ),
       ),

@@ -4,7 +4,6 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/modules/user/controllers/user_controller.dart';
-import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';

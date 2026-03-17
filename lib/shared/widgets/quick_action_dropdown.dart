@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -38,23 +39,62 @@ class QuickActionDropdown extends StatelessWidget {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
+                    _ExpandableSection(
+                      title: "Dashboard",
+                      onTap: () {
+                        Get.toNamed(Routes.home);
+                      },
+                    ),
                     _ExpandableSection(
                       title: "Sales",
-                      items: ["Invoice", "Credit Note"],
+                      items: [
+                        QuickActionItem(title: "Invoice"),
+                        QuickActionItem(title: "Credit Note"),
+                      ],
                     ),
                     _ExpandableSection(
                       title: "Bank / Cash",
-                      items: ["Bank", "Bank Transaction", "Receipt", "Payment"],
+                      items: [
+                        QuickActionItem(title: "Bank"),
+                        QuickActionItem(title: "Bank Transaction"),
+                        QuickActionItem(title: "Receipt"),
+                        QuickActionItem(title: "Payment"),
+                      ],
                     ),
                     _ExpandableSection(
                       title: "Purchase",
-                      items: ["Supplier Bill", "Debit Note"],
+                      items: [
+                        QuickActionItem(title: "Supplier Bill"),
+                        QuickActionItem(title: "Debit Note"),
+                      ],
                     ),
-                    _ExpandableSection(title: "Content", items: ["Contact"]),
+                    _ExpandableSection(
+                      title: "Contact",
+                      items: [QuickActionItem(title: "Contact")],
+                    ),
                     _ExpandableSection(
                       title: "Inventory",
-                      items: ["Product", "Stock Transfer", "Price Master"],
+                      items: [
+                        QuickActionItem(
+                          title: "Product",
+                          route: Routes.product,
+                        ),
+                        QuickActionItem(title: "Stock", route: Routes.stock),
+                        QuickActionItem(title: "Recipt", route: Routes.recipt),
+                        QuickActionItem(
+                          title: "Stock Varification ",
+                          route: Routes.stockVarification,
+                        ),
+                        QuickActionItem(
+                          title: "Bill of Live",
+                          route: Routes.billOfLive,
+                        ),
+                        QuickActionItem(
+                          title: "Material Consumption",
+                          route: Routes.materialConsumption,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -67,36 +107,62 @@ class QuickActionDropdown extends StatelessWidget {
   }
 }
 
+class QuickActionItem {
+  final String title;
+  final String? route;
+
+  const QuickActionItem({required this.title, this.route});
+}
+
 class _ExpandableSection extends StatelessWidget {
   final String title;
-  final List<String> items;
+  final List<QuickActionItem>? items;
+  final VoidCallback? onTap;
 
-  const _ExpandableSection({required this.title, required this.items});
+  const _ExpandableSection({required this.title, this.items, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        tilePadding: EdgeInsets.zero,
-        childrenPadding: const EdgeInsets.only(
-          left: Sizes.paddingS,
-          bottom: Sizes.paddingS,
+      child: GestureDetector(
+        onTap: onTap,
+        child: ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: const EdgeInsets.only(
+            left: Sizes.paddingS,
+            bottom: Sizes.paddingS,
+          ),
+          initiallyExpanded: true,
+          iconColor: context.responsive(
+            light: AppColors.lightTextSecondary,
+            dark: AppColors.darkTextSecondary,
+          ),
+          collapsedIconColor: context.responsive(
+            light: AppColors.lightTextSecondary,
+            dark: AppColors.darkTextSecondary,
+          ),
+          title: Text(
+            title,
+            style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
+          ),
+          children: items != null
+              ? items!
+                    .map(
+                      (item) => _QuickActionItem(
+                        label: item.title,
+                        onTap: () {
+                          if (item.route != null) {
+                            Get.toNamed(item.route!);
+                          } else {
+                            Get.back();
+                          }
+                        },
+                      ),
+                    )
+                    .toList()
+              : [],
         ),
-        initiallyExpanded: true,
-        iconColor: context.responsive(
-          light: AppColors.lightTextSecondary,
-          dark: AppColors.darkTextSecondary,
-        ),
-        collapsedIconColor: context.responsive(
-          light: AppColors.lightTextSecondary,
-          dark: AppColors.darkTextSecondary,
-        ),
-        title: Text(
-          title,
-          style: TextHelper.h4.copyWith(fontWeight: FontWeight.bold),
-        ),
-        children: items.map((item) => _QuickActionItem(label: item)).toList(),
       ),
     );
   }
@@ -104,14 +170,16 @@ class _ExpandableSection extends StatelessWidget {
 
 class _QuickActionItem extends StatelessWidget {
   final String label;
+  final VoidCallback onTap;
 
-  const _QuickActionItem({required this.label});
+  const _QuickActionItem({required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Get.back();
+        onTap();
       },
       borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
       child: Padding(

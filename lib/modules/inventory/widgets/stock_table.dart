@@ -11,8 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
-class ProductTable extends StatelessWidget {
-  ProductTable({super.key});
+class StockTable extends StatelessWidget {
+  StockTable({super.key});
   final HomeController homeController = Get.put(HomeController());
 
   @override
@@ -33,87 +33,58 @@ class ProductTable extends StatelessWidget {
               CommonTable<ProductItemModel>(
                 items: [
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    printName: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                   ProductItemModel(
-                    name: 'Apple',
-                    printName: 'Apple',
-                    category: 'Fruits',
-                    brand: 'Apple',
-                    purchaseTax: '10',
-                    saleTax: '10',
-                    purchasePrice: '10',
-                    mrp: '10',
-                    salePrice: '10',
-                    saleDiscount: '10',
+                    name: 'Hp Laptop',
+                    category: 'Electronics',
+                    subCategory: 'Laptops',
+                    brand: 'Hp',
+                    subBrand: 'Hp',
                     qty: 10,
                   ),
                 ],
                 columns: [
                   TableColumn(
-                    title: 'Name',
+                    title: 'Product Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,17 +101,7 @@ class ProductTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Print Name',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.printName ?? '',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Category',
+                    title: 'Category Name',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
@@ -150,7 +111,17 @@ class ProductTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Brand',
+                    title: 'Sub Category Name',
+                    width: 100,
+                    alignment: TextAlign.right,
+                    cellBuilder: (context, item, index) => Text(
+                      item.subCategory ?? '',
+                      textAlign: TextAlign.right,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Brand Name',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
@@ -162,11 +133,11 @@ class ProductTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Purchase Tax',
+                    title: 'Sub Brand Name',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.purchaseTax}',
+                      item.subBrand ?? '',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -174,57 +145,7 @@ class ProductTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Sale Tax',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.saleTax}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Purchase Price',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.purchasePrice}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'MRP',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.mrp}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Sale Price',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.salePrice}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Sale Discount',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.saleDiscount}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Qty',
+                    title: 'Available Qty',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
