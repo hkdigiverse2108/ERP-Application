@@ -136,6 +136,5 @@ class PurchaseOrderTable extends StatelessWidget {
         );
       }),
     );
-    ;
   }
 }

@@ -5,6 +5,11 @@ class StorageService {
   factory StorageService() => _instance;
   StorageService._internal();
 
+  // Add this
+  static StorageService get instance => _instance;
+
+  String? get token => read<String>(StorageKeys.accessToken);
+
   final _box = GetStorage();
 
   /// Initialize Storage

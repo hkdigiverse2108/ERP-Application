@@ -38,48 +38,63 @@ class SignIn extends GetView<SignInController> {
             flex: 4,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gap(20),
-                  Text(Strings.login, style: TextHelper.h2),
-                  Text(Strings.loginMsg, style: TextHelper.label),
-                  Gap(18),
-                  NormalField(
-                    labelFloating: true,
-                    labelText: "Email ID",
-                    controller: controller.email,
-                    hintText: "Enter Your Email",
-                  ),
-                  Gap(18),
-                  Obx(
-                    () => NormalField(
+              child: Form(
+                key: controller.loginFormKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gap(20),
+                    Text(Strings.login, style: TextHelper.h2),
+                    Text(Strings.loginMsg, style: TextHelper.label),
+                    Gap(18),
+                    NormalField(
                       labelFloating: true,
-                      labelText: "Password",
-                      controller: controller.password,
-                      hintText: "Enter Your Password",
-                      obscureText: !controller.show.value,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          controller.show.value
-                              ? PhosphorIconsBold.eyeClosed
-                              : PhosphorIconsBold.eye,
-                        ),
-                        onPressed: () {
-                          controller.show.value = !controller.show.value;
+                      labelText: "Email ID",
+                      controller: controller.emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your email";
+                        }
+                        return null;
+                      },
+                      hintText: "Enter Your Email",
+                    ),
+                    Gap(18),
+                    Obx(
+                      () => NormalField(
+                        labelFloating: true,
+                        labelText: "Password",
+                        controller: controller.passwordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your password";
+                          }
+                          return null;
                         },
+                        hintText: "Enter Your Password",
+                        obscureText: !controller.showPassword.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.showPassword.value
+                                ? PhosphorIconsBold.eyeClosed
+                                : PhosphorIconsBold.eye,
+                          ),
+                          onPressed: () {
+                            controller.togglePassword();
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  Gap(20),
-                  CommonButton(
-                    onPressed: () {
-                      Get.offAllNamed(Routes.home);
-                    },
-                    text: Strings.login.toUpperCase(),
-                  ),
-                ],
+                    Gap(20),
+                    CommonButton(
+                      onPressed: () {
+                        controller.login();
+                      },
+                      text: Strings.login.toUpperCase(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
