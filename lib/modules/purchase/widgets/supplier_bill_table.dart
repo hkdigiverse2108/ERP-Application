@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/purchase_model/supplier_bill_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
@@ -48,13 +49,13 @@ class SupplierBillTable extends StatelessWidget {
                 ],
                 columns: [
                   TableColumn(
-                    title: 'Name',
+                    title: 'Status',
                     width: 140,
                     cellBuilder: (context, item, index) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.name,
+                          item.status,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -65,31 +66,31 @@ class SupplierBillTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Print Name',
+                    title: 'Company',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.printName,
+                      item.company,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Category',
+                    title: 'Bill No',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.category,
+                      item.billNo,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Brand',
+                    title: 'Supplier',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.brand,
+                      item.supplier,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -97,11 +98,11 @@ class SupplierBillTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Purchase Tax',
+                    title: 'Bill Date',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.purchaseTax}',
+                      item.billDate,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -109,61 +110,71 @@ class SupplierBillTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Sale Tax',
+                    title: 'Bill Amount',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.saleTax}',
+                      '₹${item.billAmount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Purchase Price',
+                    title: 'Paid Amount',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.purchasePrice}',
+                      '₹${item.paidAmount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'MRP',
+                    title: 'Due Amount',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.mrp}',
+                      '₹${item.dueAmount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Sale Price',
+                    title: 'Tax Amount',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.salePrice}',
+                      '₹${item.taxAmount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Sale Discount',
+                    title: 'Due Date',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.saleDiscount}',
+                      item.dueDate,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Qty',
+                    title: 'Notes',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.qty.toString(),
+                      item.notes,
+                      textAlign: TextAlign.right,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Action',
+                    width: 100,
+                    alignment: TextAlign.right,
+                    cellBuilder: (context, item, index) => Text(
+                      item.action,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -180,6 +191,6 @@ class SupplierBillTable extends StatelessWidget {
         );
       }),
     );
-    ;
+    
   }
 }
