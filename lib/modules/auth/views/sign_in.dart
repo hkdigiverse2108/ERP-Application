@@ -6,7 +6,6 @@ import 'package:ai_setu/shared/widgets/buttons/common_button.dart';
 import 'package:ai_setu/shared/widgets/text_fields/normal_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ai_setu/app/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -16,7 +15,7 @@ class SignIn extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Column(
         children: [
           Expanded(
@@ -81,17 +80,20 @@ class SignIn extends GetView<SignInController> {
                                 : PhosphorIconsBold.eye,
                           ),
                           onPressed: () {
-                            controller.togglePassword();
+                            controller.toggleShowPass();
                           },
                         ),
                       ),
                     ),
                     Gap(20),
-                    CommonButton(
-                      onPressed: () {
-                        controller.login();
-                      },
-                      text: Strings.login.toUpperCase(),
+                    Obx(
+                      () => CommonButton(
+                        onPressed: () {
+                          controller.login();
+                        },
+                        isLoading: controller.isLoading.value,
+                        text: Strings.login.toUpperCase(),
+                      ),
                     ),
                   ],
                 ),

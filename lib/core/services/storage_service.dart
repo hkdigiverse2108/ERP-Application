@@ -37,6 +37,13 @@ class StorageService {
     await _box.erase();
   }
 
+  /// Clear Session
+  Future<void> clearSession() async {
+    await remove(StorageKeys.accessToken);
+    await remove(StorageKeys.refreshToken);
+    await remove(StorageKeys.userData);
+  }
+
   /// Check if key exists
   bool hasData(String key) {
     return _box.hasData(key);

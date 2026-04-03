@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_bindings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/theme/light_theme.dart';
@@ -12,6 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'AI Setu',
+      initialBinding: AppBindings(),
       debugShowCheckedModeBanner: false,
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,

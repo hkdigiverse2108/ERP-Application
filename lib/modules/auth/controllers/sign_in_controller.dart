@@ -1,13 +1,12 @@
 import 'dart:developer';
 
+import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:ai_setu/app/app_routes.dart';
-import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
-import 'package:ai_setu/data/model/res_model/res_model.dart';
+import 'package:ai_setu/data/repositories/auth_repository.dart';
 
 class SignInController extends GetxController {
   static SignInController get instance => Get.find();
@@ -15,73 +14,44 @@ class SignInController extends GetxController {
   // Services
   final StorageService storageService = StorageService.instance;
   final ApiService apiService = ApiService.to;
+  final _repo = AuthRepository();
 
-  // Form
-  final loginFormKey = GlobalKey<FormState>();
+  final isLoading = false.obs;
+  final showPassword = false.obs;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final loginFormKey = GlobalKey<FormState>();
 
-  // UI State
-  final showPassword = false.obs;
-  final isLoading = false.obs;
-
-  // ================= LOGIN =================
   Future<void> login() async {
+    if (!loginFormKey.currentState!.validate()) return;
     try {
       isLoading.value = true;
-
-      if (!(loginFormKey.currentState?.validate() ?? false)) {
-        return;
-      }
-
-      final email = emailController.text.trim();
-      final password = passwordController.text.trim();
-
-      final ResModel response = await apiService.postRequest(
-        ApiConstants.login,
-        {"email": email, "password": password},
-        isAuth: false,
+      final result = await _repo.login(
+        emailController.text.trim(),
+        passwordController.text.trim(),
       );
-
-      log("Login Response: ${response.toJson()}");
-      log("Token: ${response.data['token']}");
-      if (response.status == 200) {
-        final data = response.data;
-
-        if (data != null && data is Map<String, dynamic>) {
-          final token = data['token'];
-
-          if (token != null) {
-            await storageService.write(StorageKeys.accessToken, token);
-            Get.offAllNamed(Routes.home);
-          } else {
-            _showError("Token not found");
-          }
-        } else {
-          _showError("Invalid response data");
-        }
-      } else {
-        _showError(response.message ?? "Login failed");
-      }
+      await StorageService.instance.write(
+        StorageKeys.accessToken,
+        result.user.token,
+      );
+      await StorageService.instance.write(StorageKeys.isLoggedIn, true);
+      await StorageService.instance.write(
+        StorageKeys.userData,
+        result.user.toJson(),
+      );
+      Get.offAllNamed(Routes.home);
     } catch (e) {
-      log("Login Failed: $e");
-      _showError("Something went wrong");
+      log(e.toString());
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
   }
 
-  // ================= UI HELPERS =================
-
-  void togglePassword() {
+  void toggleShowPass() {
     showPassword.toggle();
   }
 
-  void _showError(String message) {
-    Get.snackbar("Error", message, snackPosition: SnackPosition.BOTTOM);
-  }
-
-  // ================= CLEANUP =================
   @override
   void onClose() {
     emailController.dispose();

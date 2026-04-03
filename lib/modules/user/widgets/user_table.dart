@@ -34,32 +34,7 @@ class UserTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<UserModel>(
-                items: [
-                  UserModel(
-                    userName: 'Aman',
-                    fullName: 'Aman',
-                    designation: 'Manager',
-                    email: 'aman@gmail.com',
-                    phoneNo: '1234567890',
-                    panNo: '1234567890',
-                    wages: '1000',
-                    extraWages: '100',
-                    commission: '10',
-                    action: 'Edit',
-                  ),
-                  UserModel(
-                    userName: 'Bharat',
-                    fullName: 'Bharat',
-                    designation: 'Manager',
-                    email: 'bharat@gmail.com',
-                    phoneNo: '1234567890',
-                    panNo: '1234567890',
-                    wages: '1000',
-                    extraWages: '100',
-                    commission: '10',
-                    action: 'Edit',
-                  ),
-                ],
+                items: [],
                 columns: [
                   TableColumn(
                     title: 'User Name',
@@ -68,7 +43,7 @@ class UserTable extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.userName ?? '',
+                          item.fullName ?? '',
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -110,7 +85,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.phoneNo ?? '',
+                      item.phoneNo.phoneNo.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -121,7 +96,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.panNo ?? '',
+                      item.panNumber ?? '',
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -132,7 +107,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.wages ?? '',
+                      item.wages.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -143,7 +118,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.extraWages ?? '',
+                      item.extraWages.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -154,7 +129,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.commission ?? '',
+                      item.commission.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
