@@ -1,8 +1,8 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.1.67:4001";
+  static const String baseUrl = "http://192.168.29.26:4001";
 
   // Helper method to build URLs with query parameters
-  static String _buildUrl(String path, Map<String, dynamic> params) {
+  static String buildUrl(String path, Map<String, dynamic> params) {
     final List<String> queryParts = [];
     params.forEach((key, value) {
       if (value != null && value.toString().isNotEmpty) {
@@ -17,14 +17,34 @@ class ApiConstants {
   // Auth
   static const String login = "/auth/login";
 
+  // Dashboard
+  static const String transactions = "/dashboard/transactions";
+  static const String topCustomers = "/dashboard/top-customers";
+  static const String categoryWiseCustomers =
+      "/dashboard/category-wise-customers";
+  static const String categoryWiseCustomersCount =
+      "/dashboard/category-wise-customers-count";
+  static const String bestSellingProducts = "/dashboard/best-selling-products";
+  static const String leastSellingProducts =
+      "/dashboard/least-selling-products";
+  static const String topExpenses = "/dashboard/top-expenses";
+  static const String topCoupons = "/dashboard/top-coupons";
+  static const String receivable = "/dashboard/receivable";
+  static const String payable = "/dashboard/payable";
+  static const String salesAndPurchaseGraph =
+      "/dashboard/sales-and-purchase-graph";
+  static const String transactionGraph = "/dashboard/transaction-graph";
+  static const String categorySales = "/dashboard/category-sales";
+  static const String loginLog = "/login-log/all";
+
   // User aad filter
   static String getAllUser(String typeFilter) =>
-      _buildUrl("/user/all", {"typeFilter": typeFilter});
+      buildUrl("/user/all", {"typeFilter": typeFilter});
   static const String addUser = "/user/add";
   static String deleteUser(String id) => "/user/$id";
   static String getUserById(String id) => "/user/$id";
   static String userDropdown(String typeFilter) =>
-      _buildUrl("user/dropdown", {"typeFilter": typeFilter});
+      buildUrl("user/dropdown", {"typeFilter": typeFilter});
   static String permissionAdmin(String id) => "/user/$id/permission";
 
   // Upload
@@ -40,43 +60,22 @@ class ApiConstants {
   static const String updateRole = "/role/edit";
   static String deleteRole(String id) => "/role/$id";
   static String roleDropdown(String id) =>
-      _buildUrl("role/dropdown", {"companyFilter": id});
+      buildUrl("role/dropdown", {"companyFilter": id});
   static String rolePermission(String id) => "/role/$id/permission";
 
   // Account Group
   static String accountGroupDropdown(String natureFilter, String purchase) =>
-      _buildUrl("account/dropdown", {
+      buildUrl("account/dropdown", {
         "natureFilter": natureFilter,
         "purchase": purchase,
       });
-
-  // Dashboard
-  static String getWiseCustomer(String typeFilter) => _buildUrl(
-    "/dashboard/category-wise-customer",
-    {"typeFilter": typeFilter},
-  );
-  static String topCustomer = "/dashboard/top-customers";
-  static String transaction = "/dashboard/transactions";
-  static String customerCount = "/dashboard/category-wise-customers-count";
-  static String loginLogAll = "/login-log/all";
-  static String bestSelling = "/dashboard/best-selling-products";
-  static String leastSelling = "/dashboard/least-selling-products";
-  static String topExpenses = "/dashboard/top-expenses";
-  static String topCoupons = "/dashboard/top-coupons";
-  static String receivable = "/dashboard/receivable";
-  static String payable = "/dashboard/payable";
-  static String salesAndPurchaseGraph = "/dashboard/sales-and-purchase-graph";
-  static String transactionGraph = "/dashboard/transaction-graph";
-  static String categorySales = "/dashboard/category-sales";
-  static String renewalDue = "/dashboard/renewal-due";
-  static String newRegistrations = "/dashboard/new-registrations";
 
   // Product
   static const String addProduct = "/product/add";
   static const String updateProduct = "/product/edit";
   static String deleteProduct(String id) => "/product/$id";
   static String getAllProduct(String page, String limit) =>
-      _buildUrl("/product/all", {"page": page, "limit": limit});
+      buildUrl("/product/all", {"page": page, "limit": limit});
   static String getProductById(String id) => "/product/$id";
   static const String productDropdown = "/product/dropdown";
 
@@ -90,7 +89,7 @@ class ApiConstants {
 
   // Product Type
   static String getAllProductType(String page, String limit) =>
-      _buildUrl("/product-type/add", {"page": page, "limit": limit});
+      buildUrl("/product-type/add", {"page": page, "limit": limit});
   static const String addProductType = "/product-type/add";
   static const String updateProductType = "/product-type/edit";
   static String deleteProductType(String id) => "/product-type/$id";
@@ -114,7 +113,7 @@ class ApiConstants {
 
   // Stock
   static String getAllStock(String activeFilter) =>
-      _buildUrl("/stock/all", {"activeFilter": activeFilter});
+      buildUrl("/stock/all", {"activeFilter": activeFilter});
   static const String addStock = "/stock/add";
   static const String updateStock = "/stock/edit";
   static String deleteStock(String id) => "/stock/$id";
@@ -130,7 +129,7 @@ class ApiConstants {
   static String getBillOfLiveProductById(String id) =>
       "/bill-of-live-product/$id";
   static String billOfLiveProductDropdown(String companyFilter, String id) =>
-      _buildUrl("/bill-of-live-product/dropdown", {
+      buildUrl("/bill-of-live-product/dropdown", {
         "companyFilter": companyFilter,
         "id": id,
       });
@@ -150,7 +149,7 @@ class ApiConstants {
   static const String updateRecipe = "/recipe/edit";
   static String deleteRecipe(String id) => "/recipe/$id";
   static String recipeDropdown(String companyFilter, String id) =>
-      _buildUrl("/recipe/dropdown", {"companyFilter": companyFilter, "id": id});
+      buildUrl("/recipe/dropdown", {"companyFilter": companyFilter, "id": id});
 
   // POS Payment
   static const String getAllPosPayment = "/pos-payment/all";
@@ -245,7 +244,7 @@ class ApiConstants {
   // POS Order
   static const String getAllPosOrder = "/pos-order/all";
   static String posOrderDropdown(String duePaymentFilter) =>
-      _buildUrl("/pos-order/dropdown", {"duePaymentFilter": duePaymentFilter});
+      buildUrl("/pos-order/dropdown", {"duePaymentFilter": duePaymentFilter});
   static String getPosOrderById(String branchId) =>
       "/pos-order/cash-control/$branchId";
   static String updatePosOrder(String id) => "/pos-order/hold/$id";
@@ -271,13 +270,13 @@ class ApiConstants {
 
   // Cash Control
   static String getAllCashControl(String registerFilter) =>
-      _buildUrl("/cash-control/all", {"registerFilter": registerFilter});
+      buildUrl("/cash-control/all", {"registerFilter": registerFilter});
   static const String addCashControl = "/cash-control/add";
   static String getCashControlById(String id) => "/cash-control/$id";
   static const String updateCashControl = "/cash-control/edit";
   static String deleteCashControl(String id) => "/cash-control/$id";
   static String cashControlDropdown(String registerFilter) =>
-      _buildUrl("/cash-control/dropdown", {"registerFilter": registerFilter});
+      buildUrl("/cash-control/dropdown", {"registerFilter": registerFilter});
 
   // POS Cash Register
   static const String getAllPosCashRegister = "/pos-cash-register/all";
@@ -317,7 +316,7 @@ class ApiConstants {
   static String singleContactById(String id) => "/contacts/single/$id";
   static String deleteContact(String id) => "/contacts/$id";
   static String contactDropdown(String typeFilter) =>
-      _buildUrl("contacts/dropdown", {"typeFilter": typeFilter});
+      buildUrl("contacts/dropdown", {"typeFilter": typeFilter});
 
   // Purchase Order
   static const String getAllPurchaseOrder = "/purchase-order/all";
@@ -350,7 +349,7 @@ class ApiConstants {
   static const String updateBranch = "/branch/edit";
   static String deleteBranch(String id) => "/branch/$id";
   static String branchDropdown(String companyFilter, String id) =>
-      _buildUrl("branch/dropdown", {"companyFilter": companyFilter, "id": id});
+      buildUrl("branch/dropdown", {"companyFilter": companyFilter, "id": id});
 
   // Brand
   static const String getAllBrand = "/brand/all";
@@ -370,7 +369,7 @@ class ApiConstants {
   static String categoryDropdown(
     String parentCategoryFilter,
     String typeFilter,
-  ) => _buildUrl("category/dropdown", {
+  ) => buildUrl("category/dropdown", {
     "parentCategoryFilter": parentCategoryFilter,
     "typeFilter": typeFilter,
   });
