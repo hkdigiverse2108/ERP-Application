@@ -37,6 +37,7 @@ class ReportCart extends StatelessWidget {
                 ? controller.categoryWiseCustomersCount[0].count.toDouble()
                 : 0,
             color: vipCustColor,
+            isLoading: controller.categoryWiseCustomersCountLoading.value,
           ),
           StatCard(
             image: "assets/images/regular.png",
@@ -45,6 +46,7 @@ class ReportCart extends StatelessWidget {
                 ? controller.categoryWiseCustomersCount[1].count.toDouble()
                 : 0,
             color: regularCustColor,
+            isLoading: controller.categoryWiseCustomersCountLoading.value,
           ),
           StatCard(
             image: "assets/images/risk.png",
@@ -53,6 +55,7 @@ class ReportCart extends StatelessWidget {
                 ? controller.categoryWiseCustomersCount[2].count.toDouble()
                 : 0,
             color: riskCustColor,
+            isLoading: controller.categoryWiseCustomersCountLoading.value,
           ),
           StatCard(
             image: "assets/images/lost.png",
@@ -61,6 +64,7 @@ class ReportCart extends StatelessWidget {
                 ? controller.categoryWiseCustomersCount[3].count.toDouble()
                 : 0,
             color: lostCustColor,
+            isLoading: controller.categoryWiseCustomersCountLoading.value,
           ),
         ],
       ),

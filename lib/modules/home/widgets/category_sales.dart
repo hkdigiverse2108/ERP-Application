@@ -6,6 +6,7 @@ import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,10 @@ class CategorySales extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (homeController.categorySalesLoading.value &&
+            homeController.categorySales.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         final items = homeController.categorySales;
         return BorderContainer(
@@ -29,8 +34,7 @@ class CategorySales extends StatelessWidget {
                 onChanged: (range) {
                   homeController.selectedDateRange.value = range;
                   homeController.categorySalesPage.value = 1; // Reset page
-                  homeController.productsLoaded.value = false;
-                  homeController.loadProducts();
+                  homeController.getCategorySales();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),

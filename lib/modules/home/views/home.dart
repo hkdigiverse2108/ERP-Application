@@ -145,83 +145,97 @@ class Home extends StatelessWidget {
                             homeController.loadGraphs();
                           }
                         },
-                        child: Obx(() {
-                          return _AnimatedSection(
-                            isLoading: homeController.graphsLoading.value,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildSectionTitle('Sales and Purchase'),
-                                Padding(
-                                  padding: EdgeInsets.all(Sizes.paddingM),
-                                  child: BorderContainer(
-                                    child: Column(
-                                      children: [
-                                        RangedDatePicker(
-                                          initialDateRange: homeController
-                                              .selectedDateRange
-                                              .value,
-                                          onChanged: (range) =>
-                                              homeController
-                                                      .selectedDateRange
-                                                      .value =
-                                                  range,
-                                        ),
-                                        Gap(Sizes.lgHorizontalSpace),
-                                        const AppBarChart(
-                                          values: [45, 80, 65, 30, 90, 50, 70],
-                                          labels: [
-                                            'Mon',
-                                            'Tue',
-                                            'Wed',
-                                            'Thu',
-                                            'Fri',
-                                            'Sat',
-                                            'Sun',
-                                          ],
-                                        ),
-                                        Gap(Sizes.lgVerticalSpace),
-                                      ],
-                                    ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('Sales and Purchase'),
+                            Padding(
+                              padding: EdgeInsets.all(Sizes.paddingM),
+                              child: Obx(() {
+                                if (homeController
+                                    .salesAndPurchaseGraphLoading
+                                    .value) {
+                                  return const SectionShimmer(height: 300);
+                                }
+                                return BorderContainer(
+                                  child: Column(
+                                    children: [
+                                      RangedDatePicker(
+                                        initialDateRange: homeController
+                                            .selectedDateRange
+                                            .value,
+                                        onChanged: (range) {
+                                          homeController
+                                                  .selectedDateRange
+                                                  .value =
+                                              range;
+                                          homeController
+                                              .getSalesAndPurchaseGraph();
+                                        },
+                                      ),
+                                      Gap(Sizes.lgHorizontalSpace),
+                                      const AppBarChart(
+                                        values: [45, 80, 65, 30, 90, 50, 70],
+                                        labels: [
+                                          'Mon',
+                                          'Tue',
+                                          'Wed',
+                                          'Thu',
+                                          'Fri',
+                                          'Sat',
+                                          'Sun',
+                                        ],
+                                      ),
+                                      Gap(Sizes.lgVerticalSpace),
+                                    ],
                                   ),
-                                ),
-                                _buildSectionTitle('Transaction'),
-                                Padding(
-                                  padding: EdgeInsets.all(Sizes.paddingM),
-                                  child: BorderContainer(
-                                    child: Column(
-                                      children: [
-                                        RangedDatePicker(
-                                          initialDateRange: homeController
-                                              .selectedDateRange
-                                              .value,
-                                          onChanged: (range) =>
-                                              homeController
-                                                      .selectedDateRange
-                                                      .value =
-                                                  range,
-                                        ),
-                                        Gap(Sizes.lgHorizontalSpace),
-                                        const AppBarChart(
-                                          values: [15, 60, 65, 45, 62, 20, 40],
-                                          labels: [
-                                            '1 Mar',
-                                            '5 Mar',
-                                            '10 Mar',
-                                            '15 Mar',
-                                            '20 Mar',
-                                            '25 Mar',
-                                          ],
-                                        ),
-                                        Gap(Sizes.lgVerticalSpace),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                );
+                              }),
                             ),
-                          );
-                        }),
+                            _buildSectionTitle('Transaction'),
+                            Padding(
+                              padding: EdgeInsets.all(Sizes.paddingM),
+                              child: Obx(() {
+                                if (homeController
+                                    .transactionGraphLoading
+                                    .value) {
+                                  return const SectionShimmer(height: 300);
+                                }
+                                return BorderContainer(
+                                  child: Column(
+                                    children: [
+                                      RangedDatePicker(
+                                        initialDateRange: homeController
+                                            .selectedDateRange
+                                            .value,
+                                        onChanged: (range) {
+                                          homeController
+                                                  .selectedDateRange
+                                                  .value =
+                                              range;
+                                          homeController.getTransactionGraph();
+                                        },
+                                      ),
+                                      Gap(Sizes.lgHorizontalSpace),
+                                      const AppBarChart(
+                                        values: [15, 60, 65, 45, 62, 20, 40],
+                                        labels: [
+                                          '1 Mar',
+                                          '5 Mar',
+                                          '10 Mar',
+                                          '15 Mar',
+                                          '20 Mar',
+                                          '25 Mar',
+                                        ],
+                                      ),
+                                      Gap(Sizes.lgVerticalSpace),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
                       ),
 
                       // ── Section 3: Customers ──
@@ -232,27 +246,20 @@ class Home extends StatelessWidget {
                             homeController.loadCustomers();
                           }
                         },
-                        child: Obx(() {
-                          return _AnimatedSection(
-                            isLoading: homeController.customersLoading.value,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildSectionTitle('Top Customers'),
-                                TopCustomers(),
-                                _buildSectionTitle("Customer Report"),
-                                Padding(
-                                  padding: EdgeInsets.all(Sizes.paddingM),
-                                  child: BorderContainer(
-                                    child: Column(
-                                      children: [const ReportCart()],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('Top Customers'),
+                            TopCustomers(),
+                            _buildSectionTitle("Customer Report"),
+                            Padding(
+                              padding: EdgeInsets.all(Sizes.paddingM),
+                              child: BorderContainer(
+                                child: Column(children: [const ReportCart()]),
+                              ),
                             ),
-                          );
-                        }),
+                          ],
+                        ),
                       ),
 
                       // ── Section 4: Products ──
@@ -263,22 +270,17 @@ class Home extends StatelessWidget {
                             homeController.loadProducts();
                           }
                         },
-                        child: Obx(() {
-                          return _AnimatedSection(
-                            isLoading: homeController.productsLoading.value,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildSectionTitle('Category Sales'),
-                                CategorySales(),
-                                _buildSectionTitle('Best Selling Product'),
-                                BestsellingProduct(),
-                                _buildSectionTitle('Least Selling Product'),
-                                LeastSellingProduct(),
-                              ],
-                            ),
-                          );
-                        }),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('Category Sales'),
+                            CategorySales(),
+                            _buildSectionTitle('Best Selling Product'),
+                            BestsellingProduct(),
+                            _buildSectionTitle('Least Selling Product'),
+                            LeastSellingProduct(),
+                          ],
+                        ),
                       ),
 
                       // ── Section 5: Finance & Logs ──
@@ -289,30 +291,25 @@ class Home extends StatelessWidget {
                             homeController.loadFinance();
                           }
                         },
-                        child: Obx(() {
-                          return _AnimatedSection(
-                            isLoading: homeController.financeLoading.value,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildSectionTitle('Top Expenses'),
-                                TopExpenses(),
-                                _buildSectionTitle('Top Coupons'),
-                                TopCoupons(),
-                                _buildSectionTitle("Today's Receivable"),
-                                TodaysReceivable(),
-                                _buildSectionTitle("Today's Payable"),
-                                TodaysPayable(),
-                                _buildSectionTitle("To Receive"),
-                                ToReceive(),
-                                _buildSectionTitle('To Pay'),
-                                ToPay(),
-                                _buildSectionTitle('Login Log'),
-                                LoginLog(),
-                              ],
-                            ),
-                          );
-                        }),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('Top Expenses'),
+                            TopExpenses(),
+                            _buildSectionTitle('Top Coupons'),
+                            TopCoupons(),
+                            _buildSectionTitle("Today's Receivable"),
+                            TodaysReceivable(),
+                            _buildSectionTitle("Today's Payable"),
+                            TodaysPayable(),
+                            _buildSectionTitle("To Receive"),
+                            ToReceive(),
+                            _buildSectionTitle('To Pay'),
+                            ToPay(),
+                            _buildSectionTitle('Login Log'),
+                            LoginLog(),
+                          ],
+                        ),
                       ),
                     ],
                   );
@@ -336,41 +333,6 @@ class Home extends StatelessWidget {
         title,
         style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
       ),
-    );
-  }
-}
-
-class _AnimatedSection extends StatelessWidget {
-  final Widget child;
-  final bool isLoading;
-
-  const _AnimatedSection({required this.child, required this.isLoading});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position:
-                Tween<Offset>(
-                  begin: const Offset(0, 0.05),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ),
-                ),
-            child: child,
-          ),
-        );
-      },
-      child: isLoading
-          ? const SectionShimmer(key: ValueKey('shimmer'), height: 300)
-          : Container(key: const ValueKey('data'), child: child),
     );
   }
 }

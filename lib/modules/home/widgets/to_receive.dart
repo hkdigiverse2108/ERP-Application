@@ -6,6 +6,7 @@ import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,10 @@ class ToReceive extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (homeController.receivablesLoading.value &&
+            homeController.receivables.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         final items = homeController.receivables;
         return BorderContainer(
@@ -31,8 +36,7 @@ class ToReceive extends StatelessWidget {
                 onChanged: (range) {
                   homeController.selectedDateRange.value = range;
                   homeController.toReceivePage.value = 1; // Reset page
-                  homeController.financeLoaded.value = false;
-                  homeController.loadFinance();
+                  homeController.getReceivables();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
@@ -95,6 +99,7 @@ class ToReceive extends StatelessWidget {
                 currentPage: homeController.toReceivePage.value,
                 totalPages: (items.length / 5).ceil(),
                 totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
                     homeController.toReceivePage.value = page,
               ),

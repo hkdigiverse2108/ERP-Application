@@ -33,12 +33,14 @@ class ReceivableModel {
 
   factory ReceivableModel.fromJson(Map<String, dynamic> json) =>
       ReceivableModel(
-        id: json["_id"],
-        customerName: json["customerName"],
-        invoiceNo: json["invoiceNo"],
-        pendingAmount: json["pendingAmount"]?.toDouble(),
-        date: DateTime.parse(json["date"]),
-        type: json["type"],
+        id: json["_id"] ?? '',
+        customerName: json["customerName"] ?? '',
+        invoiceNo: json["invoiceNo"] ?? '-',
+        pendingAmount: json["pendingAmount"]?.toDouble() ?? 0.0,
+        date: json["date"] != null
+            ? DateTime.parse(json["date"])
+            : DateTime.now(),
+        type: json["type"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

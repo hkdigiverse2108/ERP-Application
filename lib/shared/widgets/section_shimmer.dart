@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class SectionShimmer extends StatefulWidget {
   final double height;
-  const SectionShimmer({super.key, this.height = 200});
+  final double? padding;
+  const SectionShimmer({super.key, this.height = 200, this.padding = 0});
 
   @override
   State<SectionShimmer> createState() => _SectionShimmerState();
@@ -38,13 +39,11 @@ class _SectionShimmerState extends State<SectionShimmer>
   @override
   Widget build(BuildContext context) {
     final isDark = ThemeService().isDarkMode;
-    final baseColor =
-        isDark ? Colors.grey[800]! : Colors.grey[300]!;
-    final highlightColor =
-        isDark ? Colors.grey[700]! : Colors.grey[100]!;
+    final baseColor = isDark ? Colors.grey[800]! : Colors.grey[300]!;
+    final highlightColor = isDark ? Colors.grey[700]! : Colors.grey[100]!;
 
     return Padding(
-      padding: EdgeInsets.all(Sizes.paddingM),
+      padding: EdgeInsets.all(widget.padding ?? 0),
       child: BorderContainer(
         child: AnimatedBuilder(
           animation: _animation,
@@ -57,11 +56,7 @@ class _SectionShimmerState extends State<SectionShimmer>
                 gradient: LinearGradient(
                   begin: Alignment(_animation.value - 1, -0.3),
                   end: Alignment(_animation.value + 1, 0.3),
-                  colors: [
-                    baseColor,
-                    highlightColor,
-                    baseColor,
-                  ],
+                  colors: [baseColor, highlightColor, baseColor],
                   stops: const [0.1, 0.5, 0.9],
                 ),
               ),

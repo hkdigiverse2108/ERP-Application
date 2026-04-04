@@ -36,13 +36,13 @@ class SellingsModel {
   String toRawJson() => json.encode(toJson());
 
   factory SellingsModel.fromJson(Map<String, dynamic> json) => SellingsModel(
-    id: json["_id"],
-    productName: json["productName"],
-    totalSalesQty: json["totalSalesQty"],
-    totalSalesValue: json["totalSalesValue"]?.toDouble(),
-    noOfBills: json["noOfBills"],
-    totalProfit: json["totalProfit"]?.toDouble(),
-    salesPercentage: json["salesPercentage"]?.toDouble(),
+    id: json["_id"] ?? '',
+    productName: json["productName"] ?? '',
+    totalSalesQty: json["totalSalesQty"] ?? 0,
+    totalSalesValue: json["totalSalesValue"]?.toDouble() ?? 0.0,
+    noOfBills: json["noOfBills"] ?? 0,
+    totalProfit: json["totalProfit"]?.toDouble() ?? 0.0,
+    salesPercentage: json["salesPercentage"]?.toDouble() ?? 0.0,
   );
 
   Map<String, dynamic> toJson() => {

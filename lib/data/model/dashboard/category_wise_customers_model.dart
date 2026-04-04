@@ -36,13 +36,13 @@ class CategoryWiseCustomersModel {
 
   factory CategoryWiseCustomersModel.fromJson(Map<String, dynamic> json) =>
       CategoryWiseCustomersModel(
-        id: json["_id"],
-        totalPurchaseValue: json["totalPurchaseValue"]?.toDouble(),
-        noOfBill: json["noOfBill"],
-        name: json["name"],
-        contactNo: json["contactNo"],
-        customerType: json["customerType"],
-        category: json["category"],
+        id: json["_id"] ?? '',
+        totalPurchaseValue: json["totalPurchaseValue"]?.toDouble() ?? 0.0,
+        noOfBill: json["noOfBill"] ?? 0,
+        name: json["name"] ?? '',
+        contactNo: json["contactNo"] ?? 0,
+        customerType: json["customerType"] ?? '',
+        category: json["category"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
