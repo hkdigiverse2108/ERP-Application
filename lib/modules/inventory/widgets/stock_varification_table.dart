@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class StockVarificationTable extends StatelessWidget {
   StockVarificationTable({super.key});

@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/customers_model.dart';
+import 'package:ai_setu/data/model/dashboard/receivable_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,6 +9,7 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ToReceive extends StatelessWidget {
   ToReceive({super.key});
@@ -21,42 +22,25 @@ class ToReceive extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.receivables;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.toReceivePage.value = 1; // Reset page
+                  homeController.financeLoaded.value = false;
+                  homeController.loadFinance();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<CustomersModel>(
-                items: [
-                  CustomersModel(
-                    customerName: 'John Doe',
-                    date: '2022-01-01',
-                    invoiceNo: '123456',
-                    pendingAmount: '2500',
-                  ),
-                  CustomersModel(
-                    customerName: 'John Doe',
-                    date: '2022-01-01',
-                    invoiceNo: '123456',
-                    pendingAmount: '2500',
-                  ),
-                  CustomersModel(
-                    customerName: 'John Doe',
-                    date: '2022-01-01',
-                    invoiceNo: '123456',
-                    pendingAmount: '2500',
-                  ),
-                  CustomersModel(
-                    customerName: 'John Doe',
-                    date: '2022-01-01',
-                    invoiceNo: '123456',
-                    pendingAmount: '2500',
-                  ),
-                ],
+              CommonTable<ReceivableModel>(
+                items: items
+                    .skip((homeController.toReceivePage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
                     title: 'Customer Name',
@@ -65,7 +49,7 @@ class ToReceive extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.customerName ?? '',
+                          item.customerName,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -78,9 +62,9 @@ class ToReceive extends StatelessWidget {
                   TableColumn(
                     title: 'Date',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.date ?? '',
+                      DateFormat('dd MMM yyyy').format(item.date),
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -88,9 +72,9 @@ class ToReceive extends StatelessWidget {
                   TableColumn(
                     title: 'Invoice No',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.invoiceNo ?? '',
+                      item.invoiceNo,
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -100,7 +84,7 @@ class ToReceive extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.pendingAmount}',
+                      '₹${item.pendingAmount.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -108,11 +92,11 @@ class ToReceive extends StatelessWidget {
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.toReceivePage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.toReceivePage.value = page,
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class StatCard extends StatelessWidget {
   final String? image;
@@ -11,6 +12,7 @@ class StatCard extends StatelessWidget {
   final String? tag;
   final Color? color;
   final bool showDecimal;
+  final bool isLoading;
 
   const StatCard({
     this.image,
@@ -20,6 +22,7 @@ class StatCard extends StatelessWidget {
     this.tag,
     this.color,
     this.showDecimal = false,
+    this.isLoading = false,
   });
 
   @override
@@ -43,17 +46,30 @@ class StatCard extends StatelessWidget {
                 width: Sizes.iconSizeXXL,
               ),
             if (image != null) Gap(Sizes.smallSpace),
-            Text(
-              (tag == null)
-                  ? (showDecimal
-                        ? value.toStringAsFixed(2)
-                        : value.toStringAsFixed(0))
-                  : "$tag ${showDecimal ? value.toStringAsFixed(2) : value.toStringAsFixed(0)}",
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: Sizes.textSizeM,
-              ),
-            ),
+            isLoading
+                ? DefaultTextStyle(
+                    style: const TextStyle(fontSize: 20.0),
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        TyperAnimatedText(
+                          '...',
+                          speed: Duration(milliseconds: 200),
+                        ),
+                      ],
+                      isRepeatingAnimation: true,
+                    ),
+                  )
+                : Text(
+                    (tag == null)
+                        ? (showDecimal
+                              ? value.toStringAsFixed(2)
+                              : value.toStringAsFixed(0))
+                        : "$tag ${showDecimal ? value.toStringAsFixed(2) : value.toStringAsFixed(0)}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: Sizes.textSizeM,
+                    ),
+                  ),
             Gap(Sizes.smallSpace),
             Text(
               title,

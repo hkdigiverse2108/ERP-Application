@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/coupons_model.dart';
+import 'package:ai_setu/data/model/dashboard/top_coupons_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class TopCoupons extends StatelessWidget {
   TopCoupons({super.key});
@@ -22,36 +21,25 @@ class TopCoupons extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.topCoupons;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.topCouponsPage.value = 1; // Reset page
+                  homeController.financeLoaded.value = false;
+                  homeController.loadFinance();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<CouponsModel>(
-                items: [
-                  CouponsModel(
-                    couponname: 'Electronics',
-                    noOfBills: '2',
-                    uniqueCouponsCount: '500',
-                    totalAmount: '2500',
-                  ),
-                  CouponsModel(
-                    couponname: 'Clothing',
-                    noOfBills: '17',
-                    uniqueCouponsCount: '2500',
-                    totalAmount: '2500',
-                  ),
-                  CouponsModel(
-                    couponname: 'Books',
-                    noOfBills: '11',
-                    uniqueCouponsCount: '2500',
-                    totalAmount: '2500',
-                  ),
-                ],
+              CommonTable<TopCouponsModel>(
+                items: items
+                    .skip((homeController.topCouponsPage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
                     title: 'Coupon Name',
@@ -60,7 +48,7 @@ class TopCoupons extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.couponname,
+                          item.name,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -71,31 +59,31 @@ class TopCoupons extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'No of Bills',
+                    title: 'Usage Count',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.noOfBills,
+                      '${item.usageCount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'UsedCount',
+                    title: 'Unique Cust.',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.uniqueCouponsCount,
+                      '${item.uniqueCustomersCount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Total Amount',
+                    title: 'Total Discount',
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.totalAmount}',
+                      '₹${item.totalDiscountGiven.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -103,11 +91,12 @@ class TopCoupons extends StatelessWidget {
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.topCouponsPage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.topCouponsPage.value = page,
               ),
             ],
           ),

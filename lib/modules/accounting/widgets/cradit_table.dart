@@ -160,6 +160,5 @@ class CraditTable extends StatelessWidget {
         );
       }),
     );
-    ;
   }
 }

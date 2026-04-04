@@ -115,6 +115,5 @@ class ContactTable extends StatelessWidget {
         );
       }),
     );
-    ;
   }
 }

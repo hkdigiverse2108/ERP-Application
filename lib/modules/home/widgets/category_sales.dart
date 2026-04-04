@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/category_model.dart';
+import 'package:ai_setu/data/model/dashboard/category_sales_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class CategorySales extends StatelessWidget {
   CategorySales({super.key});
@@ -21,58 +20,25 @@ class CategorySales extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.categorySales;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.categorySalesPage.value = 1; // Reset page
+                  homeController.productsLoaded.value = false;
+                  homeController.loadProducts();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<CategoryModel>(
-                items: [
-                  CategoryModel(
-                    categoryName: 'Electronics',
-                    noofBill: '2',
-                    salesQty: '500',
-                    salesAmount: '2500',
-                    profit: '2500',
-                    salePer: '2500',
-                  ),
-                  CategoryModel(
-                    categoryName: 'Clothing',
-                    noofBill: '17',
-                    salesQty: '2500',
-                    salesAmount: '2500',
-                    profit: '2500',
-                    salePer: '2500',
-                  ),
-                  CategoryModel(
-                    categoryName: 'Books',
-                    noofBill: '11',
-                    salesQty: '2500',
-                    salesAmount: '2500',
-                    profit: '2500',
-                    salePer: '2500',
-                  ),
-                  CategoryModel(
-                    categoryName: 'Toys',
-                    noofBill: '15',
-                    salesQty: '2500',
-                    salesAmount: '2500',
-                    profit: '2500',
-                    salePer: '2500',
-                  ),
-                  CategoryModel(
-                    categoryName: 'Furniture',
-                    noofBill: '5',
-                    salesQty: '2500',
-                    salesAmount: '2500',
-                    profit: '2500',
-                    salePer: '2500',
-                  ),
-                ],
+              CommonTable<CategorySalesModel>(
+                items: items
+                    .skip((homeController.categorySalesPage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
                     title: 'Category Name',
@@ -96,7 +62,7 @@ class CategorySales extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.noofBill,
+                      '${item.noOfBills}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -106,7 +72,7 @@ class CategorySales extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.salesQty,
+                      '${item.totalSalesQty}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -116,7 +82,7 @@ class CategorySales extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.salesAmount}',
+                      '₹${item.totalSalesValue.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -128,7 +94,7 @@ class CategorySales extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.profit}',
+                      '₹${item.totalProfit.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
@@ -140,17 +106,18 @@ class CategorySales extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.salePer,
+                      '${item.salesPercentage.toStringAsFixed(1)}%',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.categorySalesPage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.categorySalesPage.value = page,
               ),
             ],
           ),

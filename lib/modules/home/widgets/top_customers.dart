@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/customers_model.dart';
+import 'package:ai_setu/data/model/dashboard/top_customer_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class TopCustomers extends StatelessWidget {
   TopCustomers({super.key});
@@ -22,28 +21,25 @@ class TopCustomers extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.topCustomers;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.topCustomersPage.value = 1; // Reset page
+                  homeController.customersLoaded.value = false;
+                  homeController.loadCustomers();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<CustomersModel>(
-                items: [
-                  CustomersModel(
-                    customerName: 'Jhone',
-                    noofBill: '10',
-                    salesValue: '1000',
-                  ),
-                  CustomersModel(
-                    customerName: 'Jhone',
-                    noofBill: '10',
-                    salesValue: '1000',
-                  ),
-                ],
+              CommonTable<TopCustomerModel>(
+                items: items
+                    .skip((homeController.topCustomersPage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
                     title: 'Customer Name',
@@ -52,7 +48,7 @@ class TopCustomers extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.customerName ?? '',
+                          item.customerId.name,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -66,24 +62,27 @@ class TopCustomers extends StatelessWidget {
                     title: 'No of Bill',
                     width: 100,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.noofBill ?? '', style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.noOfBill.toString(),
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'Sales Value',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.salesValue ?? '',
+                      '₹${item.salesValue.toStringAsFixed(2)}',
                       style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.topCustomersPage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.topCustomersPage.value = page,
               ),
             ],
           ),

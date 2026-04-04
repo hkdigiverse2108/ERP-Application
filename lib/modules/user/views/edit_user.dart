@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class EditUser extends GetView<UserController> {
-  EditUser({super.key});
+  const EditUser({super.key});
 
   @override
   Widget build(BuildContext context) {

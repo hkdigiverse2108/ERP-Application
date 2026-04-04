@@ -35,6 +35,7 @@ class CommonTable<T> extends StatelessWidget {
   final int? totalPages;
   final Function(int)? onPageChanged;
   final int? totalItems;
+  final int pageSize;
 
   const CommonTable({
     super.key,
@@ -51,6 +52,7 @@ class CommonTable<T> extends StatelessWidget {
     this.totalPages,
     this.onPageChanged,
     this.totalItems,
+    this.pageSize = 10,
   });
 
   static const double _colSerial = 40;
@@ -278,7 +280,10 @@ class CommonTable<T> extends StatelessWidget {
           if (showSerial)
             SizedBox(
               width: _colSerial,
-              child: Text('${index + 1}', style: TextHelper.bodySmall),
+              child: Text(
+                '${index + 1 + ((currentPage ?? 1) - 1) * pageSize}',
+                style: TextHelper.bodySmall,
+              ),
             ),
 
           // Dynamic Columns
