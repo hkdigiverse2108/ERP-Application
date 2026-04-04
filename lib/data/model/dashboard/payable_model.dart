@@ -29,11 +29,11 @@ class PayableModel {
   String toRawJson() => json.encode(toJson());
 
   factory PayableModel.fromJson(Map<String, dynamic> json) => PayableModel(
-    id: json["_id"],
-    supplierName: json["supplierName"],
-    billNo: json["billNo"],
-    pendingAmount: json["pendingAmount"]?.toDouble(),
-    date: DateTime.parse(json["date"]),
+    id: json["_id"] ?? '',
+    supplierName: json["supplierName"] ?? '',
+    billNo: json["billNo"] ?? '-',
+    pendingAmount: json["pendingAmount"]?.toDouble() ?? 0.0,
+    date: json["date"] != null ? DateTime.parse(json["date"]) : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {

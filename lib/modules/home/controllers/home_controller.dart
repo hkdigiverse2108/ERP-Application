@@ -32,27 +32,36 @@ class HomeController extends GetxController {
 
   // ── Section 2: Graphs ──
   final graphsLoaded = false.obs;
-  final graphsLoading = false.obs;
+  final salesAndPurchaseGraphLoading = false.obs;
+  final transactionGraphLoading = false.obs;
   final salesAndPurchaseGraph = <SalesAndPurchaseGraphModel>[].obs;
   final transactionGraph = <TransactionGraphModel>[].obs;
 
   // ── Section 3: Customers ──
   final customersLoaded = false.obs;
-  final customersLoading = false.obs;
+  final topCustomersLoading = false.obs;
+  final categoryWiseCustomersLoading = false.obs;
+  final categoryWiseCustomersCountLoading = false.obs;
   final topCustomers = <TopCustomerModel>[].obs;
   final categoryWiseCustomers = <CategoryWiseCustomersModel>[].obs;
   final categoryWiseCustomersCount = <CategoryWiseCustomersCountModel>[].obs;
 
   // ── Section 4: Products ──
   final productsLoaded = false.obs;
-  final productsLoading = false.obs;
+  final bestSellingLoading = false.obs;
+  final leastSellingLoading = false.obs;
+  final categorySalesLoading = false.obs;
   final bestSelling = <SellingsModel>[].obs;
   final leastSelling = <SellingsModel>[].obs;
   final categorySales = <CategorySalesModel>[].obs;
 
   // ── Section 5: Finance ──
   final financeLoaded = false.obs;
-  final financeLoading = false.obs;
+  final topExpensesLoading = false.obs;
+  final topCouponsLoading = false.obs;
+  final receivablesLoading = false.obs;
+  final payablesLoading = false.obs;
+  final loginLogsLoading = false.obs;
   final topExpenses = <TopExpensesModel>[].obs;
   final topCoupons = <TopCouponsModel>[].obs;
   final receivables = <ReceivableModel>[].obs;
@@ -102,131 +111,237 @@ class HomeController extends GetxController {
   // Each section guard: only fetch once
   Future<void> loadGraphs() async {
     if (graphsLoaded.value) return;
-    graphsLoading.value = true;
-    final results = await Future.wait([
-      _repo
-          .getSalesAndPurchaseGraph(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <SalesAndPurchaseGraphModel>[]),
-      _repo
-          .getTransactionGraph(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <TransactionGraphModel>[]),
+    await Future.wait([
+      getSalesAndPurchaseGraph(),
+      getTransactionGraph(),
     ]);
-    salesAndPurchaseGraph.value =
-        results[0] as List<SalesAndPurchaseGraphModel>;
-    transactionGraph.value = results[1] as List<TransactionGraphModel>;
     graphsLoaded.value = true;
-    graphsLoading.value = false;
+  }
+
+  Future<void> getSalesAndPurchaseGraph() async {
+    try {
+      salesAndPurchaseGraphLoading.value = true;
+      final response = await _repo.getSalesAndPurchaseGraph(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      salesAndPurchaseGraph.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      salesAndPurchaseGraphLoading.value = false;
+    }
+  }
+
+  Future<void> getTransactionGraph() async {
+    try {
+      transactionGraphLoading.value = true;
+      final response = await _repo.getTransactionGraph(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      transactionGraph.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      transactionGraphLoading.value = false;
+    }
   }
 
   Future<void> loadCustomers() async {
     if (customersLoaded.value) return;
-    customersLoading.value = true;
-    final results = await Future.wait([
-      _repo
-          .getTopCustomers(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <TopCustomerModel>[]),
-      _repo
-          .getCategoryWiseCustomers(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <CategoryWiseCustomersModel>[]),
-      _repo
-          .getCategoryWiseCustomersCount(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <CategoryWiseCustomersCountModel>[]),
+    await Future.wait([
+      getTopCustomers(),
+      getCategoryWiseCustomers(),
+      getCategoryWiseCustomersCount(),
     ]);
-    topCustomers.value = results[0] as List<TopCustomerModel>;
-    categoryWiseCustomers.value =
-        results[1] as List<CategoryWiseCustomersModel>;
-    categoryWiseCustomersCount.value =
-        results[2] as List<CategoryWiseCustomersCountModel>;
     customersLoaded.value = true;
-    customersLoading.value = false;
+  }
+
+  Future<void> getTopCustomers() async {
+    try {
+      topCustomersLoading.value = true;
+      final response = await _repo.getTopCustomers(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      topCustomers.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      topCustomersLoading.value = false;
+    }
+  }
+
+  Future<void> getCategoryWiseCustomers() async {
+    try {
+      categoryWiseCustomersLoading.value = true;
+      final response = await _repo.getCategoryWiseCustomers(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      categoryWiseCustomers.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      categoryWiseCustomersLoading.value = false;
+    }
+  }
+
+  Future<void> getCategoryWiseCustomersCount() async {
+    try {
+      categoryWiseCustomersCountLoading.value = true;
+      final response = await _repo.getCategoryWiseCustomersCount(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      categoryWiseCustomersCount.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      categoryWiseCustomersCountLoading.value = false;
+    }
   }
 
   Future<void> loadProducts() async {
     if (productsLoaded.value) return;
-    productsLoading.value = true;
-    final results = await Future.wait([
-      _repo
-          .getBestSellingProducts(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <SellingsModel>[]),
-      _repo
-          .getLeastSellingProducts(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <SellingsModel>[]),
-      _repo
-          .getCategorySales(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <CategorySalesModel>[]),
+    await Future.wait([
+      getBestSellingProducts(),
+      getLeastSellingProducts(),
+      getCategorySales(),
     ]);
-    bestSelling.value = results[0] as List<SellingsModel>;
-    leastSelling.value = results[1] as List<SellingsModel>;
-    categorySales.value = results[2] as List<CategorySalesModel>;
     productsLoaded.value = true;
-    productsLoading.value = false;
+  }
+
+  Future<void> getBestSellingProducts() async {
+    try {
+      bestSellingLoading.value = true;
+      final response = await _repo.getBestSellingProducts(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      bestSelling.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      bestSellingLoading.value = false;
+    }
+  }
+
+  Future<void> getLeastSellingProducts() async {
+    try {
+      leastSellingLoading.value = true;
+      final response = await _repo.getLeastSellingProducts(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      leastSelling.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      leastSellingLoading.value = false;
+    }
+  }
+
+  Future<void> getCategorySales() async {
+    try {
+      categorySalesLoading.value = true;
+      final response = await _repo.getCategorySales(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      categorySales.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      categorySalesLoading.value = false;
+    }
   }
 
   Future<void> loadFinance() async {
     if (financeLoaded.value) return;
-    financeLoading.value = true;
-    final results = await Future.wait([
-      _repo
-          .getTopExpenses(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <TopExpensesModel>[]),
-      _repo
-          .getTopCoupons(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <TopCouponsModel>[]),
-      _repo
-          .getReceivables(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <ReceivableModel>[]),
-      _repo
-          .getPayables(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <PayableModel>[]),
-      _repo
-          .getLoginLogs(
-            startDate: selectedDateRange.value.start,
-            endDate: selectedDateRange.value.end,
-          )
-          .catchError((_) => <LoginLogModel>[]),
+    await Future.wait([
+      getTopExpenses(),
+      getTopCoupons(),
+      getReceivables(),
+      getPayables(),
+      getLoginLogs(),
     ]);
-    topExpenses.value = results[0] as List<TopExpensesModel>;
-    topCoupons.value = results[1] as List<TopCouponsModel>;
-    receivables.value = results[2] as List<ReceivableModel>;
-    payables.value = results[3] as List<PayableModel>;
-    loginLogs.value = results[4] as List<LoginLogModel>;
     financeLoaded.value = true;
-    financeLoading.value = false;
+  }
+
+  Future<void> getTopExpenses() async {
+    try {
+      topExpensesLoading.value = true;
+      final response = await _repo.getTopExpenses(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      topExpenses.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      topExpensesLoading.value = false;
+    }
+  }
+
+  Future<void> getTopCoupons() async {
+    try {
+      topCouponsLoading.value = true;
+      final response = await _repo.getTopCoupons(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      topCoupons.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      topCouponsLoading.value = false;
+    }
+  }
+
+  Future<void> getReceivables() async {
+    try {
+      receivablesLoading.value = true;
+      final response = await _repo.getReceivables(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      receivables.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      receivablesLoading.value = false;
+    }
+  }
+
+  Future<void> getPayables() async {
+    try {
+      payablesLoading.value = true;
+      final response = await _repo.getPayables(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      payables.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      payablesLoading.value = false;
+    }
+  }
+
+  Future<void> getLoginLogs() async {
+    try {
+      loginLogsLoading.value = true;
+      final response = await _repo.getLoginLogs(
+        startDate: selectedDateRange.value.start,
+        endDate: selectedDateRange.value.end,
+      );
+      loginLogs.value = response;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      loginLogsLoading.value = false;
+    }
   }
 }

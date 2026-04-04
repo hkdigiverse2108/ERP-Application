@@ -6,6 +6,7 @@ import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -13,13 +14,17 @@ import 'package:get/get.dart';
 class TopCoupons extends StatelessWidget {
   TopCoupons({super.key});
 
-  final HomeController homeController = Get.find<HomeController>();
+  final homeController = HomeController.instance;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (homeController.topCouponsLoading.value &&
+            homeController.topCoupons.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         final items = homeController.topCoupons;
         return BorderContainer(
@@ -30,8 +35,7 @@ class TopCoupons extends StatelessWidget {
                 onChanged: (range) {
                   homeController.selectedDateRange.value = range;
                   homeController.topCouponsPage.value = 1; // Reset page
-                  homeController.financeLoaded.value = false;
-                  homeController.loadFinance();
+                  homeController.getTopCoupons();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),

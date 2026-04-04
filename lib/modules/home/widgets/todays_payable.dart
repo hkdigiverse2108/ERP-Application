@@ -6,6 +6,7 @@ import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,10 @@ class TodaysPayable extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (homeController.payablesLoading.value &&
+            homeController.payables.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         final items = homeController.payables;
         return BorderContainer(
@@ -30,8 +35,7 @@ class TodaysPayable extends StatelessWidget {
                 onChanged: (range) {
                   homeController.selectedDateRange.value = range;
                   homeController.todaysPayablePage.value = 1; // Reset page
-                  homeController.financeLoaded.value = false;
-                  homeController.loadFinance();
+                  homeController.getPayables();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),

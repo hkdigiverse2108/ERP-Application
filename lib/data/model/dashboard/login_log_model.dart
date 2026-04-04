@@ -49,7 +49,7 @@ class LoginLogModel {
   String toRawJson() => json.encode(toJson());
 
   factory LoginLogModel.fromJson(Map<String, dynamic> json) => LoginLogModel(
-    id: json["_id"],
+    id: json["_id"] ?? '',
     company:
         ModelHelper.getNestedField<String>(json, ["companyId", "name"]) ?? "",
     branch:
@@ -57,12 +57,12 @@ class LoginLogModel {
     user:
         ModelHelper.getNestedField<String>(json, ["userId", "fullName"]) ?? "",
     email: ModelHelper.getNestedField<String>(json, ["userId", "email"]) ?? "",
-    message: json["message"],
-    ip: json["ip"],
-    eventType: json["eventType"],
-    systemDetails: json["systemDetails"],
-    createdAt: json["createdAt"],
-    updatedAt: json["updatedAt"],
+    message: json["message"] ?? '-',
+    ip: json["ipAddress"] ?? json["ip"] ?? '-',
+    eventType: json["eventType"] ?? '-',
+    systemDetails: json["systemDetails"] ?? '-',
+    createdAt: json["createdAt"] ?? '-',
+    updatedAt: json["updatedAt"] ?? '-',
   );
 
   Map<String, dynamic> toJson() => {

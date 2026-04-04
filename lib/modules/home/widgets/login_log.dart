@@ -6,6 +6,7 @@ import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,10 @@ class LoginLog extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (homeController.loginLogsLoading.value &&
+            homeController.loginLogs.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         final items = homeController.loginLogs;
         return BorderContainer(
@@ -31,8 +36,7 @@ class LoginLog extends StatelessWidget {
                 onChanged: (range) {
                   homeController.selectedDateRange.value = range;
                   homeController.loginLogsPage.value = 1; // Reset page
-                  homeController.financeLoaded.value = false;
-                  homeController.loadFinance();
+                  homeController.getLoginLogs();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
@@ -66,7 +70,9 @@ class LoginLog extends StatelessWidget {
                     cellBuilder: (context, item, index) {
                       final date = DateTime.tryParse(item.createdAt);
                       return Text(
-                        date != null ? DateFormat('dd MMM yyyy').format(date) : item.createdAt,
+                        date != null
+                            ? DateFormat('dd MMM yyyy').format(date)
+                            : item.createdAt,
                         style: TextHelper.bodySmall,
                       );
                     },
@@ -93,10 +99,8 @@ class LoginLog extends StatelessWidget {
                     title: 'IP Address',
                     width: 100,
                     alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.ip,
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.ip, style: TextHelper.bodySmall),
                   ),
                 ],
                 currentPage: homeController.loginLogsPage.value,

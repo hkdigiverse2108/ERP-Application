@@ -75,10 +75,11 @@ class DashboardRepository {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
-    final String url = ApiConstants.buildUrl(ApiConstants.leastSellingProducts, {
-      if (startDate != null) 'startDate': startDate.toIso8601String(),
-      if (endDate != null) 'endDate': endDate.toIso8601String(),
-    });
+    final String url =
+        ApiConstants.buildUrl(ApiConstants.leastSellingProducts, {
+          if (startDate != null) 'startDate': startDate.toIso8601String(),
+          if (endDate != null) 'endDate': endDate.toIso8601String(),
+        });
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
@@ -92,10 +93,11 @@ class DashboardRepository {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
-    final String url = ApiConstants.buildUrl(ApiConstants.categoryWiseCustomers, {
-      if (startDate != null) 'startDate': startDate.toIso8601String(),
-      if (endDate != null) 'endDate': endDate.toIso8601String(),
-    });
+    final String url =
+        ApiConstants.buildUrl(ApiConstants.categoryWiseCustomers, {
+          if (startDate != null) 'startDate': startDate.toIso8601String(),
+          if (endDate != null) 'endDate': endDate.toIso8601String(),
+        });
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
@@ -113,9 +115,9 @@ class DashboardRepository {
   }) async {
     final String url =
         ApiConstants.buildUrl(ApiConstants.categoryWiseCustomersCount, {
-      if (startDate != null) 'startDate': startDate.toIso8601String(),
-      if (endDate != null) 'endDate': endDate.toIso8601String(),
-    });
+          if (startDate != null) 'startDate': startDate.toIso8601String(),
+          if (endDate != null) 'endDate': endDate.toIso8601String(),
+        });
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
@@ -152,10 +154,11 @@ class DashboardRepository {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
-    final String url = ApiConstants.buildUrl(ApiConstants.salesAndPurchaseGraph, {
-      if (startDate != null) 'startDate': startDate.toIso8601String(),
-      if (endDate != null) 'endDate': endDate.toIso8601String(),
-    });
+    final String url =
+        ApiConstants.buildUrl(ApiConstants.salesAndPurchaseGraph, {
+          if (startDate != null) 'startDate': startDate.toIso8601String(),
+          if (endDate != null) 'endDate': endDate.toIso8601String(),
+        });
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
@@ -271,7 +274,12 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return (res.data as List).map((e) => LoginLogModel.fromJson(e)).toList();
+      final rawData = res.data;
+      final List dataList =
+          (rawData is Map && rawData.containsKey('loginLog_data'))
+          ? (rawData['loginLog_data'] as List)
+          : (rawData is List ? rawData : []);
+      return dataList.map((e) => LoginLogModel.fromJson(e)).toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch login logs');
