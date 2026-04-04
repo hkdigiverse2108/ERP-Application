@@ -227,6 +227,5 @@ class MaterialConsumptionTable extends StatelessWidget {
         );
       }),
     );
-    ;
   }
 }

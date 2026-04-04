@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/expenses_model.dart';
+import 'package:ai_setu/data/model/dashboard/top_expenses_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 
 class TopExpenses extends StatelessWidget {
   TopExpenses({super.key});
@@ -22,43 +21,25 @@ class TopExpenses extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.topExpenses;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.topExpensesPage.value = 1; // Reset page
+                  homeController.financeLoaded.value = false;
+                  homeController.loadFinance();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<ExpensesModel>(
-                items: [
-                  ExpensesModel(
-                    expensename: 'Electronics',
-                    expansescount: '2',
-                    expansesamount: '2500',
-                  ),
-                  ExpensesModel(
-                    expensename: 'Clothing',
-                    expansescount: '17',
-                    expansesamount: '2500',
-                  ),
-                  ExpensesModel(
-                    expensename: 'Books',
-                    expansescount: '11',
-                    expansesamount: '2500',
-                  ),
-                  ExpensesModel(
-                    expensename: 'Toys',
-                    expansescount: '15',
-                    expansesamount: '2500',
-                  ),
-                  ExpensesModel(
-                    expensename: 'Furniture',
-                    expansescount: '5',
-                    expansesamount: '2500',
-                  ),
-                ],
+              CommonTable<TopExpensesModel>(
+                items: items
+                    .skip((homeController.topExpensesPage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
                     title: 'Expenses Name',
@@ -67,7 +48,7 @@ class TopExpenses extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.expensename,
+                          item.accountName,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -82,7 +63,7 @@ class TopExpenses extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.expansescount,
+                      '${item.expenseCount}',
                       textAlign: TextAlign.right,
                       style: TextHelper.bodySmall,
                     ),
@@ -92,17 +73,20 @@ class TopExpenses extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.expansesamount,
+                      '₹${item.totalAmount.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                      style: TextHelper.bodySmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.topExpensesPage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.topExpensesPage.value = page,
               ),
             ],
           ),

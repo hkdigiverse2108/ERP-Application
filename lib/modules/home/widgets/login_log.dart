@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/login_log_model.dart';
+import 'package:ai_setu/data/model/dashboard/login_log_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,7 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 
 class LoginLog extends StatelessWidget {
   LoginLog({super.key});
@@ -22,41 +22,34 @@ class LoginLog extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.loginLogs;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.loginLogsPage.value = 1; // Reset page
+                  homeController.financeLoaded.value = false;
+                  homeController.loadFinance();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<LoginLogModel>(
-                items: [
-                  LoginLogModel(
-                    userName: 'Electronics',
-                    date: '2022-01-01',
-                    time: '10:00 AM',
-                    device: 'Mobile',
-                    ipAddress: '[IP_ADDRESS]',
-                  ),
-                  LoginLogModel(
-                    userName: 'Clothing',
-                    date: '2022-01-01',
-                    time: '10:00 AM',
-                    device: 'Mobile',
-                    ipAddress: '[IP_ADDRESS]',
-                  ),
-                ],
+                items: items
+                    .skip((homeController.loginLogsPage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
-                    title: 'User Name',
+                    title: 'User',
                     width: 140,
                     cellBuilder: (context, item, index) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.userName ?? '',
+                          item.user,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -70,25 +63,30 @@ class LoginLog extends StatelessWidget {
                     title: 'Date',
                     width: 100,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.date ?? '', style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) {
+                      final date = DateTime.tryParse(item.createdAt);
+                      return Text(
+                        date != null ? DateFormat('dd MMM yyyy').format(date) : item.createdAt,
+                        style: TextHelper.bodySmall,
+                      );
+                    },
                   ),
                   TableColumn(
-                    title: 'Time',
+                    title: 'Event',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.time ?? '', style: TextHelper.bodySmall),
+                        Text(item.eventType, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
-                    title: 'Device',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    title: 'System',
+                    width: 120,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.device ?? '',
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      item.systemDetails,
+                      style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TableColumn(
@@ -96,18 +94,17 @@ class LoginLog extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.ipAddress ?? '',
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      item.ip,
+                      style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.loginLogsPage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.loginLogsPage.value = page,
               ),
             ],
           ),

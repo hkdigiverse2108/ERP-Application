@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/payable_model.dart';
+import 'package:ai_setu/data/model/dashboard/payable_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -9,7 +9,7 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 
 class TodaysPayable extends StatelessWidget {
   TodaysPayable({super.key});
@@ -21,52 +21,34 @@ class TodaysPayable extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         ThemeService().isDarkMode;
+        final items = homeController.payables;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
                 initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                onChanged: (range) {
+                  homeController.selectedDateRange.value = range;
+                  homeController.todaysPayablePage.value = 1; // Reset page
+                  homeController.financeLoaded.value = false;
+                  homeController.loadFinance();
+                },
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<PayableModel>(
-                items: [
-                  PayableModel(
-                    vendorName: 'Electronics',
-                    noOfBills: '2',
-                    pendingAmount: '500',
-                  ),
-                  PayableModel(
-                    vendorName: 'Clothing',
-                    noOfBills: '17',
-                    pendingAmount: '2500',
-                  ),
-                  PayableModel(
-                    vendorName: 'Books',
-                    noOfBills: '11',
-                    pendingAmount: '2500',
-                  ),
-                  PayableModel(
-                    vendorName: 'Toys',
-                    noOfBills: '15',
-                    pendingAmount: '2500',
-                  ),
-                  PayableModel(
-                    vendorName: 'Furniture',
-                    noOfBills: '5',
-                    pendingAmount: '2500',
-                  ),
-                ],
+                items: items
+                    .skip((homeController.todaysPayablePage.value - 1) * 5)
+                    .take(5)
+                    .toList(),
                 columns: [
                   TableColumn(
-                    title: 'Vendor Name',
+                    title: 'Supplier Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.vendorName ?? '',
+                          item.supplierName,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -77,12 +59,20 @@ class TodaysPayable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'No of Bills',
+                    title: 'Bill No',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.noOfBills ?? '',
-                      textAlign: TextAlign.right,
+                      item.billNo,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Date',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      DateFormat('dd MMM yyyy').format(item.date),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -91,17 +81,20 @@ class TodaysPayable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.pendingAmount ?? '',
+                      '₹${item.pendingAmount.toStringAsFixed(2)}',
                       textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                      style: TextHelper.bodySmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                currentPage: homeController.todaysPayablePage.value,
+                totalPages: (items.length / 5).ceil(),
+                totalItems: items.length,
+                pageSize: 5,
                 onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                    homeController.todaysPayablePage.value = page,
               ),
             ],
           ),

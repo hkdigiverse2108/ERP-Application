@@ -125,6 +125,5 @@ class DebitTable extends StatelessWidget {
         );
       }),
     );
-    ;
   }
 }

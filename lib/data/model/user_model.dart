@@ -9,23 +9,23 @@ class UserModel {
   final String username;
   final bool isDeleted;
   final bool isActive;
-  final String createdBy;
-  final String updatedBy;
+  final String? createdBy;
+  final String? updatedBy;
   final BranchId companyId;
   final BranchId branchId;
   final DateTime createdAt;
   final DateTime updatedAt;
   final Address address;
   final BankDetails bankDetails;
-  final int commission;
-  final String designation;
-  final int extraWages;
-  final String panNumber;
-  final int target;
-  final int wages;
-  final String showPassword;
+  final int? commission;
+  final String? designation;
+  final int? extraWages;
+  final String? panNumber;
+  final int? target;
+  final int? wages;
+  final String? showPassword;
   final String userType;
-  final dynamic profileImage;
+  final String? profileImage;
   final String token;
 
   UserModel({
@@ -37,23 +37,23 @@ class UserModel {
     required this.username,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
-    required this.updatedBy,
+    this.createdBy,
+    this.updatedBy,
     required this.companyId,
     required this.branchId,
     required this.createdAt,
     required this.updatedAt,
     required this.address,
     required this.bankDetails,
-    required this.commission,
-    required this.designation,
-    required this.extraWages,
-    required this.panNumber,
-    required this.target,
-    required this.wages,
-    required this.showPassword,
+    this.commission,
+    this.designation,
+    this.extraWages,
+    this.panNumber,
+    this.target,
+    this.wages,
+    this.showPassword,
     required this.userType,
-    required this.profileImage,
+    this.profileImage,
     required this.token,
   });
 
@@ -77,8 +77,12 @@ class UserModel {
     branchId: BranchId.fromJson(json["branchId"]),
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
-    address: Address.fromJson(json["address"]),
-    bankDetails: BankDetails.fromJson(json["bankDetails"]),
+    address: json["address"] != null
+        ? Address.fromJson(json["address"])
+        : Address.empty(),
+    bankDetails: json["bankDetails"] != null
+        ? BankDetails.fromJson(json["bankDetails"])
+        : BankDetails.empty(),
     commission: json["commission"],
     designation: json["designation"],
     extraWages: json["extraWages"],
@@ -136,6 +140,9 @@ class Address {
     required this.pinCode,
   });
 
+  factory Address.empty() =>
+      Address(address: '', country: '', state: '', city: '', pinCode: 0);
+
   factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -173,6 +180,15 @@ class BankDetails {
     required this.swiftCode,
     required this.ifscCode,
   });
+
+  factory BankDetails.empty() => BankDetails(
+    name: '',
+    branchName: '',
+    accountNumber: '',
+    bankHolderName: '',
+    swiftCode: '',
+    ifscCode: '',
+  );
 
   factory BankDetails.fromRawJson(String str) =>
       BankDetails.fromJson(json.decode(str));
