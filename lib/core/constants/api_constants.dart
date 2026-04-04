@@ -27,6 +27,12 @@ class ApiConstants {
       _buildUrl("user/dropdown", {"typeFilter": typeFilter});
   static String permissionAdmin(String id) => "/user/$id/permission";
 
+  // Upload
+  static const String getUpload = "/upload/images";
+  static const String upload = "/upload";
+  static const String uploadPdf = "/upload/pdf";
+  static const String deleteUpload = "/upload";
+
   // Role
   static const String getAllRole = "/role/all";
   static const String addRole = "/role/add";
@@ -37,15 +43,33 @@ class ApiConstants {
       _buildUrl("role/dropdown", {"companyFilter": id});
   static String rolePermission(String id) => "/role/$id/permission";
 
+  // Account Group
+  static String accountGroupDropdown(String natureFilter, String purchase) =>
+      _buildUrl("account/dropdown", {
+        "natureFilter": natureFilter,
+        "purchase": purchase,
+      });
+
   // Dashboard
   static String getWiseCustomer(String typeFilter) => _buildUrl(
-    "/dashboard/category-wise-customers",
+    "/dashboard/category-wise-customer",
     {"typeFilter": typeFilter},
   );
   static String topCustomer = "/dashboard/top-customers";
-  static String transaction = "/dashboard/all";
+  static String transaction = "/dashboard/transactions";
   static String customerCount = "/dashboard/category-wise-customers-count";
   static String loginLogAll = "/login-log/all";
+  static String bestSelling = "/dashboard/best-selling-products";
+  static String leastSelling = "/dashboard/least-selling-products";
+  static String topExpenses = "/dashboard/top-expenses";
+  static String topCoupons = "/dashboard/top-coupons";
+  static String receivable = "/dashboard/receivable";
+  static String payable = "/dashboard/payable";
+  static String salesAndPurchaseGraph = "/dashboard/sales-and-purchase-graph";
+  static String transactionGraph = "/dashboard/transaction-graph";
+  static String categorySales = "/dashboard/category-sales";
+  static String renewalDue = "/dashboard/renewal-due";
+  static String newRegistrations = "/dashboard/new-registrations";
 
   // Product
   static const String addProduct = "/product/add";
@@ -56,6 +80,38 @@ class ApiConstants {
   static String getProductById(String id) => "/product/$id";
   static const String productDropdown = "/product/dropdown";
 
+  // Product Category
+  static const String getAllProductCategory = "/product-category/all";
+  static const String addProductCategory = "/product-category/add";
+  static const String updateProductCategory = "/product-category/edit";
+  static String deleteProductCategory(String id) => "/product-category/$id";
+  static String getProductCategoryById(String id) => "/product-category/$id";
+  static const String productCategoryDropdown = "/product-category/dropdown";
+
+  // Product Type
+  static String getAllProductType(String page, String limit) =>
+      _buildUrl("/product-type/add", {"page": page, "limit": limit});
+  static const String addProductType = "/product-type/add";
+  static const String updateProductType = "/product-type/edit";
+  static String deleteProductType(String id) => "/product-type/$id";
+  static String getProductTypeById(String id) => "/product-type/$id";
+  static const String productTypeDropdown = "/product-type/dropdown";
+
+  // Product Request
+  static const String getAllProductRequest = "/product-request/all";
+  static const String addProductRequest = "/product-request/add";
+  static const String updateProductRequest = "/product-request/edit";
+  static String deleteProductRequest(String id) => "/product-request/$id";
+  static String getProductRequestById(String id) => "/product-request/$id";
+
+  // Company
+  static const String getAllCompany = "/company/all";
+  static const String addCompany = "/company/add";
+  static const String updateCompany = "/company/edit";
+  static String deleteCompany(String id) => "/company/$id";
+  static String getCompanyById(String id) => "/company/$id";
+  static const String companyDropdown = "/company/dropdown";
+
   // Stock
   static String getAllStock(String activeFilter) =>
       _buildUrl("/stock/all", {"activeFilter": activeFilter});
@@ -65,6 +121,20 @@ class ApiConstants {
   static String getStockById(String id) => "/stock/$id";
   static const String bulkStock = "/stock/bulk-adjustment";
 
+  // Bill of Live Product
+  static const String getAllBillOfLiveProduct = "/bill-of-live-product/all";
+  static const String addBillOfLiveProduct = "/bill-of-live-product/add";
+  static const String updateBillOfLiveProduct = "/bill-of-live-product/edit";
+  static String deleteBillOfLiveProduct(String id) =>
+      "/bill-of-live-product/$id";
+  static String getBillOfLiveProductById(String id) =>
+      "/bill-of-live-product/$id";
+  static String billOfLiveProductDropdown(String companyFilter, String id) =>
+      _buildUrl("/bill-of-live-product/dropdown", {
+        "companyFilter": companyFilter,
+        "id": id,
+      });
+
   // Stock Verification
   static const String getAllStockVerification = "/stock-verification/all";
   static const String addStockVerification = "/stock-verification/add";
@@ -73,19 +143,39 @@ class ApiConstants {
   static String getStockVerificationById(String id) =>
       "/stock-verification/$id";
 
-  // Receipt
-  static const String getAllReceipt = "/receipt/all";
-  static const String addReceipt = "/receipt/add";
-  static const String getReceiptById = "/receipt/getById";
-  static const String updateReceipt = "/receipt/edit";
-  static const String receiptDropdown = "/receipt/dropdown";
+  // Recipe
+  static const String getAllRecipe = "/recipe/all";
+  static const String addRecipe = "/recipe/add";
+  static String getRecipeById(String id) => "/recipe/$id";
+  static const String updateRecipe = "/recipe/edit";
+  static String deleteRecipe(String id) => "/recipe/$id";
+  static String recipeDropdown(String companyFilter, String id) =>
+      _buildUrl("/recipe/dropdown", {"companyFilter": companyFilter, "id": id});
 
-  // Payment
-  static const String getAllPayment = "/payment/all";
-  static const String addPayment = "/payment/add";
-  static const String getPaymentById = "/payment/getById";
-  static const String updatePayment = "/payment/edit";
-  static const String paymentDropdown = "/payment/dropdown";
+  // POS Payment
+  static const String getAllPosPayment = "/pos-payment/all";
+  static const String addPosPayment = "/pos-payment/add";
+  static String getPosPaymentById(String id) => "/pos-payment/$id";
+  static const String updatePosPayment = "/pos-payment/edit";
+
+  // Voucher
+  static const String getAllVoucher = "/voucher/payment/all";
+  static const String addVoucher = "/voucher/payment/add";
+
+  // Payment Term
+  static const String getAllPaymentTerm = "/payment-term/all";
+  static const String paymentTermDropdown = "/payment-term/dropdown";
+  static String getPaymentTermById(String id) => "/payment-term/$id";
+  static const String addPaymentTerm = "/payment-term/add";
+  static const String updatePaymentTerm = "/payment-term/edit";
+  static String deletePaymentTerm(String id) => "/payment-term/$id";
+
+  // Material
+  static const String getAllMaterial = "/material/all";
+  static const String addMaterial = "/material/add";
+  static String getMaterialById(String id) => "/material/$id";
+  static const String updateMaterial = "/material/edit";
+  static String deleteMaterial(String id) => "/material/$id";
 
   // Material Consumption
   static const String getAllMaterialConsumption = "/materialConsumption/all";
@@ -96,52 +186,364 @@ class ApiConstants {
   static const String materialConsumptionDropdown =
       "/materialConsumption/dropdown";
 
-  // Debit
-  static const String getAllDebit = "/debit/all";
-  static const String addDebit = "/debit/add";
-  static const String getDebitById = "/debit/getById";
-  static const String updateDebit = "/debit/edit";
-  static const String debitDropdown = "/debit/dropdown";
+  // Announcement
+  static const String getAllAnnouncement = "/announcement/all";
+  static const String addAnnouncement = "/announcement/add";
+  static String getAnnouncementById(String id) => "/announcement/$id";
+  static const String updateAnnouncement = "/announcement/edit";
+  static String deleteAnnouncement(String id) => "/announcement/$id";
 
-  // Credit
-  static const String getAllCredit = "/credit/all";
-  static const String addCredit = "/credit/add";
-  static const String getCreditById = "/credit/getById";
-  static const String updateCredit = "/credit/edit";
-  static const String creditDropdown = "/credit/dropdown";
+  // Bank
+  static const String getAllBank = "/bank/all";
+  static const String addBank = "/bank/add";
+  static const String editBank = "/bank/edit";
+  static String deleteBank(String id) => "/bank/$id";
+  static String bankById(String id) => "/bank/$id";
+  static const String bankDropdown = "/bank/dropdown";
 
-  // Contact
-  static const String getAllContact = "/contact/all";
-  static const String addContact = "/contact/add";
-  static const String getContactById = "/contact/getById";
-  static const String updateContact = "/contact/edit";
-  static const String contactDropdown = "/contact/dropdown";
+  // Bank Transaction
+  static const String getAllBankTransaction = "/bank-transaction/all";
+  static const String addBankTransaction = "/bank-transaction/add";
+  static const String updateBankTransaction = "/bank-transaction/edit";
+  static String deleteBankTransaction(String id) => "/bank-transaction/$id";
+  static String getBankTransactionById(String id) => "/bank-transaction/$id";
+
+  //Debit Note
+  static const String getAllDebitNote = "/debit-note/all";
+  static const String addDebitNote = "/debit-note/add";
+  static const String updateDebitNote = "/debit-note/edit";
+  static String deleteDebitNote(String id) => "/debit-note/$id";
+  static String getDebitNoteById(String id) => "/debit-note/$id";
+
+  // Sales Debit Note
+  static const String getAllSalesDebitNote = "/sales-debit-note/all";
+  static const String addSalesDebitNote = "/sales-debit-note/add";
+  static const String updateSalesDebitNote = "/sales-debit-note/edit";
+  static String deleteSalesDebitNote(String id) => "/sales-debit-note/$id";
+  static String getSalesDebitNoteById(String id) => "/sales-debit-note/$id";
+
+  // POS Credit Note
+  static const String getAllPosCreditNote = "/pos-credit-note/all";
+  static const String redeemPosCreditNote = "/pos-credit-note/redeem";
+  static String deletePosCreditNote(String id) => "/pos-credit-note/$id";
+  static String getPosCreditNoteById(String id) => "/pos-credit-note/$id";
+
+  //Credit Note
+  static const String getAllCreditNote = "/credit-note/all";
+  static const String addCreditNote = "/credit-note/add";
+  static const String updateCreditNote = "/credit-note/edit";
+  static String deleteCreditNote(String id) => "/credit-note/$id";
+  static String getCreditNoteById(String id) => "/credit-note/$id";
+
+  // Sales Credit Note
+  static const String getAllSalesCreditNote = "/sales-credit-note/all";
+  static const String addSalesCreditNote = "/sales-credit-note/add";
+  static const String updateSalesCreditNote = "/sales-credit-note/edit";
+  static String deleteSalesCreditNote(String id) => "/sales-credit-note/$id";
+  static String getSalesCreditNoteById(String id) => "/sales-credit-note/$id";
+
+  // POS Order
+  static const String getAllPosOrder = "/pos-order/all";
+  static String posOrderDropdown(String duePaymentFilter) =>
+      _buildUrl("/pos-order/dropdown", {"duePaymentFilter": duePaymentFilter});
+  static String getPosOrderById(String branchId) =>
+      "/pos-order/cash-control/$branchId";
+  static String updatePosOrder(String id) => "/pos-order/hold/$id";
+  static const String addPosOrder = "/pos-order/add";
+  static const String quickAddProduct = "/pos-order/quick-add-product";
+  static const String editPosOrder = "/pos-order/edit";
+  static const String posOrderCashControl = "/pos-order/cash-control";
+  static const String posOrderHold = "/pos-order/hold";
+  static const String posOrderRelease = "/pos-order/release";
+  static const String posOrderConvertToInvoice =
+      "/pos-order/convert-to-invoice";
+  static const String deletePosOrder = "/pos-order";
+  static String posOrderCustomer(String id) => "/pos-order/customer/$id";
+  static String posOrderById(String id) => "/pos-order/$id";
+
+  // Supplier Bill
+  static const String getAllSupplierBill = "/supplier-bill/all";
+  static const String addSupplierBill = "/supplier-bill/add";
+  static String getSupplierBillById(String id) => "/supplier-bill/$id";
+  static const String updateSupplierBill = "/supplier-bill/edit";
+  static String deleteSupplierBill(String id) => "/supplier-bill/$id";
+  static const String supplierBillDropdown = "/supplier-bill/dropdown";
+
+  // Cash Control
+  static String getAllCashControl(String registerFilter) =>
+      _buildUrl("/cash-control/all", {"registerFilter": registerFilter});
+  static const String addCashControl = "/cash-control/add";
+  static String getCashControlById(String id) => "/cash-control/$id";
+  static const String updateCashControl = "/cash-control/edit";
+  static String deleteCashControl(String id) => "/cash-control/$id";
+  static String cashControlDropdown(String registerFilter) =>
+      _buildUrl("/cash-control/dropdown", {"registerFilter": registerFilter});
+
+  // POS Cash Register
+  static const String getAllPosCashRegister = "/pos-cash-register/all";
+  static const String addPosCashRegister = "/pos-cash-register/add";
+  static String getPosCashRegisterById(String id) => "/pos-cash-register/$id";
+  static const String updatePosCashRegister = "/pos-cash-register/edit";
+  static String deletePosCashRegister(String id) => "/pos-cash-register/$id";
+  static const String posCashRegisterDropdown = "/pos-cash-register/dropdown";
+
+  // Pay Later
+  static const String getAllPayLater = "/pay-later/all";
+  static const String addPayLater = "/pay-later/add";
+  static String getPayLaterById(String id) => "/pay-later/$id";
+  static const String updatePayLater = "/pay-later/edit";
+  static String deletePayLater(String id) => "/pay-later/$id";
+
+  // Return POS Order
+  static const String getAllReturnPosOrder = "/return-pos-order/all";
+  static const String addReturnPosOrder = "/return-pos-order/add";
+  static String getReturnPosOrderById(String id) => "/return-pos-order/$id";
+  static const String updateReturnPosOrder = "/return-pos-order/edit";
+  static String deleteReturnPosOrder(String id) => "/return-pos-order/$id";
+
+  // Call Request
+  static const String getAllCallRequest = "/call-request/all";
+  static const String getAllCallRequestByBranchId = "/call-request/all";
+  static const String addCallRequest = "/call-request/add";
+  static String getCallRequestById(String id) => "/call-request/$id";
+  static String updateCallRequest(String id) => "/call-request/$id";
+  static String deleteCallRequest(String id) => "/call-request/$id";
+
+  // Contacts
+  static const String getAllContact = "/contacts/all";
+  static const String addContact = "/contacts/add";
+  static String getContactById(String id) => "/contacts/$id";
+  static const String updateContact = "/contacts/edit";
+  static String singleContactById(String id) => "/contacts/single/$id";
+  static String deleteContact(String id) => "/contacts/$id";
+  static String contactDropdown(String typeFilter) =>
+      _buildUrl("contacts/dropdown", {"typeFilter": typeFilter});
 
   // Purchase Order
-  static const String getAllPurchaseOrder = "/purchaseOrder/all";
-  static const String addPurchaseOrder = "/purchaseOrder/add";
-  static const String getPurchaseOrderById = "/purchaseOrder/getById";
-  static const String updatePurchaseOrder = "/purchaseOrder/edit";
-  static const String purchaseOrderDropdown = "/purchaseOrder/dropdown";
+  static const String getAllPurchaseOrder = "/purchase-order/all";
+  static const String addPurchaseOrder = "/purchase-order/add";
+  static String getPurchaseOrderById(String id) => "/purchase-order/$id";
+  static const String updatePurchaseOrder = "/purchase-order/edit";
+  static String deletePurchaseOrder(String id) => "/purchase-order/$id";
+  static const String purchaseOrderDropdown = "/purchase-order/dropdown";
 
   // Sales Order
-  static const String getAllSalesOrder = "/salesOrder/all";
-  static const String addSalesOrder = "/salesOrder/add";
-  static const String getSalesOrderById = "/salesOrder/getById";
-  static const String updateSalesOrder = "/salesOrder/edit";
-  static const String salesOrderDropdown = "/salesOrder/dropdown";
+  static const String getAllSalesOrder = "/sales-order/all";
+  static const String addSalesOrder = "/sales-order/add";
+  static const String getSalesOrderById = "/sales-order/getById";
+  static const String updateSalesOrder = "/sales-order/edit";
+  static String deleteSalesOrder(String id) => "/sales-order/$id";
+  static const String salesOrderDropdown = "/sales-order/dropdown";
 
-  // Production Order
-  static const String getAllProductionOrder = "/productionOrder/all";
-  static const String addProductionOrder = "/productionOrder/add";
-  static const String getProductionOrderById = "/productionOrder/getById";
-  static const String updateProductionOrder = "/productionOrder/edit";
-  static const String productionOrderDropdown = "/productionOrder/dropdown";
+  // Purchase Request
+  static const String getAllPurchaseRequest = "/purchase-request/all";
+  static const String addPurchaseRequest = "/purchase-request/add";
+  static String getPurchaseRequestById(String id) => "/purchase-request/$id";
+  static const String updatePurchaseRequest = "/purchase-request/edit";
+  static String deletePurchaseRequest(String id) => "/purchase-request/$id";
+  static const String purchaseRequestDropdown = "/purchase-request/dropdown";
 
-  // Production
-  static const String getAllProduction = "/production/all";
-  static const String addProduction = "/production/add";
-  static const String getProductionById = "/production/getById";
-  static const String updateProduction = "/production/edit";
-  static const String productionDropdown = "/production/dropdown";
+  // Branch
+  static const String getAllBranch = "/branch/all";
+  static const String addBranch = "/branch/add";
+  static String getBranchById(String id) => "/branch/$id";
+  static const String updateBranch = "/branch/edit";
+  static String deleteBranch(String id) => "/branch/$id";
+  static String branchDropdown(String companyFilter, String id) =>
+      _buildUrl("branch/dropdown", {"companyFilter": companyFilter, "id": id});
+
+  // Brand
+  static const String getAllBrand = "/brand/all";
+  static const String addBrand = "/brand/add";
+  static String getBrandById(String id) => "/brand/$id";
+  static const String updateBrand = "/brand/edit";
+  static String deleteBrand(String id) => "/brand/$id";
+  static const String brandDropdown = "/brand/dropdown";
+  static const String getAllBrandTree = "brand/tree/all";
+
+  // Category
+  static const String getAllCategory = "/category/all";
+  static const String addCategory = "/category/add";
+  static String getCategoryById(String id) => "/category/$id";
+  static const String updateCategory = "/category/edit";
+  static String deleteCategory(String id) => "/category/$id";
+  static String categoryDropdown(
+    String parentCategoryFilter,
+    String typeFilter,
+  ) => _buildUrl("category/dropdown", {
+    "parentCategoryFilter": parentCategoryFilter,
+    "typeFilter": typeFilter,
+  });
+  static const String getAllCategoryTree = "category/tree/all";
+
+  // Additional Charge
+  static const String getAllAdditionalCharge = "/additional-charge/all";
+  static const String addAdditionalCharge = "/additional-charge/add";
+  static String getAdditionalChargeById(String id) => "/additional-charge/$id";
+  static const String updateAdditionalCharge = "/additional-charge/edit";
+  static String deleteAdditionalCharge(String id) => "/additional-charge/$id";
+  static const String additionalChargeDropdown = "/additional-charge/dropdown";
+
+  // Terms and Condition
+  static const String getAllTermsAndCondition = "/terms-and-condition/all";
+  static const String addTermsAndCondition = "/terms-and-condition/add";
+  static String getTermsAndConditionById(String id) =>
+      "/terms-and-condition/$id";
+  static const String updateTermsAndCondition = "/terms-and-condition/edit";
+  static String deleteTermsAndCondition(String id) =>
+      "/terms-and-condition/$id";
+  static const String termsAndConditionDropdown =
+      "/terms-and-condition/dropdown";
+
+  // Purchase Debit Note
+  static const String getAllPurchaseDebitNote = "/purchase-debit-note/all";
+  static const String addPurchaseDebitNote = "/purchase-debit-note/add";
+  static String getPurchaseDebitNoteById(String id) =>
+      "/purchase-debit-note/$id";
+  static const String updatePurchaseDebitNote = "/purchase-debit-note/edit";
+  static String deletePurchaseDebitNote(String id) =>
+      "/purchase-debit-note/$id";
+  static const String purchaseDebitNoteDropdown =
+      "/purchase-debit-note/dropdown";
+
+  // Estimate
+  static const String getAllEstimate = "/estimate/all";
+  static const String addEstimate = "/estimate/add";
+  static String getEstimateById(String id) => "/estimate/$id";
+  static const String updateEstimate = "/estimate/edit";
+  static String deleteEstimate(String id) => "/estimate/$id";
+  static const String estimateDropdown = "/estimate/dropdown";
+
+  // Invoice
+  static const String getAllInvoice = "/invoice/all";
+  static const String addInvoice = "/invoice/add";
+  static String getInvoiceById(String id) => "/invoice/$id";
+  static const String updateInvoice = "/invoice/edit";
+  static String deleteInvoice(String id) => "/invoice/$id";
+  static const String invoiceDropdown = "/invoice/dropdown";
+
+  // Delivery Challan
+  static const String getAllDeliveryChallan = "/delivery-challan/all";
+  static const String addDeliveryChallan = "/delivery-challan/add";
+  static String getDeliveryChallanById(String id) => "/delivery-challan/$id";
+  static const String updateDeliveryChallan = "/delivery-challan/edit";
+  static String deleteDeliveryChallan(String id) => "/delivery-challan/$id";
+
+  // Location
+  static const String getCountry = "/location/country";
+  static String getState(String id) => "/location/state/$id";
+  static String getCity(String id) => "/location/city/$id";
+  static const String addLocation = "/location/add";
+  static String getAllLocation(String parentFilter, String typeFilter) =>
+      "/location/all?parentFilter=$parentFilter&typeFilter=$typeFilter";
+  static String updateLocation(String id) => "/location/edit";
+  static String deleteLocation(String id) => "/location/$id";
+  static String locationById(String id) => "/location/dropdown?id=$id";
+
+  // UOM
+  static String getAllUOM(String page, String limit) =>
+      "/uom/all?page=$page&limit=$limit";
+  static const String addUOM = "/uom/add";
+  static String getUOMById(String id) => "/uom/$id";
+  static const String updateUOM = "/uom/edit";
+  static String deleteUOM(String id) => "/uom/$id";
+  static const String uomDropdown = "/uom/dropdown";
+
+  // Tax
+  static const String getAllTax = "/tax/all";
+  static const String addTax = "/tax/add";
+  static String getTaxById(String id) => "/tax/$id";
+  static const String updateTax = "/tax/edit";
+  static String deleteTax(String id) => "/tax/$id";
+  static const String taxDropdown = "/tax/dropdown";
+
+  // Setting
+  static const String updateSetting = "/settings/updatet";
+  static const String getAllSetting = "/settings/all";
+
+  // Coupon
+  static const String getAllCoupon = "/coupon/all";
+  static const String addCoupon = "/coupon/add";
+  static String getCouponById(String id) => "/coupon/$id";
+  static const String updateCoupon = "/coupon/edit";
+  static String deleteCoupon(String id) => "/coupon/$id";
+  static const String removeCoupon = "/coupon/remove";
+  static const String couponDropdown = "/coupon/dropdown";
+
+  // Discount
+  static const String getAllDiscount = "/discount/all";
+  static const String addDiscount = "/discount/add";
+  static const String updateDiscount = "/discount/edit";
+  static String getDiscountById(String id) => "/discount/$id";
+  static String deleteDiscount(String id) => "/discount/delete/$id";
+  static const String removeDiscount = "/discount/remove";
+  static const String discountDropdown = "/discount/dropdown";
+  static const String discountVerify = "/discount/verify";
+  static const String discountApply = "/discount/apply";
+
+  // Feedback
+  static const String getAllFeedback = "/feedback/all";
+  static const String addFeedback = "/feedback/add";
+  static String getFeedbackById(String id) => "/feedback/$id";
+  static const String updateFeedback = "/feedback/edit";
+  static String deleteFeedback(String id) => "/feedback/$id";
+
+  // Loyalty
+  static const String getAllLoyalty = "/loyalty/all";
+  static const String loyaltyDropdown = "/loyalty/dropdown";
+  static const String loyaltyPointsAll = "loyalty-points/";
+  static const String loyaltyRemove = "/loyalty/remove";
+  static const String loyaltyRedeem = "/loyalty/redeem";
+  static const String loyaltyAdd = "/loyalty/add";
+  static const String loyaltyPoints = "/loyalty-points/";
+  static const String loyaltyEdit = "/loyalty/edit";
+  static String loyaltyDelete(String id) => "/loyalty/delete/$id";
+  static String loyaltyPointsById(String id) => "/loyalty-points/$id";
+
+  // Prefix
+  static const String getAllPrefix = "/prefix/all";
+  static const String addPrefix = "/prefix/add";
+  static String getPrefixById(String id) => "/prefix/$id";
+  static String getPrefixByModule(String module) => "/prefix/module/$module";
+  static const String updatePrefix = "/prefix/edit";
+  static String deletePrefix(String id) => "/prefix/$id";
+  static const String prefixDropdown = "/prefix/dropdown";
+
+  // Module
+  static const String getAllModule = "/module/all";
+  static const String addModule = "/module/add";
+  static String getModuleById(String id) => "/module/$id";
+  static const String updateModule = "/module/edit";
+  static String deleteModule(String id) => "/module/$id";
+  static const String moduleBulkEdit = "/module/bulk/edit";
+  static String moduleUserPermissions(String moduleId) =>
+      "/module/user/permissions/$moduleId";
+
+  // Company Drivers
+  static const String getAllCompanyDrivers = "/company-drivers/all";
+  static const String addCompanyDrivers = "/company-drivers/add";
+  static String getCompanyDriversById(String id) => "/company-drivers/$id";
+  static const String updateCompanyDrivers = "/company-drivers/edit";
+  static String deleteCompanyDrivers(String id) => "/company-drivers/$id";
+
+  // Journal Voucher
+  static const String getAllJournalVoucher = "/journal-voucher/all";
+  static const String addJournalVoucher = "/journal-voucher/add";
+  static String getJournalVoucherById(String id) => "/journal-voucher/$id";
+  static const String updateJournalVoucher = "/journal-voucher/edit";
+  static String deleteJournalVoucher(String id) => "/journal-voucher/$id";
+
+  // Expense
+  static const String getAllExpense = "/expense/all";
+  static const String addExpense = "/expense/add";
+  static String getExpenseById(String id) => "/expense/$id";
+  static const String updateExpense = "/expense/edit";
+  static String deleteExpense(String id) => "/expense/$id";
+
+  // Salary
+  static const String getAllSalary = "/salary/all";
+  static const String addSalary = "/salary/add";
+  static String getSalaryById(String id) => "/salary/$id";
+  static const String updateSalary = "/salary/edit";
+  static String deleteSalary(String id) => "/salary/$id";
 }
