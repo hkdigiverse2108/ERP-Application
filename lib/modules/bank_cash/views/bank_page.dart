@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/accounting/widgets/debit_table.dart';
+import 'package:ai_setu/modules/bank_cash/widgets/bank_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class BankPage extends StatelessWidget {
           children: [
             QuickAction(),
             _buildSectionTitle('Bank List'),
-            DebitTable(),
+            BankTable(),
           ],
         ),
       ),

@@ -69,10 +69,16 @@ class QuickActionDropdown extends StatelessWidget {
                     _ExpandableSection(
                       title: "Bank / Cash",
                       items: [
-                        QuickActionItem(title: "Bank"),
-                        QuickActionItem(title: "Bank Transaction"),
-                        QuickActionItem(title: "Receipt"),
-                        QuickActionItem(title: "Payment"),
+                        QuickActionItem(title: "Bank", route: Routes.bank),
+                        QuickActionItem(
+                          title: "Bank Transaction",
+                          route: Routes.bankTransaction,
+                        ),
+                        QuickActionItem(title: "Receipt", route: Routes.recipt),
+                        QuickActionItem(
+                          title: "Payment",
+                          route: Routes.posPayment,
+                        ),
                       ],
                     ),
                     _ExpandableSection(

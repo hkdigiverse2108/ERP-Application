@@ -14,4 +14,7 @@ abstract class Routes {
   static const debit = '/debit';
   static const credit = '/credit';
   static const contact = '/contact';
+  static const bank = '/bank';
+  static const bankTransaction = '/bank-transaction';
+  static const posPayment = '/pos-payment';
 }

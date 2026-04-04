@@ -2,6 +2,11 @@ import 'package:ai_setu/modules/accounting/views/cradit_page.dart';
 import 'package:ai_setu/modules/accounting/views/dabit_page.dart';
 import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
 import 'package:ai_setu/modules/auth/views/sign_in.dart';
+import 'package:ai_setu/modules/bank_cash/bindings/bank_cash_binding.dart';
+import 'package:ai_setu/modules/bank_cash/views/bank_page.dart';
+import 'package:ai_setu/modules/bank_cash/views/bank_transaction_page.dart';
+import 'package:ai_setu/modules/bank_cash/views/payment_page.dart';
+import 'package:ai_setu/modules/bank_cash/widgets/payment_table.dart';
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
@@ -89,5 +94,21 @@ class AppPages {
 
     GetPage(name: Routes.user, page: () => User(), binding: UserBinding()),
     GetPage(name: Routes.home, page: () => Home(), binding: HomeBindings()),
+
+    GetPage(
+      name: Routes.bank,
+      page: () => const BankPage(),
+      binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.bankTransaction,
+      page: () => const BankTransactionPage(),
+      binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.posPayment,
+      page: () => const PaymentPage(),
+      binding: BankCashBinding(),
+    ),
   ];
 }
