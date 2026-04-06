@@ -27,6 +27,7 @@ class DashboardStatWidget extends StatelessWidget {
           mainAxisSpacing: 16.0,
         ),
         children: [
+          // Section 1: Sales
           StatCard(
             title: "Total Sales",
             value: controller.topSectionData.value.totalSales,
@@ -36,28 +37,25 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Invoice",
-            value: controller.topSectionData.value.totalInvoice.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.totalInvoice,
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "Sold Qty",
-            value: controller.topSectionData.value.totalSales.toDouble(),
-            tag: "₹",
+            value: controller.topSectionData.value.soldQty,
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "Total Customer",
-            value: controller.topSectionData.value.totalCustomers.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.totalCustomers,
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "To Receive",
-            value: controller.topSectionData.value.toReceive.toDouble(),
+            value: controller.topSectionData.value.toReceive,
             tag: "₹",
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
@@ -70,6 +68,7 @@ class DashboardStatWidget extends StatelessWidget {
             isLoading: controller.topSectionLoading.value,
           ),
 
+          // Section 2: Purchase
           StatCard(
             title: "Total Purchase",
             value: controller.topSectionData.value.totalPurchase,
@@ -79,28 +78,25 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Bills",
-            value: controller.topSectionData.value.totalBills.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.totalBills,
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "Purchase Qty",
-            value: controller.topSectionData.value.purchaseQty.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.purchaseQty,
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "Total Suppliers",
-            value: controller.topSectionData.value.totalSuppliers.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.totalSuppliers,
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "To Pay",
-            value: controller.topSectionData.value.toPay.toDouble(),
+            value: controller.topSectionData.value.toPay,
             tag: "₹",
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
@@ -113,6 +109,7 @@ class DashboardStatWidget extends StatelessWidget {
             isLoading: controller.topSectionLoading.value,
           ),
 
+          // Section 3: Finance / Stock
           StatCard(
             title: "Total Paid",
             value: controller.topSectionData.value.totalPaid,
@@ -129,15 +126,13 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Products",
-            value: controller.topSectionData.value.totalProducts.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.totalProducts,
             color: transectionColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
             title: "Stock Qty",
-            value: controller.topSectionData.value.stockQty.toDouble(),
-            // tag: "₹",
+            value: controller.topSectionData.value.stockQty,
             color: transectionColor,
             isLoading: controller.topSectionLoading.value,
           ),
@@ -156,6 +151,7 @@ class DashboardStatWidget extends StatelessWidget {
             isLoading: controller.topSectionLoading.value,
           ),
 
+          // Section 4: Profit Analysis
           StatCard(
             title: "Gross Profit",
             value: controller.topSectionData.value.grossProfit,
@@ -173,7 +169,6 @@ class DashboardStatWidget extends StatelessWidget {
           StatCard(
             title: "Avg. Profit margin (%)",
             value: controller.topSectionData.value.avgProfitMarginPercent,
-            // tag: "₹",
             showDecimal: true,
             color: profitColor,
             isLoading: controller.topSectionLoading.value,
@@ -188,12 +183,11 @@ class DashboardStatWidget extends StatelessWidget {
           StatCard(
             title: "Avg. Bills (Nos.)",
             value: controller.topSectionData.value.avgBillsCount,
-            tag: "₹",
             color: profitColor,
             isLoading: controller.topSectionLoading.value,
           ),
           StatCard(
-            title: "Bank Access",
+            title: "Bank Balance",
             value: controller.topSectionData.value.bankAccountsBalance,
             tag: "₹",
             color: profitColor,

@@ -5,8 +5,10 @@ import 'package:ai_setu/modules/auth/views/sign_in.dart';
 import 'package:ai_setu/modules/bank_cash/bindings/bank_cash_binding.dart';
 import 'package:ai_setu/modules/bank_cash/views/bank_page.dart';
 import 'package:ai_setu/modules/bank_cash/views/bank_transaction_page.dart';
+import 'package:ai_setu/modules/bank_cash/views/expense_page.dart';
 import 'package:ai_setu/modules/bank_cash/views/payment_page.dart';
-import 'package:ai_setu/modules/bank_cash/widgets/payment_table.dart';
+import 'package:ai_setu/modules/bank_cash/views/receipt_page.dart';
+import 'package:ai_setu/modules/bank_cash/views/salary_page.dart';
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
@@ -108,6 +110,21 @@ class AppPages {
     GetPage(
       name: Routes.posPayment,
       page: () => const PaymentPage(),
+      binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.receipt,
+      page: () => const ReceiptPage(),
+      binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.expense,
+      page: () => const ExpensePage(),
+      binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.salary,
+      page: () => const SalaryPage(),
       binding: BankCashBinding(),
     ),
   ];

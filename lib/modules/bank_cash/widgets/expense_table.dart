@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
+import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 import 'package:ai_setu/modules/bank_cash/controllers/bank_cash_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -11,8 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PaymentTable extends StatelessWidget {
-  PaymentTable({super.key});
+class ExpenseTable extends StatelessWidget {
+  ExpenseTable({super.key});
 
   final bankCashController = Get.find<BankCashController>();
 
@@ -22,11 +22,11 @@ class PaymentTable extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         if (bankCashController.isLoading.value &&
-            bankCashController.paymentTermsList.isEmpty) {
+            bankCashController.expenseList.isEmpty) {
           return const TableShimmer();
         }
 
-        final items = bankCashController.paymentTermsList;
+        final items = bankCashController.expenseList;
         return BorderContainer(
           child: Column(
             children: [
@@ -35,18 +35,18 @@ class PaymentTable extends StatelessWidget {
                 onChanged: (range) {
                   bankCashController.selectedDateRange.value = range;
                   bankCashController.currentPage.value = 1; // Reset page
-                  bankCashController.fetchPaymentTerms();
+                  bankCashController.fetchExpenses();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<PosPaymentDatum>(
+              CommonTable<ExpenseDatum>(
                 items: items,
                 columns: [
                   TableColumn(
-                    title: 'Payment No',
+                    title: 'Party Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.paymentNo,
+                      item.partyId.fullName,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -55,42 +55,22 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Party Name',
+                    title: 'Salary',
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
-                      final party = item.partyId;
-                      if (party == null) return const Text("-");
                       return Text(
-                        "${party.firstName} ${party.lastName}",
+                        "₹${item.amount}",
                         style: TextHelper.bodySmall,
                       );
                     },
                   ),
                   TableColumn(
-                    title: 'Date',
+                    title: 'Expense Date',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.createdAt),
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Mode',
-                    width: 100,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      paymentModeValues.reverse[item.paymentMode] ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Type',
-                    width: 120,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      paymentTypeValues.reverse[item.paymentType] ?? "-",
+                      DateFormat('dd MMM yyyy').format(item.fromDate),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -98,21 +78,26 @@ class PaymentTable extends StatelessWidget {
                     title: 'Amount',
                     width: 100,
                     alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) =>
+                        Text("₹${item.amount}", style: TextHelper.bodySmall),
+                  ),
+                  TableColumn(
+                    title: 'Expense Type',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) =>
+                        Text(item.type, style: TextHelper.bodySmall),
+                  ),
+                  TableColumn(
+                    title: 'Created By',
+                    width: 150,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.amount.toStringAsFixed(2)}',
+                      '${item.createdBy.fullName}',
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Status',
-                    width: 100,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      statusValues.reverse[item.status] ?? "-",
-                      style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
@@ -122,7 +107,7 @@ class PaymentTable extends StatelessWidget {
                 pageSize: 10,
                 onPageChanged: (page) {
                   bankCashController.currentPage.value = page;
-                  bankCashController.fetchPaymentTerms();
+                  bankCashController.fetchExpenses();
                 },
               ),
             ],

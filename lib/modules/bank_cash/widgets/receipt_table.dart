@@ -11,8 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PaymentTable extends StatelessWidget {
-  PaymentTable({super.key});
+class ReceiptTable extends StatelessWidget {
+  ReceiptTable({super.key});
 
   final bankCashController = Get.find<BankCashController>();
 
@@ -43,7 +43,7 @@ class PaymentTable extends StatelessWidget {
                 items: items,
                 columns: [
                   TableColumn(
-                    title: 'Payment No',
+                    title: 'Receipt No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
                       item.paymentNo,
@@ -68,7 +68,7 @@ class PaymentTable extends StatelessWidget {
                     },
                   ),
                   TableColumn(
-                    title: 'Date',
+                    title: 'Payment Mode',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
@@ -77,7 +77,7 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Mode',
+                    title: 'Payment Type',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
@@ -95,7 +95,7 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Amount',
+                    title: 'Payment Date',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
@@ -107,11 +107,29 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
+                    title: 'Amount',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      statusValues.reverse[item.status] ?? "-",
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
                     title: 'Status',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       statusValues.reverse[item.status] ?? "-",
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Created By',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.createdBy.fullName,
                       style: TextHelper.bodySmall,
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
+import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 import 'package:ai_setu/modules/bank_cash/controllers/bank_cash_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -11,8 +12,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PaymentTable extends StatelessWidget {
-  PaymentTable({super.key});
+class SalaryTable extends StatelessWidget {
+  SalaryTable({super.key});
 
   final bankCashController = Get.find<BankCashController>();
 
@@ -22,11 +23,11 @@ class PaymentTable extends StatelessWidget {
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
         if (bankCashController.isLoading.value &&
-            bankCashController.paymentTermsList.isEmpty) {
+            bankCashController.salaryList.isEmpty) {
           return const TableShimmer();
         }
 
-        final items = bankCashController.paymentTermsList;
+        final items = bankCashController.salaryList;
         return BorderContainer(
           child: Column(
             children: [
@@ -35,18 +36,18 @@ class PaymentTable extends StatelessWidget {
                 onChanged: (range) {
                   bankCashController.selectedDateRange.value = range;
                   bankCashController.currentPage.value = 1; // Reset page
-                  bankCashController.fetchPaymentTerms();
+                  bankCashController.fetchSalary();
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<PosPaymentDatum>(
+              CommonTable<SalaryDatum>(
                 items: items,
                 columns: [
                   TableColumn(
-                    title: 'Payment No',
+                    title: 'Party Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.paymentNo,
+                      item.partyId.fullName,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -55,42 +56,22 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Party Name',
+                    title: 'From Date',
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
-                      final party = item.partyId;
-                      if (party == null) return const Text("-");
                       return Text(
-                        "${party.firstName} ${party.lastName}",
+                        DateFormat('dd MMM yyyy').format(item.fromDate),
                         style: TextHelper.bodySmall,
                       );
                     },
                   ),
                   TableColumn(
-                    title: 'Date',
+                    title: 'To Date',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       DateFormat('dd MMM yyyy').format(item.createdAt),
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Mode',
-                    width: 100,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      paymentModeValues.reverse[item.paymentMode] ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Type',
-                    width: 120,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      paymentTypeValues.reverse[item.paymentType] ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -107,11 +88,42 @@ class PaymentTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Status',
+                    title: 'Expense Type',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) =>
+                        Text(item.type, style: TextHelper.bodySmall),
+                  ),
+                  TableColumn(
+                    title: 'Incentive',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      statusValues.reverse[item.status] ?? "-",
+                      '₹${item.incentive.toStringAsFixed(2)}',
+                      style: TextHelper.bodySmall.copyWith(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Total',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      '₹${item.amount.toStringAsFixed(2)}',
+                      style: TextHelper.bodySmall.copyWith(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Created By',
+                    width: 150,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.createdBy.fullName,
                       style: TextHelper.bodySmall,
                     ),
                   ),

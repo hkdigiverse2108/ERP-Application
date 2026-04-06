@@ -53,11 +53,7 @@ class BankCashRepository {
     String? fromDate,
     String? toDate,
   }) async {
-    final Map<String, dynamic> query = {
-      "type": "bank",
-      "page": page,
-      "limit": limit,
-    };
+    final Map<String, dynamic> query = {"page": page, "limit": limit};
     if (fromDate != null) query["fromDate"] = fromDate;
     if (toDate != null) query["toDate"] = toDate;
 
@@ -71,6 +67,46 @@ class BankCashRepository {
       return res;
     }
 
-    throw Exception(res.message ?? 'Failed to fetch bank transactions');
+    throw Exception(res.message ?? 'Failed to fetch payment terms');
+  }
+
+  Future<ResModel> getExpenses({
+    int page = 1,
+    int limit = 10,
+    String? fromDate,
+    String? toDate,
+  }) async {
+    final Map<String, dynamic> query = {"page": page, "limit": limit};
+    if (fromDate != null) query["fromDate"] = fromDate;
+    if (toDate != null) query["toDate"] = toDate;
+
+    final String url = ApiConstants.buildUrl(ApiConstants.getAllExpense, query);
+    final ResModel res = await _api.get(url);
+
+    if (res.status == 200 && res.data != null) {
+      return res;
+    }
+
+    throw Exception(res.message ?? 'Failed to fetch expenses');
+  }
+
+  Future<ResModel> getSalary({
+    int page = 1,
+    int limit = 10,
+    String? fromDate,
+    String? toDate,
+  }) async {
+    final Map<String, dynamic> query = {"page": page, "limit": limit};
+    if (fromDate != null) query["fromDate"] = fromDate;
+    if (toDate != null) query["toDate"] = toDate;
+
+    final String url = ApiConstants.buildUrl(ApiConstants.getAllSalary, query);
+    final ResModel res = await _api.get(url);
+
+    if (res.status == 200 && res.data != null) {
+      return res;
+    }
+
+    throw Exception(res.message ?? 'Failed to fetch salary');
   }
 }

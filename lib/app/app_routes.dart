@@ -17,4 +17,7 @@ abstract class Routes {
   static const bank = '/bank';
   static const bankTransaction = '/bank-transaction';
   static const posPayment = '/pos-payment';
+  static const receipt = '/receipt';
+  static const expense = '/expense';
+  static const salary = '/salary';
 }

@@ -1,22 +1,22 @@
 class TransactionsModel {
   final double totalSales;
-  final int totalInvoice;
-  final int soldQty;
-  final int totalCustomers;
-  final int toReceive;
+  final double totalInvoice;
+  final double soldQty;
+  final double totalCustomers;
+  final double toReceive;
   final double totalSalesReturn;
   final double totalPurchase;
-  final int totalBills;
-  final int purchaseQty;
-  final int totalSuppliers;
-  final int toPay;
+  final double totalBills;
+  final double purchaseQty;
+  final double totalSuppliers;
+  final double toPay;
   final double totalPurchaseReturn;
   final double totalPaid;
   final double totalExpense;
   final double cashInHand;
   final double bankAccountsBalance;
-  final int totalProducts;
-  final int stockQty;
+  final double totalProducts;
+  final double stockQty;
   final double stockValue;
   final double grossProfit;
   final double avgProfitMarginAmount;
@@ -80,30 +80,30 @@ class TransactionsModel {
 
   factory TransactionsModel.fromJson(Map<String, dynamic> json) =>
       TransactionsModel(
-        totalSales: json["totalSales"]?.toDouble() ?? 0,
-        totalInvoice: json["totalInvoice"] ?? 0,
-        soldQty: json["soldQty"] ?? 0,
-        totalCustomers: json["totalCustomers"] ?? 0,
-        toReceive: json["toReceive"] ?? 0,
-        totalSalesReturn: json["totalSalesReturn"]?.toDouble() ?? 0,
-        totalPurchase: json["totalPurchase"]?.toDouble() ?? 0,
-        totalBills: json["totalBills"] ?? 0,
-        purchaseQty: json["purchaseQty"] ?? 0,
-        totalSuppliers: json["totalSuppliers"] ?? 0,
-        toPay: json["toPay"] ?? 0,
-        totalPurchaseReturn: json["totalPurchaseReturn"]?.toDouble() ?? 0,
-        totalPaid: json["totalPaid"]?.toDouble() ?? 0,
-        totalExpense: json["totalExpense"]?.toDouble() ?? 0,
-        cashInHand: json["cashInHand"]?.toDouble() ?? 0,
-        bankAccountsBalance: json["bankAccountsBalance"]?.toDouble() ?? 0,
-        totalProducts: json["totalProducts"] ?? 0,
-        stockQty: json["stockQty"] ?? 0,
-        stockValue: json["stockValue"]?.toDouble() ?? 0,
-        grossProfit: json["grossProfit"]?.toDouble() ?? 0,
-        avgProfitMarginAmount: json["avgProfitMarginAmount"]?.toDouble() ?? 0,
-        avgProfitMarginPercent: json["avgProfitMarginPercent"]?.toDouble() ?? 0,
-        avgCartValue: json["avgCartValue"]?.toDouble() ?? 0,
-        avgBillsCount: json["avgBillsCount"]?.toDouble() ?? 0,
+        totalSales: (json["totalSales"] ?? 0).toDouble(),
+        totalInvoice: (json["totalInvoice"] ?? 0).toDouble(),
+        soldQty: (json["soldQty"] ?? 0).toDouble(),
+        totalCustomers: (json["totalCustomers"] ?? 0).toDouble(),
+        toReceive: (json["toReceive"] ?? 0).toDouble(),
+        totalSalesReturn: (json["totalSalesReturn"] ?? 0).toDouble(),
+        totalPurchase: (json["totalPurchase"] ?? 0).toDouble(),
+        totalBills: (json["totalBills"] ?? 0).toDouble(),
+        purchaseQty: (json["purchaseQty"] ?? 0).toDouble(),
+        totalSuppliers: (json["totalSuppliers"] ?? 0).toDouble(),
+        toPay: (json["toPay"] ?? 0).toDouble(),
+        totalPurchaseReturn: (json["totalPurchaseReturn"] ?? 0).toDouble(),
+        totalPaid: (json["totalPaid"] ?? 0).toDouble(),
+        totalExpense: (json["totalExpense"] ?? 0).toDouble(),
+        cashInHand: (json["cashInHand"] ?? 0).toDouble(),
+        bankAccountsBalance: (json["bankAccountsBalance"] ?? 0).toDouble(),
+        totalProducts: (json["totalProducts"] ?? 0).toDouble(),
+        stockQty: (json["stockQty"] ?? 0).toDouble(),
+        stockValue: (json["stockValue"] ?? 0).toDouble(),
+        grossProfit: (json["grossProfit"] ?? 0).toDouble(),
+        avgProfitMarginAmount: (json["avgProfitMarginAmount"] ?? 0).toDouble(),
+        avgProfitMarginPercent: (json["avgProfitMarginPercent"] ?? 0).toDouble(),
+        avgCartValue: (json["avgCartValue"] ?? 0).toDouble(),
+        avgBillsCount: (json["avgBillsCount"] ?? 0).toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

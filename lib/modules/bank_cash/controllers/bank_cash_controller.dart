@@ -1,6 +1,8 @@
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/bank_model.dart';
+import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
+import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/repositories/bank_cash.dart';
 import 'package:ai_setu/data/model/bank_cash/bank_transaction_model.dart';
@@ -20,11 +22,18 @@ class BankCashController extends GetxController {
 
   final RxList<PosPaymentDatum> paymentTermsList = <PosPaymentDatum>[].obs;
 
+  final RxList<ExpenseDatum> expenseList = <ExpenseDatum>[].obs;
+
+  final RxList<SalaryDatum> salaryList = <SalaryDatum>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     fetchBankCash();
     fetchBankCashTransaction();
+    fetchPaymentTerms();
+    fetchExpenses();
+    fetchSalary();
   }
 
   Future<void> fetchBankCash() async {
@@ -102,6 +111,95 @@ class BankCashController extends GetxController {
         totalPages.value = paymentModel.state.totalPages;
       } else {
         error.value = res.message ?? 'Failed to fetch bank transactions';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchReceipts() async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final ResModel res = await _repo.getPaymentTerms(
+        page: currentPage.value,
+        fromDate: DateFormat(
+          'yyyy-MM-dd',
+        ).format(selectedDateRange.value.start),
+        toDate: DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end),
+      );
+
+      if (res.status == 200 && res.data != null) {
+        final PosPaymentModel receiptVoucherModel = PosPaymentModel.fromJson(
+          res.data,
+        );
+        paymentTermsList.assignAll(receiptVoucherModel.posPaymentData);
+        totalItems.value = receiptVoucherModel.totalData;
+        totalPages.value = receiptVoucherModel.state.totalPages;
+      } else {
+        error.value = res.message ?? 'Failed to fetch receipt voucher';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchExpenses() async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final ResModel res = await _repo.getExpenses(
+        page: currentPage.value,
+        fromDate: DateFormat(
+          'yyyy-MM-dd',
+        ).format(selectedDateRange.value.start),
+        toDate: DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end),
+      );
+
+      if (res.status == 200 && res.data != null) {
+        final ExpenseModel expenseModel = ExpenseModel.fromJson(res.data);
+        expenseList.assignAll(expenseModel.expenseData);
+        totalItems.value = expenseModel.totalData;
+        totalPages.value = expenseModel.state.totalPages;
+      } else {
+        error.value = res.message ?? 'Failed to fetch expenses';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchSalary() async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final ResModel res = await _repo.getSalary(
+        page: currentPage.value,
+        fromDate: DateFormat(
+          'yyyy-MM-dd',
+        ).format(selectedDateRange.value.start),
+        toDate: DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end),
+      );
+
+      if (res.status == 200 && res.data != null) {
+        final SalaryModel salaryModel = SalaryModel.fromJson(res.data);
+        salaryList.assignAll(salaryModel.salaryData);
+        totalItems.value = salaryModel.totalData;
+        totalPages.value = salaryModel.state.totalPages;
+      } else {
+        error.value = res.message ?? 'Failed to fetch salary';
       }
     } catch (e) {
       debugPrint(e.toString());
