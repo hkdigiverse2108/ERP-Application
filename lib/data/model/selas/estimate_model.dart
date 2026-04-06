@@ -19,12 +19,18 @@ class EstimateModel {
   String toRawJson() => json.encode(toJson());
 
   factory EstimateModel.fromJson(Map<String, dynamic> json) => EstimateModel(
-    estimateData: List<EstimateDatum>.from(
-      json["estimate_data"].map((x) => EstimateDatum.fromJson(x)),
-    ),
-    totalData: json["totalData"],
-    summary: Summary.fromJson(json["summary"]),
-    state: State.fromJson(json["state"]),
+    estimateData: json["estimate_data"] == null
+        ? []
+        : List<EstimateDatum>.from(
+            json["estimate_data"].map((x) => EstimateDatum.fromJson(x)),
+          ),
+    totalData: json["totalData"] ?? 0,
+    summary: json["summary"] == null
+        ? Summary(allEstimates: 0, pending: 0, orderCreated: 0, invoiceCreated: 0)
+        : Summary.fromJson(json["summary"]),
+    state: json["state"] == null
+        ? State(page: 1, limit: 10, totalPages: 1)
+        : State.fromJson(json["state"]),
   );
 
   Map<String, dynamic> toJson() => {

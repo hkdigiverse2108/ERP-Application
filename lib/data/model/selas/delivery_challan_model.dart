@@ -20,14 +20,25 @@ class DeliveryChallanMode {
 
   factory DeliveryChallanMode.fromJson(Map<String, dynamic> json) =>
       DeliveryChallanMode(
-        deliveryChallanData: List<DeliveryChallanDatum>.from(
-          json["deliveryChallan_data"].map(
-            (x) => DeliveryChallanDatum.fromJson(x),
-          ),
-        ),
-        totalData: json["totalData"],
-        summary: Summary.fromJson(json["summary"]),
-        state: State.fromJson(json["state"]),
+        deliveryChallanData: json["deliveryChallan_data"] == null
+            ? []
+            : List<DeliveryChallanDatum>.from(
+                json["deliveryChallan_data"].map(
+                  (x) => DeliveryChallanDatum.fromJson(x),
+                ),
+              ),
+        totalData: json["totalData"] ?? 0,
+        summary: json["summary"] == null
+            ? Summary(
+                allDeliveryChallans: 0,
+                invoiceCreated: 0,
+                delivered: 0,
+                cancelled: 0,
+              )
+            : Summary.fromJson(json["summary"]),
+        state: json["state"] == null
+            ? State(page: 1, limit: 10, totalPages: 1)
+            : State.fromJson(json["state"]),
       );
 
   Map<String, dynamic> toJson() => {

@@ -37,7 +37,7 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Invoice",
-            value: controller.topSectionData.value.totalInvoice,
+            value: controller.topSectionData.value.totalInvoice.toDouble(),
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
           ),
@@ -49,7 +49,7 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Customer",
-            value: controller.topSectionData.value.totalCustomers,
+            value: controller.topSectionData.value.totalCustomers.toDouble(),
             color: selseColor,
             isLoading: controller.topSectionLoading.value,
           ),
@@ -78,7 +78,7 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Bills",
-            value: controller.topSectionData.value.totalBills,
+            value: controller.topSectionData.value.totalBills.toDouble(),
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
           ),
@@ -90,7 +90,7 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Suppliers",
-            value: controller.topSectionData.value.totalSuppliers,
+            value: controller.topSectionData.value.totalSuppliers.toDouble(),
             color: purchaseColor,
             isLoading: controller.topSectionLoading.value,
           ),
@@ -126,7 +126,7 @@ class DashboardStatWidget extends StatelessWidget {
           ),
           StatCard(
             title: "Total Products",
-            value: controller.topSectionData.value.totalProducts,
+            value: controller.topSectionData.value.totalProducts.toDouble(),
             color: transectionColor,
             isLoading: controller.topSectionLoading.value,
           ),

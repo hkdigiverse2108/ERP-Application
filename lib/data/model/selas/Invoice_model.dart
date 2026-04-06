@@ -19,12 +19,26 @@ class InvoiceMode {
   String toRawJson() => json.encode(toJson());
 
   factory InvoiceMode.fromJson(Map<String, dynamic> json) => InvoiceMode(
-    invoiceData: List<InvoiceDatum>.from(
-      json["invoice_data"].map((x) => InvoiceDatum.fromJson(x)),
-    ),
-    totalData: json["totalData"],
-    summary: Summary.fromJson(json["summary"]),
-    state: State.fromJson(json["state"]),
+    invoiceData: json["invoice_data"] == null
+        ? []
+        : List<InvoiceDatum>.from(
+            json["invoice_data"].map((x) => InvoiceDatum.fromJson(x)),
+          ),
+    totalData: json["totalData"] ?? 0,
+    summary: json["summary"] == null
+        ? Summary(
+            allInvoices: 0,
+            invoiced: 0,
+            deliveryChallanCreated: 0,
+            cancelled: 0,
+            totalSales: 0.0,
+            paidAmount: 0,
+            unpaidAmount: 0.0,
+          )
+        : Summary.fromJson(json["summary"]),
+    state: json["state"] == null
+        ? State(page: 1, limit: 10, totalPages: 1)
+        : State.fromJson(json["state"]),
   );
 
   Map<String, dynamic> toJson() => {

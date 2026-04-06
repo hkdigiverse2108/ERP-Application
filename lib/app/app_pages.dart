@@ -20,6 +20,12 @@ import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/views/recipe.dart';
 import 'package:ai_setu/modules/inventory/views/stock.dart';
 import 'package:ai_setu/modules/inventory/views/stockVri.dart';
+import 'package:ai_setu/modules/sales/bindings/sales_binding.dart';
+import 'package:ai_setu/modules/sales/views/delivery_challan_page.dart';
+import 'package:ai_setu/modules/sales/views/estimate_page.dart';
+import 'package:ai_setu/modules/sales/views/invoice_page.dart';
+import 'package:ai_setu/modules/sales/views/sales_credit%20_note_page.dart';
+import 'package:ai_setu/modules/sales/views/sales_order_page.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
@@ -127,6 +133,31 @@ class AppPages {
       name: Routes.salary,
       page: () => const SalaryPage(),
       binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.estimate,
+      page: () => const EstimatePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.salesCreditNote,
+      page: () => const SalesCreditNotePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.salesOrder,
+      page: () => const SalesOrderPage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.invoice,
+      page: () => const InvoicePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.deliveryChallan,
+      page: () => const DeliveryChallanPage(),
+      binding: SalesBinding(),
     ),
   ];
 }

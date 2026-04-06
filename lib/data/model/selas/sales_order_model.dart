@@ -20,12 +20,24 @@ class SalesOrderModel {
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) =>
       SalesOrderModel(
-        salesOrderData: List<SalesOrderDatum>.from(
-          json["salesOrder_data"].map((x) => SalesOrderDatum.fromJson(x)),
-        ),
-        totalData: json["totalData"],
-        summary: Summary.fromJson(json["summary"]),
-        state: State.fromJson(json["state"]),
+        salesOrderData: json["salesOrder_data"] == null
+            ? []
+            : List<SalesOrderDatum>.from(
+                json["salesOrder_data"].map((x) => SalesOrderDatum.fromJson(x)),
+              ),
+        totalData: json["totalData"] ?? 0,
+        summary: json["summary"] == null
+            ? Summary(
+                allSalesOrders: 0,
+                pending: 0,
+                invoiceCreated: 0,
+                deliveryChallanCreated: 0,
+                cancelled: 0,
+              )
+            : Summary.fromJson(json["summary"]),
+        state: json["state"] == null
+            ? State(page: 1, limit: 10, totalPages: 1)
+            : State.fromJson(json["state"]),
       );
 
   Map<String, dynamic> toJson() => {

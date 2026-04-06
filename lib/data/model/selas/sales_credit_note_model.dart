@@ -18,13 +18,17 @@ class SalesCreditNoteMode {
 
   factory SalesCreditNoteMode.fromJson(Map<String, dynamic> json) =>
       SalesCreditNoteMode(
-        salesCreditNoteData: List<SalesCreditNoteDatum>.from(
-          json["salesCreditNote_data"].map(
-            (x) => SalesCreditNoteDatum.fromJson(x),
-          ),
-        ),
-        totalData: json["totalData"],
-        state: State.fromJson(json["state"]),
+        salesCreditNoteData: json["salesCreditNote_data"] == null
+            ? []
+            : List<SalesCreditNoteDatum>.from(
+                json["salesCreditNote_data"].map(
+                  (x) => SalesCreditNoteDatum.fromJson(x),
+                ),
+              ),
+        totalData: json["totalData"] ?? 0,
+        state: json["state"] == null
+            ? State(page: 1, limit: 10, totalPages: 1)
+            : State.fromJson(json["state"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -109,35 +113,112 @@ class SalesCreditNoteDatum {
   factory SalesCreditNoteDatum.fromJson(
     Map<String, dynamic> json,
   ) => SalesCreditNoteDatum(
-    id: json["_id"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: UpdatedBy.fromJson(json["updatedBy"]),
-    companyId: CompanyId.fromJson(json["companyId"]),
-    customerId: CustomerId.fromJson(json["customerId"]),
-    placeOfSupply: placeOfSupplyValues.map[json["placeOfSupply"]] ?? PlaceOfSupply.GUJARAT,
-    billingAddress: Address.fromJson(json["billingAddress"]),
-    shippingAddress: Address.fromJson(json["shippingAddress"]),
-    creditNoteDate: DateTime.parse(json["creditNoteDate"]),
-    creditNoteNo: json["creditNoteNo"],
+    id: json["_id"] ?? "",
+    isDeleted: json["isDeleted"] ?? false,
+    isActive: json["isActive"] ?? true,
+    createdBy: json["createdBy"] == null
+        ? CreatedBy(id: "", fullName: "", userType: "")
+        : CreatedBy.fromJson(json["createdBy"]),
+    updatedBy: json["updatedBy"] == null
+        ? UpdatedBy(id: "", userType: "")
+        : UpdatedBy.fromJson(json["updatedBy"]),
+    companyId: json["companyId"] == null
+        ? CompanyId(
+            id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+            name: PlaceOfSupply.GUJARAT,
+          )
+        : CompanyId.fromJson(json["companyId"]),
+    customerId: json["customerId"] == null
+        ? CustomerId(
+            id: "",
+            firstName: "",
+            lastName: "",
+            phoneNo: PhoneNo(countryCode: "", phoneNo: 0),
+            address: [],
+            contactType: "",
+          )
+        : CustomerId.fromJson(json["customerId"]),
+    placeOfSupply:
+        placeOfSupplyValues.map[json["placeOfSupply"]] ?? PlaceOfSupply.GUJARAT,
+    billingAddress: json["billingAddress"] == null
+        ? Address(
+            addressLine1: "",
+            country: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            state: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            city: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            pinCode: 0,
+            id: Id.THE_698980209_B8_C1_E41_C7226_EFF,
+          )
+        : Address.fromJson(json["billingAddress"]),
+    shippingAddress: json["shippingAddress"] == null
+        ? Address(
+            addressLine1: "",
+            country: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            state: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            city: CompanyId(
+              id: UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+              name: PlaceOfSupply.GUJARAT,
+            ),
+            pinCode: 0,
+            id: Id.THE_698980209_B8_C1_E41_C7226_EFF,
+          )
+        : Address.fromJson(json["shippingAddress"]),
+    creditNoteDate: json["creditNoteDate"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["creditNoteDate"]),
+    creditNoteNo: json["creditNoteNo"] ?? "",
     dueDate: json["dueDate"] == null ? null : DateTime.parse(json["dueDate"]),
     reason: json["reason"],
-    reverseCharge: json["reverseCharge"],
+    reverseCharge: json["reverseCharge"] ?? false,
     sez: json["sez"],
-    paymentReminder: json["paymentReminder"],
-    productType: json["productType"],
+    paymentReminder: json["paymentReminder"] ?? false,
+    productType: json["productType"] ?? "",
     productDetails: json["productDetails"],
     additionalCharges: json["additionalCharges"],
-    termsAndConditionIds: List<TermsAndConditionId>.from(
-      json["termsAndConditionIds"].map((x) => TermsAndConditionId.fromJson(x)),
-    ),
+    termsAndConditionIds: json["termsAndConditionIds"] == null
+        ? []
+        : List<TermsAndConditionId>.from(
+            json["termsAndConditionIds"].map(
+              (x) => TermsAndConditionId.fromJson(x),
+            ),
+          ),
     notes: json["notes"],
-    shippingDetails: ShippingDetails.fromJson(json["shippingDetails"]),
-    summary: Summary.fromJson(json["summary"]),
-    status: json["status"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    shippingDetails: json["shippingDetails"] == null
+        ? ShippingDetails(shippingType: "", weight: 0.0)
+        : ShippingDetails.fromJson(json["shippingDetails"]),
+    summary: json["summary"] == null
+        ? Summary(
+            flatDiscount: 0,
+            grossAmount: 0,
+            discountAmount: 0,
+            taxableAmount: 0,
+            taxAmount: 0.0,
+            roundOff: 0.0,
+            netAmount: 0.0,
+          )
+        : Summary.fromJson(json["summary"]),
+    status: json["status"] ?? "pending",
+    createdAt: json["createdAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["updatedAt"]),
     salesManId: json["salesManId"] == null
         ? null
         : SalesManId.fromJson(json["salesManId"]),
@@ -380,7 +461,9 @@ class CompanyId {
   String toRawJson() => json.encode(toJson());
 
   factory CompanyId.fromJson(Map<String, dynamic> json) => CompanyId(
-    id: uomIdEnumValues.map[json["_id"]] ?? UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+    id:
+        uomIdEnumValues.map[json["_id"]] ??
+        UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
     name: placeOfSupplyValues.map[json["name"]] ?? PlaceOfSupply.GUJARAT,
   );
 
@@ -708,7 +791,9 @@ class ProductDetailsItem {
   factory ProductDetailsItem.fromJson(Map<String, dynamic> json) =>
       ProductDetailsItem(
         productId: json["productId"],
-        uomId: uomIdEnumValues.map[json["uomId"]] ?? UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
+        uomId:
+            uomIdEnumValues.map[json["uomId"]] ??
+            UomIdEnum.THE_69982_A4_D9_F5643_C708711_E61,
         unit: placeOfSupplyValues.map[json["unit"]] ?? PlaceOfSupply.PIECES,
         qty: json["qty"],
         freeQty: json["freeQty"],

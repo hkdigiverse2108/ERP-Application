@@ -65,7 +65,7 @@ class InvoiceTable extends StatelessWidget {
                   ),
                   TableColumn(
                     title: 'Due Date',
-                    width: 120,
+                    width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       DateFormat('dd MMM yyyy').format(item.dueDate),
@@ -74,8 +74,8 @@ class InvoiceTable extends StatelessWidget {
                   ),
                   TableColumn(
                     title: 'Customer Name',
-                    width: 100,
-                    alignment: TextAlign.center,
+                    width: 150,
+                    // alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Row(
                       children: [
                         Text(
@@ -91,7 +91,7 @@ class InvoiceTable extends StatelessWidget {
                   ),
                   TableColumn(
                     title: 'Net Amount',
-                    width: 180,
+                    width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       "₹${item.transactionSummary.netAmount}",
@@ -158,7 +158,7 @@ class InvoiceTable extends StatelessWidget {
                 pageSize: 10,
                 onPageChanged: (page) {
                   salesController.currentPage.value = page;
-                  salesController.fetchInvoices(page: page);
+                  salesController.fetchInvoices();
                 },
               ),
             ],
