@@ -14,4 +14,15 @@ abstract class Routes {
   static const debit = '/debit';
   static const credit = '/credit';
   static const contact = '/contact';
+  static const bank = '/bank';
+  static const bankTransaction = '/bank-transaction';
+  static const posPayment = '/pos-payment';
+  static const receipt = '/receipt';
+  static const expense = '/expense';
+  static const salary = '/salary';
+  static const estimate = '/estimate';
+  static const salesOrder = '/sales-order';
+  static const invoice = '/invoice';
+  static const deliveryChallan = '/delivery-challan';
+  static const salesCreditNote = '/sales-credit-note';
 }

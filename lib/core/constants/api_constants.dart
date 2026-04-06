@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.29.26:4001";
+  static const String baseUrl = "http://192.168.1.67:4001";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -179,8 +179,17 @@ class ApiConstants {
   static const String updatePosPayment = "/pos-payment/edit";
 
   // Voucher
-  static const String getAllVoucher = "/voucher/payment/all";
-  static const String addVoucher = "/voucher/payment/add";
+  static const String getAllVoucher = "/voucher/alll";
+  static const String addVoucher = "/voucher/add";
+  static const String updateVoucher = "/voucher/edit";
+  static String deleteVoucher(String id) => "/voucher/$id";
+  static const String getAllPaymentVoucher = "/voucher/payment/all";
+  static const String addPaymentVoucher = "/voucher/payment/add";
+  static const String getAllReceiptVoucher = "/voucher/receipt/all";
+  static const String addReceiptVoucher = "/voucher/receipt/add";
+  static const String updatePaymentVoucher = "/voucher/payment/edit";
+  static const String getExpense = "/voucher/expense/all";
+  static const String addExpenseVoucher = "/voucher/expense/add";
 
   // Payment Term
   static const String getAllPaymentTerm = "/payment-term/all";
