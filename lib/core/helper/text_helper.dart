@@ -90,4 +90,6 @@ class TextHelper {
       bodySmall.copyWith(color: Theme.of(context).colorScheme.onSurface);
   static TextStyle bodyBoldStyle(BuildContext context) =>
       bodyBold.copyWith(color: Theme.of(context).colorScheme.onSurface);
+  static TextStyle captionStyle(BuildContext context) =>
+      caption.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
 }

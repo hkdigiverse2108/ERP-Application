@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/invetory/product_item_model.dart';
+import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -30,117 +30,34 @@ class StockTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<ProductItemModel>(
-                items: [
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    printName: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                  ProductItemModel(
-                    name: 'Hp Laptop',
-                    category: 'Electronics',
-                    subCategory: 'Laptops',
-                    brand: 'Hp',
-                    subBrand: 'Hp',
-                    qty: 10,
-                  ),
-                ],
+                items: [],
                 columns: [
                   TableColumn(
                     title: 'Product Name',
                     width: 140,
-                    cellBuilder: (context, item, index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.name ?? '',
-                          style: TextHelper.bodySmall.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    cellBuilder: (context, item, index) => Text(
+                      item.name,
+                      style: TextHelper.bodySmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TableColumn(
                     title: 'Category Name',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    width: 120,
                     cellBuilder: (context, item, index) => Text(
-                      item.category ?? '',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Sub Category Name',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.subCategory ?? '',
-                      textAlign: TextAlign.right,
+                      item.categoryId?.name ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
                     title: 'Brand Name',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    width: 120,
                     cellBuilder: (context, item, index) => Text(
-                      item.brand ?? '',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Sub Brand Name',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.subBrand ?? '',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      item.brandId?.name ?? '-',
+                      style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
@@ -155,8 +72,8 @@ class StockTable extends StatelessWidget {
                   ),
                 ],
                 currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
+                totalPages: 1,
+                totalItems: 0,
                 onPageChanged: (page) =>
                     homeController.currentPage.value = page,
               ),

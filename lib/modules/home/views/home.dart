@@ -20,6 +20,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/charts/app_bar_chart.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
+import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/section_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -38,6 +39,7 @@ class Home extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: const DefAppBar(),
+        drawer: const AppDrawer(),
         body: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           color: context.appColors.background,

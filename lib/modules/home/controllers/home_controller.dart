@@ -111,11 +111,8 @@ class HomeController extends GetxController {
   // Each section guard: only fetch once
   Future<void> loadGraphs() async {
     if (graphsLoaded.value) return;
-    await Future.wait([
-      getSalesAndPurchaseGraph(),
-      getTransactionGraph(),
-    ]);
     graphsLoaded.value = true;
+    await Future.wait([getSalesAndPurchaseGraph(), getTransactionGraph()]);
   }
 
   Future<void> getSalesAndPurchaseGraph() async {
@@ -150,12 +147,12 @@ class HomeController extends GetxController {
 
   Future<void> loadCustomers() async {
     if (customersLoaded.value) return;
+    customersLoaded.value = true;
     await Future.wait([
       getTopCustomers(),
       getCategoryWiseCustomers(),
       getCategoryWiseCustomersCount(),
     ]);
-    customersLoaded.value = true;
   }
 
   Future<void> getTopCustomers() async {
@@ -205,12 +202,12 @@ class HomeController extends GetxController {
 
   Future<void> loadProducts() async {
     if (productsLoaded.value) return;
+    productsLoaded.value = true;
     await Future.wait([
       getBestSellingProducts(),
       getLeastSellingProducts(),
       getCategorySales(),
     ]);
-    productsLoaded.value = true;
   }
 
   Future<void> getBestSellingProducts() async {
@@ -260,6 +257,7 @@ class HomeController extends GetxController {
 
   Future<void> loadFinance() async {
     if (financeLoaded.value) return;
+    financeLoaded.value = true;
     await Future.wait([
       getTopExpenses(),
       getTopCoupons(),
@@ -267,7 +265,6 @@ class HomeController extends GetxController {
       getPayables(),
       getLoginLogs(),
     ]);
-    financeLoaded.value = true;
   }
 
   Future<void> getTopExpenses() async {

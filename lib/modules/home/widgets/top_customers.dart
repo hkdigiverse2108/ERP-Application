@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 class TopCustomers extends StatelessWidget {
   TopCustomers({super.key});
 
-  final homeController = Get.find<HomeController>();
+  final homeController = HomeController.instance;
 
   @override
   Widget build(BuildContext context) {

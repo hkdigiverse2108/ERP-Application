@@ -1,22 +1,22 @@
 class TransactionsModel {
   final double totalSales;
   final int totalInvoice;
-  final int soldQty;
+  final double soldQty;
   final int totalCustomers;
-  final int toReceive;
+  final double toReceive;
   final double totalSalesReturn;
   final double totalPurchase;
   final int totalBills;
-  final int purchaseQty;
+  final double purchaseQty;
   final int totalSuppliers;
-  final int toPay;
+  final double toPay;
   final double totalPurchaseReturn;
   final double totalPaid;
   final double totalExpense;
   final double cashInHand;
   final double bankAccountsBalance;
   final int totalProducts;
-  final int stockQty;
+  final double stockQty;
   final double stockValue;
   final double grossProfit;
   final double avgProfitMarginAmount;
@@ -82,22 +82,22 @@ class TransactionsModel {
       TransactionsModel(
         totalSales: json["totalSales"]?.toDouble() ?? 0,
         totalInvoice: json["totalInvoice"] ?? 0,
-        soldQty: json["soldQty"] ?? 0,
+        soldQty: json["soldQty"]?.toDouble() ?? 0,
         totalCustomers: json["totalCustomers"] ?? 0,
-        toReceive: json["toReceive"] ?? 0,
+        toReceive: json["toReceive"]?.toDouble() ?? 0,
         totalSalesReturn: json["totalSalesReturn"]?.toDouble() ?? 0,
         totalPurchase: json["totalPurchase"]?.toDouble() ?? 0,
         totalBills: json["totalBills"] ?? 0,
-        purchaseQty: json["purchaseQty"] ?? 0,
+        purchaseQty: json["purchaseQty"]?.toDouble() ?? 0,
         totalSuppliers: json["totalSuppliers"] ?? 0,
-        toPay: json["toPay"] ?? 0,
+        toPay: json["toPay"]?.toDouble() ?? 0,
         totalPurchaseReturn: json["totalPurchaseReturn"]?.toDouble() ?? 0,
         totalPaid: json["totalPaid"]?.toDouble() ?? 0,
         totalExpense: json["totalExpense"]?.toDouble() ?? 0,
         cashInHand: json["cashInHand"]?.toDouble() ?? 0,
         bankAccountsBalance: json["bankAccountsBalance"]?.toDouble() ?? 0,
         totalProducts: json["totalProducts"] ?? 0,
-        stockQty: json["stockQty"] ?? 0,
+        stockQty: json["stockQty"]?.toDouble() ?? 0,
         stockValue: json["stockValue"]?.toDouble() ?? 0,
         grossProfit: json["grossProfit"]?.toDouble() ?? 0,
         avgProfitMarginAmount: json["avgProfitMarginAmount"]?.toDouble() ?? 0,

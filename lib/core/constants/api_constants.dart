@@ -74,8 +74,17 @@ class ApiConstants {
   static const String addProduct = "/product/add";
   static const String updateProduct = "/product/edit";
   static String deleteProduct(String id) => "/product/$id";
-  static String getAllProduct(String page, String limit) =>
-      buildUrl("/product/all", {"page": page, "limit": limit});
+  static String getAllProduct({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/product/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static String getProductById(String id) => "/product/$id";
   static const String productDropdown = "/product/dropdown";
 
@@ -97,7 +106,19 @@ class ApiConstants {
   static const String productTypeDropdown = "/product-type/dropdown";
 
   // Product Request
-  static const String getAllProductRequest = "/product-request/all";
+  static String getAllProductRequest({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+    String? statusFilter,
+  }) => buildUrl("/product-request/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+    "statusFilter": statusFilter,
+  });
   static const String addProductRequest = "/product-request/add";
   static const String updateProductRequest = "/product-request/edit";
   static String deleteProductRequest(String id) => "/product-request/$id";

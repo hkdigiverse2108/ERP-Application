@@ -6,9 +6,10 @@ import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
 import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
+import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
 import 'package:ai_setu/modules/inventory/views/bill_of_live.dart';
 import 'package:ai_setu/modules/inventory/views/material_consumption.dart';
-import 'package:ai_setu/modules/inventory/views/product.dart';
+import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/views/recipe.dart';
 import 'package:ai_setu/modules/inventory/views/stock.dart';
 import 'package:ai_setu/modules/inventory/views/stockVri.dart';
@@ -43,8 +44,8 @@ class AppPages {
     ),
     GetPage(
       name: Routes.product,
-      page: () => const Product(),
-      binding: InventoryBindings(),
+      page: () => Product(),
+      binding: ProductBinding(),
     ),
     GetPage(
       name: Routes.stock,

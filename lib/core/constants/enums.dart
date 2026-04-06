@@ -1,0 +1,3 @@
+enum ProductType { FINISHED, RAW_MATERIAL, SEMI_FINISHED }
+
+enum UserType { ADMIN, SUPER_ADMIN }
