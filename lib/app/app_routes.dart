@@ -20,4 +20,9 @@ abstract class Routes {
   static const receipt = '/receipt';
   static const expense = '/expense';
   static const salary = '/salary';
+  static const estimate = '/estimate';
+  static const salesOrder = '/sales-order';
+  static const invoice = '/invoice';
+  static const deliveryChallan = '/delivery-challan';
+  static const salesCreditNote = '/sales-credit-note';
 }

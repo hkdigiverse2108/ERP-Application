@@ -47,13 +47,6 @@ class QuickActionDropdown extends StatelessWidget {
                       },
                     ),
                     _ExpandableSection(
-                      title: "Sales",
-                      items: [
-                        QuickActionItem(title: "Invoice"),
-                        QuickActionItem(title: "Credit Note"),
-                      ],
-                    ),
-                    _ExpandableSection(
                       title: "Accounting",
                       items: [
                         QuickActionItem(
@@ -94,6 +87,31 @@ class QuickActionDropdown extends StatelessWidget {
                       items: [
                         QuickActionItem(title: "Supplier Bill"),
                         QuickActionItem(title: "Debit Note"),
+                      ],
+                    ),
+                    _ExpandableSection(
+                      title: "Sales",
+                      items: [
+                        QuickActionItem(
+                          title: "Estimate",
+                          route: Routes.estimate,
+                        ),
+                        QuickActionItem(
+                          title: "Sales Order",
+                          route: Routes.salesOrder,
+                        ),
+                        QuickActionItem(
+                          title: "Invoice",
+                          route: Routes.invoice,
+                        ),
+                        QuickActionItem(
+                          title: "Delivery Challan",
+                          route: Routes.deliveryChallan,
+                        ),
+                        QuickActionItem(
+                          title: "Sales Credit Note",
+                          route: Routes.salesCreditNote,
+                        ),
                       ],
                     ),
                     _ExpandableSection(
