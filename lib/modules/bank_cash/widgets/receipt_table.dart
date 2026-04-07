@@ -68,7 +68,7 @@ class ReceiptTable extends StatelessWidget {
                     },
                   ),
                   TableColumn(
-                    title: 'Payment Mode',
+                    title: 'Date',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
@@ -77,26 +77,26 @@ class ReceiptTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Payment Type',
-                    width: 100,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      paymentModeValues.reverse[item.paymentMode] ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Type',
+                    title: 'Payment Mode',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      paymentTypeValues.reverse[item.paymentType] ?? "-",
+                      item.paymentMode ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Payment Date',
-                    width: 100,
+                    title: 'Payment Type',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.paymentType ?? "-",
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Amount',
+                    width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       '₹${item.amount.toStringAsFixed(2)}',
@@ -107,26 +107,15 @@ class ReceiptTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Amount',
-                    width: 100,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      statusValues.reverse[item.status] ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
-                  ),
-                  TableColumn(
                     title: 'Status',
-                    width: 100,
+                    width: 120,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      statusValues.reverse[item.status] ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.status ?? "-", style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Created By',
-                    width: 100,
+                    width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       item.createdBy.fullName,
@@ -140,7 +129,7 @@ class ReceiptTable extends StatelessWidget {
                 pageSize: 10,
                 onPageChanged: (page) {
                   bankCashController.currentPage.value = page;
-                  bankCashController.fetchPaymentTerms();
+                  bankCashController.fetchReceipts();
                 },
               ),
             ],

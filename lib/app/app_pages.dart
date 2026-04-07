@@ -1,3 +1,5 @@
+import 'package:ai_setu/modules/accounting/bindings/account_binding.dart';
+import 'package:ai_setu/modules/contact/bindings/contact_binding.dart';
 import 'package:ai_setu/modules/accounting/views/cradit_page.dart';
 import 'package:ai_setu/modules/accounting/views/dabit_page.dart';
 import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
@@ -15,14 +17,20 @@ import 'package:ai_setu/modules/home/views/home.dart';
 import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
 import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
+import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
 import 'package:ai_setu/modules/inventory/stock/bindings/stock_bindings.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/bindings/stock_verification_binding.dart';
 import 'package:ai_setu/modules/inventory/views/bill_of_live.dart';
 import 'package:ai_setu/modules/inventory/views/material_consumption.dart';
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
-import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
 import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification.dart';
+import 'package:ai_setu/modules/sales/bindings/sales_binding.dart';
+import 'package:ai_setu/modules/sales/views/delivery_challan_page.dart';
+import 'package:ai_setu/modules/sales/views/estimate_page.dart';
+import 'package:ai_setu/modules/sales/views/invoice_page.dart';
+import 'package:ai_setu/modules/sales/views/sales_credit_note_page.dart';
+import 'package:ai_setu/modules/sales/views/sales_order_page.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
@@ -81,17 +89,17 @@ class AppPages {
     GetPage(
       name: Routes.debit,
       page: () => const DebitPage(),
-      // binding: InventoryBindings(),
+      binding: AccountingBinding(),
     ),
     GetPage(
       name: Routes.credit,
       page: () => const CraditPage(),
-      // binding: InventoryBindings(),
+      binding: AccountingBinding(),
     ),
     GetPage(
       name: Routes.contact,
       page: () => const Contact(),
-      // binding: InventoryBindings(),
+      binding: ContactBinding(),
     ),
 
     GetPage(name: Routes.user, page: () => User(), binding: UserBinding()),
@@ -126,6 +134,31 @@ class AppPages {
       name: Routes.salary,
       page: () => const SalaryPage(),
       binding: BankCashBinding(),
+    ),
+    GetPage(
+      name: Routes.estimate,
+      page: () => const EstimatePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.salesCreditNote,
+      page: () => const SalesCreditNotePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.salesOrder,
+      page: () => const SalesOrderPage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.invoice,
+      page: () => const InvoicePage(),
+      binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.deliveryChallan,
+      page: () => const DeliveryChallanPage(),
+      binding: SalesBinding(),
     ),
   ];
 }

@@ -40,7 +40,7 @@ class QuickActionDropdown extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ExpandableSection(
+                    _MainHeader(
                       title: "Dashboard",
                       onTap: () {
                         Get.toNamed(Routes.home);
@@ -255,6 +255,33 @@ class _QuickActionItem extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MainHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+
+  const _MainHeader({required this.title, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: GestureDetector(
+        onTap: () {
+          if (onTap != null) {
+            Get.toNamed(Routes.home);
+          } else {
+            Get.toNamed(Routes.home);
+          }
+        },
+        child: Text(
+          title,
+          style: TextHelper.h2.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
     );

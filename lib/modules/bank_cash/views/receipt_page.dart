@@ -3,6 +3,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/modules/bank_cash/widgets/receipt_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
+import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptPage extends StatelessWidget {
@@ -12,6 +13,7 @@ class ReceiptPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefAppBar(),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
