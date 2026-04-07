@@ -1,36 +1,41 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/invetory/product_model.dart';
-import 'package:ai_setu/modules/home/controllers/home_controller.dart';
+import 'package:ai_setu/data/model/invetory/stock_model.dart';
+import 'package:ai_setu/modules/inventory/stock/controllers/stock_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class StockTable extends StatelessWidget {
   StockTable({super.key});
-  final HomeController homeController = Get.put(HomeController());
+  final controller = StockController.instance;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (controller.isLoading.value && controller.stocks.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         return BorderContainer(
           child: Column(
             children: [
               RangedDatePicker(
-                initialDateRange: homeController.selectedDateRange.value,
+                initialDateRange: controller.selectedDateRange.value,
                 onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
+                    controller.selectedDateRange.value = range,
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<ProductItemModel>(
-                items: [],
+              CommonTable<StockItemModel>(
+                isLoading: controller.isLoading.value,
+                items: controller.stocks,
                 columns: [
                   TableColumn(
                     title: 'Product Name',
@@ -45,7 +50,7 @@ class StockTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Category Name',
+                    title: 'Category',
                     width: 120,
                     cellBuilder: (context, item, index) => Text(
                       item.categoryId?.name ?? '-',
@@ -53,7 +58,15 @@ class StockTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Brand Name',
+                    title: 'Sub-Category',
+                    width: 120,
+                    cellBuilder: (context, item, index) => Text(
+                      item.subCategoryId?.name ?? '-',
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Brand',
                     width: 120,
                     cellBuilder: (context, item, index) => Text(
                       item.brandId?.name ?? '-',
@@ -61,21 +74,40 @@ class StockTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
+                    title: 'Sub-Brand',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.subBrandId?.name ?? '-',
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
                     title: 'Available Qty',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.qty.toString(),
-                      textAlign: TextAlign.right,
+                      item.availableQty.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Created By',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.createdBy.fullName,
+                      textAlign: TextAlign.center,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 1,
-                totalItems: 0,
-                onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                currentPage: controller.currentPage.value,
+                totalPages: controller.totalPages.value,
+                totalItems: controller.totalItems.value,
+                pageSize: controller.limit.value,
+                onPageChanged: (page) => controller.goToPage(page),
               ),
             ],
           ),

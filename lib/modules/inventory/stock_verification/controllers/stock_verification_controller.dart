@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'package:ai_setu/data/model/invetory/product_model.dart';
-import 'package:ai_setu/data/repositories/product_repository.dart';
+import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
+import 'package:ai_setu/data/repositories/stock_verification_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductController extends GetxController {
-  static ProductController get instance => Get.find();
+class StockVerificationController extends GetxController {
+  static StockVerificationController get instance => Get.find();
 
-  final _repo = ProductRepository();
-  final products = <ProductItemModel>[].obs;
+  final _repo = StockVerificationRepository();
+  final stockVerifications = <StockVerificationModel>[].obs;
+
   final selectedDateRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 30)),
     end: DateTime.now(),
@@ -21,40 +22,39 @@ class ProductController extends GetxController {
 
   // Caching
   final _cache =
-      <String, ({List<ProductItemModel> items, DateTime fetchedAt})>{};
+      <String, ({List<StockVerificationModel> items, DateTime fetchedAt})>{};
   final _cacheExpiry = const Duration(minutes: 5);
 
-  // pagination
+  // Pagination
   final currentPage = 1.obs;
   final totalPages = 1.obs;
   final limit = 10.obs;
   final totalItems = 0.obs;
 
-  final isLodding = false.obs;
+  final RxBool isLoading = false.obs;
 
   @override
   void onReady() {
     super.onReady();
-    getProductsData();
+    getStockVerificationData();
   }
 
   String _getCacheKey(int page) =>
       '${page}_${searchQuery.value}_${activeFilters.toString()}';
 
-  Future<void> getProductsData() async {
+  Future<void> getStockVerificationData() async {
     final key = _getCacheKey(currentPage.value);
     final cached = _cache[key];
 
-    // Check if cache exists and is not expired
     if (cached != null &&
         DateTime.now().difference(cached.fetchedAt) < _cacheExpiry) {
-      products.value = cached.items;
+      stockVerifications.value = cached.items;
       return;
     }
 
     try {
-      isLodding.value = true;
-      final res = await _repo.getProductsForTable(
+      isLoading.value = true;
+      final res = await _repo.getStockVerificationList(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
@@ -63,14 +63,14 @@ class ProductController extends GetxController {
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
 
-      products.value = res.items;
+      stockVerifications.value = res.items;
       totalPages.value = res.totalPages;
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isLodding.value = false;
+      isLoading.value = false;
     }
   }
 
@@ -84,7 +84,7 @@ class ProductController extends GetxController {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       searchQuery.value = query;
       _clearCache();
-      getProductsData();
+      getStockVerificationData();
     });
   }
 
@@ -97,13 +97,13 @@ class ProductController extends GetxController {
   void onFiltersChanged(Map<String, dynamic> filters) {
     activeFilters.value = filters;
     _clearCache();
-    getProductsData();
+    getStockVerificationData();
   }
 
   Future<void> goToPage(int page) async {
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page;
-      await getProductsData();
+      await getStockVerificationData();
     }
   }
 }

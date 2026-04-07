@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.1.67:4001";
+  static const String baseUrl = "http://192.168.29.26:4001";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -133,8 +133,17 @@ class ApiConstants {
   static const String companyDropdown = "/company/dropdown";
 
   // Stock
-  static String getAllStock(String activeFilter) =>
-      buildUrl("/stock/all", {"activeFilter": activeFilter});
+  static String getAllStock({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/stock/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addStock = "/stock/add";
   static const String updateStock = "/stock/edit";
   static String deleteStock(String id) => "/stock/$id";
@@ -156,7 +165,17 @@ class ApiConstants {
       });
 
   // Stock Verification
-  static const String getAllStockVerification = "/stock-verification/all";
+  static String getAllStockVerification({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/stock-verification/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addStockVerification = "/stock-verification/add";
   static const String updateStockVerification = "/stock-verification/edit";
   static String deleteStockVerification(String id) => "/stock-verification/$id";
@@ -164,7 +183,17 @@ class ApiConstants {
       "/stock-verification/$id";
 
   // Recipe
-  static const String getAllRecipe = "/recipe/all";
+  static String getAllRecipe({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/recipe/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addRecipe = "/recipe/add";
   static String getRecipeById(String id) => "/recipe/$id";
   static const String updateRecipe = "/recipe/edit";

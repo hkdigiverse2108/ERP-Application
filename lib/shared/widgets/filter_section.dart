@@ -246,7 +246,7 @@ class _FilterDropdown extends StatelessWidget {
     return SizedBox(
       height: 40,
       child: DropdownButtonFormField<String>(
-        value: selected,
+        initialValue: selected,
         isDense: true,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(

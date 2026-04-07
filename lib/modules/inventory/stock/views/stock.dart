@@ -1,15 +1,15 @@
 import 'package:ai_setu/core/constants/sizes.dart';
-import 'package:ai_setu/modules/inventory/product/controllers/product_controller.dart';
-import 'package:ai_setu/modules/inventory/product/widgets/product_table.dart';
+import 'package:ai_setu/modules/inventory/stock/controllers/stock_controller.dart';
+import 'package:ai_setu/modules/inventory/stock/widgets/stock_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
 
-class Product extends StatelessWidget {
-  Product({super.key});
-  final controller = ProductController.instance;
+class Stock extends StatelessWidget {
+  Stock({super.key});
+  final controller = StockController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +17,15 @@ class Product extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: DefAppBar(),
-        drawer: AppDrawer(),
+        drawer: const AppDrawer(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              QuickAction(),
-              _buildSectionTitle('Product List'),
-              ProductTable(),
+              const QuickAction(),
+              _buildSectionTitle('Stock List'),
+              StockTable(),
             ],
           ),
         ),

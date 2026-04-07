@@ -1,6 +1,5 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/bank_cash/widgets/receipt_table.dart';
 import 'package:ai_setu/modules/bank_cash/widgets/salary_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';

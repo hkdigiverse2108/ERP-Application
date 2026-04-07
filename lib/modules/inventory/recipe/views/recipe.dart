@@ -1,31 +1,32 @@
 import 'package:ai_setu/core/constants/sizes.dart';
-import 'package:ai_setu/modules/inventory/product/controllers/product_controller.dart';
-import 'package:ai_setu/modules/inventory/product/widgets/product_table.dart';
+import 'package:ai_setu/modules/inventory/recipe/controllers/recipe_controller.dart';
+import 'package:ai_setu/modules/inventory/recipe/widgets/recipe_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
 
-class Product extends StatelessWidget {
-  Product({super.key});
-  final controller = ProductController.instance;
+class Recipe extends StatelessWidget {
+  const Recipe({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = RecipeController.instance;
+
     return SafeArea(
       top: false,
       child: Scaffold(
         appBar: DefAppBar(),
-        drawer: AppDrawer(),
+        drawer: const AppDrawer(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              QuickAction(),
-              _buildSectionTitle('Product List'),
-              ProductTable(),
+              const QuickAction(),
+              _buildSectionTitle(controller),
+              RecipeTable(),
             ],
           ),
         ),
@@ -33,7 +34,7 @@ class Product extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(RecipeController controller) {
     return Padding(
       padding: EdgeInsets.only(
         left: Sizes.paddingM,
@@ -41,18 +42,8 @@ class Product extends StatelessWidget {
         top: Sizes.paddingM,
       ),
       child: FilterSection(
-        title: 'Product list',
-        filters: [
-          FilterOption(
-            label: 'Category',
-            options: ['Fruits', 'Dairy', 'Beverages'],
-          ),
-          FilterOption(label: 'Brand', options: ['Amul', 'Nestle', 'Local']),
-          FilterOption(
-            label: 'Stock',
-            options: ['In stock', 'Low stock', 'Out of stock'],
-          ),
-        ],
+        title: 'Recipe List',
+        filters: const [],
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),

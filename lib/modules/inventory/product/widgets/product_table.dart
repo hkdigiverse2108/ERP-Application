@@ -34,120 +34,124 @@ class ProductTable extends StatelessWidget {
                     controller.selectedDateRange.value = range,
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<ProductItemModel>(
-                items: controller.products,
-                columns: [
-                  TableColumn(
-                    title: 'Name',
-                    width: 100,
-                    cellBuilder: (context, item, index) => Text(
-                      item.name,
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
+              Obx(
+                () => CommonTable<ProductItemModel>(
+                  isLoading: controller.isLodding.value,
+                  items: controller.products,
+                  columns: [
+                    TableColumn(
+                      title: 'Name',
+                      width: 100,
+                      cellBuilder: (context, item, index) => Text(
+                        item.name,
+                        style: TextHelper.bodySmall.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Print Name',
-                    width: 120,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.printName, style: TextHelper.bodySmall),
-                  ),
-                  TableColumn(
-                    title: 'Category',
-                    width: 80,
-                    cellBuilder: (context, item, index) => Text(
-                      item.categoryId?.name ?? '-',
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Print Name',
+                      width: 120,
+                      cellBuilder: (context, item, index) =>
+                          Text(item.printName, style: TextHelper.bodySmall),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Brand',
-                    width: 80,
-                    cellBuilder: (context, item, index) => Text(
-                      item.brandId?.name ?? '-',
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Category',
+                      width: 80,
+                      cellBuilder: (context, item, index) => Text(
+                        item.categoryId?.name ?? '-',
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Purchase Tax',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.purchaseTaxId?.name ?? '-',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Brand',
+                      width: 80,
+                      cellBuilder: (context, item, index) => Text(
+                        item.brandId?.name ?? '-',
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Sales Tax',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.salesTaxId?.name ?? '-',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Purchase Tax',
+                      width: 100,
+                      alignment: TextAlign.right,
+                      cellBuilder: (context, item, index) => Text(
+                        item.purchaseTaxId?.name ?? '-',
+                        textAlign: TextAlign.right,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Purchase Price',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.purchasePrice}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Sales Tax',
+                      width: 100,
+                      alignment: TextAlign.right,
+                      cellBuilder: (context, item, index) => Text(
+                        item.salesTaxId?.name ?? '-',
+                        textAlign: TextAlign.right,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'MRP',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.mrp}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Purchase Price',
+                      width: 100,
+                      alignment: TextAlign.right,
+                      cellBuilder: (context, item, index) => Text(
+                        '₹${item.purchasePrice}',
+                        textAlign: TextAlign.right,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Selling Price',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      '₹${item.sellingPrice}',
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'MRP',
+                      width: 100,
+                      alignment: TextAlign.right,
+                      cellBuilder: (context, item, index) => Text(
+                        '₹${item.mrp}',
+                        textAlign: TextAlign.right,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Qty',
-                    width: 80,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      item.qty.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Selling Price',
+                      width: 100,
+                      alignment: TextAlign.right,
+                      cellBuilder: (context, item, index) => Text(
+                        '₹${item.sellingPrice}',
+                        textAlign: TextAlign.right,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                  TableColumn(
-                    title: 'Created By',
-                    width: 120,
-                    alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      (item.createdBy.userType == UserType.SUPER_ADMIN)
-                          ? "system generated"
-                          : item.createdBy.fullName,
-                      textAlign: TextAlign.center,
-                      style: TextHelper.bodySmall,
+                    TableColumn(
+                      title: 'Qty',
+                      width: 80,
+                      alignment: TextAlign.center,
+                      cellBuilder: (context, item, index) => Text(
+                        item.qty.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextHelper.bodySmall,
+                      ),
                     ),
-                  ),
-                ],
-                currentPage: controller.currentPage.value,
-                totalPages: controller.totalPages.value,
-                totalItems: controller.totalItems.value,
-                onPageChanged: (page) => controller.currentPage.value = page,
+                    TableColumn(
+                      title: 'Created By',
+                      width: 120,
+                      alignment: TextAlign.center,
+                      cellBuilder: (context, item, index) => Text(
+                        (item.createdBy.userType == UserType.SUPER_ADMIN)
+                            ? "system generated"
+                            : item.createdBy.fullName,
+                        textAlign: TextAlign.center,
+                        style: TextHelper.bodySmall,
+                      ),
+                    ),
+                  ],
+                  currentPage: controller.currentPage.value,
+                  totalPages: controller.totalPages.value,
+                  totalItems: controller.totalItems.value,
+                  onPageChanged: (page) => controller.goToPage(page),
+                  pageSize: controller.limit.value,
+                ),
               ),
             ],
           ),

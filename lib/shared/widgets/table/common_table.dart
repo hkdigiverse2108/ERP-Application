@@ -3,6 +3,7 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class TableColumn<T> {
@@ -29,6 +30,7 @@ class CommonTable<T> extends StatelessWidget {
   final Widget? emptyState;
   final Widget? footer;
   final bool showSerial;
+  final bool isLoading;
 
   // Pagination params
   final int? currentPage;
@@ -48,6 +50,7 @@ class CommonTable<T> extends StatelessWidget {
     this.emptyState,
     this.footer,
     this.showSerial = true,
+    this.isLoading = false,
     this.currentPage,
     this.totalPages,
     this.onPageChanged,
@@ -107,7 +110,9 @@ class CommonTable<T> extends StatelessWidget {
                   _buildHeaderRow(headerBg),
 
                   // Data Rows
-                  if (items.isEmpty)
+                  if (isLoading)
+                    _buildLoadingOverlay(borderColor)
+                  else if (items.isEmpty)
                     emptyState ?? _buildEmptyState(surfaceColor)
                   else
                     ConstrainedBox(
@@ -132,7 +137,7 @@ class CommonTable<T> extends StatelessWidget {
         ),
 
         // Pagination
-        if (totalPages != null && totalPages! > 1) ...[
+        if (totalPages != null) ...[
           const SizedBox(height: Sizes.smallSpace),
           _buildPagination(context, borderColor, surfaceColor),
         ],
@@ -148,6 +153,18 @@ class CommonTable<T> extends StatelessWidget {
           const SizedBox(height: Sizes.defHorizontalSpace),
           _buildAddButton(),
         ],
+      ],
+    );
+  }
+
+  Widget _buildLoadingOverlay(Color borderColor) {
+    return _CommonTableShimmer(
+      rowCount: (items.isNotEmpty) ? items.length : pageSize,
+      borderColor: borderColor,
+      columnWidths: [
+        if (showSerial) _colSerial,
+        ...columns.map((c) => c.width),
+        if (onRemoveItem != null || onEditItem != null) _colActions,
       ],
     );
   }
@@ -382,6 +399,70 @@ class CommonTable<T> extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
       ),
+    );
+  }
+}
+
+class _CommonTableShimmer extends StatefulWidget {
+  final int rowCount;
+  final List<double> columnWidths;
+  final Color borderColor;
+
+  const _CommonTableShimmer({
+    required this.rowCount,
+    required this.columnWidths,
+    required this.borderColor,
+  });
+
+  @override
+  State<_CommonTableShimmer> createState() => _CommonTableShimmerState();
+}
+
+class _CommonTableShimmerState extends State<_CommonTableShimmer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat();
+    _animation = Tween<double>(begin: -2, end: 2).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = ThemeService().isDarkMode;
+    final baseColor = isDark ? Colors.grey[800]! : Colors.grey[300]!;
+    final highlightColor = isDark ? Colors.grey[700]! : Colors.grey[100]!;
+
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Column(
+          children: List.generate(
+            widget.rowCount,
+            (index) => TableShimmer.buildShimmerRow(
+              animationValue: _animation.value,
+              baseColor: baseColor,
+              highlightColor: highlightColor,
+              borderColor: widget.borderColor,
+              columnWidths: widget.columnWidths,
+            ),
+          ),
+        );
+      },
     );
   }
 }

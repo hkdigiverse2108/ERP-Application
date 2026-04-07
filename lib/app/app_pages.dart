@@ -14,12 +14,15 @@ import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
 import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
 import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
+import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
+import 'package:ai_setu/modules/inventory/stock/bindings/stock_bindings.dart';
+import 'package:ai_setu/modules/inventory/stock_verification/bindings/stock_verification_binding.dart';
 import 'package:ai_setu/modules/inventory/views/bill_of_live.dart';
 import 'package:ai_setu/modules/inventory/views/material_consumption.dart';
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
-import 'package:ai_setu/modules/inventory/views/recipe.dart';
-import 'package:ai_setu/modules/inventory/views/stock.dart';
-import 'package:ai_setu/modules/inventory/views/stockVri.dart';
+import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
+import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
+import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
@@ -54,20 +57,16 @@ class AppPages {
       page: () => Product(),
       binding: ProductBinding(),
     ),
-    GetPage(
-      name: Routes.stock,
-      page: () => const Stock(),
-      binding: InventoryBindings(),
-    ),
+    GetPage(name: Routes.stock, page: () => Stock(), binding: StockBindings()),
     GetPage(
       name: Routes.stockVarification,
-      page: () => const StockVri(),
-      binding: InventoryBindings(),
+      page: () => const StockVerification(),
+      binding: StockVerificationBinding(),
     ),
     GetPage(
       name: Routes.recipt,
       page: () => const Recipe(),
-      binding: InventoryBindings(),
+      binding: RecipeBinding(),
     ),
     GetPage(
       name: Routes.billOfLive,

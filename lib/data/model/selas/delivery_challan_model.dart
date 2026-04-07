@@ -110,51 +110,53 @@ class DeliveryChallanDatum {
 
   String toRawJson() => json.encode(toJson());
 
-  factory DeliveryChallanDatum.fromJson(Map<String, dynamic> json) =>
-      DeliveryChallanDatum(
-        id: json["_id"],
-        isDeleted: json["isDeleted"],
-        isActive: json["isActive"],
-        createdBy: CreatedBy.fromJson(json["createdBy"]),
-        updatedBy: updatedByValues.map[json["updatedBy"]] ?? UpdatedBy.THE_694_D017_B7_CB4009_F97_A30854,
-        companyId: BranchId.fromJson(json["companyId"]),
-        deliveryChallanNo: json["deliveryChallanNo"],
-        date: DateTime.parse(json["date"]),
-        customerId: CustomerId.fromJson(json["customerId"]),
-        placeOfSupply: placeOfSupplyValues.map[json["placeOfSupply"]] ?? PlaceOfSupply.GUJARAT,
-        billingAddress: Address.fromJson(json["billingAddress"]),
-        shippingAddress: Address.fromJson(json["shippingAddress"]),
-        invoiceIds: List<InvoiceId>.from(
-          json["invoiceIds"].map((x) => InvoiceId.fromJson(x)),
-        ),
-        salesOrderIds: List<SalesOrderId>.from(
-          json["salesOrderIds"].map((x) => SalesOrderId.fromJson(x)),
-        ),
-        paymentTermsId: json["paymentTermsId"] == null
-            ? null
-            : PaymentTermsId.fromJson(json["paymentTermsId"]),
-        dueDate: DateTime.parse(json["dueDate"]),
-        taxType: taxTypeValues.map[json["taxType"]] ?? TaxType.DEFAULT,
-        shippingDetails: ShippingDetails.fromJson(json["shippingDetails"]),
-        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        transactionSummary: TransactionSummary.fromJson(
-          json["transactionSummary"],
-        ),
-        additionalCharges: List<AdditionalCharge>.from(
-          json["additionalCharges"].map((x) => AdditionalCharge.fromJson(x)),
-        ),
-        reverseCharge: json["reverseCharge"],
-        status: statusValues.map[json["status"]] ?? Status.DELIVERED,
-        termsAndConditionIds: List<String>.from(
-          json["termsAndConditionIds"].map((x) => x),
-        ),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        branchId: BranchId.fromJson(json["branchId"]),
-        createdFrom: json["createdFrom"],
-        paymentTerms: json["paymentTerms"],
-        notes: json["notes"],
-      );
+  factory DeliveryChallanDatum.fromJson(
+    Map<String, dynamic> json,
+  ) => DeliveryChallanDatum(
+    id: json["_id"],
+    isDeleted: json["isDeleted"],
+    isActive: json["isActive"],
+    createdBy: CreatedBy.fromJson(json["createdBy"]),
+    updatedBy:
+        updatedByValues.map[json["updatedBy"]] ??
+        UpdatedBy.THE_694_D017_B7_CB4009_F97_A30854,
+    companyId: BranchId.fromJson(json["companyId"]),
+    deliveryChallanNo: json["deliveryChallanNo"],
+    date: DateTime.parse(json["date"]),
+    customerId: CustomerId.fromJson(json["customerId"]),
+    placeOfSupply:
+        placeOfSupplyValues.map[json["placeOfSupply"]] ?? PlaceOfSupply.GUJARAT,
+    billingAddress: Address.fromJson(json["billingAddress"]),
+    shippingAddress: Address.fromJson(json["shippingAddress"]),
+    invoiceIds: List<InvoiceId>.from(
+      json["invoiceIds"].map((x) => InvoiceId.fromJson(x)),
+    ),
+    salesOrderIds: List<SalesOrderId>.from(
+      json["salesOrderIds"].map((x) => SalesOrderId.fromJson(x)),
+    ),
+    paymentTermsId: json["paymentTermsId"] == null
+        ? null
+        : PaymentTermsId.fromJson(json["paymentTermsId"]),
+    dueDate: DateTime.parse(json["dueDate"]),
+    taxType: taxTypeValues.map[json["taxType"]] ?? TaxType.DEFAULT,
+    shippingDetails: ShippingDetails.fromJson(json["shippingDetails"]),
+    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+    transactionSummary: TransactionSummary.fromJson(json["transactionSummary"]),
+    additionalCharges: List<AdditionalCharge>.from(
+      json["additionalCharges"].map((x) => AdditionalCharge.fromJson(x)),
+    ),
+    reverseCharge: json["reverseCharge"],
+    status: statusValues.map[json["status"]] ?? Status.DELIVERED,
+    termsAndConditionIds: List<String>.from(
+      json["termsAndConditionIds"].map((x) => x),
+    ),
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    branchId: BranchId.fromJson(json["branchId"]),
+    createdFrom: json["createdFrom"],
+    paymentTerms: json["paymentTerms"],
+    notes: json["notes"],
+  );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -262,7 +264,9 @@ class Address {
     state: BranchId.fromJson(json["state"]),
     city: BranchId.fromJson(json["city"]),
     pinCode: json["pinCode"],
-    id: billingAddressIdValues.map[json["_id"]] ?? BillingAddressId.THE_699828_F0675_F1_C7_B8_DDF7212,
+    id:
+        billingAddressIdValues.map[json["_id"]] ??
+        BillingAddressId.THE_699828_F0675_F1_C7_B8_DDF7212,
   );
 
   Map<String, dynamic> toJson() => {
@@ -324,8 +328,11 @@ class CreatedBy {
   String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: updatedByValues.map[json["_id"]] ?? UpdatedBy.THE_694_D017_B7_CB4009_F97_A30854,
-    fullName: fullNameValues.map[json["fullName"]] ?? FullName.HARSHITHKDIGIVERSE,
+    id:
+        updatedByValues.map[json["_id"]] ??
+        UpdatedBy.THE_694_D017_B7_CB4009_F97_A30854,
+    fullName:
+        fullNameValues.map[json["fullName"]] ?? FullName.HARSHITHKDIGIVERSE,
     userType: userTypeValues.map[json["userType"]] ?? UserType.ADMIN,
   );
 
@@ -386,7 +393,9 @@ class CustomerId {
   String toRawJson() => json.encode(toJson());
 
   factory CustomerId.fromJson(Map<String, dynamic> json) => CustomerId(
-    id: customerIdIdValues.map[json["_id"]] ?? CustomerIdId.THE_699828_F0675_F1_C7_B8_DDF7211,
+    id:
+        customerIdIdValues.map[json["_id"]] ??
+        CustomerIdId.THE_699828_F0675_F1_C7_B8_DDF7211,
     firstName: firstNameValues.map[json["firstName"]] ?? FirstName.KRISH,
     lastName: lastNameValues.map[json["lastName"]] ?? LastName.RADADIYA,
     email: json["email"],
@@ -507,7 +516,9 @@ class Item {
     productId: BranchId.fromJson(json["productId"]),
     qty: json["qty"],
     freeQty: json["freeQty"],
-    uomId: uomIdValues.map[json["uomId"]] ?? UomId.THE_69982_A4_D9_F5643_C708711_E61,
+    uomId:
+        uomIdValues.map[json["uomId"]] ??
+        UomId.THE_69982_A4_D9_F5643_C708711_E61,
     unit: unitValues.map[json["unit"]] ?? Unit.PIECES,
     price: json["price"],
     discount1: json["discount1"],
@@ -648,7 +659,9 @@ class ShippingDetails {
 
   factory ShippingDetails.fromJson(Map<String, dynamic> json) =>
       ShippingDetails(
-        shippingType: shippingTypeValues.map[json["shippingType"]] ?? ShippingType.DELIVERY,
+        shippingType:
+            shippingTypeValues.map[json["shippingType"]] ??
+            ShippingType.DELIVERY,
         weight: json["weight"],
         id: json["_id"],
         shippingDate: json["shippingDate"] == null
