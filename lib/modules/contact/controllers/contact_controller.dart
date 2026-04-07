@@ -15,10 +15,9 @@ class ContactController extends GetxController {
 
   final contactRepository = ContactRepository();
 
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now(),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = Rx<DateTimeRange?>(null);
+
+  final _repo = ContactRepository();
 
   @override
   void onInit() {
@@ -29,7 +28,7 @@ class ContactController extends GetxController {
   Future<void> fetchContacts() async {
     try {
       isLoading.value = true;
-      final response = await contactRepository.getContacts(
+      final response = await _repo.getContacts(
         page: currentPage.value,
         limit: 10,
         search: searchController.text,

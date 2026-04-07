@@ -8,10 +8,11 @@ class AccountingRepository {
   final ApiService _api = ApiService();
 
   Future<DebitNoteModel> getDebitNote() async {
-    final ResModel res = await _api.post(
-      ApiConstants.getAllDebitNote,
-      body: {},
-    );
+    final String url = ApiConstants.buildUrl(ApiConstants.getAllDebitNote, {
+      "page": 1,
+      "limit": 10,
+    });
+    final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) {
       return DebitNoteModel.fromJson(res.data);
     } else {
@@ -20,10 +21,11 @@ class AccountingRepository {
   }
 
   Future<CreditNoteModel> getCreditNote() async {
-    final ResModel res = await _api.post(
-      ApiConstants.getAllCreditNote,
-      body: {},
-    );
+    final String url = ApiConstants.buildUrl(ApiConstants.getAllCreditNote, {
+      "page": 1,
+      "limit": 10,
+    });
+    final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) {
       return CreditNoteModel.fromJson(res.data);
     } else {
