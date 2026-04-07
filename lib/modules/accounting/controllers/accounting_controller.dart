@@ -16,64 +16,36 @@ class AccountingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    debugPrint("AccountingController initialized");
     fetchDebitNote();
     fetchCreditNote();
   }
 
   Future<void> fetchDebitNote() async {
     try {
-      debugPrint("Fetching Debit Notes...");
       isLoading.value = true;
-
       final debitNote = await AccountingRepository().getDebitNote();
 
-      debugPrint("Debit Note API Response: $debitNote");
-
       debitNoteList.assignAll(debitNote.debitNoteData);
-
-      debugPrint("Debit Note List Length: ${debitNoteList.length}");
-
       totalPages.value = debitNote.state.totalPages;
       totalItems.value = debitNote.totalData;
-
-      debugPrint(
-        "Debit Notes Pagination -> Total Pages: ${totalPages.value}, Total Items: ${totalItems.value}",
-      );
-    } catch (e, stackTrace) {
+    } catch (e) {
       debugPrint("Error fetching debit notes: $e");
-      debugPrint("StackTrace: $stackTrace");
     } finally {
       isLoading.value = false;
-      debugPrint("Finished fetching Debit Notes");
     }
   }
 
   Future<void> fetchCreditNote() async {
     try {
-      debugPrint("Fetching Credit Notes...");
       isLoading.value = true;
-
       final creditNote = await AccountingRepository().getCreditNote();
-
-      debugPrint("Credit Note API Response: $creditNote");
-
       creditNoteList.assignAll(creditNote.creditNoteData);
-
-      debugPrint("Credit Note List Length: ${creditNoteList.length}");
-
       totalPages.value = creditNote.state.totalPages;
       totalItems.value = creditNote.totalData;
-
-      debugPrint(
-        "Credit Notes Pagination -> Total Pages: ${totalPages.value}, Total Items: ${totalItems.value}",
-      );
-    } catch (e, stackTrace) {
+    } catch (e) {
       debugPrint("Error fetching credit notes: $e");
-      debugPrint("StackTrace: $stackTrace");
     } finally {
       isLoading.value = false;
-      debugPrint("Finished fetching Credit Notes");
     }
   }
 }
