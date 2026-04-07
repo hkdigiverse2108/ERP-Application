@@ -81,7 +81,7 @@ class PaymentTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      paymentModeValues.reverse[item.paymentMode] ?? "-",
+                      item.paymentMode ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -90,7 +90,7 @@ class PaymentTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      paymentTypeValues.reverse[item.paymentType] ?? "-",
+                      item.paymentType ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -111,7 +111,7 @@ class PaymentTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      statusValues.reverse[item.status] ?? "-",
+                      item.status ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),

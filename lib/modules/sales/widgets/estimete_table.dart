@@ -90,9 +90,7 @@ class EstimateTable extends StatelessWidget {
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
                       final netAmount =
-                          item.transectionSummary?.netAmount ??
-                          item.transactionSummary?.netAmount ??
-                          0.0;
+                          item.transactionSummary?.netAmount ?? 0.0;
                       return Text(
                         '₹${netAmount.toStringAsFixed(2)}',
                         style: TextHelper.bodySmall.copyWith(
@@ -116,7 +114,7 @@ class EstimateTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        statusValues.reverse[item.status] ?? "-",
+                        item.status,
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
                         ),
@@ -128,7 +126,7 @@ class EstimateTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName.name,
+                      item.createdBy.fullName,
                       style: TextHelper.bodySmall,
                     ),
                   ),

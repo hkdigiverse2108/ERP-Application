@@ -79,11 +79,11 @@ class DeliveryChallanTable extends StatelessWidget {
                     cellBuilder: (context, item, index) => Row(
                       children: [
                         Text(
-                          item.customerId.firstName.name,
+                          item.customerId.firstName,
                           style: TextHelper.bodySmall,
                         ),
                         Text(
-                          " ${item.customerId.lastName.name}",
+                          " ${item.customerId.lastName}",
                           style: TextHelper.bodySmall,
                         ),
                       ],
@@ -122,7 +122,7 @@ class DeliveryChallanTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName.name,
+                      item.createdBy.fullName,
                       style: TextHelper.bodySmall,
                     ),
                   ),

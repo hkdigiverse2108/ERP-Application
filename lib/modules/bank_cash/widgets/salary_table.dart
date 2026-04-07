@@ -134,7 +134,7 @@ class SalaryTable extends StatelessWidget {
                 pageSize: 10,
                 onPageChanged: (page) {
                   bankCashController.currentPage.value = page;
-                  bankCashController.fetchPaymentTerms();
+                  bankCashController.fetchSalary();
                 },
               ),
             ],

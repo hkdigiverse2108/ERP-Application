@@ -148,7 +148,7 @@ class SalesController extends GetxController {
         toDate: invoiceToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = InvoiceMode.fromJson(res.data);
+        final model = InvoiceModel.fromJson(res.data);
         invoiceList.value = model.invoiceData;
         invoiceCurrentPage.value = page;
         invoiceTotalPages.value = model.state.totalPages;
@@ -177,7 +177,7 @@ class SalesController extends GetxController {
         toDate: deliveryChallanToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = DeliveryChallanMode.fromJson(res.data);
+        final model = DeliveryChallanModel.fromJson(res.data);
         deliveryChallanList.value = model.deliveryChallanData;
         deliveryChallanCurrentPage.value = page;
         deliveryChallanTotalPages.value = model.state.totalPages;
@@ -206,7 +206,7 @@ class SalesController extends GetxController {
         toDate: creditNoteToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = SalesCreditNoteMode.fromJson(res.data);
+        final model = SalesCreditNoteModel.fromJson(res.data);
         creditNoteList.value = model.salesCreditNoteData;
         creditNoteCurrentPage.value = page;
         creditNoteTotalPages.value = model.state.totalPages;

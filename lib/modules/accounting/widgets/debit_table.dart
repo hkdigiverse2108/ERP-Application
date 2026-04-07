@@ -1,123 +1,105 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/model/accounting/accunt_model.dart';
-import 'package:ai_setu/modules/home/controllers/home_controller.dart';
+import 'package:ai_setu/data/model/accounting/debit_note_model.dart';
+import 'package:ai_setu/modules/accounting/controllers/accounting_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
-import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DebitTable extends StatelessWidget {
   DebitTable({super.key});
-  final homeController = Get.find<HomeController>();
+
+  final accountingController = Get.find<AccountingController>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
-        ThemeService().isDarkMode;
+        if (accountingController.isLoading.value &&
+            accountingController.debitNoteList.isEmpty) {
+          return const TableShimmer();
+        }
+
+        final items = accountingController.debitNoteList;
         return BorderContainer(
           child: Column(
             children: [
-              RangedDatePicker(
-                initialDateRange: homeController.selectedDateRange.value,
-                onChanged: (range) =>
-                    homeController.selectedDateRange.value = range,
-              ),
-              Gap(Sizes.defHorizontalSpace),
-              CommonTable<AccountModel>(
-                items: [
-                  AccountModel(
-                    amount: '100',
-                    date: '2022-01-01',
-                    bankName: 'Bank of America',
-                    phoneNo: '1234567890',
-                    discription: 'Apple',
-                    action: 'Debit',
-                  ),
-                ],
+              CommonTable<DebitNoteDatum>(
+                items: items,
                 columns: [
                   TableColumn(
-                    title: 'Amount',
+                    title: 'Voucher No',
                     width: 140,
-                    cellBuilder: (context, item, index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.amount,
-                          style: TextHelper.bodySmall.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    cellBuilder: (context, item, index) => Text(
+                      item.voucherNumber,
+                      style: TextHelper.bodySmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TableColumn(
-                    title: 'Date',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    title: 'Transaction Date',
+                    width: 120,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.date,
-                      textAlign: TextAlign.right,
+                      DateFormat('dd MMM yyyy').format(item.date),
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Bank Name',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    title: 'Person Name',
+                    width: 180,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.bankName,
-                      textAlign: TextAlign.right,
+                      item.personName,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
-                    title: 'Phone No',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    title: 'Account',
+                    width: 180,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.phoneNo,
-                      textAlign: TextAlign.right,
+                      item.bankAccountId.name,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Amount',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      "₹${item.amount}",
                       style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   TableColumn(
-                    title: 'Description',
-                    width: 100,
-                    alignment: TextAlign.right,
+                    title: 'Created By',
+                    width: 150,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.discription,
-                      textAlign: TextAlign.right,
-                      style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Action',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Text(
-                      item.action,
-                      textAlign: TextAlign.right,
+                      item.createdBy.fullName,
                       style: TextHelper.bodySmall,
                     ),
                   ),
                 ],
-                currentPage: homeController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
-                onPageChanged: (page) =>
-                    homeController.currentPage.value = page,
+                currentPage: accountingController.currentPage.value,
+                totalPages: accountingController.totalPages.value,
+                totalItems: accountingController.totalItems.value,
+                pageSize: 10,
+                onPageChanged: (page) {
+                  accountingController.currentPage.value = page;
+                  accountingController.fetchDebitNote();
+                },
               ),
             ],
           ),

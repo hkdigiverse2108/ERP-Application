@@ -41,13 +41,13 @@ class SalesOrderModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "salesOrder_data": List<dynamic>.from(
-      salesOrderData.map((x) => x.toJson()),
-    ),
-    "totalData": totalData,
-    "summary": summary.toJson(),
-    "state": state.toJson(),
-  };
+        "salesOrder_data": List<dynamic>.from(
+          salesOrderData.map((x) => x.toJson()),
+        ),
+        "totalData": totalData,
+        "summary": summary.toJson(),
+        "state": state.toJson(),
+      };
 }
 
 class SalesOrderDatum {
@@ -116,85 +116,139 @@ class SalesOrderDatum {
 
   String toRawJson() => json.encode(toJson());
 
-  factory SalesOrderDatum.fromJson(
-    Map<String, dynamic> json,
-  ) => SalesOrderDatum(
-    id: json["_id"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"],
-    companyId: BranchId.fromJson(json["companyId"]),
-    salesOrderNo: json["salesOrderNo"],
-    date: DateTime.parse(json["date"]),
-    dueDate: DateTime.parse(json["dueDate"]),
-    customerId: CustomerId.fromJson(json["customerId"]),
-    placeOfSupply: json["placeOfSupply"],
-    billingAddress: Address.fromJson(json["billingAddress"]),
-    shippingAddress: Address.fromJson(json["shippingAddress"]),
-    taxType: json["taxType"],
-    selectedEstimateId: SelectedEstimateId.fromJson(json["selectedEstimateId"]),
-    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-    transactionSummary: TransactionSummary.fromJson(json["transactionSummary"]),
-    additionalCharges: List<AdditionalCharge>.from(
-      json["additionalCharges"].map((x) => AdditionalCharge.fromJson(x)),
-    ),
-    termsAndConditionIds: List<TermsAndConditionIdElement>.from(
-      json["termsAndConditionIds"].map(
-        (x) => TermsAndConditionIdElement.fromJson(x),
-      ),
-    ),
-    status: json["status"],
-    shippingDetails: ShippingDetails.fromJson(json["shippingDetails"]),
-    reverseCharge: json["reverseCharge"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    branchId: BranchId.fromJson(json["branchId"]),
-    paymentTerms: json["paymentTerms"],
-    salesManId: json["salesManId"],
-    notes: json["notes"],
-  );
+  factory SalesOrderDatum.fromJson(Map<String, dynamic> json) =>
+      SalesOrderDatum(
+        id: json["_id"] ?? "",
+        isDeleted: json["isDeleted"] ?? false,
+        isActive: json["isActive"] ?? true,
+        createdBy: json["createdBy"] == null
+            ? CreatedBy(id: "", fullName: "", userType: "")
+            : CreatedBy.fromJson(json["createdBy"]),
+        updatedBy: json["updatedBy"] ?? "",
+        companyId: json["companyId"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["companyId"]),
+        salesOrderNo: json["salesOrderNo"] ?? "",
+        date:
+            json["date"] == null ? DateTime.now() : DateTime.parse(json["date"]),
+        dueDate: json["dueDate"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["dueDate"]),
+        customerId: json["customerId"] == null
+            ? CustomerId(
+                id: "",
+                firstName: "",
+                lastName: "",
+                email: "",
+                phoneNo: PhoneNo(countryCode: "91", phoneNo: 0),
+                address: [])
+            : CustomerId.fromJson(json["customerId"]),
+        placeOfSupply: json["placeOfSupply"] ?? "",
+        billingAddress: json["billingAddress"] == null
+            ? Address(
+                addressLine1: "",
+                country: BranchId(id: "", name: ""),
+                state: BranchId(id: "", name: ""),
+                city: BranchId(id: "", name: ""),
+                pinCode: 0,
+                id: "")
+            : Address.fromJson(json["billingAddress"]),
+        shippingAddress: json["shippingAddress"] == null
+            ? Address(
+                addressLine1: "",
+                country: BranchId(id: "", name: ""),
+                state: BranchId(id: "", name: ""),
+                city: BranchId(id: "", name: ""),
+                pinCode: 0,
+                id: "")
+            : Address.fromJson(json["shippingAddress"]),
+        taxType: json["taxType"] ?? "default",
+        selectedEstimateId: json["selectedEstimateId"] == null
+            ? SelectedEstimateId(id: "", estimateNo: "")
+            : SelectedEstimateId.fromJson(json["selectedEstimateId"]),
+        items: json["items"] == null
+            ? []
+            : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        transactionSummary: json["transactionSummary"] == null
+            ? TransactionSummary(
+                flatDiscount: 0.0,
+                grossAmount: 0.0,
+                discountAmount: 0.0,
+                taxableAmount: 0.0,
+                taxAmount: 0.0,
+                roundOff: 0.0,
+                netAmount: 0.0,
+                id: "")
+            : TransactionSummary.fromJson(json["transactionSummary"]),
+        additionalCharges: json["additionalCharges"] == null
+            ? []
+            : List<AdditionalCharge>.from(
+                json["additionalCharges"]
+                    .map((x) => AdditionalCharge.fromJson(x)),
+              ),
+        termsAndConditionIds: json["termsAndConditionIds"] == null
+            ? []
+            : List<TermsAndConditionIdElement>.from(
+                json["termsAndConditionIds"]
+                    .map((x) => TermsAndConditionIdElement.fromJson(x)),
+              ),
+        status: json["status"] ?? "pending",
+        shippingDetails: json["shippingDetails"] == null
+            ? ShippingDetails(shippingType: "delivery", weight: 0.0, id: "")
+            : ShippingDetails.fromJson(json["shippingDetails"]),
+        reverseCharge: json["reverseCharge"] ?? false,
+        createdAt: json["createdAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["updatedAt"]),
+        branchId: json["branchId"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["branchId"]),
+        paymentTerms: json["paymentTerms"],
+        salesManId: json["salesManId"],
+        notes: json["notes"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy.toJson(),
-    "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
-    "salesOrderNo": salesOrderNo,
-    "date": date.toIso8601String(),
-    "dueDate": dueDate.toIso8601String(),
-    "customerId": customerId.toJson(),
-    "placeOfSupply": placeOfSupply,
-    "billingAddress": billingAddress.toJson(),
-    "shippingAddress": shippingAddress.toJson(),
-    "taxType": taxType,
-    "selectedEstimateId": selectedEstimateId.toJson(),
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "transactionSummary": transactionSummary.toJson(),
-    "additionalCharges": List<dynamic>.from(
-      additionalCharges.map((x) => x.toJson()),
-    ),
-    "termsAndConditionIds": List<dynamic>.from(
-      termsAndConditionIds.map((x) => x.toJson()),
-    ),
-    "status": status,
-    "shippingDetails": shippingDetails.toJson(),
-    "reverseCharge": reverseCharge,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId.toJson(),
-    "paymentTerms": paymentTerms,
-    "salesManId": salesManId,
-    "notes": notes,
-  };
+        "_id": id,
+        "isDeleted": isDeleted,
+        "isActive": isActive,
+        "createdBy": createdBy.toJson(),
+        "updatedBy": updatedBy,
+        "companyId": companyId.toJson(),
+        "salesOrderNo": salesOrderNo,
+        "date": date.toIso8601String(),
+        "dueDate": dueDate.toIso8601String(),
+        "customerId": customerId.toJson(),
+        "placeOfSupply": placeOfSupply,
+        "billingAddress": billingAddress.toJson(),
+        "shippingAddress": shippingAddress.toJson(),
+        "taxType": taxType,
+        "selectedEstimateId": selectedEstimateId.toJson(),
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "transactionSummary": transactionSummary.toJson(),
+        "additionalCharges":
+            List<dynamic>.from(additionalCharges.map((x) => x.toJson())),
+        "termsAndConditionIds":
+            List<dynamic>.from(termsAndConditionIds.map((x) => x.toJson())),
+        "status": status,
+        "shippingDetails": shippingDetails.toJson(),
+        "reverseCharge": reverseCharge,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "branchId": branchId.toJson(),
+        "paymentTerms": paymentTerms,
+        "salesManId": salesManId,
+        "notes": notes,
+      };
 }
 
 class AdditionalCharge {
-  final BranchId chargeId;
-  final TaxId taxId;
-  final int amount;
+  final String chargeId;
+  final String taxId;
+  final double amount;
   final double totalAmount;
   final String id;
 
@@ -213,20 +267,20 @@ class AdditionalCharge {
 
   factory AdditionalCharge.fromJson(Map<String, dynamic> json) =>
       AdditionalCharge(
-        chargeId: BranchId.fromJson(json["chargeId"]),
-        taxId: TaxId.fromJson(json["taxId"]),
-        amount: json["amount"],
-        totalAmount: json["totalAmount"]?.toDouble(),
-        id: json["_id"],
+        chargeId: json["chargeId"] is Map ? json["chargeId"]["_id"] : (json["chargeId"] ?? ""),
+        taxId: json["taxId"] is Map ? json["taxId"]["_id"] : (json["taxId"] ?? ""),
+        amount: (json["amount"] ?? 0).toDouble(),
+        totalAmount: (json["totalAmount"] ?? 0).toDouble(),
+        id: json["_id"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
-    "chargeId": chargeId.toJson(),
-    "taxId": taxId.toJson(),
-    "amount": amount,
-    "totalAmount": totalAmount,
-    "_id": id,
-  };
+        "chargeId": chargeId,
+        "taxId": taxId,
+        "amount": amount,
+        "totalAmount": totalAmount,
+        "_id": id,
+      };
 }
 
 class BranchId {
@@ -240,16 +294,18 @@ class BranchId {
 
   String toRawJson() => json.encode(toJson());
 
-  factory BranchId.fromJson(Map<String, dynamic> json) =>
-      BranchId(id: json["_id"], name: json["name"]);
+  factory BranchId.fromJson(Map<String, dynamic> json) => BranchId(
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class TaxId {
-  final TaxIdId id;
-  final Name name;
-  final int percentage;
+  final String id;
+  final String name;
+  final double percentage;
 
   TaxId({required this.id, required this.name, required this.percentage});
 
@@ -258,55 +314,35 @@ class TaxId {
   String toRawJson() => json.encode(toJson());
 
   factory TaxId.fromJson(Map<String, dynamic> json) => TaxId(
-    id: taxIdIdValues.map[json["_id"]] ?? TaxIdId.THE_6964_B7_F820_D84261_D82_FB8_FA,
-    name: nameValues.map[json["name"]] ?? Name.GST_18,
-    percentage: json["percentage"],
-  );
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+        percentage: (json["percentage"] ?? 0).toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": taxIdIdValues.reverse[id],
-    "name": nameValues.reverse[name],
-    "percentage": percentage,
-  };
+        "_id": id,
+        "name": name,
+        "percentage": percentage,
+      };
 }
-
-enum TaxIdId {
-  THE_6964_B7_F820_D84261_D82_FB8_FA,
-  THE_6964_B8176_BFCE325_EDE7_F9_E3,
-  THE_6981_E7_A321_D8_B862_C136_B5_F0,
-}
-
-final taxIdIdValues = EnumValues({
-  "6964b7f820d84261d82fb8fa": TaxIdId.THE_6964_B7_F820_D84261_D82_FB8_FA,
-  "6964b8176bfce325ede7f9e3": TaxIdId.THE_6964_B8176_BFCE325_EDE7_F9_E3,
-  "6981e7a321d8b862c136b5f0": TaxIdId.THE_6981_E7_A321_D8_B862_C136_B5_F0,
-});
-
-enum Name { GST_0, GST_18, GST_28 }
-
-final nameValues = EnumValues({
-  "GST 0": Name.GST_0,
-  "GST 18": Name.GST_18,
-  "GST 28": Name.GST_28,
-});
 
 class Address {
-  final AddressLine1 addressLine1;
+  final String addressLine1;
+  final String? addressLine2;
   final BranchId country;
   final BranchId state;
   final BranchId city;
   final int pinCode;
-  final BillingAddressId id;
-  final String? addressLine2;
+  final String id;
 
   Address({
     required this.addressLine1,
+    this.addressLine2,
     required this.country,
     required this.state,
     required this.city,
     required this.pinCode,
     required this.id,
-    this.addressLine2,
   });
 
   factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
@@ -314,47 +350,31 @@ class Address {
   String toRawJson() => json.encode(toJson());
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
-    addressLine1: addressLine1Values.map[json["addressLine1"]] ?? AddressLine1.AR_MALL,
-    country: BranchId.fromJson(json["country"]),
-    state: BranchId.fromJson(json["state"]),
-    city: BranchId.fromJson(json["city"]),
-    pinCode: json["pinCode"],
-    id: billingAddressIdValues.map[json["_id"]] ?? BillingAddressId.THE_699828_F0675_F1_C7_B8_DDF7212,
-    addressLine2: json["addressLine2"],
-  );
+        addressLine1: json["addressLine1"] ?? "",
+        addressLine2: json["addressLine2"],
+        country: json["country"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["country"]),
+        state: json["state"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["state"]),
+        city: json["city"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["city"]),
+        pinCode: json["pinCode"] ?? 0,
+        id: json["_id"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
-    "addressLine1": addressLine1Values.reverse[addressLine1],
-    "country": country.toJson(),
-    "state": state.toJson(),
-    "city": city.toJson(),
-    "pinCode": pinCode,
-    "_id": billingAddressIdValues.reverse[id],
-    "addressLine2": addressLine2,
-  };
+        "addressLine1": addressLine1,
+        "addressLine2": addressLine2,
+        "country": country.toJson(),
+        "state": state.toJson(),
+        "city": city.toJson(),
+        "pinCode": pinCode,
+        "_id": id,
+      };
 }
-
-enum AddressLine1 { AR_MALL, SILVER_TRADE_CENTER }
-
-final addressLine1Values = EnumValues({
-  "AR Mall": AddressLine1.AR_MALL,
-  "Silver Trade Center": AddressLine1.SILVER_TRADE_CENTER,
-});
-
-enum BillingAddressId {
-  THE_699828_F0675_F1_C7_B8_DDF7212,
-  THE_69_B24_F85918_A03_C4936_A0_DC5,
-  THE_69_B24_F85918_A03_C4936_A0_DC6,
-}
-
-final billingAddressIdValues = EnumValues({
-  "699828f0675f1c7b8ddf7212":
-      BillingAddressId.THE_699828_F0675_F1_C7_B8_DDF7212,
-  "69b24f85918a03c4936a0dc5":
-      BillingAddressId.THE_69_B24_F85918_A03_C4936_A0_DC5,
-  "69b24f85918a03c4936a0dc6":
-      BillingAddressId.THE_69_B24_F85918_A03_C4936_A0_DC6,
-});
 
 class CreatedBy {
   final String id;
@@ -369,23 +389,23 @@ class CreatedBy {
   String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
-  );
+        id: json["_id"] ?? "",
+        fullName: json["fullName"] ?? "",
+        userType: json["userType"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-  };
+        "_id": id,
+        "fullName": fullName,
+        "userType": userType,
+      };
 }
 
 class CustomerId {
   final String id;
   final String firstName;
   final String lastName;
-  final String email;
+  final String? email;
   final PhoneNo phoneNo;
   final List<Address> address;
 
@@ -393,7 +413,7 @@ class CustomerId {
     required this.id,
     required this.firstName,
     required this.lastName,
-    required this.email,
+    this.email,
     required this.phoneNo,
     required this.address,
   });
@@ -404,24 +424,28 @@ class CustomerId {
   String toRawJson() => json.encode(toJson());
 
   factory CustomerId.fromJson(Map<String, dynamic> json) => CustomerId(
-    id: json["_id"],
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    email: json["email"],
-    phoneNo: PhoneNo.fromJson(json["phoneNo"]),
-    address: List<Address>.from(
-      json["address"].map((x) => Address.fromJson(x)),
-    ),
-  );
+        id: json["_id"] ?? "",
+        firstName: json["firstName"] ?? "",
+        lastName: json["lastName"] ?? "",
+        email: json["email"],
+        phoneNo: json["phoneNo"] == null
+            ? PhoneNo(countryCode: "91", phoneNo: 0)
+            : PhoneNo.fromJson(json["phoneNo"]),
+        address: json["address"] == null
+            ? []
+            : List<Address>.from(
+                json["address"].map((x) => Address.fromJson(x)),
+              ),
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "email": email,
-    "phoneNo": phoneNo.toJson(),
-    "address": List<dynamic>.from(address.map((x) => x.toJson())),
-  };
+        "_id": id,
+        "firstName": firstName,
+        "lastName": lastName,
+        "email": email,
+        "phoneNo": phoneNo.toJson(),
+        "address": List<dynamic>.from(address.map((x) => x.toJson())),
+      };
 }
 
 class PhoneNo {
@@ -434,27 +458,29 @@ class PhoneNo {
 
   String toRawJson() => json.encode(toJson());
 
-  factory PhoneNo.fromJson(Map<String, dynamic> json) =>
-      PhoneNo(countryCode: json["countryCode"], phoneNo: json["phoneNo"]);
+  factory PhoneNo.fromJson(Map<String, dynamic> json) => PhoneNo(
+        countryCode: json["countryCode"] ?? "91",
+        phoneNo: json["phoneNo"] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "countryCode": countryCode,
-    "phoneNo": phoneNo,
-  };
+        "countryCode": countryCode,
+        "phoneNo": phoneNo,
+      };
 }
 
 class Item {
   final String? refId;
   final BranchId productId;
-  final int qty;
-  final int freeQty;
+  final double qty;
+  final double freeQty;
   final BranchId uomId;
-  final int price;
-  final int discount1;
-  final int discount2;
+  final double price;
+  final double discount1;
+  final double discount2;
   final TaxId taxId;
-  final int taxableAmount;
-  final int totalAmount;
+  final double taxableAmount;
+  final double totalAmount;
   final String id;
 
   Item({
@@ -477,34 +503,40 @@ class Item {
   String toRawJson() => json.encode(toJson());
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
-    refId: json["refId"],
-    productId: BranchId.fromJson(json["productId"]),
-    qty: json["qty"],
-    freeQty: json["freeQty"],
-    uomId: BranchId.fromJson(json["uomId"]),
-    price: json["price"],
-    discount1: json["discount1"],
-    discount2: json["discount2"],
-    taxId: TaxId.fromJson(json["taxId"]),
-    taxableAmount: json["taxableAmount"],
-    totalAmount: json["totalAmount"],
-    id: json["_id"],
-  );
+        refId: json["refId"],
+        productId: json["productId"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["productId"]),
+        qty: (json["qty"] ?? 0).toDouble(),
+        freeQty: (json["freeQty"] ?? 0).toDouble(),
+        uomId: json["uomId"] == null
+            ? BranchId(id: "", name: "")
+            : BranchId.fromJson(json["uomId"]),
+        price: (json["price"] ?? 0).toDouble(),
+        discount1: (json["discount1"] ?? 0).toDouble(),
+        discount2: (json["discount2"] ?? 0).toDouble(),
+        taxId: json["taxId"] == null
+            ? TaxId(id: "", name: "", percentage: 0)
+            : TaxId.fromJson(json["taxId"]),
+        taxableAmount: (json["taxableAmount"] ?? 0).toDouble(),
+        totalAmount: (json["totalAmount"] ?? 0).toDouble(),
+        id: json["_id"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
-    "refId": refId,
-    "productId": productId.toJson(),
-    "qty": qty,
-    "freeQty": freeQty,
-    "uomId": uomId.toJson(),
-    "price": price,
-    "discount1": discount1,
-    "discount2": discount2,
-    "taxId": taxId.toJson(),
-    "taxableAmount": taxableAmount,
-    "totalAmount": totalAmount,
-    "_id": id,
-  };
+        "refId": refId,
+        "productId": productId.toJson(),
+        "qty": qty,
+        "freeQty": freeQty,
+        "uomId": uomId.toJson(),
+        "price": price,
+        "discount1": discount1,
+        "discount2": discount2,
+        "taxId": taxId.toJson(),
+        "taxableAmount": taxableAmount,
+        "totalAmount": totalAmount,
+        "_id": id,
+      };
 }
 
 class SelectedEstimateId {
@@ -519,7 +551,10 @@ class SelectedEstimateId {
   String toRawJson() => json.encode(toJson());
 
   factory SelectedEstimateId.fromJson(Map<String, dynamic> json) =>
-      SelectedEstimateId(id: json["_id"], estimateNo: json["estimateNo"]);
+      SelectedEstimateId(
+        id: json["_id"] ?? "",
+        estimateNo: json["estimateNo"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {"_id": id, "estimateNo": estimateNo};
 }
@@ -531,9 +566,9 @@ class ShippingDetails {
   final DateTime? transportDate;
   final String? modeOfTransport;
   final String? vehicleNo;
-  final int weight;
+  final double weight;
   final String id;
-  final TermsAndConditionIdElement? transporterId;
+  final String? transporterId;
 
   ShippingDetails({
     required this.shippingType,
@@ -554,7 +589,7 @@ class ShippingDetails {
 
   factory ShippingDetails.fromJson(Map<String, dynamic> json) =>
       ShippingDetails(
-        shippingType: json["shippingType"],
+        shippingType: json["shippingType"] ?? "delivery",
         shippingDate: json["shippingDate"] == null
             ? null
             : DateTime.parse(json["shippingDate"]),
@@ -564,24 +599,24 @@ class ShippingDetails {
             : DateTime.parse(json["transportDate"]),
         modeOfTransport: json["modeOfTransport"],
         vehicleNo: json["vehicleNo"],
-        weight: json["weight"],
-        id: json["_id"],
-        transporterId: json["transporterId"] == null
-            ? null
-            : TermsAndConditionIdElement.fromJson(json["transporterId"]),
+        weight: (json["weight"] ?? 0).toDouble(),
+        id: json["_id"] ?? "",
+        transporterId: json["transporterId"] is Map
+            ? json["transporterId"]["_id"]
+            : json["transporterId"],
       );
 
   Map<String, dynamic> toJson() => {
-    "shippingType": shippingType,
-    "shippingDate": shippingDate?.toIso8601String(),
-    "referenceNo": referenceNo,
-    "transportDate": transportDate?.toIso8601String(),
-    "modeOfTransport": modeOfTransport,
-    "vehicleNo": vehicleNo,
-    "weight": weight,
-    "_id": id,
-    "transporterId": transporterId?.toJson(),
-  };
+        "shippingType": shippingType,
+        "shippingDate": shippingDate?.toIso8601String(),
+        "referenceNo": referenceNo,
+        "transportDate": transportDate?.toIso8601String(),
+        "modeOfTransport": modeOfTransport,
+        "vehicleNo": vehicleNo,
+        "weight": weight,
+        "_id": id,
+        "transporterId": transporterId,
+      };
 }
 
 class TermsAndConditionIdElement {
@@ -595,18 +630,18 @@ class TermsAndConditionIdElement {
   String toRawJson() => json.encode(toJson());
 
   factory TermsAndConditionIdElement.fromJson(Map<String, dynamic> json) =>
-      TermsAndConditionIdElement(id: json["_id"]);
+      TermsAndConditionIdElement(id: json["_id"] ?? "");
 
   Map<String, dynamic> toJson() => {"_id": id};
 }
 
 class TransactionSummary {
-  final int flatDiscount;
-  final int grossAmount;
-  final int discountAmount;
-  final int taxableAmount;
+  final double flatDiscount;
+  final double grossAmount;
+  final double discountAmount;
+  final double taxableAmount;
   final double taxAmount;
-  final int roundOff;
+  final double roundOff;
   final double netAmount;
   final String id;
 
@@ -628,26 +663,26 @@ class TransactionSummary {
 
   factory TransactionSummary.fromJson(Map<String, dynamic> json) =>
       TransactionSummary(
-        flatDiscount: json["flatDiscount"],
-        grossAmount: json["grossAmount"],
-        discountAmount: json["discountAmount"],
-        taxableAmount: json["taxableAmount"],
-        taxAmount: json["taxAmount"]?.toDouble(),
-        roundOff: json["roundOff"],
-        netAmount: json["netAmount"]?.toDouble(),
-        id: json["_id"],
+        flatDiscount: (json["flatDiscount"] ?? 0).toDouble(),
+        grossAmount: (json["grossAmount"] ?? 0).toDouble(),
+        discountAmount: (json["discountAmount"] ?? 0).toDouble(),
+        taxableAmount: (json["taxableAmount"] ?? 0).toDouble(),
+        taxAmount: (json["taxAmount"] ?? 0).toDouble(),
+        roundOff: (json["roundOff"] ?? 0).toDouble(),
+        netAmount: (json["netAmount"] ?? 0).toDouble(),
+        id: json["_id"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
-    "flatDiscount": flatDiscount,
-    "grossAmount": grossAmount,
-    "discountAmount": discountAmount,
-    "taxableAmount": taxableAmount,
-    "taxAmount": taxAmount,
-    "roundOff": roundOff,
-    "netAmount": netAmount,
-    "_id": id,
-  };
+        "flatDiscount": flatDiscount,
+        "grossAmount": grossAmount,
+        "discountAmount": discountAmount,
+        "taxableAmount": taxableAmount,
+        "taxAmount": taxAmount,
+        "roundOff": roundOff,
+        "netAmount": netAmount,
+        "_id": id,
+      };
 }
 
 class State {
@@ -662,16 +697,16 @@ class State {
   String toRawJson() => json.encode(toJson());
 
   factory State.fromJson(Map<String, dynamic> json) => State(
-    page: json["page"],
-    limit: json["limit"],
-    totalPages: json["totalPages"],
-  );
+        page: json["page"],
+        limit: json["limit"],
+        totalPages: json["totalPages"] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "page": page,
-    "limit": limit,
-    "totalPages": totalPages,
-  };
+        "page": page,
+        "limit": limit,
+        "totalPages": totalPages,
+      };
 }
 
 class Summary {
@@ -694,30 +729,18 @@ class Summary {
   String toRawJson() => json.encode(toJson());
 
   factory Summary.fromJson(Map<String, dynamic> json) => Summary(
-    allSalesOrders: json["allSalesOrders"],
-    pending: json["pending"],
-    invoiceCreated: json["invoiceCreated"],
-    deliveryChallanCreated: json["deliveryChallanCreated"],
-    cancelled: json["cancelled"],
-  );
+        allSalesOrders: json["allSalesOrders"] ?? 0,
+        pending: json["pending"] ?? 0,
+        invoiceCreated: json["invoiceCreated"] ?? 0,
+        deliveryChallanCreated: json["deliveryChallanCreated"] ?? 0,
+        cancelled: json["cancelled"] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "allSalesOrders": allSalesOrders,
-    "pending": pending,
-    "invoiceCreated": invoiceCreated,
-    "deliveryChallanCreated": deliveryChallanCreated,
-    "cancelled": cancelled,
-  };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
+        "allSalesOrders": allSalesOrders,
+        "pending": pending,
+        "invoiceCreated": invoiceCreated,
+        "deliveryChallanCreated": deliveryChallanCreated,
+        "cancelled": cancelled,
+      };
 }

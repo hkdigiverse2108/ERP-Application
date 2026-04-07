@@ -18,7 +18,7 @@ class CraditPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuickAction(),
-            _buildSectionTitle('Cradit List'),
+            _buildSectionTitle('Credit List'),
             CraditTable(),
           ],
         ),

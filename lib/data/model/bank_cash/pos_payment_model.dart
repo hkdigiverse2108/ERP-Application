@@ -19,7 +19,9 @@ class PosPaymentModel {
   factory PosPaymentModel.fromJson(Map<String, dynamic> json) =>
       PosPaymentModel(
         posPaymentData: List<PosPaymentDatum>.from(
-          (json["posPayment_data"] ?? []).map((x) => PosPaymentDatum.fromJson(x)),
+          (json["posPayment_data"] ?? []).map(
+            (x) => PosPaymentDatum.fromJson(x),
+          ),
         ),
         totalData: json["totalData"] ?? 0,
         state: State.fromJson(json["state"] ?? {}),
@@ -37,21 +39,21 @@ class PosPaymentModel {
 class PosPaymentDatum {
   final String id;
   final String paymentNo;
-  final VoucherType? voucherType;
-  final PaymentType? paymentType;
+  final String? voucherType;
+  final String? paymentType;
   final PartyId? partyId;
   final PosOrderId? posOrderId;
   final String? posCashRegisterId;
-  final PaymentMode? paymentMode;
+  final String? paymentMode;
   final double totalAmount;
   final int paidAmount;
   final int pendingAmount;
   final int kasar;
-  final ExpenseType? expenseType;
+  final String? expenseType;
   final int discountAmount;
   final double amount;
   final bool isNonGst;
-  final Status? status;
+  final String? status;
   final bool isDeleted;
   final bool isActive;
   final CreatedBy createdBy;
@@ -96,50 +98,56 @@ class PosPaymentDatum {
       PosPaymentDatum(
         id: json["_id"] ?? "",
         paymentNo: json["paymentNo"] ?? "",
-        voucherType: voucherTypeValues.map[json["voucherType"]],
-        paymentType: paymentTypeValues.map[json["paymentType"]],
-        partyId: json["partyId"] == null ? null : PartyId.fromJson(json["partyId"]),
+        voucherType: json["voucherType"] ?? "",
+        paymentType: json["paymentType"] ?? "",
+        partyId: json["partyId"] == null
+            ? null
+            : PartyId.fromJson(json["partyId"]),
         posOrderId: json["posOrderId"] == null
             ? null
             : PosOrderId.fromJson(json["posOrderId"]),
         posCashRegisterId: json["posCashRegisterId"]?.toString(),
-        paymentMode: paymentModeValues.map[json["paymentMode"]],
+        paymentMode: json["paymentMode"] ?? "",
         totalAmount: (json["totalAmount"] ?? 0).toDouble(),
         paidAmount: json["paidAmount"] ?? 0,
         pendingAmount: json["pendingAmount"] ?? 0,
         kasar: json["kasar"] ?? 0,
-        expenseType: expenseTypeValues.map[json["expenseType"]],
+        expenseType: json["expenseType"] ?? "",
         discountAmount: json["discountAmount"] ?? 0,
         amount: (json["amount"] ?? 0).toDouble(),
         isNonGst: json["isNonGST"] ?? false,
-        status: statusValues.map[json["status"]],
+        status: json["status"] ?? "",
         isDeleted: json["isDeleted"] ?? false,
         isActive: json["isActive"] ?? false,
         createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
         updatedBy: (json["updatedBy"] ?? "").toString(),
         companyId: CompanyId.fromJson(json["companyId"] ?? {}),
-        createdAt: json["createdAt"] == null ? DateTime.now() : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? DateTime.now() : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "paymentNo": paymentNo,
-    "voucherType": voucherTypeValues.reverse[voucherType],
-    "paymentType": paymentTypeValues.reverse[paymentType],
+    "voucherType": voucherType,
+    "paymentType": paymentType,
     "partyId": partyId?.toJson(),
     "posOrderId": posOrderId?.toJson(),
     "posCashRegisterId": posCashRegisterId,
-    "paymentMode": paymentModeValues.reverse[paymentMode],
+    "paymentMode": paymentMode,
     "totalAmount": totalAmount,
     "paidAmount": paidAmount,
     "pendingAmount": pendingAmount,
     "kasar": kasar,
-    "expenseType": expenseTypeValues.reverse[expenseType],
+    "expenseType": expenseType,
     "discountAmount": discountAmount,
     "amount": amount,
     "isNonGST": isNonGst,
-    "status": statusValues.reverse[status],
+    "status": status,
     "isDeleted": isDeleted,
     "isActive": isActive,
     "createdBy": createdBy.toJson(),
@@ -166,16 +174,13 @@ class CompanyId {
     name: (json["name"] ?? "").toString(),
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-  };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class CreatedBy {
   final String id;
   final String fullName;
-  final UserType? userType;
+  final String? userType;
 
   CreatedBy({required this.id, required this.fullName, this.userType});
 
@@ -187,23 +192,15 @@ class CreatedBy {
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
     id: (json["_id"] ?? "").toString(),
     fullName: (json["fullName"] ?? "").toString(),
-    userType: userTypeValues.map[json["userType"]],
+    userType: json["userType"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "fullName": fullName,
-    "userType": userTypeValues.reverse[userType],
+    "userType": userType,
   };
 }
-
-enum UserType { ADMIN }
-
-final userTypeValues = EnumValues({"admin": UserType.ADMIN});
-
-enum ExpenseType { PRODUCT }
-
-final expenseTypeValues = EnumValues({"product": ExpenseType.PRODUCT});
 
 class PartyId {
   final String id;
@@ -237,24 +234,6 @@ class PartyId {
   };
 }
 
-enum PaymentMode { BANK, CARD, CASH, CHEQUE, UPI, WALLET }
-
-final paymentModeValues = EnumValues({
-  "bank": PaymentMode.BANK,
-  "card": PaymentMode.CARD,
-  "cash": PaymentMode.CASH,
-  "cheque": PaymentMode.CHEQUE,
-  "upi": PaymentMode.UPI,
-  "wallet": PaymentMode.WALLET,
-});
-
-enum PaymentType { ADVANCE, AGAINST_BILL }
-
-final paymentTypeValues = EnumValues({
-  "advance": PaymentType.ADVANCE,
-  "against_bill": PaymentType.AGAINST_BILL,
-});
-
 class PosOrderId {
   final String id;
   final String orderNo;
@@ -280,7 +259,9 @@ class PosOrderId {
     orderNo: json["orderNo"] ?? "",
     totalAmount: (json["totalAmount"] ?? 0).toDouble(),
     paidAmount: (json["paidAmount"] ?? 0).toDouble(),
-    createdAt: json["createdAt"] == null ? DateTime.now() : DateTime.parse(json["createdAt"]),
+    createdAt: json["createdAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["createdAt"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -291,18 +272,6 @@ class PosOrderId {
     "createdAt": createdAt.toIso8601String(),
   };
 }
-
-enum Status { CLEARED }
-
-final statusValues = EnumValues({"cleared": Status.CLEARED});
-
-enum VoucherType { EXPENSE, PURCHASE, SALES }
-
-final voucherTypeValues = EnumValues({
-  "expense": VoucherType.EXPENSE,
-  "purchase": VoucherType.PURCHASE,
-  "sales": VoucherType.SALES,
-});
 
 class State {
   final int page;
@@ -326,16 +295,4 @@ class State {
     "limit": limit,
     "totalPages": totalPages,
   };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
