@@ -13,6 +13,10 @@ class AccountingController extends GetxController {
   final totalPages = 1.obs;
   final totalItems = 0.obs;
 
+  final selectedDateRange = Rx<DateTimeRange?>(null);
+
+  final _repo = AccountingRepository();
+
   @override
   void onInit() {
     super.onInit();
@@ -23,7 +27,7 @@ class AccountingController extends GetxController {
   Future<void> fetchDebitNote() async {
     try {
       isLoading.value = true;
-      final debitNote = await AccountingRepository().getDebitNote();
+      final debitNote = await _repo.getDebitNote();
 
       debitNoteList.assignAll(debitNote.debitNoteData);
       totalPages.value = debitNote.state.totalPages;
@@ -38,7 +42,7 @@ class AccountingController extends GetxController {
   Future<void> fetchCreditNote() async {
     try {
       isLoading.value = true;
-      final creditNote = await AccountingRepository().getCreditNote();
+      final creditNote = await _repo.getCreditNote();
       creditNoteList.assignAll(creditNote.creditNoteData);
       totalPages.value = creditNote.state.totalPages;
       totalItems.value = creditNote.totalData;
