@@ -151,7 +151,17 @@ class ApiConstants {
   static const String bulkStock = "/stock/bulk-adjustment";
 
   // Bill of Live Product
-  static const String getAllBillOfLiveProduct = "/bill-of-live-product/all";
+  static String getAllBillOfLiveProduct({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/bill-of-live-product/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addBillOfLiveProduct = "/bill-of-live-product/add";
   static const String updateBillOfLiveProduct = "/bill-of-live-product/edit";
   static String deleteBillOfLiveProduct(String id) =>

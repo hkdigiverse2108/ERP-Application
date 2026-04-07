@@ -20,7 +20,8 @@ import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
 import 'package:ai_setu/modules/inventory/stock/bindings/stock_bindings.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/bindings/stock_verification_binding.dart';
-import 'package:ai_setu/modules/inventory/views/bill_of_live.dart';
+import 'package:ai_setu/modules/inventory/bill_of_live_product/bindings/bill_of_live_product_binding.dart';
+import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bill_of_live_product.dart';
 import 'package:ai_setu/modules/inventory/views/material_consumption.dart';
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
@@ -79,7 +80,7 @@ class AppPages {
     GetPage(
       name: Routes.billOfLive,
       page: () => const BillOfLive(),
-      binding: InventoryBindings(),
+      binding: BillOfLiveProductBinding(),
     ),
     GetPage(
       name: Routes.materialConsumption,
