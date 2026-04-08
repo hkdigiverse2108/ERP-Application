@@ -26,6 +26,7 @@ import 'package:ai_setu/modules/inventory/material_consumption/views/material_co
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification.dart';
+import 'package:ai_setu/modules/purchase/views/purchase_debit_note_page.dart';
 import 'package:ai_setu/modules/sales/bindings/sales_binding.dart';
 import 'package:ai_setu/modules/sales/views/delivery_challan_page.dart';
 import 'package:ai_setu/modules/sales/views/estimate_page.dart';
@@ -172,6 +173,11 @@ class AppPages {
     GetPage(
       name: Routes.supplierBill,
       page: () => const SupplierBillPage(),
+      binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: Routes.purchaseReturn,
+      page: () => const PurchaseDebitNotePage(),
       binding: PurchaseBinding(),
     ),
   ];

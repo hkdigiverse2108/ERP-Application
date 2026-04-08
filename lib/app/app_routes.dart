@@ -27,4 +27,5 @@ abstract class Routes {
   static const salesCreditNote = '/sales-credit-note';
   static const purchaseOrder = '/purchase-order';
   static const supplierBill = '/supplier-bill';
+  static const purchaseReturn = '/purchase-debit-note';
 }

@@ -1,12 +1,13 @@
+import 'package:ai_setu/modules/purchase/widgets/purchase_debit_note_table.dart';
+import 'package:ai_setu/modules/purchase/widgets/supplier_bill_table.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
+import 'package:get/get.dart';
 import 'package:ai_setu/modules/purchase/controllers/purchase_controller.dart';
-import 'package:ai_setu/modules/purchase/widgets/supplier_bill_table.dart';
 
 class SupplierBillPage extends StatefulWidget {
   const SupplierBillPage({super.key});

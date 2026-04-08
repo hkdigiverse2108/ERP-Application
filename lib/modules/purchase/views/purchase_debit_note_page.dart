@@ -1,4 +1,4 @@
-import 'package:ai_setu/modules/purchase/widgets/purchase_order_table.dart';
+import 'package:ai_setu/modules/purchase/widgets/purchase_debit_note_table.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -8,21 +8,21 @@ import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/modules/purchase/controllers/purchase_controller.dart';
 
-class PurchaseOrderPage extends StatefulWidget {
-  const PurchaseOrderPage({super.key});
+class PurchaseDebitNotePage extends StatefulWidget {
+  const PurchaseDebitNotePage({super.key});
 
   @override
-  State<PurchaseOrderPage> createState() => _PurchaseOrderPageState();
+  State<PurchaseDebitNotePage> createState() => _PurchaseDebitNotePageState();
 }
 
-class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
+class _PurchaseDebitNotePageState extends State<PurchaseDebitNotePage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = Get.put(PurchaseController());
       controller.resetPagination();
-      controller.fetchPurchaseOrders();
+      controller.fetchPurchaseDebitNotes();
     });
   }
 
@@ -37,8 +37,8 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuickAction(),
-            _buildSectionTitle('Purchase Order'),
-            PurchaseOrderTable(),
+            _buildSectionTitle('Purchase Debit Note'),
+            PurchaseDebitNoteTable(),
           ],
         ),
       ),

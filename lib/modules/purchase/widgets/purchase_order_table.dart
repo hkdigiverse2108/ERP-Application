@@ -9,6 +9,7 @@ import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PurchaseOrderTable extends StatelessWidget {
   PurchaseOrderTable({super.key});
@@ -42,7 +43,7 @@ class PurchaseOrderTable extends StatelessWidget {
                 items: items,
                 columns: [
                   TableColumn(
-                    title: 'Purchase Order No',
+                    title: 'Order No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
                       item.orderNo,
@@ -57,22 +58,30 @@ class PurchaseOrderTable extends StatelessWidget {
                     title: 'Order Date',
                     width: 120,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.orderDate, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      DateFormat('dd MMM yyyy').format(item.orderDate),
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'Supplier',
                     width: 150,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.supplier, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.supplierId.companyName.isNotEmpty
+                          ? item.supplierId.companyName
+                          : "${item.supplierId.firstName} ${item.supplierId.lastName}",
+                      style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   TableColumn(
                     title: 'Amount',
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.amount}',
+                      '₹${item.summary.netAmount.toStringAsFixed(2)}',
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -98,6 +107,28 @@ class PurchaseOrderTable extends StatelessWidget {
                           color: Colors.blue,
                         ),
                       ),
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Notes',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.notes ?? "",
+                      style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  TableColumn(
+                    title: 'Created By',
+                    width: 100,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.createdBy.fullName,
+                      style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

@@ -90,8 +90,12 @@ class QuickActionDropdown extends StatelessWidget {
                           route: Routes.supplierBill,
                         ),
                         QuickActionItem(
-                          title: "Debit Note",
-                          route: Routes.debit,
+                          title: "Purchase Order",
+                          route: Routes.purchaseOrder,
+                        ),
+                        QuickActionItem(
+                          title: "Purchase Debit Note",
+                          route: Routes.purchaseReturn,
                         ),
                       ],
                     ),
