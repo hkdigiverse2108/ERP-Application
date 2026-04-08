@@ -38,8 +38,19 @@ class ApiConstants {
   static const String loginLog = "/login-log/all";
 
   // User aad filter
-  static String getAllUser(String typeFilter) =>
-      buildUrl("/user/all", {"typeFilter": typeFilter});
+  static String getAllUser({
+    String? typeFilter,
+    int? page,
+    int? limit,
+    String? search,
+    Map<String, dynamic>? filters,
+  }) => buildUrl("/user/all", {
+    "typeFilter": typeFilter,
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "filters": filters,
+  });
   static const String addUser = "/user/add";
   static String deleteUser(String id) => "/user/$id";
   static String getUserById(String id) => "/user/$id";
