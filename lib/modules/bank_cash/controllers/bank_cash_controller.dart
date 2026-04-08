@@ -16,24 +16,19 @@ class BankCashController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
-  final RxList<BankDatum> bankCashList = <BankDatum>[].obs;
-  final RxList<BankTransactionDatum> bankCashTransactionList =
-      <BankTransactionDatum>[].obs;
+  final RxList<BankModel> bankCashList = <BankModel>[].obs;
+  final RxList<BankTransactionModel> bankCashTransactionList =
+      <BankTransactionModel>[].obs;
 
-  final RxList<PosPaymentDatum> paymentTermsList = <PosPaymentDatum>[].obs;
+  final RxList<PosPaymentModel> paymentTermsList = <PosPaymentModel>[].obs;
 
-  final RxList<ExpenseDatum> expenseList = <ExpenseDatum>[].obs;
+  final RxList<ExpenseModel> expenseList = <ExpenseModel>[].obs;
 
-  final RxList<SalaryDatum> salaryList = <SalaryDatum>[].obs;
+  final RxList<SalaryModel> salaryList = <SalaryModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchBankCash();
-    fetchBankCashTransaction();
-    fetchPaymentTerms();
-    fetchExpenses();
-    fetchSalary();
   }
 
   Future<void> fetchBankCash() async {
@@ -45,11 +40,26 @@ class BankCashController extends GetxController {
 
       if (res.status == 200 && res.data != null) {
         final Map<String, dynamic> data = res.data as Map<String, dynamic>;
-        final List<dynamic> bankData = data['bank_data'] ?? [];
+        List<dynamic> bankData = data['bank_data'] ?? [];
+        if (bankData.isEmpty) {
+          for (var value in data.values) {
+            if (value is List) {
+              bankData = value;
+              break;
+            }
+          }
+        }
 
         bankCashList.assignAll(
-          bankData.map((json) => BankDatum.fromJson(json)).toList(),
+          bankData.map((json) => BankModel.fromJson(json)).toList(),
         );
+
+        if (data['state'] != null) {
+          totalPages.value =
+              int.tryParse(data['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value =
+            int.tryParse(data['totalData']?.toString() ?? data['total']?.toString() ?? '0') ?? 0;
       } else {
         error.value = res.message ?? 'Failed to fetch bank cash';
       }
@@ -75,11 +85,28 @@ class BankCashController extends GetxController {
       );
 
       if (res.status == 200 && res.data != null) {
-        final BankTransactionModel transactionModel =
-            BankTransactionModel.fromJson(res.data);
-        bankCashTransactionList.assignAll(transactionModel.bankTransactionData);
-        totalItems.value = transactionModel.totalData;
-        totalPages.value = transactionModel.state.totalPages;
+        final Map<String, dynamic> data = res.data as Map<String, dynamic>;
+        List<dynamic> listData =
+            data['transaction_data'] ?? data['bank_transaction_data'] ?? data['bankTransaction_data'] ?? [];
+        if (listData.isEmpty) {
+          for (var value in data.values) {
+            if (value is List) {
+              listData = value;
+              break;
+            }
+          }
+        }
+
+        bankCashTransactionList.assignAll(
+          listData.map((json) => BankTransactionModel.fromJson(json)).toList(),
+        );
+
+        if (data['state'] != null) {
+          totalPages.value =
+              int.tryParse(data['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value =
+            int.tryParse(data['totalData']?.toString() ?? data['total']?.toString() ?? '0') ?? 0;
       } else {
         error.value = res.message ?? 'Failed to fetch bank transactions';
       }
@@ -105,10 +132,27 @@ class BankCashController extends GetxController {
       );
 
       if (res.status == 200 && res.data != null) {
-        final PosPaymentModel paymentModel = PosPaymentModel.fromJson(res.data);
-        paymentTermsList.assignAll(paymentModel.posPaymentData);
-        totalItems.value = paymentModel.totalData;
-        totalPages.value = paymentModel.state.totalPages;
+        final Map<String, dynamic> data = res.data as Map<String, dynamic>;
+        List<dynamic> listData = data['posPayment_data'] ?? data['paymentTerms_data'] ?? [];
+        if (listData.isEmpty) {
+          for (var value in data.values) {
+            if (value is List) {
+              listData = value;
+              break;
+            }
+          }
+        }
+
+        paymentTermsList.assignAll(
+          listData.map((json) => PosPaymentModel.fromJson(json)).toList(),
+        );
+
+        if (data['state'] != null) {
+          totalPages.value =
+              int.tryParse(data['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value =
+            int.tryParse(data['totalData']?.toString() ?? data['total']?.toString() ?? '0') ?? 0;
       } else {
         error.value = res.message ?? 'Failed to fetch bank transactions';
       }
@@ -121,34 +165,8 @@ class BankCashController extends GetxController {
   }
 
   Future<void> fetchReceipts() async {
-    isLoading.value = true;
-    error.value = '';
-
-    try {
-      final ResModel res = await _repo.getPaymentTerms(
-        page: currentPage.value,
-        fromDate: DateFormat(
-          'yyyy-MM-dd',
-        ).format(selectedDateRange.value.start),
-        toDate: DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end),
-      );
-
-      if (res.status == 200 && res.data != null) {
-        final PosPaymentModel receiptVoucherModel = PosPaymentModel.fromJson(
-          res.data,
-        );
-        paymentTermsList.assignAll(receiptVoucherModel.posPaymentData);
-        totalItems.value = receiptVoucherModel.totalData;
-        totalPages.value = receiptVoucherModel.state.totalPages;
-      } else {
-        error.value = res.message ?? 'Failed to fetch receipt voucher';
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
-    } finally {
-      isLoading.value = false;
-    }
+    // Same as fetchPaymentTerms but might use different logic later
+    await fetchPaymentTerms();
   }
 
   Future<void> fetchExpenses() async {
@@ -165,10 +183,27 @@ class BankCashController extends GetxController {
       );
 
       if (res.status == 200 && res.data != null) {
-        final ExpenseModel expenseModel = ExpenseModel.fromJson(res.data);
-        expenseList.assignAll(expenseModel.expenseData);
-        totalItems.value = expenseModel.totalData;
-        totalPages.value = expenseModel.state.totalPages;
+        final Map<String, dynamic> data = res.data as Map<String, dynamic>;
+        List<dynamic> listData = data['expense_data'] ?? [];
+        if (listData.isEmpty) {
+          for (var value in data.values) {
+            if (value is List) {
+              listData = value;
+              break;
+            }
+          }
+        }
+
+        expenseList.assignAll(
+          listData.map((json) => ExpenseModel.fromJson(json)).toList(),
+        );
+
+        if (data['state'] != null) {
+          totalPages.value =
+              int.tryParse(data['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value =
+            int.tryParse(data['totalData']?.toString() ?? data['total']?.toString() ?? '0') ?? 0;
       } else {
         error.value = res.message ?? 'Failed to fetch expenses';
       }
@@ -194,10 +229,27 @@ class BankCashController extends GetxController {
       );
 
       if (res.status == 200 && res.data != null) {
-        final SalaryModel salaryModel = SalaryModel.fromJson(res.data);
-        salaryList.assignAll(salaryModel.salaryData);
-        totalItems.value = salaryModel.totalData;
-        totalPages.value = salaryModel.state.totalPages;
+        final Map<String, dynamic> data = res.data as Map<String, dynamic>;
+        List<dynamic> listData = data['salary_data'] ?? [];
+        if (listData.isEmpty) {
+          for (var value in data.values) {
+            if (value is List) {
+              listData = value;
+              break;
+            }
+          }
+        }
+
+        salaryList.assignAll(
+          listData.map((json) => SalaryModel.fromJson(json)).toList(),
+        );
+
+        if (data['state'] != null) {
+          totalPages.value =
+              int.tryParse(data['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value =
+            int.tryParse(data['totalData']?.toString() ?? data['total']?.toString() ?? '0') ?? 0;
       } else {
         error.value = res.message ?? 'Failed to fetch salary';
       }

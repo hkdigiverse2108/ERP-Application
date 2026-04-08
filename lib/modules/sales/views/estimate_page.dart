@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class EstimatePage extends StatelessWidget {
+import 'package:ai_setu/modules/sales/controllers/sales_controller.dart';
+import 'package:get/get.dart';
+
+class EstimatePage extends StatefulWidget {
   const EstimatePage({super.key});
+
+  @override
+  State<EstimatePage> createState() => _EstimatePageState();
+}
+
+class _EstimatePageState extends State<EstimatePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<SalesController>().fetchEstimates();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

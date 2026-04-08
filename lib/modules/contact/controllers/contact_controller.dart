@@ -22,7 +22,6 @@ class ContactController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchContacts();
   }
 
   Future<void> fetchContacts() async {
@@ -33,9 +32,33 @@ class ContactController extends GetxController {
         limit: 10,
         search: searchController.text,
       );
-      contactList.assignAll(response.contactData);
-      totalItems.value = response.totalData;
-      totalPages.value = (totalItems.value / 10).ceil();
+      
+      final dynamic rawData = response.data;
+      List<dynamic> targetList = [];
+      if (rawData is List) {
+        targetList = rawData;
+      } else if (rawData is Map) {
+        if (rawData.containsKey("contact_data") && rawData["contact_data"] is List) {
+          targetList = rawData["contact_data"];
+        } else if (rawData.containsKey("data") && rawData["data"] is List) {
+          targetList = rawData["data"];
+        } else {
+          for (var value in rawData.values) {
+            if (value is List) {
+              targetList = value;
+              break;
+            }
+          }
+        }
+        
+        if (rawData['state'] != null) {
+          totalPages.value = int.tryParse(rawData['state']['totalPages']?.toString() ?? '0') ?? 0;
+        }
+        totalItems.value = int.tryParse(rawData['totalData']?.toString() ?? rawData['total']?.toString() ?? '0') ?? 0;
+      }
+      
+      contactList.assignAll(targetList.map((e) => ContactModel.fromJson(e)).toList());
+      
     } catch (e) {
       debugPrint(e.toString());
     } finally {

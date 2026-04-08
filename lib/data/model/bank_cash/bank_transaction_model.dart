@@ -1,42 +1,6 @@
 import 'dart:convert';
 
 class BankTransactionModel {
-  final List<BankTransactionDatum> bankTransactionData;
-  final int totalData;
-  final State state;
-
-  BankTransactionModel({
-    required this.bankTransactionData,
-    required this.totalData,
-    required this.state,
-  });
-
-  factory BankTransactionModel.fromRawJson(String str) =>
-      BankTransactionModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory BankTransactionModel.fromJson(Map<String, dynamic> json) =>
-      BankTransactionModel(
-        bankTransactionData: List<BankTransactionDatum>.from(
-          json["bankTransaction_data"].map(
-            (x) => BankTransactionDatum.fromJson(x),
-          ),
-        ),
-        totalData: json["totalData"],
-        state: State.fromJson(json["state"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-    "bankTransaction_data": List<dynamic>.from(
-      bankTransactionData.map((x) => x.toJson()),
-    ),
-    "totalData": totalData,
-    "state": state.toJson(),
-  };
-}
-
-class BankTransactionDatum {
   final String id;
   final bool isDeleted;
   final bool isActive;
@@ -54,7 +18,7 @@ class BankTransactionDatum {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  BankTransactionDatum({
+  BankTransactionModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
@@ -73,32 +37,55 @@ class BankTransactionDatum {
     required this.updatedAt,
   });
 
-  factory BankTransactionDatum.fromRawJson(String str) =>
-      BankTransactionDatum.fromJson(json.decode(str));
+  factory BankTransactionModel.fromJson(Map<String, dynamic> json) {
+    return BankTransactionModel(
+      id: json["_id"] ?? "",
+      isDeleted: json["isDeleted"] ?? false,
+      isActive: json["isActive"] ?? false,
 
-  String toRawJson() => json.encode(toJson());
+      createdBy: json["createdBy"] != null
+          ? AtedBy.fromJson(json["createdBy"])
+          : AtedBy.empty(),
 
-  factory BankTransactionDatum.fromJson(Map<String, dynamic> json) =>
-      BankTransactionDatum(
-        id: json["_id"],
-        isDeleted: json["isDeleted"],
-        isActive: json["isActive"],
-        createdBy: AtedBy.fromJson(json["createdBy"]),
-        updatedBy: AtedBy.fromJson(json["updatedBy"]),
-        companyId: CompanyId.fromJson(json["companyId"]),
-        branchId: json["branchId"],
-        voucherNo: json["voucherNo"],
-        transactionDate: DateTime.parse(json["transactionDate"]),
-        transactionType: json["transactionType"],
-        fromAccount: CompanyId.fromJson(json["fromAccount"]),
-        toAccount: json["toAccount"] == null
-            ? null
-            : CompanyId.fromJson(json["toAccount"]),
-        amount: json["amount"],
-        description: json["description"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+      updatedBy: json["updatedBy"] != null
+          ? AtedBy.fromJson(json["updatedBy"])
+          : AtedBy.empty(),
+
+      companyId: json["companyId"] != null
+          ? CompanyId.fromJson(json["companyId"])
+          : CompanyId.empty(),
+
+      branchId: json["branchId"],
+
+      voucherNo: json["voucherNo"] ?? "",
+
+      transactionDate: json["transactionDate"] != null
+          ? DateTime.tryParse(json["transactionDate"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      transactionType: json["transactionType"] ?? "",
+
+      fromAccount: json["fromAccount"] != null
+          ? CompanyId.fromJson(json["fromAccount"])
+          : CompanyId.empty(),
+
+      toAccount: json["toAccount"] != null
+          ? CompanyId.fromJson(json["toAccount"])
+          : null,
+
+      amount: (json["amount"] ?? 0).toInt(),
+
+      description: json["description"] ?? "",
+
+      createdAt: json["createdAt"] != null
+          ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      updatedAt: json["updatedAt"] != null
+          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
+          : DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -126,13 +113,10 @@ class CompanyId {
 
   CompanyId({required this.id, required this.name});
 
-  factory CompanyId.fromRawJson(String str) =>
-      CompanyId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(id: json["_id"], name: json["name"]);
+      CompanyId(id: json["_id"] ?? "", name: json["name"] ?? "");
+
+  factory CompanyId.empty() => CompanyId(id: "", name: "");
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
@@ -144,43 +128,17 @@ class AtedBy {
 
   AtedBy({required this.id, required this.fullName, required this.userType});
 
-  factory AtedBy.fromRawJson(String str) => AtedBy.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory AtedBy.fromJson(Map<String, dynamic> json) => AtedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
+    id: json["_id"] ?? "",
+    fullName: json["fullName"] ?? "",
+    userType: json["userType"] ?? "",
   );
+
+  factory AtedBy.empty() => AtedBy(id: "", fullName: "", userType: "");
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "fullName": fullName,
     "userType": userType,
-  };
-}
-
-class State {
-  final int page;
-  final dynamic limit;
-  final int totalPages;
-
-  State({required this.page, required this.limit, required this.totalPages});
-
-  factory State.fromRawJson(String str) => State.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory State.fromJson(Map<String, dynamic> json) => State(
-    page: json["page"],
-    limit: json["limit"],
-    totalPages: json["totalPages"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "page": page,
-    "limit": limit,
-    "totalPages": totalPages,
   };
 }

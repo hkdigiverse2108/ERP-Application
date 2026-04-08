@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class BankPage extends StatelessWidget {
+import 'package:ai_setu/modules/bank_cash/controllers/bank_cash_controller.dart';
+import 'package:get/get.dart';
+
+class BankPage extends StatefulWidget {
   const BankPage({super.key});
+
+  @override
+  State<BankPage> createState() => _BankPageState();
+}
+
+class _BankPageState extends State<BankPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<BankCashController>().fetchBankCash();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

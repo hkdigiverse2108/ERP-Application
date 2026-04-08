@@ -5,9 +5,24 @@ import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ai_setu/modules/inventory/controllers/inventory_controller.dart';
 
-class MaterialConsumption extends StatelessWidget {
+class MaterialConsumption extends StatefulWidget {
   const MaterialConsumption({super.key});
+
+  @override
+  State<MaterialConsumption> createState() => _MaterialConsumptionState();
+}
+
+class _MaterialConsumptionState extends State<MaterialConsumption> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.put(InventoryController()).fetchMaterialConsumption();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

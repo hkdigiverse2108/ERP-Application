@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class SalesOrderPage extends StatelessWidget {
+import 'package:ai_setu/modules/sales/controllers/sales_controller.dart';
+import 'package:get/get.dart';
+
+class SalesOrderPage extends StatefulWidget {
   const SalesOrderPage({super.key});
+
+  @override
+  State<SalesOrderPage> createState() => _SalesOrderPageState();
+}
+
+class _SalesOrderPageState extends State<SalesOrderPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<SalesController>().fetchSalesOrders();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -25,4 +25,6 @@ abstract class Routes {
   static const invoice = '/invoice';
   static const deliveryChallan = '/delivery-challan';
   static const salesCreditNote = '/sales-credit-note';
+  static const purchaseOrder = '/purchase-order';
+  static const supplierBill = '/supplier-bill';
 }

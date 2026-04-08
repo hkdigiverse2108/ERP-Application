@@ -26,4 +26,21 @@ class SupplierBillModel {
     required this.notes,
     required this.action,
   });
+
+  factory SupplierBillModel.fromJson(Map<String, dynamic> json) {
+    return SupplierBillModel(
+      status: json["status"]?.toString() ?? "",
+      company: json["company"]?.toString() ?? (json["companyId"] is Map ? json["companyId"]["name"]?.toString() ?? "" : ""),
+      billNo: json["billNo"]?.toString() ?? json["supplierBillNo"]?.toString() ?? "",
+      supplier: json["supplier"]?.toString() ?? (json["supplierId"] is Map ? json["supplierId"]["name"]?.toString() ?? "" : ""),
+      billDate: json["billDate"]?.toString() ?? json["date"]?.toString() ?? "",
+      billAmount: json["billAmount"]?.toString() ?? json["totalAmount"]?.toString() ?? json["grossAmount"]?.toString() ?? (json["transactionSummary"] is Map ? json["transactionSummary"]["netAmount"]?.toString() ?? "" : json["transactionSummary"]?.toString() ?? ""),
+      paidAmount: json["paidAmount"]?.toString() ?? "0",
+      dueAmount: json["dueAmount"]?.toString() ?? "0",
+      taxAmount: json["taxAmount"]?.toString() ?? (json["transactionSummary"] is Map ? json["transactionSummary"]["taxAmount"]?.toString() ?? "0" : "0"),
+      dueDate: json["dueDate"]?.toString() ?? "",
+      notes: json["notes"]?.toString() ?? "",
+      action: json["action"]?.toString() ?? "",
+    );
+  }
 }

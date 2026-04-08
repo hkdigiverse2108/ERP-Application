@@ -39,14 +39,14 @@ class SalesCreditNoteTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<SalesCreditNoteDatum>(
+              CommonTable<SalesCreditNoteModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Credit Note No.',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.creditNoteNo,
+                      item.creditNoteNo ?? "",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -59,7 +59,8 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.creditNoteDate),
+                      DateFormat('dd MMM yyyy')
+                          .format(item.creditNoteDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -82,11 +83,11 @@ class SalesCreditNoteTable extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          item.customerId.firstName,
+                          item.customerId?.firstName ?? "",
                           style: TextHelper.bodySmall,
                         ),
                         Text(
-                          " ${item.customerId.lastName}",
+                          " ${item.customerId?.lastName ?? ""}",
                           style: TextHelper.bodySmall,
                         ),
                       ],
@@ -97,7 +98,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.summary.netAmount}",
+                      "₹${item.summary?.netAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -106,7 +107,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.summary.taxAmount}",
+                      "₹${item.summary?.taxAmount ?? 0}",
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -118,7 +119,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.summary.netAmount - item.summary.taxAmount}",
+                      "₹${(item.summary?.netAmount ?? 0) - (item.summary?.taxAmount ?? 0)}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -127,7 +128,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.summary.netAmount - item.summary.taxAmount}",
+                      "₹${(item.summary?.netAmount ?? 0) - (item.summary?.taxAmount ?? 0)}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -136,7 +137,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.status.toUpperCase(),
+                      (item.status ?? "").toUpperCase(),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -145,7 +146,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "",
                       style: TextHelper.bodySmall,
                     ),
                   ),

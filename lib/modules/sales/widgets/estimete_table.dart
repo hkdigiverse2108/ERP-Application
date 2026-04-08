@@ -39,14 +39,14 @@ class EstimateTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<EstimateDatum>(
+              CommonTable<EstimateModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Estimate No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.estimateNo,
+                      item.estimateNo ?? "",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -59,7 +59,7 @@ class EstimateTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.date),
+                      DateFormat('dd MMM yyyy').format(item.date ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -68,7 +68,7 @@ class EstimateTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.dueDate),
+                      DateFormat('dd MMM yyyy').format(item.dueDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -79,7 +79,7 @@ class EstimateTable extends StatelessWidget {
                     cellBuilder: (context, item, index) {
                       final customer = item.customerId;
                       return Text(
-                        "${customer.firstName} ${customer.lastName}",
+                        "${customer?.firstName ?? ""} ${customer?.lastName ?? ""}",
                         style: TextHelper.bodySmall,
                       );
                     },
@@ -114,7 +114,7 @@ class EstimateTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        item.status,
+                        item.status ?? "",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
                         ),
@@ -126,7 +126,7 @@ class EstimateTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "",
                       style: TextHelper.bodySmall,
                     ),
                   ),

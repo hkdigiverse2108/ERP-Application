@@ -28,7 +28,7 @@ class CraditTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              CommonTable<CreditNoteDatum>(
+              CommonTable<CreditNoteModel>(
                 items: items,
                 columns: [
                   TableColumn(

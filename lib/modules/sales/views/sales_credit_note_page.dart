@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class SalesCreditNotePage extends StatelessWidget {
+import 'package:ai_setu/modules/sales/controllers/sales_controller.dart';
+import 'package:get/get.dart';
+
+class SalesCreditNotePage extends StatefulWidget {
   const SalesCreditNotePage({super.key});
+
+  @override
+  State<SalesCreditNotePage> createState() => _SalesCreditNotePageState();
+}
+
+class _SalesCreditNotePageState extends State<SalesCreditNotePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<SalesController>().fetchCreditNotes();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

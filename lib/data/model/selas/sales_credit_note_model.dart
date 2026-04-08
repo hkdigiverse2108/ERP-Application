@@ -1,14 +1,68 @@
 import 'dart:convert';
 
 class SalesCreditNoteModel {
-  final List<SalesCreditNoteDatum> salesCreditNoteData;
-  final int totalData;
-  final State state;
+  final String id;
+  final bool isDeleted;
+  final bool isActive;
+  final CreatedBy? createdBy;
+  final String? updatedBy;
+  final BranchId? companyId;
+  final CustomerId? customerId;
+  final String? placeOfSupply;
+  final Address? billingAddress;
+  final Address? shippingAddress;
+  final DateTime? creditNoteDate;
+  final String? creditNoteNo;
+  final DateTime? dueDate;
+  final String? reason;
+  final bool reverseCharge;
+  final String? sez;
+  final bool paymentReminder;
+  final String? productType;
+  final dynamic productDetails;
+  final dynamic additionalCharges;
+  final List<TermsAndConditionId> termsAndConditionIds;
+  final String? notes;
+  final ShippingDetails? shippingDetails;
+  final TransactionSummary? summary;
+  final String? status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? salesManId;
+  final String? salesId;
+  final String? accountLedgerId;
 
   SalesCreditNoteModel({
-    required this.salesCreditNoteData,
-    required this.totalData,
-    required this.state,
+    required this.id,
+    required this.isDeleted,
+    required this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.companyId,
+    this.customerId,
+    this.placeOfSupply,
+    this.billingAddress,
+    this.shippingAddress,
+    this.creditNoteDate,
+    this.creditNoteNo,
+    this.dueDate,
+    this.reason,
+    required this.reverseCharge,
+    this.sez,
+    required this.paymentReminder,
+    this.productType,
+    this.productDetails,
+    this.additionalCharges,
+    required this.termsAndConditionIds,
+    this.notes,
+    this.shippingDetails,
+    this.summary,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.salesManId,
+    this.salesId,
+    this.accountLedgerId,
   });
 
   factory SalesCreditNoteModel.fromRawJson(String str) =>
@@ -18,150 +72,39 @@ class SalesCreditNoteModel {
 
   factory SalesCreditNoteModel.fromJson(Map<String, dynamic> json) =>
       SalesCreditNoteModel(
-        salesCreditNoteData: json["salesCreditNote_data"] == null
-            ? []
-            : List<SalesCreditNoteDatum>.from(
-                json["salesCreditNote_data"].map(
-                  (x) => SalesCreditNoteDatum.fromJson(x),
-                ),
-              ),
-        totalData: json["totalData"] ?? 0,
-        state: json["state"] == null
-            ? State(page: 1, limit: 10, totalPages: 1)
-            : State.fromJson(json["state"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "salesCreditNote_data":
-            List<dynamic>.from(salesCreditNoteData.map((x) => x.toJson())),
-        "totalData": totalData,
-        "state": state.toJson(),
-      };
-}
-
-class SalesCreditNoteDatum {
-  final String id;
-  final bool isDeleted;
-  final bool isActive;
-  final CreatedBy createdBy;
-  final String updatedBy;
-  final BranchId companyId;
-  final CustomerId customerId;
-  final String placeOfSupply;
-  final Address billingAddress;
-  final Address shippingAddress;
-  final DateTime creditNoteDate;
-  final String creditNoteNo;
-  final DateTime? dueDate;
-  final String? reason;
-  final bool reverseCharge;
-  final String? sez;
-  final bool paymentReminder;
-  final String productType;
-  final dynamic productDetails;
-  final dynamic additionalCharges;
-  final List<TermsAndConditionId> termsAndConditionIds;
-  final String? notes;
-  final ShippingDetails shippingDetails;
-  final TransactionSummary summary;
-  final String status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String? salesManId;
-  final String? salesId;
-  final String? accountLedgerId;
-
-  SalesCreditNoteDatum({
-    required this.id,
-    required this.isDeleted,
-    required this.isActive,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.companyId,
-    required this.customerId,
-    required this.placeOfSupply,
-    required this.billingAddress,
-    required this.shippingAddress,
-    required this.creditNoteDate,
-    required this.creditNoteNo,
-    this.dueDate,
-    this.reason,
-    required this.reverseCharge,
-    this.sez,
-    required this.paymentReminder,
-    required this.productType,
-    required this.productDetails,
-    required this.additionalCharges,
-    required this.termsAndConditionIds,
-    this.notes,
-    required this.shippingDetails,
-    required this.summary,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    this.salesManId,
-    this.salesId,
-    this.accountLedgerId,
-  });
-
-  factory SalesCreditNoteDatum.fromRawJson(String str) =>
-      SalesCreditNoteDatum.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory SalesCreditNoteDatum.fromJson(Map<String, dynamic> json) =>
-      SalesCreditNoteDatum(
         id: json["_id"] ?? "",
         isDeleted: json["isDeleted"] ?? false,
         isActive: json["isActive"] ?? true,
         createdBy: json["createdBy"] == null
-            ? CreatedBy(id: "", fullName: "", userType: "")
+            ? null
             : CreatedBy.fromJson(json["createdBy"]),
         updatedBy: json["updatedBy"] is Map
             ? json["updatedBy"]["_id"]
-            : (json["updatedBy"] ?? ""),
+            : (json["updatedBy"] as String?),
         companyId: json["companyId"] == null
-            ? BranchId(id: "", name: "")
+            ? null
             : BranchId.fromJson(json["companyId"]),
         customerId: json["customerId"] == null
-            ? CustomerId(
-                id: "",
-                firstName: "",
-                lastName: "",
-                email: "",
-                phoneNo: PhoneNo(countryCode: "91", phoneNo: 0),
-                address: [])
+            ? null
             : CustomerId.fromJson(json["customerId"]),
-        placeOfSupply: json["placeOfSupply"] ?? "",
+        placeOfSupply: json["placeOfSupply"] as String?,
         billingAddress: json["billingAddress"] == null
-            ? Address(
-                addressLine1: "",
-                country: BranchId(id: "", name: ""),
-                state: BranchId(id: "", name: ""),
-                city: BranchId(id: "", name: ""),
-                pinCode: 0,
-                id: "")
+            ? null
             : Address.fromJson(json["billingAddress"]),
         shippingAddress: json["shippingAddress"] == null
-            ? Address(
-                addressLine1: "",
-                country: BranchId(id: "", name: ""),
-                state: BranchId(id: "", name: ""),
-                city: BranchId(id: "", name: ""),
-                pinCode: 0,
-                id: "")
+            ? null
             : Address.fromJson(json["shippingAddress"]),
         creditNoteDate: json["creditNoteDate"] == null
-            ? DateTime.now()
+            ? null
             : DateTime.parse(json["creditNoteDate"]),
-        creditNoteNo: json["creditNoteNo"] ?? "",
+        creditNoteNo: json["creditNoteNo"] as String?,
         dueDate:
             json["dueDate"] == null ? null : DateTime.parse(json["dueDate"]),
-        reason: json["reason"],
+        reason: json["reason"] as String?,
         reverseCharge: json["reverseCharge"] ?? false,
-        sez: json["sez"],
+        sez: json["sez"] as String?,
         paymentReminder: json["paymentReminder"] ?? false,
-        productType: json["productType"] ?? "",
+        productType: json["productType"] as String?,
         productDetails: json["productDetails"],
         additionalCharges: json["additionalCharges"],
         termsAndConditionIds: json["termsAndConditionIds"] == null
@@ -170,47 +113,41 @@ class SalesCreditNoteDatum {
                 json["termsAndConditionIds"]
                     .map((x) => TermsAndConditionId.fromJson(x)),
               ),
-        notes: json["notes"],
+        notes: json["notes"] as String?,
         shippingDetails: json["shippingDetails"] == null
-            ? ShippingDetails(shippingType: "delivery", weight: 0.0)
+            ? null
             : ShippingDetails.fromJson(json["shippingDetails"]),
         summary: json["summary"] == null
-            ? TransactionSummary(
-                flatDiscount: 0,
-                grossAmount: 0,
-                discountAmount: 0,
-                taxableAmount: 0,
-                taxAmount: 0.0,
-                roundOff: 0.0,
-                netAmount: 0.0,
-                id: "")
+            ? null
             : TransactionSummary.fromJson(json["summary"]),
-        status: json["status"] ?? "pending",
+        status: json["status"] as String?,
         createdAt: json["createdAt"] == null
-            ? DateTime.now()
+            ? null
             : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null
-            ? DateTime.now()
+            ? null
             : DateTime.parse(json["updatedAt"]),
         salesManId: json["salesManId"] is Map
             ? json["salesManId"]["_id"]
-            : json["salesManId"],
-        salesId: json["salesId"] is Map ? json["salesId"]["_id"] : json["salesId"],
-        accountLedgerId: json["accountLedgerId"],
+            : json["salesManId"] as String?,
+        salesId: json["salesId"] is Map 
+            ? json["salesId"]["_id"] 
+            : json["salesId"] as String?,
+        accountLedgerId: json["accountLedgerId"] as String?,
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "isDeleted": isDeleted,
         "isActive": isActive,
-        "createdBy": createdBy.toJson(),
+        "createdBy": createdBy?.toJson(),
         "updatedBy": updatedBy,
-        "companyId": companyId.toJson(),
-        "customerId": customerId.toJson(),
+        "companyId": companyId?.toJson(),
+        "customerId": customerId?.toJson(),
         "placeOfSupply": placeOfSupply,
-        "billingAddress": billingAddress.toJson(),
-        "shippingAddress": shippingAddress.toJson(),
-        "creditNoteDate": creditNoteDate.toIso8601String(),
+        "billingAddress": billingAddress?.toJson(),
+        "shippingAddress": shippingAddress?.toJson(),
+        "creditNoteDate": creditNoteDate?.toIso8601String(),
         "creditNoteNo": creditNoteNo,
         "dueDate": dueDate?.toIso8601String(),
         "reason": reason,
@@ -224,11 +161,11 @@ class SalesCreditNoteDatum {
           termsAndConditionIds.map((x) => x.toJson()),
         ),
         "notes": notes,
-        "shippingDetails": shippingDetails.toJson(),
-        "summary": summary.toJson(),
+        "shippingDetails": shippingDetails?.toJson(),
+        "summary": summary?.toJson(),
         "status": status,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
         "salesManId": salesManId,
         "salesId": salesId,
         "accountLedgerId": accountLedgerId,
@@ -241,11 +178,6 @@ class BranchId {
 
   BranchId({required this.id, required this.name});
 
-  factory BranchId.fromRawJson(String str) =>
-      BranchId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory BranchId.fromJson(Map<String, dynamic> json) => BranchId(
         id: json["_id"] ?? "",
         name: json["name"] ?? "",
@@ -257,37 +189,33 @@ class BranchId {
 class Address {
   final String addressLine1;
   final String? addressLine2;
-  final BranchId country;
-  final BranchId state;
-  final BranchId city;
+  final BranchId? country;
+  final BranchId? state;
+  final BranchId? city;
   final int pinCode;
   final String id;
 
   Address({
     required this.addressLine1,
     this.addressLine2,
-    required this.country,
-    required this.state,
-    required this.city,
+    this.country,
+    this.state,
+    this.city,
     required this.pinCode,
     required this.id,
   });
 
-  factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Address.fromJson(Map<String, dynamic> json) => Address(
         addressLine1: json["addressLine1"] ?? "",
-        addressLine2: json["addressLine2"],
+        addressLine2: json["addressLine2"] as String?,
         country: json["country"] == null
-            ? BranchId(id: "", name: "")
+            ? null
             : BranchId.fromJson(json["country"]),
         state: json["state"] == null
-            ? BranchId(id: "", name: "")
+            ? null
             : BranchId.fromJson(json["state"]),
         city: json["city"] == null
-            ? BranchId(id: "", name: "")
+            ? null
             : BranchId.fromJson(json["city"]),
         pinCode: json["pinCode"] ?? 0,
         id: json["_id"] ?? "",
@@ -296,9 +224,9 @@ class Address {
   Map<String, dynamic> toJson() => {
         "addressLine1": addressLine1,
         "addressLine2": addressLine2,
-        "country": country.toJson(),
-        "state": state.toJson(),
-        "city": city.toJson(),
+        "country": country?.toJson(),
+        "state": state?.toJson(),
+        "city": city?.toJson(),
         "pinCode": pinCode,
         "_id": id,
       };
@@ -310,11 +238,6 @@ class CreatedBy {
   final String userType;
 
   CreatedBy({required this.id, required this.fullName, required this.userType});
-
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
         id: json["_id"] ?? "",
@@ -334,7 +257,7 @@ class CustomerId {
   final String firstName;
   final String lastName;
   final String? email;
-  final PhoneNo phoneNo;
+  final PhoneNo? phoneNo;
   final List<Address> address;
 
   CustomerId({
@@ -342,22 +265,17 @@ class CustomerId {
     required this.firstName,
     required this.lastName,
     this.email,
-    required this.phoneNo,
+    this.phoneNo,
     required this.address,
   });
-
-  factory CustomerId.fromRawJson(String str) =>
-      CustomerId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
 
   factory CustomerId.fromJson(Map<String, dynamic> json) => CustomerId(
         id: json["_id"] ?? "",
         firstName: json["firstName"] ?? "",
         lastName: json["lastName"] ?? "",
-        email: json["email"],
+        email: json["email"] as String?,
         phoneNo: json["phoneNo"] == null
-            ? PhoneNo(countryCode: "91", phoneNo: 0)
+            ? null
             : PhoneNo.fromJson(json["phoneNo"]),
         address: json["address"] == null
             ? []
@@ -371,7 +289,7 @@ class CustomerId {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
-        "phoneNo": phoneNo.toJson(),
+        "phoneNo": phoneNo?.toJson(),
         "address": List<dynamic>.from(address.map((x) => x.toJson())),
       };
 }
@@ -381,10 +299,6 @@ class PhoneNo {
   final int phoneNo;
 
   PhoneNo({required this.countryCode, required this.phoneNo});
-
-  factory PhoneNo.fromRawJson(String str) => PhoneNo.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
 
   factory PhoneNo.fromJson(Map<String, dynamic> json) => PhoneNo(
         countryCode: json["countryCode"] ?? "91",
@@ -408,16 +322,11 @@ class ShippingDetails {
     this.id,
   });
 
-  factory ShippingDetails.fromRawJson(String str) =>
-      ShippingDetails.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory ShippingDetails.fromJson(Map<String, dynamic> json) =>
       ShippingDetails(
         shippingType: json["shippingType"] ?? "delivery",
         weight: (json["weight"] ?? 0).toDouble(),
-        id: json["_id"],
+        id: json["_id"] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -433,15 +342,10 @@ class TermsAndConditionId {
 
   TermsAndConditionId({required this.id, this.termsCondition});
 
-  factory TermsAndConditionId.fromRawJson(String str) =>
-      TermsAndConditionId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory TermsAndConditionId.fromJson(Map<String, dynamic> json) =>
       TermsAndConditionId(
         id: json["_id"] ?? "",
-        termsCondition: json["termsCondition"],
+        termsCondition: json["termsCondition"] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -471,11 +375,6 @@ class TransactionSummary {
     required this.id,
   });
 
-  factory TransactionSummary.fromRawJson(String str) =>
-      TransactionSummary.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory TransactionSummary.fromJson(Map<String, dynamic> json) =>
       TransactionSummary(
         flatDiscount: (json["flatDiscount"] ?? 0).toDouble(),
@@ -497,29 +396,5 @@ class TransactionSummary {
         "roundOff": roundOff,
         "netAmount": netAmount,
         "_id": id,
-      };
-}
-
-class State {
-  final dynamic page;
-  final dynamic limit;
-  final int totalPages;
-
-  State({required this.page, required this.limit, required this.totalPages});
-
-  factory State.fromRawJson(String str) => State.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory State.fromJson(Map<String, dynamic> json) => State(
-        page: json["page"],
-        limit: json["limit"],
-        totalPages: json["totalPages"] ?? 0,
-      );
-
-  Map<String, dynamic> toJson() => {
-        "page": page,
-        "limit": limit,
-        "totalPages": totalPages,
       };
 }
