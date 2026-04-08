@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:ai_setu/data/model/brand/brand_model.dart';
+import 'package:ai_setu/data/model/category/category_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_model.dart';
+import 'package:ai_setu/data/repositories/brand_repository.dart';
+import 'package:ai_setu/data/repositories/category_repository.dart';
 import 'package:ai_setu/data/repositories/stock_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +13,18 @@ class StockController extends GetxController {
   static StockController get instance => Get.find();
 
   final _repo = StockRepository();
+  final _categoryRepo = CategoryRepository();
+  final _brandRepo = BrandRepository();
+
   final stocks = <StockItemModel>[].obs;
+
+  final category = <CategoryDropdownModel>[].obs;
+  final subCategory = <CategoryDropdownModel>[].obs;
+  final brand = <BrandDropdownModel>[].obs;
+  final subBrand = <BrandDropdownModel>[].obs;
+
+  final selectedCategoryId = ''.obs;
+  final selectedBrandId = ''.obs;
 
   final selectedDateRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 30)),
@@ -34,9 +49,76 @@ class StockController extends GetxController {
   final RxBool isLoading = false.obs;
 
   @override
+  void onInit() {
+    super.onInit();
+    // Watch for category change to load sub-categories
+    ever(selectedCategoryId, (id) => _loadSubCategories(id));
+    // Watch for brand change to load sub-brands
+    ever(selectedBrandId, (id) => _loadSubBrands(id));
+  }
+
+  @override
   void onReady() {
     super.onReady();
+    _loadFilterData();
     getStockList();
+  }
+
+  void _loadFilterData() async {
+    try {
+      final results = await Future.wait([
+        _categoryRepo.getCategories(), // root categories
+        _brandRepo.getBrands(), // root brands
+      ]);
+      category.value = results[0] as List<CategoryDropdownModel>;
+      brand.value = results[1] as List<BrandDropdownModel>;
+    } catch (e) {
+      debugPrint('Filter data load failed: $e');
+    }
+  }
+
+  Future<void> _loadSubCategories(String id) async {
+    // Cascade reset: clear sub-category selection when parent changes
+    if (activeFilters.containsKey('subCategoryFilter')) {
+      final newFilters = Map<String, dynamic>.from(activeFilters);
+      newFilters.remove('subCategoryFilter');
+      activeFilters.value = newFilters;
+      _clearCache();
+      getStockList();
+    }
+
+    if (id.isEmpty) {
+      subCategory.clear();
+      return;
+    }
+    try {
+      subCategory.value = await _categoryRepo.getCategories(
+        parentCategoryFilter: id,
+      );
+    } catch (e) {
+      debugPrint('Sub-category load failed: $e');
+    }
+  }
+
+  Future<void> _loadSubBrands(String id) async {
+    // Cascade reset: clear sub-brand selection when parent changes
+    if (activeFilters.containsKey('subBrandFilter')) {
+      final newFilters = Map<String, dynamic>.from(activeFilters);
+      newFilters.remove('subBrandFilter');
+      activeFilters.value = newFilters;
+      _clearCache();
+      getStockList();
+    }
+
+    if (id.isEmpty) {
+      subBrand.clear();
+      return;
+    }
+    try {
+      subBrand.value = await _brandRepo.getBrands(parentBrandFilter: id);
+    } catch (e) {
+      debugPrint('Sub-brand load failed: $e');
+    }
   }
 
   String _getCacheKey(int page) =>
@@ -59,6 +141,10 @@ class StockController extends GetxController {
         limit: limit.value,
         search: searchQuery.value,
         activeFilter: "true",
+        categoryFilter: activeFilters['categoryFilter'],
+        subCategoryFilter: activeFilters['subCategoryFilter'],
+        brandFilter: activeFilters['brandFilter'],
+        subBrandFilter: activeFilters['subBrandFilter'],
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
@@ -96,6 +182,10 @@ class StockController extends GetxController {
 
   void onFiltersChanged(Map<String, dynamic> filters) {
     activeFilters.value = filters;
+    // Update IDs for reactive sub-filtering
+    selectedCategoryId.value = filters['categoryFilter'] ?? '';
+    selectedBrandId.value = filters['brandFilter'] ?? '';
+
     _clearCache();
     getStockList();
   }

@@ -79,11 +79,29 @@ class ApiConstants {
     int? limit,
     String? search,
     String? activeFilter,
+    String? categoryFilter,
+    String? subCategoryFilter,
+    String? brandFilter,
+    String? subBrandFilter,
+    String? hsnCodeFilter,
+    String? purchaseTaxFilter,
+    String? salesTaxIdFilter,
+    String? productTypeFilter,
+    String? productTypeIdFilter,
   }) => buildUrl("/product/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "activeFilter": activeFilter,
+    "categoryFilter": categoryFilter,
+    "subCategoryFilter": subCategoryFilter,
+    "brandFilter": brandFilter,
+    "subBrandFilter": subBrandFilter,
+    "hsnCodeFilter": hsnCodeFilter,
+    "purchaseTaxFilter": purchaseTaxFilter,
+    "salesTaxIdFilter": salesTaxIdFilter,
+    "productTypeFilter": productTypeFilter,
+    "productTypeIdFilter": productTypeIdFilter,
   });
   static String getProductById(String id) => "/product/$id";
   static const String productDropdown = "/product/dropdown";
@@ -138,11 +156,19 @@ class ApiConstants {
     int? limit,
     String? search,
     String? activeFilter,
+    String? categoryFilter,
+    String? subCategoryFilter,
+    String? brandFilter,
+    String? subBrandFilter,
   }) => buildUrl("/stock/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "activeFilter": activeFilter,
+    "categoryFilter": categoryFilter,
+    "subCategoryFilter": subCategoryFilter,
+    "brandFilter": brandFilter,
+    "subBrandFilter": subBrandFilter,
   });
   static const String addStock = "/stock/add";
   static const String updateStock = "/stock/edit";
@@ -180,11 +206,13 @@ class ApiConstants {
     int? limit,
     String? search,
     String? activeFilter,
+    String? statusFilter,
   }) => buildUrl("/stock-verification/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "activeFilter": activeFilter,
+    "statusFilter": statusFilter,
   });
   static const String addStockVerification = "/stock-verification/add";
   static const String updateStockVerification = "/stock-verification/edit";
@@ -246,13 +274,25 @@ class ApiConstants {
   static String deleteMaterial(String id) => "/material/$id";
 
   // Material Consumption
-  static const String getAllMaterialConsumption = "/materialConsumption/all";
-  static const String addMaterialConsumption = "/materialConsumption/add";
+  static String getAllMaterialConsumption({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+    String? branchFilter,
+  }) => buildUrl("/material-consumption/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+    "branchFilter": branchFilter,
+  });
+  static const String addMaterialConsumption = "/material-consumption/add";
   static const String getMaterialConsumptionById =
-      "/materialConsumption/getById";
-  static const String updateMaterialConsumption = "/materialConsumption/edit";
+      "/material-consumption/getById";
+  static const String updateMaterialConsumption = "/material-consumption/edit";
   static const String materialConsumptionDropdown =
-      "/materialConsumption/dropdown";
+      "/material-consumption/dropdown";
 
   // Announcement
   static const String getAllAnnouncement = "/announcement/all";
@@ -417,8 +457,8 @@ class ApiConstants {
   static String getBranchById(String id) => "/branch/$id";
   static const String updateBranch = "/branch/edit";
   static String deleteBranch(String id) => "/branch/$id";
-  static String branchDropdown(String companyFilter, String id) =>
-      buildUrl("branch/dropdown", {"companyFilter": companyFilter, "id": id});
+  static String branchDropdown({String? companyFilter, String? id}) =>
+      buildUrl("/branch/dropdown", {"companyFilter": companyFilter, "id": id});
 
   // Brand
   static const String getAllBrand = "/brand/all";
@@ -426,7 +466,13 @@ class ApiConstants {
   static String getBrandById(String id) => "/brand/$id";
   static const String updateBrand = "/brand/edit";
   static String deleteBrand(String id) => "/brand/$id";
-  static const String brandDropdown = "/brand/dropdown";
+  static String brandDropdown({
+    String? parentBrandFilter,
+    String? typeFilter,
+  }) => buildUrl("/brand/dropdown", {
+    "parentBrandFilter": parentBrandFilter,
+    "typeFilter": typeFilter,
+  });
   static const String getAllBrandTree = "brand/tree/all";
 
   // Category
@@ -435,10 +481,10 @@ class ApiConstants {
   static String getCategoryById(String id) => "/category/$id";
   static const String updateCategory = "/category/edit";
   static String deleteCategory(String id) => "/category/$id";
-  static String categoryDropdown(
-    String parentCategoryFilter,
-    String typeFilter,
-  ) => buildUrl("category/dropdown", {
+  static String categoryDropdown({
+    String? parentCategoryFilter,
+    String? typeFilter,
+  }) => buildUrl("/category/dropdown", {
     "parentCategoryFilter": parentCategoryFilter,
     "typeFilter": typeFilter,
   });

@@ -1,20 +1,20 @@
-import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/inventory/stock_verification/controllers/stock_verification_controller.dart';
-import 'package:ai_setu/modules/inventory/stock_verification/widgets/stock_verification_table.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/controllers/material_consumption_controller.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/widgets/material_consumption_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class StockVerification extends StatelessWidget {
-  const StockVerification({super.key});
+class MaterialConsumption extends StatelessWidget {
+  const MaterialConsumption({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = StockVerificationController.instance;
+    final controller = MaterialConsumptionController.instance;
 
     return SafeArea(
       top: false,
@@ -28,7 +28,7 @@ class StockVerification extends StatelessWidget {
             children: [
               const QuickAction(),
               _buildSectionTitle(controller),
-              StockVerificationTable(),
+              MaterialConsumptionTable(),
             ],
           ),
         ),
@@ -36,26 +36,28 @@ class StockVerification extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(StockVerificationController controller) {
+  Widget _buildSectionTitle(MaterialConsumptionController controller) {
     return Padding(
       padding: EdgeInsets.only(
         left: Sizes.paddingM,
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: FilterSection(
-        title: 'Stock Verification List',
-        filters: [
-          FilterOption(
-            label: 'Status',
-            filterKey: 'statusFilter',
-            options: StockVerificationStatus.values.asMap().map(
-              (key, value) => MapEntry(value.name.formatEnum(), value.name),
+      child: Obx(
+        () => FilterSection(
+          title: 'Material Consumption List',
+          filters: [
+            FilterOption(
+              label: 'Branch',
+              filterKey: 'branchFilter',
+              options: {
+                for (var e in controller.branches) e.name.formatEnum(): e.id,
+              },
             ),
-          ),
-        ],
-        onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+          ],
+          onSearchChanged: (query) => controller.onSearch(query),
+          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        ),
       ),
     );
   }

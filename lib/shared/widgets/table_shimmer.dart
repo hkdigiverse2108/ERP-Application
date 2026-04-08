@@ -41,18 +41,21 @@ class TableShimmer extends StatefulWidget {
             : null,
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: widths.map((width) {
-          return Container(
+          return SizedBox(
             width: width,
-            height: isHeader ? 16 : 12,
-            margin: const EdgeInsets.only(right: Sizes.paddingS),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              gradient: LinearGradient(
-                begin: Alignment(animationValue - 1, -0.3),
-                end: Alignment(animationValue + 1, 0.3),
-                colors: [baseColor, highlightColor, baseColor],
-                stops: const [0.1, 0.5, 0.9],
+            child: Container(
+              height: isHeader ? 16 : 12,
+              margin: const EdgeInsets.only(right: Sizes.paddingS),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: LinearGradient(
+                  begin: Alignment(animationValue - 1, -0.3),
+                  end: Alignment(animationValue + 1, 0.3),
+                  colors: [baseColor, highlightColor, baseColor],
+                  stops: const [0.1, 0.5, 0.9],
+                ),
               ),
             ),
           );
@@ -101,7 +104,7 @@ class _TableShimmerState extends State<TableShimmer>
           builder: (context, child) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

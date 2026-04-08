@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class TextHelper {
   static Color get _primaryTextColor => ThemeService().isDarkMode
@@ -92,4 +93,10 @@ class TextHelper {
       bodyBold.copyWith(color: Theme.of(context).colorScheme.onSurface);
   static TextStyle captionStyle(BuildContext context) =>
       caption.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
+}
+
+extension FormatEnum on String {
+  String formatEnum() {
+    return replaceAll('_', ' ').capitalizeFirst ?? this;
+  }
 }

@@ -1,14 +1,17 @@
 import 'dart:async';
-import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
-import 'package:ai_setu/data/repositories/bill_of_live_product_repository.dart';
+import 'package:ai_setu/data/model/branch/branch_model.dart';
+import 'package:ai_setu/data/model/invetory/material_consumption_model.dart';
+import 'package:ai_setu/data/repositories/branch_repository.dart';
+import 'package:ai_setu/data/repositories/material_consumption_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BillOfLiveProductController extends GetxController {
-  static BillOfLiveProductController get instance => Get.find();
+class MaterialConsumptionController extends GetxController {
+  static MaterialConsumptionController get instance => Get.find();
 
-  final _repo = BillOfLiveProductRepository();
-  final billOfLiveProducts = <BillOfLiveProductModel>[].obs;
+  final _repo = MaterialConsumptionRepository();
+  final _branchRepo = BranchRepository();
+  final materialConsumptions = <MaterialConsumptionModel>[].obs;
 
   final selectedDateRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 30)),
@@ -17,12 +20,13 @@ class BillOfLiveProductController extends GetxController {
 
   // Search & Filter
   final searchQuery = ''.obs;
-  final activeFilters = <String, dynamic>{}.obs;
+  final filters = <String, dynamic>{}.obs;
   Timer? _debounceTimer;
+  final branches = <BranchDropdownModel>[].obs;
 
   // Caching
   final _cache =
-      <String, ({List<BillOfLiveProductModel> items, DateTime fetchedAt})>{};
+      <String, ({List<MaterialConsumptionModel> items, DateTime fetchedAt})>{};
   final _cacheExpiry = const Duration(minutes: 5);
 
   // Pagination
@@ -36,34 +40,44 @@ class BillOfLiveProductController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getBillOfLiveProductData();
+    getMaterialConsumptionData();
+    getBranchesDropdown();
+  }
+
+  Future<void> getBranchesDropdown() async {
+    try {
+      final res = await _branchRepo.getBranchesDropdown();
+      branches.value = res;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${activeFilters.toString()}';
+      '${page}_${searchQuery.value}_${filters.toString()}';
 
-  Future<void> getBillOfLiveProductData() async {
+  Future<void> getMaterialConsumptionData() async {
     final key = _getCacheKey(currentPage.value);
     final cached = _cache[key];
 
     if (cached != null &&
         DateTime.now().difference(cached.fetchedAt) < _cacheExpiry) {
-      billOfLiveProducts.value = cached.items;
+      materialConsumptions.value = cached.items;
       return;
     }
 
     try {
       isLoading.value = true;
-      final res = await _repo.getBillOfLiveProductList(
+      final res = await _repo.getMaterialConsumptionList(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        activeFilter: activeFilters.isEmpty ? null : activeFilters.toString(),
+        filter: filters.isEmpty ? null : filters,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
 
-      billOfLiveProducts.value = res.items;
+      materialConsumptions.value = res.items;
       totalPages.value = res.totalPages;
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
@@ -84,7 +98,7 @@ class BillOfLiveProductController extends GetxController {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       searchQuery.value = query;
       _clearCache();
-      getBillOfLiveProductData();
+      getMaterialConsumptionData();
     });
   }
 
@@ -95,15 +109,15 @@ class BillOfLiveProductController extends GetxController {
   }
 
   void onFiltersChanged(Map<String, dynamic> filters) {
-    activeFilters.value = filters;
+    this.filters.value = filters;
     _clearCache();
-    getBillOfLiveProductData();
+    getMaterialConsumptionData();
   }
 
   Future<void> goToPage(int page) async {
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page;
-      await getBillOfLiveProductData();
+      await getMaterialConsumptionData();
     }
   }
 }

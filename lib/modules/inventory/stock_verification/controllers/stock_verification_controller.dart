@@ -17,7 +17,7 @@ class StockVerificationController extends GetxController {
 
   // Search & Filter
   final searchQuery = ''.obs;
-  final activeFilters = <String, dynamic>{}.obs;
+  final filters = <String, dynamic>{}.obs;
   Timer? _debounceTimer;
 
   // Caching
@@ -40,7 +40,7 @@ class StockVerificationController extends GetxController {
   }
 
   String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${activeFilters.toString()}';
+      '${page}_${searchQuery.value}_${filters.toString()}';
 
   Future<void> getStockVerificationData() async {
     final key = _getCacheKey(currentPage.value);
@@ -58,7 +58,7 @@ class StockVerificationController extends GetxController {
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        activeFilter: activeFilters.isEmpty ? null : activeFilters.toString(),
+        filter: filters.isEmpty ? null : filters,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
@@ -95,7 +95,7 @@ class StockVerificationController extends GetxController {
   }
 
   void onFiltersChanged(Map<String, dynamic> filters) {
-    activeFilters.value = filters;
+    this.filters.value = filters;
     _clearCache();
     getStockVerificationData();
   }

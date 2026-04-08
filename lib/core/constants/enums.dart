@@ -1,3 +1,11 @@
-enum ProductType { FINISHED, RAW_MATERIAL, SEMI_FINISHED }
+enum ProductType {
+  finished,
+  raw_material,
+  semi_finished,
+  service,
+  non_inventory,
+}
 
-enum UserType { ADMIN, SUPER_ADMIN }
+enum StockVerificationStatus { pending, approved, rejected }
+
+enum UserType { admin, superAdmin }

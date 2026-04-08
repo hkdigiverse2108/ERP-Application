@@ -1,4 +1,6 @@
+import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/modules/inventory/product/controllers/product_controller.dart';
 import 'package:ai_setu/modules/inventory/product/widgets/product_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -6,6 +8,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Product extends StatelessWidget {
   Product({super.key});
@@ -40,21 +43,63 @@ class Product extends StatelessWidget {
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: FilterSection(
-        title: 'Product list',
-        filters: [
-          FilterOption(
-            label: 'Category',
-            options: ['Fruits', 'Dairy', 'Beverages'],
-          ),
-          FilterOption(label: 'Brand', options: ['Amul', 'Nestle', 'Local']),
-          FilterOption(
-            label: 'Stock',
-            options: ['In stock', 'Low stock', 'Out of stock'],
-          ),
-        ],
-        onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+      child: Obx(
+        () => FilterSection(
+          title: 'Product list',
+          filters: [
+            FilterOption(
+              label: 'Category',
+              filterKey: 'categoryFilter',
+              options: {
+                for (var e in controller.category) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Sub Category',
+              filterKey: 'subCategoryFilter',
+              options: {
+                for (var e in controller.subCategory) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Brand',
+              filterKey: 'brandFilter',
+              options: {
+                for (var e in controller.brand) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Sub Brand',
+              filterKey: 'subBrandFilter',
+              options: {
+                for (var e in controller.subBrand) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Purchase Tax',
+              filterKey: 'purchaseTaxFilter',
+              options: {
+                for (var e in controller.tax) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Sales Tax',
+              filterKey: 'salesTaxFilter',
+              options: {
+                for (var e in controller.tax) e.name.formatEnum(): e.id,
+              },
+            ),
+            FilterOption(
+              label: 'Product Type',
+              filterKey: 'productTypeFilter',
+              options: {
+                for (var e in ProductType.values) e.name.formatEnum(): e.name,
+              },
+            ),
+          ],
+          onSearchChanged: (query) => controller.onSearch(query),
+          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        ),
       ),
     );
   }

@@ -43,7 +43,7 @@ class UserTable extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.fullName ?? '',
+                          item.fullName,
                           style: TextHelper.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -58,7 +58,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.fullName ?? '', style: TextHelper.bodySmall),
+                        Text(item.fullName, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Designation',
@@ -74,7 +74,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.email ?? '',
+                      item.email,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),

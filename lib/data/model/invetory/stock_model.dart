@@ -279,8 +279,8 @@ class CreatedBy {
 }
 
 final userTypeValues = EnumValues({
-  "admin": UserType.ADMIN,
-  "super-admin": UserType.SUPER_ADMIN,
+  "admin": UserType.admin,
+  "super-admin": UserType.superAdmin,
 });
 
 class Nutrition {
@@ -302,9 +302,9 @@ class Nutrition {
 }
 
 final productTypeValues = EnumValues({
-  "finished": ProductType.FINISHED,
-  "raw_material": ProductType.RAW_MATERIAL,
-  "semi_finished": ProductType.SEMI_FINISHED,
+  "finished": ProductType.finished,
+  "raw_material": ProductType.raw_material,
+  "semi_finished": ProductType.semi_finished,
 });
 
 class EnumValues<T> {

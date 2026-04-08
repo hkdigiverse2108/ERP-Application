@@ -14,7 +14,6 @@ import 'package:ai_setu/modules/bank_cash/views/salary_page.dart';
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
-import 'package:ai_setu/modules/inventory/bindings/inventory_binfings.dart';
 import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
@@ -22,7 +21,8 @@ import 'package:ai_setu/modules/inventory/stock/bindings/stock_bindings.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/bindings/stock_verification_binding.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/bindings/bill_of_live_product_binding.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bill_of_live_product.dart';
-import 'package:ai_setu/modules/inventory/views/material_consumption.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/bindings/material_consumption_binding.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/views/material_consumption.dart';
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification.dart';
@@ -85,7 +85,7 @@ class AppPages {
     GetPage(
       name: Routes.materialConsumption,
       page: () => const MaterialConsumption(),
-      binding: InventoryBindings(),
+      binding: MaterialConsumptionBinding(),
     ),
     GetPage(
       name: Routes.debit,

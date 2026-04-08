@@ -6,6 +6,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Stock extends StatelessWidget {
   Stock({super.key});
@@ -40,21 +41,45 @@ class Stock extends StatelessWidget {
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: FilterSection(
-        title: 'Product list',
-        filters: [
-          FilterOption(
-            label: 'Category',
-            options: ['Fruits', 'Dairy', 'Beverages'],
-          ),
-          FilterOption(label: 'Brand', options: ['Amul', 'Nestle', 'Local']),
-          FilterOption(
-            label: 'Stock',
-            options: ['In stock', 'Low stock', 'Out of stock'],
-          ),
-        ],
-        onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+      child: Obx(
+        () => FilterSection(
+          title: 'Stock list',
+          onSearchChanged: (query) => controller.onSearch(query),
+          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+          filters: [
+            FilterOption(
+              label: 'Category',
+              filterKey: 'categoryFilter',
+              options: {for (var e in controller.category) e.name: e.id},
+            ),
+            if (controller.subCategory.isNotEmpty)
+              FilterOption(
+                label: 'Sub Category',
+                filterKey: 'subCategoryFilter',
+                options: {for (var e in controller.subCategory) e.name: e.id},
+              ),
+            FilterOption(
+              label: 'Brand',
+              filterKey: 'brandFilter',
+              options: {for (var e in controller.brand) e.name: e.id},
+            ),
+            if (controller.subBrand.isNotEmpty)
+              FilterOption(
+                label: 'Sub Brand',
+                filterKey: 'subBrandFilter',
+                options: {for (var e in controller.subBrand) e.name: e.id},
+              ),
+            FilterOption(
+              label: 'Stock Status',
+              filterKey: 'stockStatus',
+              options: const {
+                'In stock': 'In stock',
+                'Low stock': 'Low stock',
+                'Out of stock': 'Out of stock',
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -12,6 +12,10 @@ class StockRepository {
     int? limit,
     String? search,
     String? activeFilter,
+    String? categoryFilter,
+    String? subCategoryFilter,
+    String? brandFilter,
+    String? subBrandFilter,
   }) async {
     final ResModel response = await _api.get(
       ApiConstants.getAllStock(
@@ -19,12 +23,17 @@ class StockRepository {
         limit: limit,
         search: search,
         activeFilter: activeFilter,
+        categoryFilter: categoryFilter,
+        subCategoryFilter: subCategoryFilter,
+        brandFilter: brandFilter,
+        subBrandFilter: subBrandFilter,
       ),
     );
     if (response.status == 200) {
-      final items = (response.data['stock_data'] as List)
-          .map((x) => StockItemModel.fromJson(x))
-          .toList();
+      final items = List<StockItemModel>.from(
+        (response.data['stock_data'] as List)
+            .map((x) => StockItemModel.fromJson(x)),
+      );
       return PaginationModel.fromJson(response.data, items);
     }
 

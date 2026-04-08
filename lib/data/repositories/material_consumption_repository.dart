@@ -1,13 +1,13 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
-import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
+import 'package:ai_setu/data/model/invetory/material_consumption_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 
-class StockVerificationRepository {
+class MaterialConsumptionRepository {
   final ApiService _api = ApiService.to;
 
-  Future<PaginationModel<StockVerificationModel>> getStockVerificationList({
+  Future<PaginationModel<MaterialConsumptionModel>> getMaterialConsumptionList({
     int? page,
     int? limit,
     String? search,
@@ -15,38 +15,38 @@ class StockVerificationRepository {
     Map<String, dynamic>? filter,
   }) async {
     final ResModel response = await _api.get(
-      ApiConstants.getAllStockVerification(
+      ApiConstants.getAllMaterialConsumption(
         page: page,
         limit: limit,
         search: search,
         activeFilter: activeFilter,
-        statusFilter: filter?['statusFilter'],
+        branchFilter: filter?['branchFilter'],
       ),
     );
 
     if (response.status == 200) {
-      final items = (response.data['stockVerification_data'] as List)
-          .map((x) => StockVerificationModel.fromJson(x))
+      final items = (response.data['material_consumption_data'] as List)
+          .map((x) => MaterialConsumptionModel.fromJson(x))
           .toList();
       return PaginationModel.fromJson(response.data, items);
     }
 
-    throw Exception(response.message ?? 'Failed to load stock verification');
+    throw Exception(response.message ?? 'Failed to load material consumptions');
   }
 
-  Future<StockVerificationModel> getStockVerificationById(String id) async {
+  Future<MaterialConsumptionModel> getMaterialConsumptionById(String id) async {
     final ResModel response = await _api.get(
-      ApiConstants.getStockVerificationById(id),
+      ApiConstants.getMaterialConsumptionById,
     );
 
     if (response.status == 200 && response.data != null) {
-      return StockVerificationModel.fromJson(
+      return MaterialConsumptionModel.fromJson(
         response.data as Map<String, dynamic>,
       );
     }
 
     throw Exception(
-      response.message ?? 'Failed to load stock verification detail',
+      response.message ?? 'Failed to load material consumption detail',
     );
   }
 }

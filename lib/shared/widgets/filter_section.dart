@@ -8,9 +8,14 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class FilterOption {
   final String label;
-  final List<String> options;
+  final String? filterKey;
+  final Map<String, String> options;
 
-  const FilterOption({required this.label, required this.options});
+  const FilterOption({
+    required this.label,
+    required this.options,
+    this.filterKey,
+  });
 }
 
 class FilterSection extends StatefulWidget {
@@ -40,8 +45,7 @@ class _FilterSectionState extends State<FilterSection>
   late final Animation<double> _animation;
   final Map<String, String?> _selected = {};
 
-  int get _activeCount =>
-      _selected.values.where((v) => v != null && v != 'All').length;
+  int get _activeCount => _selected.values.where((v) => v != null).length;
 
   @override
   void initState() {
@@ -55,8 +59,31 @@ class _FilterSectionState extends State<FilterSection>
       curve: Curves.easeInOut,
     );
     for (final f in widget.filters) {
-      _selected[f.label] = null;
+      _selected[f.filterKey ?? f.label] = null;
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant FilterSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Sync _selected map with new filters
+    for (final f in widget.filters) {
+      final key = f.filterKey ?? f.label;
+      if (!_selected.containsKey(key)) {
+        _selected[key] = null;
+      } else {
+        // If current selected value is not in new options, reset to null
+        final currentVal = _selected[key];
+        if (currentVal != null && !f.options.containsValue(currentVal)) {
+          _selected[key] = null;
+        }
+      }
+    }
+    // Remove old filters that are no longer present
+    final currentKeys = widget.filters
+        .map((f) => f.filterKey ?? f.label)
+        .toSet();
+    _selected.removeWhere((key, _) => !currentKeys.contains(key));
   }
 
   @override
@@ -190,10 +217,19 @@ class _FilterSectionState extends State<FilterSection>
                           const Gap(4),
                           _FilterDropdown(
                             options: filter.options,
-                            selected: _selected[filter.label],
+                            selected:
+                                _selected[filter.filterKey ?? filter.label],
                             onChanged: (val) {
-                              setState(() => _selected[filter.label] = val);
-                              widget.onFiltersChanged(Map.from(_selected));
+                              setState(
+                                () =>
+                                    _selected[filter.filterKey ??
+                                            filter.label] =
+                                        val,
+                              );
+                              final activeFilters = Map<String, String?>.from(
+                                _selected,
+                              )..removeWhere((k, v) => v == null);
+                              widget.onFiltersChanged(activeFilters);
                             },
                           ),
                         ],
@@ -231,7 +267,7 @@ class _FilterSectionState extends State<FilterSection>
 }
 
 class _FilterDropdown extends StatelessWidget {
-  final List<String> options;
+  final Map<String, String> options;
   final String? selected;
   final ValueChanged<String?> onChanged;
 
@@ -272,11 +308,14 @@ class _FilterDropdown extends StatelessWidget {
           filled: true,
         ),
         hint: Text('All', style: TextHelper.bodySmallStyle(context)),
-        items: options
+        items: options.entries
             .map(
-              (o) => DropdownMenuItem(
-                value: o,
-                child: Text(o, style: TextHelper.bodySmallStyle(context)),
+              (entry) => DropdownMenuItem(
+                value: entry.value,
+                child: Text(
+                  entry.key,
+                  style: TextHelper.bodySmallStyle(context),
+                ),
               ),
             )
             .toList(),
