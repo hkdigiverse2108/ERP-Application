@@ -5,18 +5,18 @@ class UserModel {
   final String fullName;
   final String email;
   final PhoneNo phoneNo;
-  final BranchId role;
+  final IdName? role;
   final String username;
   final bool isDeleted;
   final bool isActive;
-  final String? createdBy;
-  final String? updatedBy;
-  final BranchId companyId;
-  final BranchId branchId;
+  final CreatedBy? createdBy;
+  final CreatedBy? updatedBy;
+  final IdName companyId;
+  final IdName? branchId;
   final DateTime createdAt;
   final DateTime updatedAt;
   final Address address;
-  final BankDetails bankDetails;
+  final BankDetails? bankDetails;
   final int? commission;
   final String? designation;
   final int? extraWages;
@@ -26,7 +26,7 @@ class UserModel {
   final String? showPassword;
   final String userType;
   final String? profileImage;
-  final String token;
+  final String? token;
 
   UserModel({
     required this.id,
@@ -54,7 +54,7 @@ class UserModel {
     this.showPassword,
     required this.userType,
     this.profileImage,
-    required this.token,
+    this.token,
   });
 
   factory UserModel.fromRawJson(String str) =>
@@ -67,14 +67,22 @@ class UserModel {
     fullName: json["fullName"],
     email: json["email"],
     phoneNo: PhoneNo.fromJson(json["phoneNo"]),
-    role: BranchId.fromJson(json["role"]),
+    role: json["role"] != null ? IdName.fromJson(json["role"]) : null,
     username: json["username"],
     isDeleted: json["isDeleted"],
     isActive: json["isActive"],
-    createdBy: json["createdBy"],
-    updatedBy: json["updatedBy"],
-    companyId: BranchId.fromJson(json["companyId"]),
-    branchId: BranchId.fromJson(json["branchId"]),
+    createdBy: json["createdBy"] != null
+        ? CreatedBy.fromJson(json["createdBy"])
+        : null,
+    updatedBy: json["updatedBy"] != null
+        ? CreatedBy.fromJson(json["updatedBy"])
+        : null,
+    companyId: json["companyId"] != null
+        ? IdName.fromJson(json["companyId"])
+        : IdName(id: '', name: ''),
+    branchId: json["branchId"] != null
+        ? IdName.fromJson(json["branchId"])
+        : null,
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     address: json["address"] != null
@@ -92,7 +100,7 @@ class UserModel {
     showPassword: json["showPassword"],
     userType: json["userType"],
     profileImage: json["profileImage"],
-    token: json["token"],
+    token: json["token"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -100,18 +108,18 @@ class UserModel {
     "fullName": fullName,
     "email": email,
     "phoneNo": phoneNo.toJson(),
-    "role": role.toJson(),
+    "role": role?.toJson(),
     "username": username,
     "isDeleted": isDeleted,
     "isActive": isActive,
     "createdBy": createdBy,
     "updatedBy": updatedBy,
     "companyId": companyId.toJson(),
-    "branchId": branchId.toJson(),
+    "branchId": branchId?.toJson(),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
     "address": address.toJson(),
-    "bankDetails": bankDetails.toJson(),
+    "bankDetails": bankDetails?.toJson(),
     "commission": commission,
     "designation": designation,
     "extraWages": extraWages,
@@ -148,11 +156,13 @@ class Address {
   String toRawJson() => json.encode(toJson());
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
-    address: json["address"],
-    country: json["country"],
-    state: json["state"],
-    city: json["city"],
-    pinCode: json["pinCode"],
+    address: json["address"] ?? '',
+    country: json["country"] is Map
+        ? json["country"]["name"]
+        : json["country"] ?? '',
+    state: json["state"] is Map ? json["state"]["name"] : json["state"] ?? '',
+    city: json["city"] is Map ? json["city"]["name"] : json["city"] ?? '',
+    pinCode: int.tryParse(json["pinCode"]?.toString() ?? '') ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
@@ -214,20 +224,22 @@ class BankDetails {
   };
 }
 
-class BranchId {
+class IdName {
   final String id;
   final String name;
 
-  BranchId({required this.id, required this.name});
+  IdName({required this.id, required this.name});
 
-  factory BranchId.fromRawJson(String str) =>
-      BranchId.fromJson(json.decode(str));
+  factory IdName.fromJson(dynamic json) {
+    // ✅ If API returns only ID string
+    if (json is String) {
+      return IdName(id: json, name: '');
+    }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory BranchId.fromJson(Map<String, dynamic> json) =>
-      BranchId(id: json["_id"], name: json["name"]);
-
+    // ✅ If API returns object
+    return IdName(id: json["_id"] ?? '', name: json["name"] ?? '');
+  }
+  // add to json
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
@@ -248,4 +260,26 @@ class PhoneNo {
     "countryCode": countryCode,
     "phoneNo": phoneNo,
   };
+}
+
+class CreatedBy {
+  final String id;
+  final String? fullName;
+  final String? userType;
+
+  CreatedBy({required this.id, this.fullName, this.userType});
+
+  factory CreatedBy.fromJson(dynamic json) {
+    // ✅ Case 1: If it's already a String (just ID)
+    if (json is String) {
+      return CreatedBy(id: json);
+    }
+
+    // ✅ Case 2: If it's a Map
+    return CreatedBy(
+      id: json["_id"] ?? '',
+      fullName: json["fullName"],
+      userType: json["userType"],
+    );
+  }
 }

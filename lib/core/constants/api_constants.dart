@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.1.67:4001";
+  static const String baseUrl = "http://192.168.29.26:4001";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -38,8 +38,17 @@ class ApiConstants {
   static const String loginLog = "/login-log/all";
 
   // User aad filter
-  static String getAllUser(String typeFilter) =>
-      buildUrl("/user/all", {"typeFilter": typeFilter});
+  static String getAllUser({
+    String? typeFilter,
+    int? page,
+    int? limit,
+    String? search,
+  }) => buildUrl("/user/all", {
+    "typeFilter": typeFilter,
+    "page": page,
+    "limit": limit,
+    "search": search,
+  });
   static const String addUser = "/user/add";
   static String deleteUser(String id) => "/user/$id";
   static String getUserById(String id) => "/user/$id";

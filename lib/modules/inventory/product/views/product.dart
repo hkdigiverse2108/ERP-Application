@@ -45,7 +45,7 @@ class Product extends StatelessWidget {
       ),
       child: Obx(
         () => FilterSection(
-          title: 'Product list',
+          title: title,
           filters: [
             FilterOption(
               label: 'Category',

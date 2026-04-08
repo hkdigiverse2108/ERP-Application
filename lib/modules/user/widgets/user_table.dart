@@ -5,36 +5,32 @@ import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/modules/user/controllers/user_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
-import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
+import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class UserTable extends StatelessWidget {
   UserTable({super.key});
 
-  final UserController userController = Get.put(UserController());
+  final controller = UserController.instance;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(Sizes.paddingM),
       child: Obx(() {
+        if (controller.isLodding.value && controller.users.isEmpty) {
+          return const TableShimmer();
+        }
         ThemeService().isDarkMode;
         return BorderContainer(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RangedDatePicker(
-                initialDateRange: userController.selectedDateRange.value,
-                onChanged: (range) =>
-                    userController.selectedDateRange.value = range,
-              ),
-              Gap(Sizes.defHorizontalSpace),
               CommonTable<UserModel>(
-                items: [],
+                items: controller.users,
                 columns: [
                   TableColumn(
                     title: 'User Name',
@@ -65,7 +61,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.designation ?? '',
+                      item.designation ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -96,7 +92,7 @@ class UserTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.right,
                     cellBuilder: (context, item, index) => Text(
-                      item.panNumber ?? '',
+                      item.panNumber ?? '-',
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -105,9 +101,9 @@ class UserTable extends StatelessWidget {
                   TableColumn(
                     title: 'Wages',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.wages.toString(),
+                      item.wages == null ? '0' : item.wages.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -116,9 +112,11 @@ class UserTable extends StatelessWidget {
                   TableColumn(
                     title: 'Extra Wages',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.extraWages.toString(),
+                      item.extraWages == null
+                          ? '0'
+                          : item.extraWages.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -127,39 +125,27 @@ class UserTable extends StatelessWidget {
                   TableColumn(
                     title: 'Commission',
                     width: 100,
-                    alignment: TextAlign.right,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.commission.toString(),
+                      item.commission == null
+                          ? '0'
+                          : item.commission.toString(),
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Action',
-                    width: 100,
-                    alignment: TextAlign.right,
-                    cellBuilder: (context, item, index) => Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Get.toNamed(Routes.editUser);
-                          },
-                          icon: const Icon(PhosphorIconsLight.pencil),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(PhosphorIconsLight.trash),
-                        ),
-                      ],
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
-                currentPage: userController.currentPage.value,
-                totalPages: 5,
-                totalItems: 43,
-                onPageChanged: (page) =>
-                    userController.currentPage.value = page,
+                onEditItem: (item) {
+                  Get.toNamed(Routes.editUser);
+                },
+                onRemoveItem: (index) {},
+                currentPage: controller.currentPage.value,
+                totalPages: controller.totalPages.value,
+                totalItems: controller.totalItems.value,
+                onPageChanged: (page) => controller.goToPage(page),
+                pageSize: controller.limit.value,
               ),
             ],
           ),

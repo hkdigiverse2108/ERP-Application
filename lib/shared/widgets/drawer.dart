@@ -124,12 +124,12 @@ class AppDrawer extends StatelessWidget {
                     label: 'Accounting',
                     children: [
                       _NavItem(
-                        label: 'Debit',
+                        label: 'Debit Note',
                         route: Routes.debit,
                         isChild: true,
                       ),
                       _NavItem(
-                        label: 'Credit',
+                        label: 'Credit Note',
                         route: Routes.credit,
                         isChild: true,
                       ),
@@ -138,35 +138,110 @@ class AppDrawer extends StatelessWidget {
                   _ExpandableSection(
                     icon: PhosphorIconsLight.cashRegister,
                     label: 'POS',
-                    children: [],
+                    children: [
+                      // TODO: give proper routes.
+                      _NavItem(
+                        label: 'Order List',
+                        route: Routes.debit,
+                        isChild: true,
+                      ),
+                      _NavItem(
+                        label: 'Credit Note',
+                        route: Routes.credit,
+                        isChild: true,
+                      ),
+                      _NavItem(
+                        label: 'Sales Register',
+                        route: Routes.credit,
+                        isChild: true,
+                      ),
+                    ],
                   ),
                   _ExpandableSection(
                     icon: PhosphorIconsLight.shoppingCart,
                     label: 'Purchase',
                     children: [
                       _NavItem(
+                        label: 'Supplier Bill',
+                        route: Routes.supplierBill,
+                        isChild: true,
+                        isActive: currentRoute == Routes.supplierBill,
+                      ),
+                      _NavItem(
                         label: 'Purchase Order',
                         route: Routes.purchaseOrder,
                         isChild: true,
                         isActive: currentRoute == Routes.purchaseOrder,
                       ),
+                      // chnage this to.
                       _NavItem(
-                        label: 'Supplier Bill',
-                        route: Routes.supplierBill,
+                        label: 'Purchase Debit Note',
+                        route: Routes.purchaseOrder,
                         isChild: true,
-                        isActive: currentRoute == Routes.supplierBill,
+                        // isActive: currentRoute == Routes.purchaseOrder,
                       ),
                     ],
                   ),
                   _ExpandableSection(
                     icon: PhosphorIconsLight.users,
                     label: 'CRM',
-                    children: [],
+                    children: [
+                      // TODO: give proper routes.
+                      _NavItem(
+                        label: 'Coupon',
+                        route: Routes.supplierBill,
+                        isChild: true,
+                        // isActive: currentRoute == Routes.supplierBill,
+                      ),
+                      _NavItem(
+                        label: 'Loyalty',
+                        route: Routes.purchaseOrder,
+                        isChild: true,
+                        // isActive: currentRoute == Routes.purchaseOrder,
+                      ),
+                      _NavItem(
+                        label: 'Discount',
+                        route: Routes.purchaseOrder,
+                        isChild: true,
+                        // isActive: currentRoute == Routes.purchaseOrder,
+                      ),
+                    ],
                   ),
                   _ExpandableSection(
                     icon: PhosphorIconsLight.chartLine,
                     label: 'Sales',
-                    children: [],
+                    children: [
+                      _NavItem(
+                        label: 'Estimate',
+                        route: Routes.estimate,
+                        isChild: true,
+                        isActive: currentRoute == Routes.estimate,
+                      ),
+                      _NavItem(
+                        label: 'Sales Order',
+                        route: Routes.salesOrder,
+                        isChild: true,
+                        isActive: currentRoute == Routes.salesOrder,
+                      ),
+                      _NavItem(
+                        label: 'Invoice',
+                        route: Routes.invoice,
+                        isChild: true,
+                        isActive: currentRoute == Routes.invoice,
+                      ),
+                      _NavItem(
+                        label: 'Delivery Challan',
+                        route: Routes.deliveryChallan,
+                        isChild: true,
+                        isActive: currentRoute == Routes.deliveryChallan,
+                      ),
+                      _NavItem(
+                        label: 'Sales Credit Note',
+                        route: Routes.salesCreditNote,
+                        isChild: true,
+                        isActive: currentRoute == Routes.salesCreditNote,
+                      ),
+                    ],
                   ),
                   _NavItem(
                     icon: PhosphorIconsLight.user,
@@ -183,12 +258,49 @@ class AppDrawer extends StatelessWidget {
                   _ExpandableSection(
                     icon: PhosphorIconsLight.gear,
                     label: 'Settings',
-                    children: [],
+                    children: [_NavItem(label: 'General Settings', route: '')],
                   ),
                   _ExpandableSection(
                     icon: PhosphorIconsLight.bank,
                     label: 'Bank / Cash',
-                    children: [],
+                    children: [
+                      _NavItem(
+                        label: 'Bank',
+                        route: Routes.bank,
+                        isChild: true,
+                        isActive: currentRoute == Routes.bank,
+                      ),
+                      _NavItem(
+                        label: 'Bank Transaction',
+                        route: Routes.bankTransaction,
+                        isChild: true,
+                        isActive: currentRoute == Routes.bankTransaction,
+                      ),
+                      _NavItem(
+                        label: 'Payment',
+                        route: Routes.payment,
+                        isChild: true,
+                        isActive: currentRoute == Routes.payment,
+                      ),
+                      _NavItem(
+                        label: 'Receipt',
+                        route: Routes.receipt,
+                        isChild: true,
+                        isActive: currentRoute == Routes.receipt,
+                      ),
+                      _NavItem(
+                        label: 'Expense',
+                        route: Routes.expense,
+                        isChild: true,
+                        isActive: currentRoute == Routes.expense,
+                      ),
+                      _NavItem(
+                        label: 'Salary',
+                        route: Routes.salary,
+                        isChild: true,
+                        isActive: currentRoute == Routes.salary,
+                      ),
+                    ],
                   ),
                   const Gap(24),
                 ],
