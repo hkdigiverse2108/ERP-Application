@@ -5,8 +5,24 @@ import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
-class Contact extends StatelessWidget {
+import 'package:ai_setu/modules/contact/controllers/contact_controller.dart';
+import 'package:get/get.dart';
+
+class Contact extends StatefulWidget {
   const Contact({super.key});
+
+  @override
+  State<Contact> createState() => _ContactState();
+}
+
+class _ContactState extends State<Contact> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<ContactController>().fetchContacts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -16,4 +16,16 @@ class PurchaseOrderModel {
     required this.notes,
     required this.action,
   });
+
+  factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) {
+    return PurchaseOrderModel(
+      orderNo: json["orderNo"]?.toString() ?? json["purchaseOrderNo"]?.toString() ?? "",
+      supplier: json["supplier"]?.toString() ?? (json["supplierId"] is Map ? json["supplierId"]["name"]?.toString() ?? "" : ""),
+      orderDate: json["orderDate"]?.toString() ?? json["date"]?.toString() ?? "",
+      amount: json["amount"]?.toString() ?? json["totalAmount"]?.toString() ?? json["grossAmount"]?.toString() ?? (json["transactionSummary"] is Map ? json["transactionSummary"]["netAmount"]?.toString() ?? "" : json["transactionSummary"]?.toString() ?? ""),
+      status: json["status"]?.toString() ?? "",
+      notes: json["notes"]?.toString() ?? "",
+      action: json["action"]?.toString() ?? "",
+    );
+  }
 }

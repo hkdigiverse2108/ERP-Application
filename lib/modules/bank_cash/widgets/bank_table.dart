@@ -39,7 +39,7 @@ class BankTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<BankDatum>(
+              CommonTable<BankModel>(
                 items: items
                     .skip((bankCashController.currentPage.value - 1) * 5)
                     .take(5)
@@ -119,7 +119,7 @@ class BankTable extends StatelessWidget {
                     width: 200,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName ?? '',
+                      item.createdBy?.fullName ?? '',
                       style: TextHelper.bodySmall,
                     ),
                   ),

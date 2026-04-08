@@ -39,6 +39,9 @@ import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/modules/splash/views/splash.dart';
 import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
+import 'package:ai_setu/modules/purchase/views/purchase_order_page.dart';
+import 'package:ai_setu/modules/purchase/views/supplier_bill_page.dart';
+import 'package:ai_setu/modules/purchase/bindings/purchase_binding.dart';
 
 class AppPages {
   // static const initial = Routes.user;
@@ -160,6 +163,16 @@ class AppPages {
       name: Routes.deliveryChallan,
       page: () => const DeliveryChallanPage(),
       binding: SalesBinding(),
+    ),
+    GetPage(
+      name: Routes.purchaseOrder,
+      page: () => const PurchaseOrderPage(),
+      binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: Routes.supplierBill,
+      page: () => const SupplierBillPage(),
+      binding: PurchaseBinding(),
     ),
   ];
 }

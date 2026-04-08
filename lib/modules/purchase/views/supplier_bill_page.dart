@@ -1,27 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/bank_cash/widgets/expense_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:ai_setu/modules/purchase/controllers/purchase_controller.dart';
+import 'package:ai_setu/modules/purchase/widgets/supplier_bill_table.dart';
 
-import 'package:ai_setu/modules/bank_cash/controllers/bank_cash_controller.dart';
-import 'package:get/get.dart';
-
-class ExpensePage extends StatefulWidget {
-  const ExpensePage({super.key});
+class SupplierBillPage extends StatefulWidget {
+  const SupplierBillPage({super.key});
 
   @override
-  State<ExpensePage> createState() => _ExpensePageState();
+  State<SupplierBillPage> createState() => _SupplierBillPageState();
 }
 
-class _ExpensePageState extends State<ExpensePage> {
+class _SupplierBillPageState extends State<SupplierBillPage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<BankCashController>().fetchExpenses();
+      final controller = Get.put(PurchaseController());
+      controller.resetPagination();
+      controller.fetchSupplierBills();
     });
   }
 
@@ -36,8 +37,8 @@ class _ExpensePageState extends State<ExpensePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuickAction(),
-            _buildSectionTitle('Expense'),
-            ExpenseTable(),
+            _buildSectionTitle('Supplier Bill'),
+            SupplierBillTable(),
           ],
         ),
       ),

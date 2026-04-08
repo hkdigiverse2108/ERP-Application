@@ -39,7 +39,7 @@ class PaymentTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<PosPaymentDatum>(
+              CommonTable<PosPaymentModel>(
                 items: items,
                 columns: [
                   TableColumn(
@@ -60,7 +60,6 @@ class PaymentTable extends StatelessWidget {
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
                       final party = item.partyId;
-                      if (party == null) return const Text("-");
                       return Text(
                         "${party.firstName} ${party.lastName}",
                         style: TextHelper.bodySmall,
@@ -81,7 +80,7 @@ class PaymentTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.paymentMode ?? "-",
+                      item.paymentMode,
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -90,7 +89,7 @@ class PaymentTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.paymentType ?? "-",
+                      item.paymentType,
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -111,7 +110,7 @@ class PaymentTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.status ?? "-",
+                      item.status,
                       style: TextHelper.bodySmall,
                     ),
                   ),

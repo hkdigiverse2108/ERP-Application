@@ -39,7 +39,7 @@ class ReceiptTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<PosPaymentDatum>(
+              CommonTable<PosPaymentModel>(
                 items: items,
                 columns: [
                   TableColumn(
@@ -60,7 +60,6 @@ class ReceiptTable extends StatelessWidget {
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
                       final party = item.partyId;
-                      if (party == null) return const Text("-");
                       return Text(
                         "${party.firstName} ${party.lastName}",
                         style: TextHelper.bodySmall,
@@ -80,19 +79,15 @@ class ReceiptTable extends StatelessWidget {
                     title: 'Payment Mode',
                     width: 120,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      item.paymentMode ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.paymentMode, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Payment Type',
                     width: 120,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) => Text(
-                      item.paymentType ?? "-",
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.paymentType, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Amount',
@@ -111,7 +106,7 @@ class ReceiptTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.status ?? "-", style: TextHelper.bodySmall),
+                        Text(item.status, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Created By',

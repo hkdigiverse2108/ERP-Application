@@ -143,7 +143,20 @@ class AppDrawer extends StatelessWidget {
                   _ExpandableSection(
                     icon: PhosphorIconsLight.shoppingCart,
                     label: 'Purchase',
-                    children: [],
+                    children: [
+                      _NavItem(
+                        label: 'Purchase Order',
+                        route: Routes.purchaseOrder,
+                        isChild: true,
+                        isActive: currentRoute == Routes.purchaseOrder,
+                      ),
+                      _NavItem(
+                        label: 'Supplier Bill',
+                        route: Routes.supplierBill,
+                        isChild: true,
+                        isActive: currentRoute == Routes.supplierBill,
+                      ),
+                    ],
                   ),
                   _ExpandableSection(
                     icon: PhosphorIconsLight.users,

@@ -39,14 +39,14 @@ class SalesOrderTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<SalesOrderDatum>(
+              CommonTable<SalesOrderModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Sales Order No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.salesOrderNo,
+                      item.salesOrderNo ?? "",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -59,7 +59,7 @@ class SalesOrderTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.date),
+                      DateFormat('dd MMM yyyy').format(item.date ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -68,7 +68,7 @@ class SalesOrderTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.dueDate),
+                      DateFormat('dd MMM yyyy').format(item.dueDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -79,11 +79,11 @@ class SalesOrderTable extends StatelessWidget {
                     cellBuilder: (context, item, index) => Row(
                       children: [
                         Text(
-                          item.customerId.firstName,
+                          item.customerId?.firstName ?? "",
                           style: TextHelper.bodySmall,
                         ),
                         Text(
-                          " ${item.customerId.lastName}",
+                          " ${item.customerId?.lastName ?? ""}",
                           style: TextHelper.bodySmall,
                         ),
                       ],
@@ -94,7 +94,7 @@ class SalesOrderTable extends StatelessWidget {
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.additionalCharges.isNotEmpty ? item.additionalCharges.first.amount : 0}",
+                      "₹${item.transactionSummary?.grossAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -103,7 +103,7 @@ class SalesOrderTable extends StatelessWidget {
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.additionalCharges.isNotEmpty ? (item.additionalCharges.first.amount + item.additionalCharges.last.amount) : 0}",
+                      "₹${item.transactionSummary?.netAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -112,7 +112,7 @@ class SalesOrderTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.additionalCharges.isNotEmpty ? item.additionalCharges.last.amount : 0}",
+                      "₹${item.transactionSummary?.taxAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -121,14 +121,14 @@ class SalesOrderTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.status, style: TextHelper.bodySmall),
+                        Text(item.status ?? "", style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Created By',
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "",
                       style: TextHelper.bodySmall,
                     ),
                   ),

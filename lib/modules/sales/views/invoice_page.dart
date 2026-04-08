@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class InvoicePage extends StatelessWidget {
+import 'package:ai_setu/modules/sales/controllers/sales_controller.dart';
+import 'package:get/get.dart';
+
+class InvoicePage extends StatefulWidget {
   const InvoicePage({super.key});
+
+  @override
+  State<InvoicePage> createState() => _InvoicePageState();
+}
+
+class _InvoicePageState extends State<InvoicePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<SalesController>().fetchInvoices();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -39,14 +39,14 @@ class SalaryTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<SalaryDatum>(
+              CommonTable<SalaryModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Party Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.partyId.fullName,
+                      item.partyId?.fullName ?? "-",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -56,21 +56,21 @@ class SalaryTable extends StatelessWidget {
                   ),
                   TableColumn(
                     title: 'From Date',
-                    width: 150,
+                    width: 110,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) {
                       return Text(
-                        DateFormat('dd MMM yyyy').format(item.fromDate),
+                        DateFormat('dd MMM yyyy').format(item.fromDate ?? DateTime.now()),
                         style: TextHelper.bodySmall,
                       );
                     },
                   ),
                   TableColumn(
                     title: 'To Date',
-                    width: 120,
+                    width: 110,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.createdAt),
+                      DateFormat('dd MMM yyyy').format(item.toDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -91,7 +91,7 @@ class SalaryTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.type, style: TextHelper.bodySmall),
+                        Text(item.type ?? "-", style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Incentive',
@@ -110,7 +110,7 @@ class SalaryTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.amount.toStringAsFixed(2)}',
+                      '₹${item.total.toStringAsFixed(2)}',
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class SalaryTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),

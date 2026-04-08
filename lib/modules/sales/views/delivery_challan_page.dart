@@ -6,8 +6,24 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class DeliveryChallanPage extends StatelessWidget {
+import 'package:ai_setu/modules/sales/controllers/sales_controller.dart';
+import 'package:get/get.dart';
+
+class DeliveryChallanPage extends StatefulWidget {
   const DeliveryChallanPage({super.key});
+
+  @override
+  State<DeliveryChallanPage> createState() => _DeliveryChallanPageState();
+}
+
+class _DeliveryChallanPageState extends State<DeliveryChallanPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<SalesController>().fetchDeliveryChallans();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

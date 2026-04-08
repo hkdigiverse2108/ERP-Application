@@ -1,37 +1,6 @@
 import 'dart:convert';
 
 class SalaryModel {
-  final List<SalaryDatum> salaryData;
-  final int totalData;
-  final State state;
-
-  SalaryModel({
-    required this.salaryData,
-    required this.totalData,
-    required this.state,
-  });
-
-  factory SalaryModel.fromRawJson(String str) =>
-      SalaryModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory SalaryModel.fromJson(Map<String, dynamic> json) => SalaryModel(
-    salaryData: List<SalaryDatum>.from(
-      json["salary_data"].map((x) => SalaryDatum.fromJson(x)),
-    ),
-    totalData: json["totalData"],
-    state: State.fromJson(json["state"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "salary_data": List<dynamic>.from(salaryData.map((x) => x.toJson())),
-    "totalData": totalData,
-    "state": state.toJson(),
-  };
-}
-
-class SalaryDatum {
   final String id;
   final bool isDeleted;
   final bool isActive;
@@ -52,7 +21,7 @@ class SalaryDatum {
   final DateTime updatedAt;
   final String branchId;
 
-  SalaryDatum({
+  SalaryModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
@@ -74,32 +43,61 @@ class SalaryDatum {
     required this.branchId,
   });
 
-  factory SalaryDatum.fromRawJson(String str) =>
-      SalaryDatum.fromJson(json.decode(str));
+  factory SalaryModel.fromJson(Map<String, dynamic> json) {
+    return SalaryModel(
+      id: json["_id"] ?? "",
 
-  String toRawJson() => json.encode(toJson());
+      isDeleted: json["isDeleted"] ?? false,
+      isActive: json["isActive"] ?? false,
 
-  factory SalaryDatum.fromJson(Map<String, dynamic> json) => SalaryDatum(
-    id: json["_id"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: AtedBy.fromJson(json["createdBy"]),
-    updatedBy: AtedBy.fromJson(json["updatedBy"]),
-    companyId: CompanyId.fromJson(json["companyId"]),
-    amount: json["amount"],
-    image: json["image"],
-    description: json["description"],
-    isSalary: json["isSalary"],
-    partyId: PartyId.fromJson(json["partyId"]),
-    type: json["type"],
-    incentive: json["incentive"],
-    fromDate: DateTime.parse(json["fromDate"]),
-    toDate: DateTime.parse(json["toDate"]),
-    total: json["total"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    branchId: json["branchId"],
-  );
+      createdBy: json["createdBy"] != null
+          ? AtedBy.fromJson(json["createdBy"])
+          : AtedBy.empty(),
+
+      updatedBy: json["updatedBy"] != null
+          ? AtedBy.fromJson(json["updatedBy"])
+          : AtedBy.empty(),
+
+      companyId: json["companyId"] != null
+          ? CompanyId.fromJson(json["companyId"])
+          : CompanyId.empty(),
+
+      amount: (json["amount"] ?? 0).toInt(),
+
+      image: json["image"],
+      description: json["description"],
+
+      isSalary: json["isSalary"] ?? false,
+
+      partyId: json["partyId"] != null
+          ? PartyId.fromJson(json["partyId"])
+          : PartyId.empty(),
+
+      type: json["type"] ?? "",
+
+      incentive: (json["incentive"] ?? 0).toInt(),
+
+      fromDate: json["fromDate"] != null
+          ? DateTime.tryParse(json["fromDate"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      toDate: json["toDate"] != null
+          ? DateTime.tryParse(json["toDate"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      total: (json["total"] ?? 0).toInt(),
+
+      createdAt: json["createdAt"] != null
+          ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      updatedAt: json["updatedAt"] != null
+          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      branchId: json["branchId"] ?? "",
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -130,13 +128,10 @@ class CompanyId {
 
   CompanyId({required this.id, required this.name});
 
-  factory CompanyId.fromRawJson(String str) =>
-      CompanyId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(id: json["_id"], name: json["name"]);
+      CompanyId(id: json["_id"] ?? "", name: json["name"] ?? "");
+
+  factory CompanyId.empty() => CompanyId(id: "", name: "");
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
@@ -148,15 +143,13 @@ class AtedBy {
 
   AtedBy({required this.id, required this.fullName, required this.userType});
 
-  factory AtedBy.fromRawJson(String str) => AtedBy.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory AtedBy.fromJson(Map<String, dynamic> json) => AtedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
+    id: json["_id"] ?? "",
+    fullName: json["fullName"] ?? "",
+    userType: json["userType"] ?? "",
   );
+
+  factory AtedBy.empty() => AtedBy(id: "", fullName: "", userType: "");
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -171,36 +164,10 @@ class PartyId {
 
   PartyId({required this.id, required this.fullName});
 
-  factory PartyId.fromRawJson(String str) => PartyId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory PartyId.fromJson(Map<String, dynamic> json) =>
-      PartyId(id: json["_id"], fullName: json["fullName"]);
+      PartyId(id: json["_id"] ?? "", fullName: json["fullName"] ?? "");
+
+  factory PartyId.empty() => PartyId(id: "", fullName: "");
 
   Map<String, dynamic> toJson() => {"_id": id, "fullName": fullName};
-}
-
-class State {
-  final String page;
-  final String limit;
-  final int totalPages;
-
-  State({required this.page, required this.limit, required this.totalPages});
-
-  factory State.fromRawJson(String str) => State.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory State.fromJson(Map<String, dynamic> json) => State(
-    page: json["page"],
-    limit: json["limit"],
-    totalPages: json["totalPages"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "page": page,
-    "limit": limit,
-    "totalPages": totalPages,
-  };
 }

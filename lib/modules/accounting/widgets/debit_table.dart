@@ -28,14 +28,14 @@ class DebitTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              CommonTable<DebitNoteDatum>(
+              CommonTable<DebitNoteModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Voucher No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.voucherNumber,
+                      item.voucherNumber ?? "",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -57,7 +57,7 @@ class DebitTable extends StatelessWidget {
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.personName,
+                      item.personName ?? "",
                       style: TextHelper.bodySmall,
                     ),
                   ),

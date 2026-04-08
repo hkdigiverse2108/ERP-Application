@@ -85,8 +85,14 @@ class QuickActionDropdown extends StatelessWidget {
                     _ExpandableSection(
                       title: "Purchase",
                       items: [
-                        QuickActionItem(title: "Supplier Bill"),
-                        QuickActionItem(title: "Debit Note"),
+                        QuickActionItem(
+                          title: "Supplier Bill",
+                          route: Routes.supplierBill,
+                        ),
+                        QuickActionItem(
+                          title: "Debit Note",
+                          route: Routes.debit,
+                        ),
                       ],
                     ),
                     _ExpandableSection(

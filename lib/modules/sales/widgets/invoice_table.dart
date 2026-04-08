@@ -39,14 +39,14 @@ class InvoiceTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<InvoiceDatum>(
+              CommonTable<InvoiceModel>(
                 items: items,
                 columns: [
                   TableColumn(
                     title: 'Invoice No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.invoiceNo,
+                      item.invoiceNo ?? "",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -59,7 +59,7 @@ class InvoiceTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.date),
+                      DateFormat('dd MMM yyyy').format(item.date ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -68,7 +68,7 @@ class InvoiceTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.dueDate),
+                      DateFormat('dd MMM yyyy').format(item.dueDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -79,11 +79,11 @@ class InvoiceTable extends StatelessWidget {
                     cellBuilder: (context, item, index) => Row(
                       children: [
                         Text(
-                          item.customerId.firstName,
+                          item.customerId?.firstName ?? "",
                           style: TextHelper.bodySmall,
                         ),
                         Text(
-                          item.customerId.lastName,
+                          " ${item.customerId?.lastName ?? ""}",
                           style: TextHelper.bodySmall,
                         ),
                       ],
@@ -94,7 +94,7 @@ class InvoiceTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.transactionSummary.netAmount}",
+                      "₹${item.transactionSummary?.netAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -112,7 +112,7 @@ class InvoiceTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.transactionSummary.netAmount - item.paidAmount}",
+                      "₹${(item.transactionSummary?.netAmount ?? 0) - (item.paidAmount)}",
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -124,21 +124,21 @@ class InvoiceTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.status, style: TextHelper.bodySmall),
+                        Text(item.status ?? "", style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Payment Status',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) =>
-                        Text(item.paymentStatus, style: TextHelper.bodySmall),
+                        Text(item.paymentStatus ?? "", style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Tax Amount',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "₹${item.transactionSummary.taxAmount}",
+                      "₹${item.transactionSummary?.taxAmount ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -147,7 +147,7 @@ class InvoiceTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "",
                       style: TextHelper.bodySmall,
                     ),
                   ),

@@ -5,8 +5,24 @@ import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
-class DebitPage extends StatelessWidget {
+import 'package:ai_setu/modules/accounting/controllers/accounting_controller.dart';
+import 'package:get/get.dart';
+
+class DebitPage extends StatefulWidget {
   const DebitPage({super.key});
+
+  @override
+  State<DebitPage> createState() => _DebitPageState();
+}
+
+class _DebitPageState extends State<DebitPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<AccountingController>().fetchDebitNote();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

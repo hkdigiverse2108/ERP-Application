@@ -19,35 +19,35 @@ class SalesController extends GetxController {
   final isLoading = false.obs;
 
   // Estimates
-  final estimateList = <EstimateDatum>[].obs;
+  final estimateList = <EstimateModel>[].obs;
   final isLoadingEstimate = false.obs;
   final estimateCurrentPage = 1.obs;
   final estimateTotalPages = 1.obs;
   final estimateTotalItems = 0.obs;
 
   // Sales Orders
-  final salesOrderList = <SalesOrderDatum>[].obs;
+  final salesOrderList = <SalesOrderModel>[].obs;
   final isLoadingSalesOrder = false.obs;
   final salesOrderCurrentPage = 1.obs;
   final salesOrderTotalPages = 1.obs;
   final salesOrderTotalItems = 0.obs;
 
   // Invoices
-  final invoiceList = <InvoiceDatum>[].obs;
+  final invoiceList = <InvoiceModel>[].obs;
   final isLoadingInvoice = false.obs;
   final invoiceCurrentPage = 1.obs;
   final invoiceTotalPages = 1.obs;
   final invoiceTotalItems = 0.obs;
 
   // Delivery Challans
-  final deliveryChallanList = <DeliveryChallanDatum>[].obs;
+  final deliveryChallanList = <DeliveryChallanModel>[].obs;
   final isLoadingDeliveryChallan = false.obs;
   final deliveryChallanCurrentPage = 1.obs;
   final deliveryChallanTotalPages = 1.obs;
   final deliveryChallanTotalItems = 0.obs;
 
   // Credit Notes
-  final creditNoteList = <SalesCreditNoteDatum>[].obs;
+  final creditNoteList = <SalesCreditNoteModel>[].obs;
   final isLoadingCreditNote = false.obs;
   final creditNoteCurrentPage = 1.obs;
   final creditNoteTotalPages = 1.obs;
@@ -72,11 +72,6 @@ class SalesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchEstimates();
-    fetchSalesOrders();
-    fetchInvoices();
-    fetchDeliveryChallans();
-    fetchCreditNotes();
   }
 
   // Estimates
@@ -90,15 +85,20 @@ class SalesController extends GetxController {
         toDate: estimateToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = EstimateModel.fromJson(res.data);
-        estimateList.value = model.estimateData;
-        estimateCurrentPage.value = page;
-        estimateTotalPages.value = model.state.totalPages;
-        estimateTotalItems.value = model.totalData;
+        final List? dataList = res.data["estimate_data"];
+        if (dataList != null) {
+          estimateList.value = dataList
+              .map((e) => EstimateModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+        }
         
+        estimateCurrentPage.value = page;
+        estimateTotalPages.value = res.data["state"]?["totalPages"] ?? 1;
+        estimateTotalItems.value = res.data["totalData"] ?? 0;
+
         currentPage.value = page;
-        totalPages.value = model.state.totalPages;
-        totalItems.value = model.totalData;
+        totalPages.value = estimateTotalPages.value;
+        totalItems.value = estimateTotalItems.value;
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -119,15 +119,20 @@ class SalesController extends GetxController {
         toDate: salesOrderToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = SalesOrderModel.fromJson(res.data);
-        salesOrderList.value = model.salesOrderData;
+        final List? dataList = res.data["salesOrder_data"];
+        if (dataList != null) {
+          salesOrderList.value = dataList
+              .map((e) => SalesOrderModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+        }
+
         salesOrderCurrentPage.value = page;
-        salesOrderTotalPages.value = model.state.totalPages;
-        salesOrderTotalItems.value = model.totalData;
+        salesOrderTotalPages.value = res.data["state"]?["totalPages"] ?? 1;
+        salesOrderTotalItems.value = res.data["totalData"] ?? 0;
 
         currentPage.value = page;
-        totalPages.value = model.state.totalPages;
-        totalItems.value = model.totalData;
+        totalPages.value = salesOrderTotalPages.value;
+        totalItems.value = salesOrderTotalItems.value;
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -148,15 +153,20 @@ class SalesController extends GetxController {
         toDate: invoiceToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = InvoiceModel.fromJson(res.data);
-        invoiceList.value = model.invoiceData;
+        final List? dataList = res.data["invoice_data"];
+        if (dataList != null) {
+          invoiceList.value = dataList
+              .map((e) => InvoiceModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+        }
+
         invoiceCurrentPage.value = page;
-        invoiceTotalPages.value = model.state.totalPages;
-        invoiceTotalItems.value = model.totalData;
+        invoiceTotalPages.value = res.data["state"]?["totalPages"] ?? 1;
+        invoiceTotalItems.value = res.data["totalData"] ?? 0;
 
         currentPage.value = page;
-        totalPages.value = model.state.totalPages;
-        totalItems.value = model.totalData;
+        totalPages.value = invoiceTotalPages.value;
+        totalItems.value = invoiceTotalItems.value;
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -177,15 +187,20 @@ class SalesController extends GetxController {
         toDate: deliveryChallanToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = DeliveryChallanModel.fromJson(res.data);
-        deliveryChallanList.value = model.deliveryChallanData;
+        final List? dataList = res.data["deliveryChallan_data"];
+        if (dataList != null) {
+          deliveryChallanList.value = dataList
+              .map((e) => DeliveryChallanModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+        }
+
         deliveryChallanCurrentPage.value = page;
-        deliveryChallanTotalPages.value = model.state.totalPages;
-        deliveryChallanTotalItems.value = model.totalData;
+        deliveryChallanTotalPages.value = res.data["state"]?["totalPages"] ?? 1;
+        deliveryChallanTotalItems.value = res.data["totalData"] ?? 0;
 
         currentPage.value = page;
-        totalPages.value = model.state.totalPages;
-        totalItems.value = model.totalData;
+        totalPages.value = deliveryChallanTotalPages.value;
+        totalItems.value = deliveryChallanTotalItems.value;
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -206,15 +221,20 @@ class SalesController extends GetxController {
         toDate: creditNoteToDate.value,
       );
       if (res.status == 200 && res.data != null) {
-        final model = SalesCreditNoteModel.fromJson(res.data);
-        creditNoteList.value = model.salesCreditNoteData;
+        final List? dataList = res.data["salesCreditNote_data"];
+        if (dataList != null) {
+          creditNoteList.value = dataList
+              .map((e) => SalesCreditNoteModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+        }
+
         creditNoteCurrentPage.value = page;
-        creditNoteTotalPages.value = model.state.totalPages;
-        creditNoteTotalItems.value = model.totalData;
+        creditNoteTotalPages.value = res.data["state"]?["totalPages"] ?? 1;
+        creditNoteTotalItems.value = res.data["totalData"] ?? 0;
 
         currentPage.value = page;
-        totalPages.value = model.state.totalPages;
-        totalItems.value = model.totalData;
+        totalPages.value = creditNoteTotalPages.value;
+        totalItems.value = creditNoteTotalItems.value;
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());

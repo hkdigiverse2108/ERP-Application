@@ -1,37 +1,6 @@
 import 'dart:convert';
 
 class BankModel {
-  final List<BankDatum> bankData;
-  final int totalData;
-  final State state;
-
-  BankModel({
-    required this.bankData,
-    required this.totalData,
-    required this.state,
-  });
-
-  factory BankModel.fromRawJson(String str) =>
-      BankModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory BankModel.fromJson(Map<String, dynamic> json) => BankModel(
-    bankData: List<BankDatum>.from(
-      json["bank_data"].map((x) => BankDatum.fromJson(x)),
-    ),
-    totalData: json["totalData"],
-    state: State.fromJson(json["state"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "bank_data": List<dynamic>.from(bankData.map((x) => x.toJson())),
-    "totalData": totalData,
-    "state": state.toJson(),
-  };
-}
-
-class BankDatum {
   final String id;
   final String name;
   final String ifscCode;
@@ -39,14 +8,14 @@ class BankDatum {
   final String accountHolderName;
   final String bankAccountNumber;
   final String swiftCode;
-  final OpeningBalance? openingBalance;
+  final OpeningBalance openingBalance;
   final String upiId;
-  final String? addressLine1;
-  final String? addressLine2;
-  final String? country;
-  final String? state;
-  final String? city;
-  final String? zipCode;
+  final String addressLine1;
+  final String addressLine2;
+  final String country;
+  final String state;
+  final String city;
+  final String zipCode;
   final List<Id> branchIds;
   final bool isDeleted;
   final bool isActive;
@@ -56,7 +25,7 @@ class BankDatum {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  BankDatum({
+  BankModel({
     required this.id,
     required this.name,
     required this.ifscCode,
@@ -66,12 +35,12 @@ class BankDatum {
     required this.swiftCode,
     required this.openingBalance,
     required this.upiId,
-    this.addressLine1,
-    this.addressLine2,
-    this.country,
-    this.state,
-    this.city,
-    this.zipCode,
+    required this.addressLine1,
+    required this.addressLine2,
+    required this.country,
+    required this.state,
+    required this.city,
+    required this.zipCode,
     required this.branchIds,
     required this.isDeleted,
     required this.isActive,
@@ -82,36 +51,54 @@ class BankDatum {
     required this.updatedAt,
   });
 
-  factory BankDatum.fromRawJson(String str) =>
-      BankDatum.fromJson(json.decode(str));
+  factory BankModel.fromJson(Map<String, dynamic> json) {
+    return BankModel(
+      id: json["_id"] ?? "",
+      name: json["name"] ?? "",
+      ifscCode: json["ifscCode"] ?? "",
+      branchName: json["branchName"] ?? "",
+      accountHolderName: json["accountHolderName"] ?? "",
+      bankAccountNumber: json["bankAccountNumber"] ?? "",
+      swiftCode: json["swiftCode"] ?? "",
 
-  String toRawJson() => json.encode(toJson());
+      openingBalance: json["openingBalance"] != null
+          ? OpeningBalance.fromJson(json["openingBalance"])
+          : OpeningBalance.empty(),
 
-  factory BankDatum.fromJson(Map<String, dynamic> json) => BankDatum(
-    id: json["_id"],
-    name: json["name"],
-    ifscCode: json["ifscCode"],
-    branchName: json["branchName"],
-    accountHolderName: json["accountHolderName"],
-    bankAccountNumber: json["bankAccountNumber"],
-    swiftCode: json["swiftCode"],
-    openingBalance: OpeningBalance.fromJson(json["openingBalance"]),
-    upiId: json["upiId"],
-    addressLine1: json["addressLine1"],
-    addressLine2: json["addressLine2"],
-    country: json["country"],
-    state: json["state"],
-    city: json["city"],
-    zipCode: json["zipCode"],
-    branchIds: List<Id>.from(json["branchIds"].map((x) => Id.fromJson(x))),
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"],
-    companyId: Id.fromJson(json["companyId"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-  );
+      upiId: json["upiId"] ?? "",
+      addressLine1: json["addressLine1"] ?? "",
+      addressLine2: json["addressLine2"] ?? "",
+      country: json["country"] ?? "",
+      state: json["state"] ?? "",
+      city: json["city"] ?? "",
+      zipCode: json["zipCode"] ?? "",
+
+      branchIds: json["branchIds"] != null
+          ? List<Id>.from(json["branchIds"].map((x) => Id.fromJson(x)))
+          : [],
+
+      isDeleted: json["isDeleted"] ?? false,
+      isActive: json["isActive"] ?? false,
+
+      createdBy: json["createdBy"] != null
+          ? CreatedBy.fromJson(json["createdBy"])
+          : CreatedBy.empty(),
+
+      updatedBy: json["updatedBy"] ?? "",
+
+      companyId: json["companyId"] != null
+          ? Id.fromJson(json["companyId"])
+          : Id.empty(),
+
+      createdAt: json["createdAt"] != null
+          ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
+          : DateTime.now(),
+
+      updatedAt: json["updatedAt"] != null
+          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
+          : DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -121,7 +108,7 @@ class BankDatum {
     "accountHolderName": accountHolderName,
     "bankAccountNumber": bankAccountNumber,
     "swiftCode": swiftCode,
-    "openingBalance": openingBalance?.toJson(),
+    "openingBalance": openingBalance.toJson(),
     "upiId": upiId,
     "addressLine1": addressLine1,
     "addressLine2": addressLine2,
@@ -129,7 +116,7 @@ class BankDatum {
     "state": state,
     "city": city,
     "zipCode": zipCode,
-    "branchIds": List<dynamic>.from(branchIds.map((x) => x.toJson())),
+    "branchIds": branchIds.map((e) => e.toJson()).toList(),
     "isDeleted": isDeleted,
     "isActive": isActive,
     "createdBy": createdBy.toJson(),
@@ -146,33 +133,28 @@ class Id {
 
   Id({required this.id, required this.name});
 
-  factory Id.fromRawJson(String str) => Id.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Id.fromJson(Map<String, dynamic> json) =>
-      Id(id: json["_id"], name: json["name"]);
+      Id(id: json["_id"] ?? "", name: json["name"] ?? "");
+
+  factory Id.empty() => Id(id: "", name: "");
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class CreatedBy {
   final String id;
-  final String? fullName;
-  final String? userType;
+  final String fullName;
+  final String userType;
 
-  CreatedBy({required this.id, this.fullName, this.userType});
-
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
+  CreatedBy({required this.id, required this.fullName, required this.userType});
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
+    id: json["_id"] ?? "",
+    fullName: json["fullName"] ?? "",
+    userType: json["userType"] ?? "",
   );
+
+  factory CreatedBy.empty() => CreatedBy(id: "", fullName: "", userType: "");
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -182,38 +164,21 @@ class CreatedBy {
 }
 
 class OpeningBalance {
-  final String? creditBalance;
-  final String? debitBalance;
+  final String creditBalance;
+  final String debitBalance;
 
-  OpeningBalance({this.creditBalance, this.debitBalance});
-
-  factory OpeningBalance.fromRawJson(String str) =>
-      OpeningBalance.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
+  OpeningBalance({required this.creditBalance, required this.debitBalance});
 
   factory OpeningBalance.fromJson(Map<String, dynamic> json) => OpeningBalance(
-    creditBalance: json["creditBalance"],
-    debitBalance: json["debitBalance"],
+    creditBalance: json["creditBalance"] ?? "0",
+    debitBalance: json["debitBalance"] ?? "0",
   );
+
+  factory OpeningBalance.empty() =>
+      OpeningBalance(creditBalance: "0", debitBalance: "0");
 
   Map<String, dynamic> toJson() => {
     "creditBalance": creditBalance,
     "debitBalance": debitBalance,
   };
-}
-
-class State {
-  final int totalPages;
-
-  State({required this.totalPages});
-
-  factory State.fromRawJson(String str) => State.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory State.fromJson(Map<String, dynamic> json) =>
-      State(totalPages: json["totalPages"]);
-
-  Map<String, dynamic> toJson() => {"totalPages": totalPages};
 }

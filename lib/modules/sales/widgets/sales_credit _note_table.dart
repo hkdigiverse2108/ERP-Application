@@ -39,7 +39,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                 },
               ),
               Gap(Sizes.defHorizontalSpace),
-              CommonTable<BankTransactionDatum>(
+              CommonTable<BankTransactionModel>(
                 items: items,
                 columns: [
                   TableColumn(
@@ -59,7 +59,9 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.transactionDate),
+                      DateFormat(
+                        'dd MMM yyyy',
+                      ).format(item.transactionDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -67,15 +69,17 @@ class SalesCreditNoteTable extends StatelessWidget {
                     title: 'Transaction Type',
                     width: 100,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.transactionType, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.transactionType ?? "-",
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'From Account',
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.fromAccount.name,
+                      item.fromAccount?.name ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -105,7 +109,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
