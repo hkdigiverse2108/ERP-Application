@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/modules/user/controllers/user_controller.dart';
+import 'package:ai_setu/modules/user/controllers/update_user_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
@@ -11,219 +11,232 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class EditUser extends GetView<UserController> {
+class EditUser extends GetView<UpdateUserController> {
   const EditUser({super.key});
 
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
 
-    return Scaffold(
-      appBar: DefAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            QuickAction(),
-            Form(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.paddingS,
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        appBar: DefAppBar(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              QuickAction(),
+              Form(
+                key: formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.paddingS,
+                        ),
+                        child: Text(
+                          "Edit User",
+                          style: TextHelper.h2Style(
+                            context,
+                          ).copyWith(fontWeight: FontWeight.w600),
+                        ),
                       ),
-                      child: Text(
-                        "Edit User",
-                        style: TextHelper.h2Style(
-                          context,
-                        ).copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const Divider(),
+                      const Divider(),
 
-                    /// BASIC DETAILS
-                    _section(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("Basic Details"),
-                          const Divider(),
-                          const Gap(Sizes.defVerticalSpace),
+                      /// BASIC DETAILS
+                      _section(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("Basic Details"),
+                            const Divider(),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Full Name",
-                            controller.fullNameController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Full Name",
+                              controller.fullNameController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "User Name",
-                            controller.userNameController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "User Name",
+                              controller.userNameController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "User Description",
-                            controller.userDescriptionController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "User Description",
+                              controller.userDescriptionController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Role", controller.roleController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("Role", controller.roleController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Phone No.",
-                            controller.phoneController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Phone No.",
+                              controller.phoneController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Email", controller.emailController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("Email", controller.emailController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("PAN No.", controller.panController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("PAN No.", controller.panController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Branch", controller.branchController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Branch",
+                              controller.branchController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          Obx(
-                            () => _textFormField(
-                              "Password",
-                              controller.passwordController,
-                              obscure: !controller.isPasswordVisible.value,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  controller.isPasswordVisible.value
-                                      ? PhosphorIconsLight.eye
-                                      : PhosphorIconsLight.eyeSlash,
+                            Obx(
+                              () => _textFormField(
+                                "Password",
+                                controller.passwordController,
+                                obscure: !controller.isPasswordVisible.value,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.isPasswordVisible.value
+                                        ? PhosphorIconsLight.eye
+                                        : PhosphorIconsLight.eyeSlash,
+                                  ),
+                                  onPressed:
+                                      controller.togglePasswordVisibility,
                                 ),
-                                onPressed: controller.togglePasswordVisibility,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
-                    /// ADDRESS DETAILS
-                    _section(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("Address Details"),
-                          const Divider(),
-                          const Gap(Sizes.defVerticalSpace),
+                      /// ADDRESS DETAILS
+                      _section(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("Address Details"),
+                            const Divider(),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Address",
-                            controller.addressController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Address",
+                              controller.addressController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Country",
-                            controller.countryController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Country",
+                              controller.countryController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("State", controller.stateController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("State", controller.stateController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("City", controller.cityController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("City", controller.cityController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Pin Code",
-                            controller.zipCodeController,
-                          ),
-                        ],
+                            _textFormField(
+                              "Pin Code",
+                              controller.zipCodeController,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    /// BANK DETAILS
-                    _section(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("Bank Details"),
-                          const Divider(),
-                          const Gap(Sizes.defVerticalSpace),
+                      /// BANK DETAILS
+                      _section(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("Bank Details"),
+                            const Divider(),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Bank Name",
-                            controller.bankNameController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Bank Name",
+                              controller.bankNameController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Account Number",
-                            controller.accountNumberController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Account Number",
+                              controller.accountNumberController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "IFSC Code",
-                            controller.ifscCodeController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "IFSC Code",
+                              controller.ifscCodeController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Branch", controller.branchController),
-                        ],
+                            _textFormField(
+                              "Branch",
+                              controller.branchController,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    /// SALARY DETAILS
-                    _section(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("Salary Details"),
-                          const Divider(),
-                          const Gap(Sizes.defVerticalSpace),
+                      /// SALARY DETAILS
+                      _section(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("Salary Details"),
+                            const Divider(),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Wages", controller.wagesController),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField("Wages", controller.wagesController),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Commission",
-                            controller.commissionController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Commission",
+                              controller.commissionController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField(
-                            "Extra Wages",
-                            controller.extraWagesController,
-                          ),
-                          const Gap(Sizes.defVerticalSpace),
+                            _textFormField(
+                              "Extra Wages",
+                              controller.extraWagesController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                          _textFormField("Target", controller.targetController),
-                        ],
+                            _textFormField(
+                              "Target",
+                              controller.targetController,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    /// IMAGE
-                    _section(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("Image"),
-                          const Divider(),
-                          const Gap(Sizes.defVerticalSpace),
-                          _imagePicker(context),
-                        ],
+                      /// IMAGE
+                      _section(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("Image"),
+                            const Divider(),
+                            const Gap(Sizes.defVerticalSpace),
+                            _imagePicker(context),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        bottomNavigationBar: _buildButton(context),
       ),
-      bottomNavigationBar: _buildButton(context),
     );
   }
 

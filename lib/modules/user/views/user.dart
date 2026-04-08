@@ -1,13 +1,16 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/modules/user/controllers/user_controller.dart';
 import 'package:ai_setu/modules/user/widgets/user_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
+import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
 
 class User extends StatelessWidget {
-  const User({super.key});
+  User({super.key});
+  final controller = UserController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +34,11 @@ class User extends StatelessWidget {
         left: Sizes.paddingM,
         right: Sizes.paddingM,
       ),
-      child: Text(
-        title,
-        style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
+      child: FilterSection(
+        title: title,
+        filters: [],
+        onSearchChanged: (query) => controller.onSearch(query),
+        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),
     );
   }
