@@ -177,16 +177,16 @@ class QuickActionItem {
 class _ExpandableSection extends StatelessWidget {
   final String title;
   final List<QuickActionItem>? items;
-  final VoidCallback? onTap;
+  // final VoidCallback? onTap;
 
-  const _ExpandableSection({required this.title, this.items, this.onTap});
+  const _ExpandableSection({required this.title, this.items});
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: GestureDetector(
-        onTap: onTap,
+        // onTap: onTap,
         child: ExpansionTile(
           tilePadding: EdgeInsets.zero,
           childrenPadding: const EdgeInsets.only(

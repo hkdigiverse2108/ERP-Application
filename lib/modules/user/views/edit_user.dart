@@ -16,8 +16,6 @@ class EditUser extends GetView<UpdateUserController> {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -27,7 +25,7 @@ class EditUser extends GetView<UpdateUserController> {
             children: [
               QuickAction(),
               Form(
-                key: formKey,
+                key: controller.formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
                   child: Column(
@@ -129,16 +127,16 @@ class EditUser extends GetView<UpdateUserController> {
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Country",
-                              controller.countryController,
-                            ),
-                            const Gap(Sizes.defVerticalSpace),
+                            // _textFormField(
+                            //   "Country",
+                            //   controller.countryController,
+                            // ),
+                            // const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField("State", controller.stateController),
-                            const Gap(Sizes.defVerticalSpace),
+                            // _textFormField("State", controller.stateController),
+                            // const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField("City", controller.cityController),
+                            // _textFormField("City", controller.cityController),
                             const Gap(Sizes.defVerticalSpace),
 
                             _textFormField(
@@ -374,20 +372,31 @@ class EditUser extends GetView<UpdateUserController> {
           ),
           const Gap(Sizes.defHorizontalSpace),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+            child: Obx(
+              () => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
+                  elevation: 0,
                 ),
-                elevation: 0,
+                onPressed: controller.isUpdating.value
+                    ? null
+                    : controller.updateUser,
+                child: controller.isUpdating.value
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text("SAVE CHANGES"),
               ),
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text("SAVE CHANGES"),
             ),
           ),
         ],

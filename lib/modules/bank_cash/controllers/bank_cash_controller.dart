@@ -26,10 +26,6 @@ class BankCashController extends GetxController {
 
   final RxList<SalaryModel> salaryList = <SalaryModel>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> fetchBankCash() async {
     isLoading.value = true;

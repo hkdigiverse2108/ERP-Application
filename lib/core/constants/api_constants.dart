@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.1.67:4001";
+  static const String baseUrl = "http://192.168.29.26:4001";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -52,9 +52,10 @@ class ApiConstants {
     "filters": filters,
   });
   static const String addUser = "/user/add";
+  static const String updateUser = "/user/edit";
   static String deleteUser(String id) => "/user/$id";
   static String getUserById(String id) => "/user/$id";
-  static String userDropdown(String typeFilter) =>
+  static String userDropdown({String? typeFilter}) =>
       buildUrl("user/dropdown", {"typeFilter": typeFilter});
   static String permissionAdmin(String id) => "/user/$id/permission";
 
@@ -556,8 +557,10 @@ class ApiConstants {
 
   // Location
   static const String getCountry = "/location/country";
-  static String getState(String id) => "/location/state/$id";
-  static String getCity(String id) => "/location/city/$id";
+  static String getState({String? id}) =>
+      (id == null) ? "/location/state" : "/location/state/$id";
+  static String getCity({String? id}) =>
+      (id == null) ? "/location/city" : "/location/city/$id";
   static const String addLocation = "/location/add";
   static String getAllLocation(String parentFilter, String typeFilter) =>
       "/location/all?parentFilter=$parentFilter&typeFilter=$typeFilter";

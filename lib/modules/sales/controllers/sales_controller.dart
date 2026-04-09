@@ -69,10 +69,6 @@ class SalesController extends GetxController {
   final creditNoteFromDate = Rxn<String>();
   final creditNoteToDate = Rxn<String>();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   // Estimates
   Future<void> fetchEstimates({int page = 1}) async {

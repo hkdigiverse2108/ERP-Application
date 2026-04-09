@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class SalaryModel {
   final String id;

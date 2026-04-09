@@ -33,6 +33,7 @@ class UserController extends GetxController {
   void onReady() {
     super.onReady();
     getUsersData();
+
   }
 
   String _getCacheKey(int page) =>

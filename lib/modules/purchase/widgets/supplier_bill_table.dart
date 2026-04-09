@@ -78,8 +78,8 @@ class SupplierBillTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        item.paymentStatus!.isNotEmpty
-                            ? item.paymentStatus!
+                        item.paymentStatus.isNotEmpty
+                            ? item.paymentStatus
                             : "Pending",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,

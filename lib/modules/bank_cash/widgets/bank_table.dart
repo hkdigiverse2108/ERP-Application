@@ -83,7 +83,7 @@ class BankTable extends StatelessWidget {
                     width: 100,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      "${item.openingBalance?.creditBalance ?? 0}",
+                      "${item.openingBalance.creditBalance ?? 0}",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -119,7 +119,7 @@ class BankTable extends StatelessWidget {
                     width: 200,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy?.fullName ?? '',
+                      item.createdBy.fullName ?? '',
                       style: TextHelper.bodySmall,
                     ),
                   ),

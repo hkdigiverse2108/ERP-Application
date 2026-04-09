@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
 import 'package:ai_setu/data/model/accounting/debit_note_model.dart';
 import 'package:ai_setu/data/repositories/accounting_repository.dart';
@@ -15,10 +14,6 @@ class AccountingController extends GetxController {
   final totalPages = 1.obs;
   final totalItems = 0.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> fetchDebitNote() async {
     try {

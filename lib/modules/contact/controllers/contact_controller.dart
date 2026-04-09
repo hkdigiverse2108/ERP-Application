@@ -19,10 +19,6 @@ class ContactController extends GetxController {
 
   final _repo = ContactRepository();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> fetchContacts() async {
     try {

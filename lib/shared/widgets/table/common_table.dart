@@ -24,8 +24,8 @@ class CommonTable<T> extends StatelessWidget {
   final List<T> items;
   final List<TableColumn<T>> columns;
   final VoidCallback? onAddItem;
-  final Function(int index)? onRemoveItem;
-  final Function(int index)? onEditItem;
+  final Function(T item)? onRemoveItem;
+  final Function(T item)? onEditItem;
   final String? addLabel;
   final Widget? emptyState;
   final Widget? footer;
@@ -323,8 +323,8 @@ class CommonTable<T> extends StatelessWidget {
                 iconSize: 18,
                 icon: const Icon(PhosphorIconsBold.dotsThreeVertical, size: 16),
                 onSelected: (value) {
-                  if (value == 'edit') onEditItem?.call(index);
-                  if (value == 'delete') onRemoveItem?.call(index);
+                  if (value == 'edit') onEditItem?.call(item);
+                  if (value == 'delete') onRemoveItem?.call(item);
                 },
                 itemBuilder: (context) => [
                   if (onEditItem != null)

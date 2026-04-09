@@ -31,4 +31,12 @@ class UserRepository {
     }
     throw Exception(res.message ?? "Something went wrong");
   }
+
+  Future<ResModel> updateUser(Map<String, dynamic> userData) async {
+    final ResModel res = await _api.put(
+      ApiConstants.updateUser,
+      body: userData,
+    );
+    return res;
+  }
 }

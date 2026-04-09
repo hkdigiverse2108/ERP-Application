@@ -79,7 +79,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.fromAccount?.name ?? "-",
+                      item.fromAccount.name ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -109,7 +109,7 @@ class SalesCreditNoteTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy?.fullName ?? "-",
+                      item.createdBy.fullName ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),

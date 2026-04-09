@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class BankModel {
   final String id;

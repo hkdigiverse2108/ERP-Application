@@ -9,7 +9,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class UserTable extends StatelessWidget {
   UserTable({super.key});
@@ -138,9 +137,9 @@ class UserTable extends StatelessWidget {
                   ),
                 ],
                 onEditItem: (item) {
-                  Get.toNamed(Routes.editUser);
+                  Get.toNamed(Routes.editUser, arguments: item);
                 },
-                onRemoveItem: (index) {},
+
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,

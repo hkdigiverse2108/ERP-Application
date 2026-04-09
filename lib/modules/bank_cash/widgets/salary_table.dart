@@ -46,7 +46,7 @@ class SalaryTable extends StatelessWidget {
                     title: 'Party Name',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.partyId?.fullName ?? "-",
+                      item.partyId.fullName ?? "-",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -122,7 +122,7 @@ class SalaryTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy?.fullName ?? "-",
+                      item.createdBy.fullName ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),
