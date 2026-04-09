@@ -26,6 +26,10 @@ import 'package:ai_setu/modules/inventory/material_consumption/views/material_co
 import 'package:ai_setu/modules/inventory/product/views/product.dart';
 import 'package:ai_setu/modules/inventory/stock/views/stock.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification.dart';
+import 'package:ai_setu/modules/pos/bindings/pos_binding.dart';
+import 'package:ai_setu/modules/pos/views/credit_note_page.dart';
+import 'package:ai_setu/modules/pos/views/oredr_list_page.dart';
+import 'package:ai_setu/modules/pos/views/sales_register_page.dart';
 import 'package:ai_setu/modules/purchase/views/purchase_debit_note_page.dart';
 import 'package:ai_setu/modules/sales/bindings/sales_binding.dart';
 import 'package:ai_setu/modules/sales/views/delivery_challan_page.dart';
@@ -179,6 +183,21 @@ class AppPages {
       name: Routes.purchaseReturn,
       page: () => const PurchaseDebitNotePage(),
       binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: Routes.posSalesRegister,
+      page: () => const SalesRegisterPage(),
+      binding: PosBinding(),
+    ),
+    GetPage(
+      name: Routes.posOrderList,
+      page: () => const OrderListPage(),
+      binding: PosBinding(),
+    ),
+    GetPage(
+      name: Routes.posCreditNote,
+      page: () => const CreditNotePage(),
+      binding: PosBinding(),
     ),
   ];
 }

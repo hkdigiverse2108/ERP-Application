@@ -139,20 +139,19 @@ class AppDrawer extends StatelessWidget {
                     icon: PhosphorIconsLight.cashRegister,
                     label: 'POS',
                     children: [
-                      // TODO: give proper routes.
                       _NavItem(
                         label: 'Order List',
-                        route: Routes.debit,
+                        route: Routes.posOrderList,
                         isChild: true,
                       ),
                       _NavItem(
                         label: 'Credit Note',
-                        route: Routes.credit,
+                        route: Routes.posCreditNote,
                         isChild: true,
                       ),
                       _NavItem(
                         label: 'Sales Register',
-                        route: Routes.credit,
+                        route: Routes.posSalesRegister,
                         isChild: true,
                       ),
                     ],
