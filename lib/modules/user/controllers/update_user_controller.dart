@@ -1,6 +1,10 @@
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/location_repository.dart';
+import 'package:ai_setu/data/repositories/role_repository.dart';
 import 'package:ai_setu/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 class UpdateUserController extends GetxController {
   final _repo = UserRepository();
   final formKey = GlobalKey<FormState>();
+  final _roleRepo = RoleRepository();
   UserModel? user;
 
   final RxBool isPasswordVisible = false.obs;
@@ -28,10 +33,12 @@ class UpdateUserController extends GetxController {
   final fullNameController = TextEditingController();
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
+  final countryCodeController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final userDescriptionController = TextEditingController();
-  final roleController = TextEditingController();
+  final roleName = ''.obs;
+  final roleId = ''.obs;
   final panController = TextEditingController();
   final branchController = TextEditingController();
 
@@ -41,6 +48,10 @@ class UpdateUserController extends GetxController {
   final stateId = ''.obs;
   final cityId = ''.obs;
   final zipCodeController = TextEditingController();
+
+  final selectedCountry = ''.obs;
+  final selectedState = ''.obs;
+  final selectedCity = ''.obs;
 
   /// Bank Details
   final bankNameController = TextEditingController();
@@ -65,6 +76,7 @@ class UpdateUserController extends GetxController {
   final countryList = <LocationDropdown>[].obs;
   final stateList = <LocationDropdown>[].obs;
   final cityList = <LocationDropdown>[].obs;
+  final roleList = <CommonDropdownModel>[].obs;
 
   /// Pick image from gallery
   Future<void> pickImageFromGallery() async {
@@ -103,6 +115,7 @@ class UpdateUserController extends GetxController {
     super.onInit();
     ever(countryId, (id) => _loadState(id));
     ever(stateId, (id) => _loadCity(id));
+    getRole();
     getCountry();
 
     // Check for user data in arguments
@@ -124,18 +137,23 @@ class UpdateUserController extends GetxController {
     fullNameController.text = user.fullName;
     userNameController.text = user.username;
     emailController.text = user.email;
+    countryCodeController.text = user.phoneNo.countryCode;
     phoneController.text = user.phoneNo.phoneNo.toString();
     userDescriptionController.text = user.designation ?? '';
-    roleController.text = user.role?.name ?? '';
+    roleName.value = user.role?.name ?? '';
+    roleId.value = user.role?.id ?? '';
     panController.text = user.panNumber ?? '';
     branchController.text = user.branchId?.name ?? '';
     passwordController.text = user.showPassword ?? '';
 
     // Address
     addressController.text = user.address.address;
-    cityId.value = user.address.city;
-    stateId.value = user.address.state;
-    countryId.value = user.address.country;
+    selectedCountry.value = user.address.country;
+    countryId.value = user.address.countryId;
+    selectedState.value = user.address.state;
+    stateId.value = user.address.stateId;
+    selectedCity.value = user.address.city;
+    cityId.value = user.address.cityId;
     zipCodeController.text = user.address.pinCode.toString();
 
     // Bank
@@ -158,6 +176,64 @@ class UpdateUserController extends GetxController {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> getRole() async {
+    try {
+      final res = await _roleRepo.roleDropdown();
+      roleList.assignAll(res);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void onCountryChanged(String name) {
+    selectedCountry.value = name;
+    final country = countryList.firstWhere(
+      (e) => e.name == name,
+      orElse: () => LocationDropdown.empty(),
+    );
+    countryId.value = country.id;
+
+    // Reset dependents
+    selectedState.value = "";
+    stateId.value = "";
+    selectedCity.value = "";
+    cityId.value = "";
+    stateList.clear();
+    cityList.clear();
+  }
+
+  void onRoleChanged(String name) {
+    roleName.value = name;
+    final role = roleList.firstWhere(
+      (e) => e.name == name,
+      orElse: () => CommonDropdownModel.empty(),
+    );
+    roleId.value = role.id;
+  }
+
+  void onStateChanged(String name) {
+    selectedState.value = name;
+    final state = stateList.firstWhere(
+      (e) => e.name == name,
+      orElse: () => LocationDropdown.empty(),
+    );
+    stateId.value = state.id;
+
+    // Reset dependents
+    selectedCity.value = "";
+    cityId.value = "";
+    cityList.clear();
+  }
+
+  void onCityChanged(String name) {
+    selectedCity.value = name;
+    final city = cityList.firstWhere(
+      (e) => e.name == name,
+      orElse: () => LocationDropdown.empty(),
+    );
+    cityId.value = city.id;
   }
 
   Future<void> _loadState(String id) async {
@@ -197,13 +273,13 @@ class UpdateUserController extends GetxController {
       isUpdating.value = true;
 
       final userData = {
-        "_id": user!.id,
+        "userId": user!.id,
         "fullName": fullNameController.text,
         "username": userNameController.text,
         "email": emailController.text,
         "phoneNo": {
-          "countryCode": user!.phoneNo.countryCode,
-          "phoneNo": int.tryParse(phoneController.text) ?? 0,
+          "countryCode": countryCodeController.text,
+          "phoneNo": phoneController.text,
         },
         "designation": userDescriptionController.text,
         "panNumber": panController.text,
@@ -226,37 +302,20 @@ class UpdateUserController extends GetxController {
         "commission": int.tryParse(commissionController.text),
         "extraWages": int.tryParse(extraWagesController.text),
         "target": int.tryParse(targetController.text),
-        "showPassword": passwordController.text,
+        "password": passwordController.text,
+        "role": roleId.value,
       };
 
-      final res = await _repo.updateUser(userData);
+      final ResModel res = await _repo.updateUser(userData);
 
       if (res.status == 200) {
         Get.back();
-        Get.snackbar(
-          "Success",
-          "User updated successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success("User updated successfully");
       } else {
-        Get.snackbar(
-          "Error",
-          res.message ?? "Failed to update user",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        AppSnackbar.error(res.message ?? "Failed to update user");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      debugPrint(e.toString());
     } finally {
       isUpdating.value = false;
     }
@@ -277,10 +336,12 @@ class UpdateUserController extends GetxController {
     fullNameController.clear();
     userNameController.clear();
     emailController.clear();
+    countryCodeController.clear();
     phoneController.clear();
     passwordController.clear();
     userDescriptionController.clear();
-    roleController.clear();
+    roleName.value = '';
+    roleId.value = '';
     panController.clear();
     branchController.clear();
 
@@ -316,10 +377,10 @@ class UpdateUserController extends GetxController {
     fullNameController.dispose();
     userNameController.dispose();
     emailController.dispose();
+    countryCodeController.dispose();
     phoneController.dispose();
     passwordController.dispose();
     userDescriptionController.dispose();
-    roleController.dispose();
     panController.dispose();
     branchController.dispose();
 

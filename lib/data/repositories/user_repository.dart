@@ -12,7 +12,7 @@ class UserRepository {
     int? page,
     int? limit,
     String? search,
-    Map<String, dynamic>? filters,
+    String? activeFilter,
   }) async {
     final ResModel res = await _api.get(
       ApiConstants.getAllUser(
@@ -20,6 +20,7 @@ class UserRepository {
         page: page,
         limit: limit,
         search: search,
+        activeFilter: activeFilter,
       ),
     );
     if (res.status == 200) {
@@ -37,6 +38,22 @@ class UserRepository {
       ApiConstants.updateUser,
       body: userData,
     );
-    return res;
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<List<UserDropDownModel>> getUserDropDown({String? typeFilter}) async {
+    final ResModel res = await _api.get(
+      ApiConstants.userDropdown(typeFilter: typeFilter),
+    );
+    if (res.status == 200) {
+      final items = (res.data as List)
+          .map((e) => UserDropDownModel.fromJson(e))
+          .toList();
+      return items;
+    }
+    throw Exception(res.message ?? "Something went wrong");
   }
 }

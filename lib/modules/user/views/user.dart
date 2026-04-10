@@ -35,7 +35,13 @@ class User extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
-        filters: [],
+        filters: [
+          FilterOption(
+            label: 'Active Status',
+            filterKey: 'activeFilter',
+            options: const {'Active': 'true', 'Inactive': 'false'},
+          ),
+        ],
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),

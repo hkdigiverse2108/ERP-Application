@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +10,23 @@ class UserController extends GetxController {
   final _repo = UserRepository();
 
   final users = <UserModel>[].obs;
-  final filters = <String, dynamic>{}.obs;
+  final activeFilter = Rxn<String>();
 
   // Search & Filter
   final searchQuery = ''.obs;
   Timer? _debounceTimer;
 
   // Caching
-  final _cache = <String, ({List<UserModel> items, DateTime fetchedAt})>{};
+  final _cache =
+      <
+        String,
+        ({
+          List<UserModel> items,
+          DateTime fetchedAt,
+          int totalPages,
+          int totalItems,
+        })
+      >{};
   final _cacheExpiry = const Duration(minutes: 5);
 
   // pagination
@@ -33,75 +41,76 @@ class UserController extends GetxController {
   void onReady() {
     super.onReady();
     getUsersData();
-
   }
 
   String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}';
+      '${page}_${searchQuery.value}_${activeFilter.value}';
 
-  Future<void> getUsersData() async {
-    final key = _getCacheKey(currentPage.value);
+  Future<void> getUsersData({int page = 1}) async {
+    final key = _getCacheKey(page);
     final cached = _cache[key];
 
     // Check if cache exists and is not expired
     if (cached != null &&
         DateTime.now().difference(cached.fetchedAt) < _cacheExpiry) {
       users.value = cached.items;
+      totalPages.value = cached.totalPages;
+      totalItems.value = cached.totalItems;
+      currentPage.value = page;
       return;
     }
 
     try {
       isLodding.value = true;
       final res = await _repo.getAllUser(
-        page: currentPage.value,
+        page: page,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        filters: filters.isEmpty ? null : filters,
+        activeFilter: activeFilter.value,
       );
 
-      _cache[key] = (items: res.items, fetchedAt: DateTime.now());
+      _cache[key] = (
+        items: res.items,
+        fetchedAt: DateTime.now(),
+        totalPages: res.totalPages,
+        totalItems: res.totalItems,
+      );
 
       users.value = res.items;
       totalPages.value = res.totalPages;
       totalItems.value = res.totalItems;
-      currentPage.value = res.currentPage;
+      currentPage.value = page;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error fetching users: $e");
     } finally {
       isLodding.value = false;
     }
-  }
-
-  void _clearCache() {
-    _cache.clear();
-    currentPage.value = 1;
   }
 
   void onSearch(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       searchQuery.value = query;
-      _clearCache();
-      getUsersData();
+      _cache.clear();
+      getUsersData(page: 1);
     });
+  }
+
+  void onFiltersChanged(Map<String, dynamic> filters) {
+    activeFilter.value = filters['activeFilter'];
+    _cache.clear();
+    getUsersData(page: 1);
+  }
+
+  Future<void> goToPage(int page) async {
+    if (page >= 1 && page <= totalPages.value) {
+      await getUsersData(page: page);
+    }
   }
 
   @override
   void onClose() {
     _debounceTimer?.cancel();
     super.onClose();
-  }
-
-  void onFiltersChanged(Map<String, dynamic> filters) {
-    this.filters.value = filters;
-    _clearCache();
-    getUsersData();
-  }
-
-  Future<void> goToPage(int page) async {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page;
-      await getUsersData();
-    }
   }
 }

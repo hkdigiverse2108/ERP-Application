@@ -6,6 +6,8 @@ import 'package:ai_setu/modules/user/controllers/update_user_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
+import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -71,12 +73,70 @@ class EditUser extends GetView<UpdateUserController> {
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField("Role", controller.roleController),
+                            Obx(
+                              () => CustomDropdown(
+                                label: "Role",
+                                items: controller.roleList
+                                    .map((e) => e.name)
+                                    .toList(),
+                                value: controller.roleName.value.isEmpty
+                                    ? null
+                                    : controller.roleName.value,
+                                onChanged: (value) =>
+                                    controller.onRoleChanged(value),
+                              ),
+                            ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Phone No.",
-                              controller.phoneController,
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  child: _textFormField(
+                                    "Code",
+                                    controller.countryCodeController,
+                                    keyboardType: TextInputType.phone,
+                                    readOnly: true,
+                                    onTap: () {
+                                      showCountryPicker(
+                                        context: context,
+                                        showPhoneCode: true,
+                                        countryListTheme: CountryListThemeData(
+                                          borderRadius: BorderRadius.circular(
+                                            Sizes.borderRadiusL,
+                                          ),
+                                          inputDecoration: InputDecoration(
+                                            labelText: "Search",
+                                            prefixIcon: const Icon(
+                                              Icons.search,
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    Sizes.borderRadiusM,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onSelect: (Country country) {
+                                          controller
+                                                  .countryCodeController
+                                                  .text =
+                                              "+${country.phoneCode}";
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const Gap(Sizes.defHorizontalSpace),
+                                Expanded(
+                                  child: _textFormField(
+                                    "Phone No.",
+                                    controller.phoneController,
+                                    keyboardType: TextInputType.phone,
+                                  ),
+                                ),
+                              ],
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
@@ -127,16 +187,49 @@ class EditUser extends GetView<UpdateUserController> {
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            // _textFormField(
-                            //   "Country",
-                            //   controller.countryController,
-                            // ),
-                            // const Gap(Sizes.defVerticalSpace),
+                            Obx(
+                              () => CustomDropdown(
+                                label: "Country",
+                                items: controller.countryList
+                                    .map((e) => e.name)
+                                    .toList(),
+                                value: controller.selectedCountry.value.isEmpty
+                                    ? null
+                                    : controller.selectedCountry.value,
+                                onChanged: (value) =>
+                                    controller.onCountryChanged(value),
+                              ),
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                            // _textFormField("State", controller.stateController),
-                            // const Gap(Sizes.defVerticalSpace),
+                            Obx(
+                              () => CustomDropdown(
+                                label: "State",
+                                items: controller.stateList
+                                    .map((e) => e.name)
+                                    .toList(),
+                                value: controller.selectedState.value.isEmpty
+                                    ? null
+                                    : controller.selectedState.value,
+                                onChanged: (value) =>
+                                    controller.onStateChanged(value),
+                              ),
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
 
-                            // _textFormField("City", controller.cityController),
+                            Obx(
+                              () => CustomDropdown(
+                                label: "City",
+                                items: controller.cityList
+                                    .map((e) => e.name)
+                                    .toList(),
+                                value: controller.selectedCity.value.isEmpty
+                                    ? null
+                                    : controller.selectedCity.value,
+                                onChanged: (value) =>
+                                    controller.onCityChanged(value),
+                              ),
+                            ),
                             const Gap(Sizes.defVerticalSpace),
 
                             _textFormField(
@@ -266,10 +359,17 @@ class EditUser extends GetView<UpdateUserController> {
     TextEditingController controller, {
     bool obscure = false,
     Widget? suffixIcon,
+    TextInputType? keyboardType,
+    bool readOnly = false,
+    VoidCallback? onTap,
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
+      keyboardType: keyboardType,
+      readOnly: readOnly,
+      onTap: onTap,
+
       style: TextHelper.bodyMedium,
       decoration: InputDecoration(
         labelText: label,

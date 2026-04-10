@@ -3,11 +3,9 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/modules/contact/controllers/contact_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
-import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ContactTable extends StatelessWidget {
@@ -29,16 +27,17 @@ class ContactTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              RangedDatePicker(
-                initialDateRange: contactController.selectedDateRange.value,
-                onChanged: (range) {
-                  contactController.selectedDateRange.value = range;
-                  contactController.currentPage.value = 1;
-                  contactController.fetchContacts();
-                },
-              ),
-              Gap(Sizes.defHorizontalSpace),
+              // RangedDatePicker(
+              //   initialDateRange: contactController.selectedDateRange.value,
+              //   onChanged: (range) {
+              //     contactController.selectedDateRange.value = range;
+              //     contactController.currentPage.value = 1;
+              //     contactController.fetchContacts();
+              //   },
+              // ),
+              // Gap(Sizes.defHorizontalSpace),
               CommonTable<ContactModel>(
+                isLoading: contactController.isLoading.value,
                 items: items,
                 columns: [
                   TableColumn(
@@ -101,11 +100,8 @@ class ContactTable extends StatelessWidget {
                 currentPage: contactController.currentPage.value,
                 totalPages: contactController.totalPages.value,
                 totalItems: contactController.totalItems.value,
-                pageSize: 10,
-                onPageChanged: (page) {
-                  contactController.currentPage.value = page;
-                  contactController.fetchContacts();
-                },
+                pageSize: contactController.limit.value,
+                onPageChanged: (page) => contactController.goToPage(page),
               ),
             ],
           ),

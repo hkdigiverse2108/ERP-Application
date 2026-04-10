@@ -10,12 +10,21 @@ class SalesRepository {
     int limit = 10,
     String? fromDate,
     String? toDate,
+    String? search,
+    String? activeFilter,
+    String? customerFilter,
+    String? statusFilter,
   }) async {
-    final Map<String, dynamic> query = {"page": page, "limit": limit};
-    if (fromDate != null) query["fromDate"] = fromDate;
-    if (toDate != null) query["toDate"] = toDate;
-
-    final String url = ApiConstants.buildUrl(ApiConstants.getAllEstimate, query);
+    final String url = ApiConstants.getAllEstimate(
+      page: page,
+      limit: limit,
+      fromDate: fromDate,
+      toDate: toDate,
+      search: search,
+      activeFilter: activeFilter,
+      customerFilter: customerFilter,
+      statusFilter: statusFilter,
+    );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
     throw Exception(res.message ?? 'Failed to fetch estimate');
@@ -26,14 +35,20 @@ class SalesRepository {
     int limit = 10,
     String? fromDate,
     String? toDate,
+    String? search,
+    String? activeFilter,
+    String? customerFilter,
+    String? statusFilter,
   }) async {
-    final Map<String, dynamic> query = {"page": page, "limit": limit};
-    if (fromDate != null) query["fromDate"] = fromDate;
-    if (toDate != null) query["toDate"] = toDate;
-
-    final String url = ApiConstants.buildUrl(
-      ApiConstants.getAllSalesOrder,
-      query,
+    final String url = ApiConstants.getAllSalesOrder(
+      page: page,
+      limit: limit,
+      fromDate: fromDate,
+      toDate: toDate,
+      search: search,
+      activeFilter: activeFilter,
+      customerFilter: customerFilter,
+      statusFilter: statusFilter,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -45,12 +60,21 @@ class SalesRepository {
     int limit = 10,
     String? fromDate,
     String? toDate,
+    String? search,
+    String? activeFilter,
+    String? customerFilter,
+    String? statusFilter,
   }) async {
-    final Map<String, dynamic> query = {"page": page, "limit": limit};
-    if (fromDate != null) query["fromDate"] = fromDate;
-    if (toDate != null) query["toDate"] = toDate;
-
-    final String url = ApiConstants.buildUrl(ApiConstants.getAllInvoice, query);
+    final String url = ApiConstants.getAllInvoice(
+      page: page,
+      limit: limit,
+      fromDate: fromDate,
+      toDate: toDate,
+      search: search,
+      activeFilter: activeFilter,
+      customerFilter: customerFilter,
+      statusFilter: statusFilter,
+    );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
     throw Exception(res.message ?? 'Failed to fetch invoice');
@@ -61,14 +85,20 @@ class SalesRepository {
     int limit = 10,
     String? fromDate,
     String? toDate,
+    String? search,
+    String? activeFilter,
+    String? customerFilter,
+    String? statusFilter,
   }) async {
-    final Map<String, dynamic> query = {"page": page, "limit": limit};
-    if (fromDate != null) query["fromDate"] = fromDate;
-    if (toDate != null) query["toDate"] = toDate;
-
-    final String url = ApiConstants.buildUrl(
-      ApiConstants.getAllDeliveryChallan,
-      query,
+    final String url = ApiConstants.getAllDeliveryChallan(
+      page: page,
+      limit: limit,
+      fromDate: fromDate,
+      toDate: toDate,
+      search: search,
+      activeFilter: activeFilter,
+      customerFilter: customerFilter,
+      statusFilter: statusFilter,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -80,14 +110,20 @@ class SalesRepository {
     int limit = 10,
     String? fromDate,
     String? toDate,
+    String? search,
+    String? activeFilter,
+    String? customerFilter,
+    String? statusFilter,
   }) async {
-    final Map<String, dynamic> query = {"page": page, "limit": limit};
-    if (fromDate != null) query["fromDate"] = fromDate;
-    if (toDate != null) query["toDate"] = toDate;
-
-    final String url = ApiConstants.buildUrl(
-      ApiConstants.getAllSalesCreditNote,
-      query,
+    final String url = ApiConstants.getAllSalesCreditNote(
+      page: page,
+      limit: limit,
+      fromDate: fromDate,
+      toDate: toDate,
+      search: search,
+      activeFilter: activeFilter,
+      customerFilter: customerFilter,
+      statusFilter: statusFilter,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;

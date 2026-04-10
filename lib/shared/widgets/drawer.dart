@@ -172,12 +172,11 @@ class AppDrawer extends StatelessWidget {
                         isChild: true,
                         isActive: currentRoute == Routes.purchaseOrder,
                       ),
-                      // chnage this to.
                       _NavItem(
                         label: 'Purchase Debit Note',
-                        route: Routes.purchaseOrder,
+                        route: Routes.purchaseReturn,
                         isChild: true,
-                        // isActive: currentRoute == Routes.purchaseOrder,
+                        isActive: currentRoute == Routes.purchaseReturn,
                       ),
                     ],
                   ),
@@ -185,24 +184,23 @@ class AppDrawer extends StatelessWidget {
                     icon: PhosphorIconsLight.users,
                     label: 'CRM',
                     children: [
-                      // TODO: give proper routes.
                       _NavItem(
                         label: 'Coupon',
-                        route: Routes.supplierBill,
+                        route: Routes.coupon,
                         isChild: true,
-                        // isActive: currentRoute == Routes.supplierBill,
+                        isActive: currentRoute == Routes.coupon,
                       ),
                       _NavItem(
                         label: 'Loyalty',
-                        route: Routes.purchaseOrder,
+                        route: Routes.loyalty,
                         isChild: true,
-                        // isActive: currentRoute == Routes.purchaseOrder,
+                        isActive: currentRoute == Routes.loyalty,
                       ),
                       _NavItem(
                         label: 'Discount',
-                        route: Routes.purchaseOrder,
+                        route: Routes.discount,
                         isChild: true,
-                        // isActive: currentRoute == Routes.purchaseOrder,
+                        isActive: currentRoute == Routes.discount,
                       ),
                     ],
                   ),
@@ -277,9 +275,9 @@ class AppDrawer extends StatelessWidget {
                       ),
                       _NavItem(
                         label: 'Payment',
-                        route: Routes.payment,
+                        route: Routes.posPayment,
                         isChild: true,
-                        isActive: currentRoute == Routes.payment,
+                        isActive: currentRoute == Routes.posPayment,
                       ),
                       _NavItem(
                         label: 'Receipt',

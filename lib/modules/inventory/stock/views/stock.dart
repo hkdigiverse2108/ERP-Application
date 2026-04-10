@@ -48,6 +48,11 @@ class Stock extends StatelessWidget {
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [
             FilterOption(
+              label: 'Active Status',
+              filterKey: 'activeFilter',
+              options: const {'Active': 'true', 'Inactive': 'false'},
+            ),
+            FilterOption(
               label: 'Category',
               filterKey: 'categoryFilter',
               options: {for (var e in controller.category) e.name: e.id},

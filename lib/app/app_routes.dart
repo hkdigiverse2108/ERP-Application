@@ -9,7 +9,7 @@ abstract class Routes {
   static const billOfLive = '/bill-of-live';
   static const stockVarification = '/stock-varification';
   static const recipt = '/recipt';
-  static const payment = '/payment';
+  // static const payment = '/payment';
   static const materialConsumption = '/material-consumption';
   static const debit = '/debit';
   static const credit = '/credit';
@@ -31,4 +31,10 @@ abstract class Routes {
   static const posSalesRegister = '/pos-sales-register';
   static const posOrderList = '/pos-order-list';
   static const posCreditNote = '/pos-credit-note';
+  
+  // CRM
+  static const coupon = '/coupon';
+  static const discount = '/discount';
+  static const loyalty = '/loyalty';
 }
+

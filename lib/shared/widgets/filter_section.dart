@@ -2,6 +2,7 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/shared/widgets/text_fields/search_field.dart';
+import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -216,6 +217,7 @@ class _FilterSectionState extends State<FilterSection>
                           ),
                           const Gap(4),
                           _FilterDropdown(
+                            label: filter.label,
                             options: filter.options,
                             selected:
                                 _selected[filter.filterKey ?? filter.label],
@@ -267,11 +269,13 @@ class _FilterSectionState extends State<FilterSection>
 }
 
 class _FilterDropdown extends StatelessWidget {
+  final String label;
   final Map<String, String> options;
   final String? selected;
   final ValueChanged<String?> onChanged;
 
   const _FilterDropdown({
+    required this.label,
     required this.options,
     required this.selected,
     required this.onChanged,
@@ -279,48 +283,23 @@ class _FilterDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: DropdownButtonFormField<String>(
-        initialValue: selected,
-        isDense: true,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-            borderSide: BorderSide(color: context.appColors.border),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-            borderSide: BorderSide(color: context.appColors.border),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-              width: 1.5,
-            ),
-          ),
-          fillColor: context.appColors.surface,
-          filled: true,
-        ),
-        hint: Text('All', style: TextHelper.bodySmallStyle(context)),
-        items: options.entries
-            .map(
-              (entry) => DropdownMenuItem(
-                value: entry.value,
-                child: Text(
-                  entry.key,
-                  style: TextHelper.bodySmallStyle(context),
-                ),
-              ),
-            )
-            .toList(),
-        onChanged: onChanged,
-      ),
+    // Reverse map to get label from value
+    final selectedLabel = options.entries
+        .firstWhere(
+          (e) => e.value == selected,
+          orElse: () => const MapEntry("", ""),
+        )
+        .key;
+
+    return CustomDropdown(
+      label: label,
+      items: options.keys.toList(),
+      value: selectedLabel.isEmpty ? null : selectedLabel,
+      onChanged: (label) {
+        onChanged(options[label]);
+      },
+      searchable: options.length > 5,
+      isFilter: true,
     );
   }
 }

@@ -7,7 +7,7 @@ class CommonDropdownModel {
   CommonDropdownModel.empty() : this(id: "", name: "");
 
   factory CommonDropdownModel.fromJson(Map<String, dynamic> json) =>
-      CommonDropdownModel(id: json["id"], name: json["name"]);
+      CommonDropdownModel(id: json["_id"], name: json["name"]);
 
-  Map<String, dynamic> toJson() => {"id": id, "name": name};
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }

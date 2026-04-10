@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
+
 class UserModel {
   final String id;
   final String fullName;
@@ -112,8 +114,8 @@ class UserModel {
     "username": username,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy,
-    "updatedBy": updatedBy,
+    "createdBy": createdBy?.toJson(),
+    "updatedBy": updatedBy?.toJson(),
     "companyId": companyId.toJson(),
     "branchId": branchId?.toJson(),
     "createdAt": createdAt.toIso8601String(),
@@ -136,20 +138,34 @@ class UserModel {
 class Address {
   final String address;
   final String country;
+  final String countryId;
   final String state;
+  final String stateId;
   final String city;
+  final String cityId;
   final int pinCode;
 
   Address({
     required this.address,
     required this.country,
+    required this.countryId,
     required this.state,
+    required this.stateId,
     required this.city,
+    required this.cityId,
     required this.pinCode,
   });
 
-  factory Address.empty() =>
-      Address(address: '', country: '', state: '', city: '', pinCode: 0);
+  factory Address.empty() => Address(
+    address: '',
+    country: '',
+    countryId: '',
+    state: '',
+    stateId: '',
+    city: '',
+    cityId: '',
+    pinCode: 0,
+  );
 
   factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
 
@@ -157,19 +173,29 @@ class Address {
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
     address: json["address"] ?? '',
-    country: json["country"] is Map
-        ? json["country"]["name"]
+    country: json["country"] is Map ? json["country"]["name"] ?? '' : '',
+    countryId: json["country"] is Map
+        ? json["country"]["_id"] ?? json["country"]["id"] ?? ''
         : json["country"] ?? '',
-    state: json["state"] is Map ? json["state"]["name"] : json["state"] ?? '',
-    city: json["city"] is Map ? json["city"]["name"] : json["city"] ?? '',
+    state: json["state"] is Map ? json["state"]["name"] ?? '' : '',
+    stateId: json["state"] is Map
+        ? json["state"]["_id"] ?? json["state"]["id"] ?? ''
+        : json["state"] ?? '',
+    city: json["city"] is Map ? json["city"]["name"] ?? '' : '',
+    cityId: json["city"] is Map
+        ? json["city"]["_id"] ?? json["city"]["id"] ?? ''
+        : json["city"] ?? '',
     pinCode: int.tryParse(json["pinCode"]?.toString() ?? '') ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
     "address": address,
     "country": country,
+    "countryId": countryId,
     "state": state,
+    "stateId": stateId,
     "city": city,
+    "cityId": cityId,
     "pinCode": pinCode,
   };
 }
@@ -282,4 +308,40 @@ class CreatedBy {
       userType: json["userType"],
     );
   }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
+}
+
+class UserDropDownModel {
+  final String id;
+  final String fullName;
+  final CommonDropdownModel? role;
+  final String userType;
+
+  UserDropDownModel({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+    required this.role,
+  });
+
+  factory UserDropDownModel.fromJson(Map<String, dynamic> json) =>
+      UserDropDownModel(
+        id: json["_id"],
+        fullName: json["fullName"],
+        userType: json["userType"],
+        role: json["role"] != null
+            ? CommonDropdownModel.fromJson(json["role"])
+            : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+    "role": role?.toJson(),
+  };
 }

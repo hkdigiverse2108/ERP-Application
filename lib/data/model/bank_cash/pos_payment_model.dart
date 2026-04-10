@@ -1,4 +1,3 @@
-
 class PosPaymentModel {
   final String id;
   final String paymentNo;

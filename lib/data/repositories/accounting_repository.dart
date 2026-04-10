@@ -6,10 +6,17 @@ import 'package:ai_setu/data/model/res/res_model.dart';
 class AccountingRepository {
   final ApiService _api = ApiService();
 
-  Future<ResModel> getCreditNote() async {
+  Future<ResModel> getCreditNote({
+    int page = 1,
+    int limit = 10,
+    String? search,
+    String? activeFilter,
+  }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.getAllCreditNote, {
-      "page": 1,
-      "limit": 10,
+      "page": page,
+      "limit": limit,
+      "search": search,
+      "activeFilter": activeFilter,
     });
 
     final ResModel res = await _api.get(url);
@@ -21,10 +28,17 @@ class AccountingRepository {
     }
   }
 
-  Future<ResModel> getDebitNote() async {
+  Future<ResModel> getDebitNote({
+    int page = 1,
+    int limit = 10,
+    String? search,
+    String? activeFilter,
+  }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.getAllDebitNote, {
-      "page": 1,
-      "limit": 10,
+      "page": page,
+      "limit": limit,
+      "search": search,
+      "activeFilter": activeFilter,
     });
 
     final ResModel res = await _api.get(url);

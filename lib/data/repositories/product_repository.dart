@@ -18,6 +18,7 @@ class ProductRepository {
         page: page,
         limit: limit,
         search: search,
+        activeFilter: filters?['activeFilter'],
         categoryFilter: filters?['categoryFilter'],
         brandFilter: filters?['brandFilter'],
         subCategoryFilter: filters?['subCategoryFilter'],

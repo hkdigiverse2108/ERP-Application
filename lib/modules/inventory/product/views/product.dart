@@ -48,6 +48,11 @@ class Product extends StatelessWidget {
           title: title,
           filters: [
             FilterOption(
+              label: 'Active Status',
+              filterKey: 'activeFilter',
+              options: {'Active': 'true', 'Inactive': 'false'},
+            ),
+            FilterOption(
               label: 'Category',
               filterKey: 'categoryFilter',
               options: {

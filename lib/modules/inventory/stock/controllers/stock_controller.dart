@@ -37,7 +37,16 @@ class StockController extends GetxController {
   Timer? _debounceTimer;
 
   // Caching
-  final _cache = <String, ({List<StockItemModel> items, DateTime fetchedAt})>{};
+  final _cache =
+      <
+        String,
+        ({
+          List<StockItemModel> items,
+          DateTime fetchedAt,
+          int totalPages,
+          int totalItems,
+        })
+      >{};
   final _cacheExpiry = const Duration(minutes: 5);
 
   // pagination
@@ -128,9 +137,12 @@ class StockController extends GetxController {
     final key = _getCacheKey(currentPage.value);
     final cached = _cache[key];
 
+    // Check if cache exists and is not expired
     if (cached != null &&
         DateTime.now().difference(cached.fetchedAt) < _cacheExpiry) {
       stocks.value = cached.items;
+      totalPages.value = cached.totalPages;
+      totalItems.value = cached.totalItems;
       return;
     }
 
@@ -139,15 +151,20 @@ class StockController extends GetxController {
       final res = await _repo.getStockList(
         page: currentPage.value,
         limit: limit.value,
-        search: searchQuery.value,
-        activeFilter: "true",
+        search: searchQuery.value.isEmpty ? null : searchQuery.value,
+        activeFilter: activeFilters['activeFilter'],
         categoryFilter: activeFilters['categoryFilter'],
         subCategoryFilter: activeFilters['subCategoryFilter'],
         brandFilter: activeFilters['brandFilter'],
         subBrandFilter: activeFilters['subBrandFilter'],
       );
 
-      _cache[key] = (items: res.items, fetchedAt: DateTime.now());
+      _cache[key] = (
+        items: res.items,
+        fetchedAt: DateTime.now(),
+        totalPages: res.totalPages,
+        totalItems: res.totalItems,
+      );
 
       stocks.value = res.items;
       totalPages.value = res.totalPages;

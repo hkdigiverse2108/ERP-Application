@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ai_setu/core/constants/enums.dart';
+
 class ContactModel {
   final String id;
   final bool isDeleted;
@@ -339,5 +341,73 @@ class PhoneNo {
   Map<String, dynamic> toJson() => {
     "phoneNo": phoneNo,
     "countryCode": countryCode,
+  };
+}
+
+class ContactDropdownModel {
+  final String id;
+  final String name;
+  final String firstName;
+  final String lastName;
+  final ContactType contactType;
+  final List<Address> address;
+  final String? email;
+  final PhoneNo phoneNo;
+  final String? customerType;
+  final DateTime? dob;
+  final PhoneNo? whatsappNo;
+
+  ContactDropdownModel({
+    required this.id,
+    required this.name,
+    required this.firstName,
+    required this.lastName,
+    required this.contactType,
+    required this.address,
+    this.email,
+    required this.phoneNo,
+    this.customerType,
+    this.dob,
+    this.whatsappNo,
+  });
+
+  factory ContactDropdownModel.fromRawJson(String str) =>
+      ContactDropdownModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory ContactDropdownModel.fromJson(Map<String, dynamic> json) =>
+      ContactDropdownModel(
+        id: json["_id"],
+        name: json["name"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        contactType: ContactType.values.firstWhere(
+          (e) => e.name == json["contactType"],
+        ),
+        address: List<Address>.from(
+          json["address"].map((x) => Address.fromJson(x)),
+        ),
+        email: json["email"],
+        phoneNo: PhoneNo.fromJson(json["phoneNo"]),
+        customerType: json["customerType"],
+        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
+        whatsappNo: json["whatsappNo"] == null
+            ? null
+            : PhoneNo.fromJson(json["whatsappNo"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "firstName": firstName,
+    "lastName": lastName,
+    "contactType": contactType.name,
+    "address": List<dynamic>.from(address.map((x) => x.toJson())),
+    "email": email,
+    "phoneNo": phoneNo.toJson(),
+    "customerType": customerType,
+    "dob": dob?.toIso8601String(),
+    "whatsappNo": whatsappNo?.toJson(),
   };
 }

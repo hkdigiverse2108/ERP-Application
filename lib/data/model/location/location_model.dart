@@ -10,7 +10,7 @@ class LocationDropdown {
   LocationDropdown.empty() : this(id: "", name: "", code: null);
 
   factory LocationDropdown.fromJson(Map<String, dynamic> json) =>
-      LocationDropdown(id: json["id"], name: json["name"], code: json["code"]);
+      LocationDropdown(id: json["_id"], name: json["name"], code: json["code"]);
 
-  Map<String, dynamic> toJson() => {"id": id, "name": name, "code": code};
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "code": code};
 }
