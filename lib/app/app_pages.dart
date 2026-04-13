@@ -94,6 +94,7 @@ import 'package:ai_setu/modules/access_denied/views/access_denied_page.dart';
 class AppPages {
   // static const initial = Routes.user;
   static const initial = Routes.splash;
+
   // static const initial = Routes.inventory;
 
   static final routes = [
@@ -106,7 +107,6 @@ class AppPages {
       name: Routes.editUser,
       page: () => EditUser(),
       binding: UserBinding(),
-      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.signIn,
@@ -174,12 +174,6 @@ class AppPages {
       binding: UserBinding(),
       middlewares: [PermissionMiddleware()],
     ),
-    // GetPage(
-    //   name: Routes.home,
-    //   page: () => Home(),
-    //   binding: HomeBindings(),
-    //   middlewares: [PermissionMiddleware()],
-    // ),
     GetPage(
       name: Routes.dashboard,
       page: () => Home(),

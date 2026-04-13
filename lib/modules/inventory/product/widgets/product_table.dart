@@ -4,6 +4,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/modules/inventory/product/controllers/product_controller.dart';
+import 'package:ai_setu/shared/widgets/buttons/smoll_section_button.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/table/common_table.dart';
@@ -11,6 +12,8 @@ import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ProductTable extends StatelessWidget {
   ProductTable({super.key});
@@ -28,6 +31,29 @@ class ProductTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SectionButton(
+                    onTap: () {},
+                    label: 'Import',
+                    icon: PhosphorIconsLight.fileArchive,
+                  ),
+                  const Gap(8),
+                  SectionButton(
+                    onTap: () {},
+                    label: 'Add Item',
+                    // icon: PhosphorIconsLight.fileArchive,
+                  ),
+                  const Gap(8),
+                  SectionButton(
+                    onTap: () {},
+                    label: 'Remove Item',
+                    // icon: PhosphorIconsLight.fileArchive,
+                  ),
+                ],
+              ),
+              Gap(Sizes.defHorizontalSpace),
               RangedDatePicker(
                 initialDateRange: controller.selectedDateRange.value,
                 onChanged: (range) =>

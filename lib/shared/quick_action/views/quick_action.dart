@@ -3,8 +3,6 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/shared/widgets/quick_action_dropdown.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -38,18 +36,18 @@ class QuickAction extends StatelessWidget {
             builder: (buttonContext) {
               return GestureDetector(
                 onTap: () {
-                  final RenderBox renderBox =
-                      buttonContext.findRenderObject() as RenderBox;
-                  final offset = renderBox.localToGlobal(Offset.zero);
-                  final size = renderBox.size;
+                  // final RenderBox renderBox =
+                  //     buttonContext.findRenderObject() as RenderBox;
+                  // final offset = renderBox.localToGlobal(Offset.zero);
+                  // final size = renderBox.size;
 
-                  Get.dialog(
-                    QuickActionDropdown(
-                      topOffset: offset.dy + size.height + 16,
-                    ),
-                    useSafeArea: false,
-                    barrierColor: Colors.black.withValues(alpha: 0.1),
-                  );
+                  // Get.dialog(
+                  //   QuickActionDropdown(
+                  //     topOffset: offset.dy + size.height + 16,
+                  //   ),
+                  //   useSafeArea: false,
+                  //   barrierColor: Colors.black.withValues(alpha: 0.1),
+                  // );
                 },
                 child: Row(
                   children: [

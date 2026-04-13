@@ -46,6 +46,7 @@ class Product extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () {},
           filters: [
             FilterOption(
               label: 'Active Status',

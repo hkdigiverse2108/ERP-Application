@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/shared/widgets/buttons/smoll_section_button.dart';
 import 'package:ai_setu/shared/widgets/text_fields/search_field.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class FilterOption {
 class FilterSection extends StatefulWidget {
   final String title;
   final List<FilterOption> filters;
+  final VoidCallback? onAdd;
   final ValueChanged<String> onSearchChanged;
   final ValueChanged<Map<String, String?>> onFiltersChanged;
   final TextEditingController? searchController;
@@ -29,6 +31,7 @@ class FilterSection extends StatefulWidget {
   const FilterSection({
     super.key,
     required this.title,
+    this.onAdd,
     required this.filters,
     required this.onSearchChanged,
     required this.onFiltersChanged,
@@ -122,8 +125,17 @@ class _FilterSectionState extends State<FilterSection>
               ).copyWith(fontWeight: FontWeight.w600),
             ),
             const Spacer(),
+            // on Add
+            if (widget.onAdd != null)
+              SectionButton(
+                onTap: widget.onAdd,
+                label: 'Add',
+                icon: PhosphorIconsLight.plus,
+              ),
+            const Gap(5),
             // Active filter badge + button
-            GestureDetector(
+            InkWell(
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
               onTap: _toggleFilters,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
