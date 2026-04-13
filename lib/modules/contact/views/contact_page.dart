@@ -2,6 +2,7 @@ import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/contact/widgets/contact_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
+import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/modules/contact/controllers/contact_controller.dart';
@@ -15,6 +16,7 @@ class Contact extends StatelessWidget {
 
     return Scaffold(
       appBar: DefAppBar(),
+      drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

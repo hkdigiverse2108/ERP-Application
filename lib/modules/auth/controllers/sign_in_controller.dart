@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/repositories/auth_repository.dart';
 
@@ -39,7 +39,11 @@ class SignInController extends GetxController {
         StorageKeys.userData,
         result.user.toJson(),
       );
-      Get.offAllNamed(Routes.home);
+
+      // Fetch permissions
+      await PermissionService.to.fetchPermissions(result.user.id);
+
+      Get.offAllNamed(PermissionService.to.defaultRoute);
     } catch (e) {
       log(e.toString());
       AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));

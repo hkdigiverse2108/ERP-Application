@@ -2,7 +2,9 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/data/model/permission_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,8 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final permissionService = PermissionService.to;
+
     return Drawer(
       backgroundColor: context.responsive(
         light: AppColors.lightSurface,
@@ -25,59 +29,30 @@ class SideBar extends StatelessWidget {
 
           // Menu Items
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingS),
-              children: [
-                _buildSectionLabel(context, 'MENU'),
-                _MenuItem(
-                  icon: PhosphorIconsFill.squaresFour,
-                  label: 'Dashboard',
-                  isActive: true, // Mocking active state
-                  onTap: () => Get.back(),
-                ),
-                _MenuItem(
-                  icon: PhosphorIconsLight.users,
-                  label: 'User',
-                  onTap: () => Get.back(),
-                ),
-                _MenuItem(
-                  icon: PhosphorIconsLight.user,
-                  label: 'Contact',
-                  onTap: () => Get.back(),
-                ),
-                _ExpandableMenuItem(
-                  icon: PhosphorIconsLight.gear,
-                  label: 'Inventory',
-                  items: const ['Items', 'Categories', 'Brands'],
-                ),
-                _ExpandableMenuItem(
-                  icon: PhosphorIconsLight.bank,
-                  label: 'Bank / Cash',
-                  items: const ['Accounts', 'Transactions'],
-                ),
-                _ExpandableMenuItem(
-                  icon: PhosphorIconsLight.bag,
-                  label: 'POS',
-                  items: const ['New Sale', 'Sales History'],
-                ),
-                _ExpandableMenuItem(
-                  icon: PhosphorIconsLight.receipt,
-                  label: 'Purchase',
-                  items: const ['Orders', 'Suppliers'],
-                ),
-                _MenuItem(
-                  icon: PhosphorIconsLight.headset,
-                  label: 'Support',
-                  onTap: () => Get.back(),
-                ),
-                _ExpandableMenuItem(
-                  icon: PhosphorIconsLight.gear,
-                  label: 'Settings',
-                  items: const ['General Setting', 'Profile'],
-                ),
-                const Gap(Sizes.lgVerticalSpace),
-              ],
-            ),
+            child: Obx(() {
+              if (permissionService.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final tabs = permissionService.permittedTabs;
+              if (tabs.isEmpty) {
+                return Center(
+                  child: Text(
+                    'No Permitted Tabs',
+                    style: TextHelper.bodySmallStyle(context),
+                  ),
+                );
+              }
+
+              return ListView(
+                padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingS),
+                children: [
+                  _buildSectionLabel(context, 'MENU'),
+                  ...tabs.map((tab) => _buildMenuItem(context, tab)),
+                  const Gap(Sizes.lgVerticalSpace),
+                ],
+              );
+            }),
           ),
 
           // Footer
@@ -85,6 +60,63 @@ class SideBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildMenuItem(BuildContext context, PermissionModel tab) {
+    if (!tab.view) return const SizedBox.shrink();
+
+    final icon = _getIconForTab(tab.tabName);
+
+    if (tab.children.isNotEmpty) {
+      return _ExpandableMenuItem(
+        icon: icon,
+        label: tab.displayName,
+        items: tab.children,
+      );
+    }
+
+    return _MenuItem(
+      icon: icon,
+      label: tab.displayName,
+      isActive: Get.currentRoute == tab.tabUrl,
+      onTap: () {
+        Get.back(); // Close drawer
+        if (Get.currentRoute != tab.tabUrl) {
+          Get.toNamed(tab.tabUrl);
+        }
+      },
+    );
+  }
+
+  IconData _getIconForTab(String tabName) {
+    switch (tabName.toLowerCase()) {
+      case 'dashboard':
+        return PhosphorIconsFill.squaresFour;
+      case 'user':
+        return PhosphorIconsLight.users;
+      case 'contact':
+        return PhosphorIconsLight.user;
+      case 'inventory':
+        return PhosphorIconsLight.package;
+      case 'bank / cash':
+      case 'bank':
+      case 'cash':
+        return PhosphorIconsLight.bank;
+      case 'pos':
+        return PhosphorIconsLight.shoppingCart;
+      case 'purchase':
+        return PhosphorIconsLight.receipt;
+      case 'support':
+        return PhosphorIconsLight.headset;
+      case 'settings':
+        return PhosphorIconsLight.gear;
+      case 'accounting':
+        return PhosphorIconsLight.calculator;
+      case 'crm':
+        return PhosphorIconsLight.usersThree;
+      default:
+        return PhosphorIconsLight.circlesThree;
+    }
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -243,7 +275,7 @@ class _MenuItem extends StatelessWidget {
 class _ExpandableMenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
-  final List<String> items;
+  final List<PermissionModel> items;
 
   const _ExpandableMenuItem({
     required this.icon,
@@ -275,27 +307,40 @@ class _ExpandableMenuItem extends StatelessWidget {
           size: 16,
           color: textColor,
         ),
-        children: items.map((item) => ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.only(left: 48),
-          title: Row(
-            children: [
-              Icon(
-                PhosphorIconsLight.arrowBendDownRight,
-                size: 14,
-                color: textColor.withValues(alpha: 0.6),
-              ),
-              const Gap(8),
-              Text(
-                item,
-                style: TextHelper.bodySmallStyle(context).copyWith(
-                  color: textColor,
+        children: items.map((subTab) {
+          if (!subTab.view) return const SizedBox.shrink();
+          final isActive = Get.currentRoute == subTab.tabUrl;
+
+          return ListTile(
+            dense: true,
+            contentPadding: const EdgeInsets.only(left: 48),
+            title: Row(
+              children: [
+                Icon(
+                  PhosphorIconsLight.arrowBendDownRight,
+                  size: 14,
+                  color: isActive 
+                      ? AppColors.primary 
+                      : textColor.withValues(alpha: 0.6),
                 ),
-              ),
-            ],
-          ),
-          onTap: () => Get.back(),
-        )).toList(),
+                const Gap(8),
+                Text(
+                  subTab.displayName,
+                  style: TextHelper.bodySmallStyle(context).copyWith(
+                    color: isActive ? AppColors.primary : textColor,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+            onTap: () {
+              Get.back(); // Close drawer
+              if (Get.currentRoute != subTab.tabUrl) {
+                Get.toNamed(subTab.tabUrl);
+              }
+            },
+          );
+        }).toList(),
       ),
     );
   }

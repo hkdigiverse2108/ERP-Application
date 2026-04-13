@@ -59,6 +59,7 @@ import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
+import 'package:ai_setu/app/middleware/permission_middleware.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/modules/splash/views/splash.dart';
@@ -69,6 +70,26 @@ import 'package:ai_setu/modules/purchase/purchase_order/bindings/purchase_order_
 import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/bindings/supplier_bill_binding.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill.dart';
+import 'package:ai_setu/modules/settings/additional_charge/bindings/additional_charge_binding.dart';
+import 'package:ai_setu/modules/settings/additional_charge/views/additional_charge_page.dart';
+import 'package:ai_setu/modules/settings/bindings/settings_binding.dart';
+import 'package:ai_setu/modules/settings/company_profile/bindings/company_profile_binding.dart';
+import 'package:ai_setu/modules/settings/company_profile/views/company_profile_page.dart';
+import 'package:ai_setu/modules/settings/consumption_type/bindings/consumption_type_binding.dart';
+import 'package:ai_setu/modules/settings/consumption_type/views/consumption_type_page.dart';
+import 'package:ai_setu/modules/settings/payment_terms/bindings/payment_terms_binding.dart';
+import 'package:ai_setu/modules/settings/payment_terms/views/payment_terms_page.dart';
+import 'package:ai_setu/modules/settings/prefix/bindings/prefix_binding.dart';
+import 'package:ai_setu/modules/settings/prefix/views/prefix_page.dart';
+import 'package:ai_setu/modules/settings/taxes/bindings/taxes_binding.dart';
+import 'package:ai_setu/modules/settings/taxes/views/taxes_page.dart';
+import 'package:ai_setu/modules/settings/user_profile/bindings/user_profile_binding.dart';
+import 'package:ai_setu/modules/settings/user_profile/views/user_profile_page.dart';
+import 'package:ai_setu/modules/settings/user_roles/bindings/user_roles_binding.dart';
+import 'package:ai_setu/modules/settings/user_roles/views/user_roles_page.dart';
+import 'package:ai_setu/modules/settings/views/settings.dart';
+import 'package:ai_setu/modules/access_denied/bindings/access_denied_binding.dart';
+import 'package:ai_setu/modules/access_denied/views/access_denied_page.dart';
 
 class AppPages {
   // static const initial = Routes.user;
@@ -85,6 +106,7 @@ class AppPages {
       name: Routes.editUser,
       page: () => EditUser(),
       binding: UserBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.signIn,
@@ -95,150 +117,259 @@ class AppPages {
       name: Routes.product,
       page: () => Product(),
       binding: ProductBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
-    GetPage(name: Routes.stock, page: () => Stock(), binding: StockBindings()),
     GetPage(
-      name: Routes.stockVarification,
+      name: Routes.stock,
+      page: () => Stock(),
+      binding: StockBindings(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.stockVerification,
       page: () => const StockVerification(),
       binding: StockVerificationBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
-      name: Routes.recipt,
+      name: Routes.recipe,
       page: () => const Recipe(),
       binding: RecipeBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.billOfLive,
       page: () => const BillOfLive(),
       binding: BillOfLiveProductBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.materialConsumption,
       page: () => const MaterialConsumption(),
       binding: MaterialConsumptionBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.debit,
       page: () => const DebitPage(),
       binding: DebitBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.credit,
       page: () => const CreditPage(),
       binding: CreditBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.contact,
       page: () => const Contact(),
       binding: ContactBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
 
-    GetPage(name: Routes.user, page: () => User(), binding: UserBinding()),
-    GetPage(name: Routes.home, page: () => Home(), binding: HomeBindings()),
+    GetPage(
+      name: Routes.user,
+      page: () => User(),
+      binding: UserBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    // GetPage(
+    //   name: Routes.home,
+    //   page: () => Home(),
+    //   binding: HomeBindings(),
+    //   middlewares: [PermissionMiddleware()],
+    // ),
+    GetPage(
+      name: Routes.dashboard,
+      page: () => Home(),
+      binding: HomeBindings(),
+      middlewares: [PermissionMiddleware()],
+    ),
 
     // bank
     GetPage(
       name: Routes.bank,
       page: () => const BankPage(),
       binding: BankBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.bankTransaction,
       page: () => const BankTransactionPage(),
       binding: BankTransactionBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.posPayment,
       page: () => const PaymentPage(),
       binding: PaymentBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.receipt,
       page: () => const ReceiptPage(),
       binding: ReceiptBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.expense,
       page: () => const ExpensePage(),
       binding: ExpenseBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.salary,
       page: () => const SalaryPage(),
       binding: SalaryBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     // sales
     GetPage(
       name: Routes.estimate,
       page: () => const EstimatePage(),
       binding: EstimateBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.salesCreditNote,
       page: () => const SalesCreditNotePage(),
       binding: SalesCreditNoteBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.salesOrder,
       page: () => const SalesOrderPage(),
       binding: SalesOrderBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.invoice,
       page: () => const InvoicePage(),
       binding: InvoiceBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.deliveryChallan,
       page: () => const DeliveryChallanPage(),
       binding: DeliveryChallanBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.purchaseOrder,
       page: () => const PurchaseOrderPage(),
       binding: PurchaseOrderBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.supplierBill,
       page: () => const SupplierBillPage(),
       binding: SupplierBillBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.purchaseReturn,
       page: () => const PurchaseDebitNotePage(),
       binding: PurchaseDebitNoteBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     // pos
     GetPage(
       name: Routes.posSalesRegister,
       page: () => const SalesRegisterPage(),
       binding: SalesRegisterBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.posOrderList,
       page: () => const OrderListPage(),
       binding: OrderListBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.posCreditNote,
       page: () => const CreditNotePage(),
       binding: CreditNoteBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     // crm
     GetPage(
       name: Routes.coupon,
       page: () => const CouponPage(),
       binding: CouponBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.discount,
       page: () => const DiscountPage(),
       binding: DiscountBinding(),
+      middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.loyalty,
       page: () => const LoyaltyPage(),
       binding: LoyaltyBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    // settings
+    GetPage(
+      name: Routes.settings,
+      page: () => Settings(),
+      binding: SettingsBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsUserProfile,
+      page: () => const UserProfilePage(),
+      binding: UserProfileBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsCompanyProfile,
+      page: () => const CompanyProfilePage(),
+      binding: CompanyProfileBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsTaxes,
+      page: () => const TaxesPage(),
+      binding: TaxesBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsUserRoles,
+      page: () => const UserRolesPage(),
+      binding: UserRolesBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsPrefix,
+      page: () => const PrefixPage(),
+      binding: PrefixBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsPaymentTerms,
+      page: () => const PaymentTermsPage(),
+      binding: PaymentTermsBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsAdditionalCharge,
+      page: () => const AdditionalChargePage(),
+      binding: AdditionalChargeBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsConsumptionType,
+      page: () => const ConsumptionTypePage(),
+      binding: ConsumptionTypeBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.accessDenied,
+      page: () => const AccessDeniedPage(),
+      binding: AccessDeniedBinding(),
     ),
   ];
 }

@@ -1,8 +1,10 @@
-import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
+import 'package:ai_setu/core/helper/route_resolver.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
+import 'package:ai_setu/data/model/permission_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -15,11 +17,99 @@ class AppDrawer extends StatelessWidget {
   static const Color _activeFg = Color(0xFF3D5AFE);
   static const Color _footerBg = Color(0xFFF4F7FA);
 
+  IconData _getIconForTab(String tabName) {
+    switch (tabName.toLowerCase()) {
+      case 'dashboard':
+        return PhosphorIconsLight.houseLine;
+      case 'inventory':
+        return PhosphorIconsLight.package;
+      case 'accounting':
+        return PhosphorIconsLight.calculator;
+      case 'pos':
+        return PhosphorIconsLight.cashRegister;
+      case 'purchase':
+        return PhosphorIconsLight.shoppingCart;
+      case 'crm':
+        return PhosphorIconsLight.users;
+      case 'sales':
+        return PhosphorIconsLight.chartLine;
+      case 'user':
+        return PhosphorIconsLight.user;
+      case 'contact':
+        return PhosphorIconsLight.addressBook;
+      case 'settings':
+        return PhosphorIconsLight.gear;
+      case 'bank / cash':
+      case 'bank':
+        return PhosphorIconsLight.bank;
+      default:
+        return PhosphorIconsLight.list;
+    }
+  }
+
+  List<Widget> _buildMenu(
+    List<PermissionModel> tabs,
+    String currentRoute,
+    String activeTabId, {
+    bool isChild = false,
+  }) {
+    final List<Widget> items = [];
+
+    for (final tab in tabs) {
+      if (!tab.view) continue;
+
+      if (tab.children.isNotEmpty) {
+        // ── Parent / group node ──
+        final childWidgets = _buildMenu(
+          tab.children,
+          currentRoute,
+          activeTabId,
+          isChild: true,
+        );
+        if (childWidgets.isNotEmpty) {
+          items.add(
+            _ExpandableSection(
+              icon: _getIconForTab(tab.tabName),
+              label: tab.displayName,
+              children: childWidgets,
+            ),
+          );
+        }
+      } else {
+        // ── Leaf node ──
+        // RouteResolver.resolve() returns the correct GetX route for this tab,
+        // handling collisions where multiple tabs share the same tabUrl.
+        // If the tab has no mapping and no tabUrl it is not navigable (skip it).
+        if (!RouteResolver.isNavigable(tab)) continue;
+
+        final resolvedRoute = RouteResolver.resolve(tab);
+
+        // Active check uses the tab's unique _id, not the route string.
+        // This prevents two tabs with the same tabUrl both lighting up.
+        final isActive = activeTabId.isNotEmpty
+            ? activeTabId == tab.id
+            : currentRoute == resolvedRoute;
+
+        items.add(
+          _NavItem(
+            tabId: tab.id,
+            icon: isChild ? null : _getIconForTab(tab.tabName),
+            label: tab.displayName,
+            route: resolvedRoute, // ← the GetX route that will actually open
+            isActive: isActive,
+            isChild: isChild,
+          ),
+        );
+      }
+    }
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentRoute = Get.currentRoute;
     final colors = context.appColors;
     final isDark = ThemeService().isDarkMode;
+    final permissionService = PermissionService.to;
 
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.82,
@@ -70,238 +160,28 @@ class AppDrawer extends StatelessWidget {
 
             // ── Nav Items ──
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  _NavItem(
-                    icon: PhosphorIconsLight.houseLine,
-                    label: 'Dashboard',
-                    route: Routes.home,
-                    isActive: currentRoute == Routes.home,
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.package,
-                    label: 'Inventory',
-                    children: [
-                      _NavItem(
-                        label: 'Products',
-                        route: Routes.product,
-                        isChild: true,
-                        isActive: currentRoute == Routes.product,
-                      ),
-                      _NavItem(
-                        label: 'Stock',
-                        route: Routes.stock,
-                        isChild: true,
-                        isActive: currentRoute == Routes.stock,
-                      ),
-                      _NavItem(
-                        label: 'Stock Verification',
-                        route: Routes.stockVarification,
-                        isChild: true,
-                        isActive: currentRoute == Routes.stockVarification,
-                      ),
-                      _NavItem(
-                        label: 'Recipe',
-                        route: Routes.recipt,
-                        isChild: true,
-                        isActive: currentRoute == Routes.recipt,
-                      ),
-                      _NavItem(
-                        label: 'Bill of Live',
-                        route: Routes.billOfLive,
-                        isChild: true,
-                      ),
-                      _NavItem(
-                        label: 'Material Consumption',
-                        route: Routes.materialConsumption,
-                        isChild: true,
-                      ),
-                    ],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.calculator,
-                    label: 'Accounting',
-                    children: [
-                      _NavItem(
-                        label: 'Debit Note',
-                        route: Routes.debit,
-                        isChild: true,
-                      ),
-                      _NavItem(
-                        label: 'Credit Note',
-                        route: Routes.credit,
-                        isChild: true,
-                      ),
-                    ],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.cashRegister,
-                    label: 'POS',
-                    children: [
-                      _NavItem(
-                        label: 'Order List',
-                        route: Routes.posOrderList,
-                        isChild: true,
-                      ),
-                      _NavItem(
-                        label: 'Credit Note',
-                        route: Routes.posCreditNote,
-                        isChild: true,
-                      ),
-                      _NavItem(
-                        label: 'Sales Register',
-                        route: Routes.posSalesRegister,
-                        isChild: true,
-                      ),
-                    ],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.shoppingCart,
-                    label: 'Purchase',
-                    children: [
-                      _NavItem(
-                        label: 'Supplier Bill',
-                        route: Routes.supplierBill,
-                        isChild: true,
-                        isActive: currentRoute == Routes.supplierBill,
-                      ),
-                      _NavItem(
-                        label: 'Purchase Order',
-                        route: Routes.purchaseOrder,
-                        isChild: true,
-                        isActive: currentRoute == Routes.purchaseOrder,
-                      ),
-                      _NavItem(
-                        label: 'Purchase Debit Note',
-                        route: Routes.purchaseReturn,
-                        isChild: true,
-                        isActive: currentRoute == Routes.purchaseReturn,
-                      ),
-                    ],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.users,
-                    label: 'CRM',
-                    children: [
-                      _NavItem(
-                        label: 'Coupon',
-                        route: Routes.coupon,
-                        isChild: true,
-                        isActive: currentRoute == Routes.coupon,
-                      ),
-                      _NavItem(
-                        label: 'Loyalty',
-                        route: Routes.loyalty,
-                        isChild: true,
-                        isActive: currentRoute == Routes.loyalty,
-                      ),
-                      _NavItem(
-                        label: 'Discount',
-                        route: Routes.discount,
-                        isChild: true,
-                        isActive: currentRoute == Routes.discount,
-                      ),
-                    ],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.chartLine,
-                    label: 'Sales',
-                    children: [
-                      _NavItem(
-                        label: 'Estimate',
-                        route: Routes.estimate,
-                        isChild: true,
-                        isActive: currentRoute == Routes.estimate,
-                      ),
-                      _NavItem(
-                        label: 'Sales Order',
-                        route: Routes.salesOrder,
-                        isChild: true,
-                        isActive: currentRoute == Routes.salesOrder,
-                      ),
-                      _NavItem(
-                        label: 'Invoice',
-                        route: Routes.invoice,
-                        isChild: true,
-                        isActive: currentRoute == Routes.invoice,
-                      ),
-                      _NavItem(
-                        label: 'Delivery Challan',
-                        route: Routes.deliveryChallan,
-                        isChild: true,
-                        isActive: currentRoute == Routes.deliveryChallan,
-                      ),
-                      _NavItem(
-                        label: 'Sales Credit Note',
-                        route: Routes.salesCreditNote,
-                        isChild: true,
-                        isActive: currentRoute == Routes.salesCreditNote,
-                      ),
-                    ],
-                  ),
-                  _NavItem(
-                    icon: PhosphorIconsLight.user,
-                    label: 'User',
-                    route: Routes.user,
-                    isActive: currentRoute == Routes.user,
-                  ),
-                  _NavItem(
-                    icon: PhosphorIconsLight.addressBook,
-                    label: 'Contact',
-                    route: Routes.contact,
-                    isActive: currentRoute == Routes.contact,
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.gear,
-                    label: 'Settings',
-                    children: [_NavItem(label: 'General Settings', route: '')],
-                  ),
-                  _ExpandableSection(
-                    icon: PhosphorIconsLight.bank,
-                    label: 'Bank / Cash',
-                    children: [
-                      _NavItem(
-                        label: 'Bank',
-                        route: Routes.bank,
-                        isChild: true,
-                        isActive: currentRoute == Routes.bank,
-                      ),
-                      _NavItem(
-                        label: 'Bank Transaction',
-                        route: Routes.bankTransaction,
-                        isChild: true,
-                        isActive: currentRoute == Routes.bankTransaction,
-                      ),
-                      _NavItem(
-                        label: 'Payment',
-                        route: Routes.posPayment,
-                        isChild: true,
-                        isActive: currentRoute == Routes.posPayment,
-                      ),
-                      _NavItem(
-                        label: 'Receipt',
-                        route: Routes.receipt,
-                        isChild: true,
-                        isActive: currentRoute == Routes.receipt,
-                      ),
-                      _NavItem(
-                        label: 'Expense',
-                        route: Routes.expense,
-                        isChild: true,
-                        isActive: currentRoute == Routes.expense,
-                      ),
-                      _NavItem(
-                        label: 'Salary',
-                        route: Routes.salary,
-                        isChild: true,
-                        isActive: currentRoute == Routes.salary,
-                      ),
-                    ],
-                  ),
-                  const Gap(24),
-                ],
-              ),
+              child: Obx(() {
+                if (permissionService.permittedTabs.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                // activeTabId drives which item is highlighted.
+                // _NavItem.onTap writes to this; cleared when route changes externally.
+                final activeTabId = permissionService.activeTabId.value;
+                final currentRoute = Get.currentRoute;
+
+                return ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    ..._buildMenu(
+                      permissionService.permittedTabs,
+                      currentRoute,
+                      activeTabId,
+                    ),
+                    const Gap(24),
+                  ],
+                );
+              }),
             ),
 
             // ── Footer ──
@@ -358,15 +238,18 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
-// ── Nav Item ──
+// ── Nav Item ──────────────────────────────────────────────────────────────────
+
 class _NavItem extends StatelessWidget {
+  final String tabId;
   final IconData? icon;
   final String label;
-  final String route;
+  final String route; // the resolved GetX route — what actually opens
   final bool isActive;
   final bool isChild;
 
   const _NavItem({
+    required this.tabId,
     this.icon,
     required this.label,
     required this.route,
@@ -382,7 +265,13 @@ class _NavItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
-        if (Get.currentRoute != route) Get.toNamed(route);
+        if (route.isNotEmpty) {
+          // Store which tab was tapped so the drawer can highlight exactly
+          // this item — even when two tabs resolve to different routes but
+          // share the same tabUrl.
+          PermissionService.to.activeTabId.value = tabId;
+          Get.toNamed(route);
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -409,13 +298,15 @@ class _NavItem extends StatelessWidget {
               ),
               const Gap(12),
             ],
-            Text(
-              label,
-              style: TextHelper.bodyMedium.copyWith(
-                color: isActive
-                    ? (isDark ? Colors.white : AppDrawer._activeFg)
-                    : colors.textSecondary,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            Expanded(
+              child: Text(
+                label,
+                style: TextHelper.bodyMedium.copyWith(
+                  color: isActive
+                      ? (isDark ? Colors.white : AppDrawer._activeFg)
+                      : colors.textSecondary,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -425,7 +316,8 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-// ── Expandable Section ──
+// ── Expandable Section ────────────────────────────────────────────────────────
+
 class _ExpandableSection extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -466,7 +358,8 @@ class _ExpandableSection extends StatelessWidget {
   }
 }
 
-// ── Social Icon ──
+// ── Social Icon ───────────────────────────────────────────────────────────────
+
 class _SocialIcon extends StatelessWidget {
   final IconData icon;
 
@@ -482,12 +375,12 @@ class _SocialIcon extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? colors.background : Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(color: colors.border.withOpacity(0.5)),
+        border: Border.all(color: colors.border.withValues(alpha: 0.5)),
         boxShadow: isDark
             ? []
             : [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),

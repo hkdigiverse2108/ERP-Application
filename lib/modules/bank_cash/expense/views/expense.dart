@@ -6,7 +6,6 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 
 class ExpensePage extends StatelessWidget {
   const ExpensePage({super.key});

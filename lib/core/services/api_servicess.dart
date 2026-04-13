@@ -267,7 +267,6 @@ class ApiService extends GetxService {
       return ResModel.fromJson(body);
     } else if (response.statusCode == 401) {
       Get.find<StorageService>().clearSession();
-      Get.offAllNamed(Routes.signIn);
       throw Exception("Token expired");
     } else {
       final body = jsonDecode(response.body);

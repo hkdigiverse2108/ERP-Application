@@ -12,10 +12,14 @@ class PaginationModel<T> {
   });
 
   factory PaginationModel.fromJson(Map<String, dynamic> json, List<T> items) {
-    final state = json['state'];
+    final state = json['state'] as Map<String, dynamic>?;
     return PaginationModel(
-      currentPage: int.tryParse(state['page'].toString()) ?? 1,
-      totalPages: int.tryParse(state['totalPages'].toString()) ?? 1,
+      currentPage: state != null
+          ? (int.tryParse(state['page'].toString()) ?? 1)
+          : 1,
+      totalPages: state != null
+          ? (int.tryParse(state['totalPages'].toString()) ?? 1)
+          : 1,
       totalItems: json['totalData'] ?? 0,
       items: items,
     );

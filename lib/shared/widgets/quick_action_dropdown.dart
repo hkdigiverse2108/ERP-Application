@@ -43,7 +43,7 @@ class QuickActionDropdown extends StatelessWidget {
                     _MainHeader(
                       title: "Dashboard",
                       onTap: () {
-                        Get.toNamed(Routes.home);
+                        Get.toNamed(Routes.dashboard);
                       },
                     ),
                     _ExpandableSection(
@@ -141,10 +141,10 @@ class QuickActionDropdown extends StatelessWidget {
                           route: Routes.product,
                         ),
                         QuickActionItem(title: "Stock", route: Routes.stock),
-                        QuickActionItem(title: "Recipt", route: Routes.recipt),
+                        QuickActionItem(title: "Recipt", route: Routes.recipe),
                         QuickActionItem(
                           title: "Stock Varification ",
-                          route: Routes.stockVarification,
+                          route: Routes.stockVerification,
                         ),
                         QuickActionItem(
                           title: "Bill of Live",
@@ -284,9 +284,9 @@ class _MainHeader extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (onTap != null) {
-            Get.toNamed(Routes.home);
+            Get.toNamed(Routes.dashboard);
           } else {
-            Get.toNamed(Routes.home);
+            Get.toNamed(Routes.dashboard);
           }
         },
         child: Text(

@@ -56,4 +56,16 @@ class UserRepository {
     }
     throw Exception(res.message ?? "Something went wrong");
   }
+
+  Future<UserModel> getUserById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getUserById(id));
+    if (res.status == 200) {
+      if (res.data is Map && res.data['user_data'] != null) {
+        return UserModel.fromJson(res.data['user_data']);
+      } else {
+        return UserModel.fromJson(res.data);
+      }
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
 }

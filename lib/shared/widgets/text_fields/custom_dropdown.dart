@@ -124,7 +124,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                     borderSide: BorderSide(
-                                      color: context.appColors.border,  
+                                      color: context.appColors.border,
                                     ),
                                   ),
                                 ),
@@ -161,7 +161,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                       vertical: 12,
                                     ),
                                     color: isSelected
-                                        ? AppColors.primary.withOpacity(0.05)
+                                        ? AppColors.primary.withValues(
+                                            alpha: 0.05,
+                                          )
                                         : null,
                                     child: Row(
                                       children: [

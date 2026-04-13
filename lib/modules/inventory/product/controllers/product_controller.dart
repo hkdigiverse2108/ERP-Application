@@ -6,7 +6,7 @@ import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/brand_repository.dart';
 import 'package:ai_setu/data/repositories/category_repository.dart';
 import 'package:ai_setu/data/repositories/product_repository.dart';
-import 'package:ai_setu/data/repositories/tax_repository.dart';
+import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

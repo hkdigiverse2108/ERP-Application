@@ -1,5 +1,6 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.29.26:4001";
+  // static const String baseUrl = "http://192.168.29.26:4001";
+  static const String baseUrl = "https://api.ai-setu.com";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -66,7 +67,17 @@ class ApiConstants {
   static const String deleteUpload = "/upload";
 
   // Role
-  static const String getAllRole = "/role/all";
+  static String getAllRole({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/role/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addRole = "/role/add";
   static String getRoleById(String id) => "/role/$id";
   static const String updateRole = "/role/edit";
@@ -292,7 +303,17 @@ class ApiConstants {
   static const String addExpenseVoucher = "/voucher/expense/add";
 
   // Payment Term
-  static const String getAllPaymentTerm = "/payment-term/all";
+  static String getAllPaymentTerm({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/payment-term/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String paymentTermDropdown = "/payment-term/dropdown";
   static String getPaymentTermById(String id) => "/payment-term/$id";
   static const String addPaymentTerm = "/payment-term/add";
@@ -333,6 +354,23 @@ class ApiConstants {
   static String getAnnouncementById(String id) => "/announcement/$id";
   static const String updateAnnouncement = "/announcement/edit";
   static String deleteAnnouncement(String id) => "/announcement/$id";
+
+  // Consumption Type
+  static String getAllConsumptionType({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/consumption-type/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
+  static const String addConsumptionType = "/consumption-type/add";
+  static String getConsumptionTypeById(String id) => "/consumption-type/$id";
+  static const String updateConsumptionType = "/consumption-type/edit";
+  static String deleteConsumptionType(String id) => "/consumption-type/$id";
 
   // Bank
   static String getAllBank({
@@ -683,7 +721,17 @@ class ApiConstants {
   static const String getAllCategoryTree = "category/tree/all";
 
   // Additional Charge
-  static const String getAllAdditionalCharge = "/additional-charge/all";
+  static String getAllAdditionalCharge({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/additional-charge/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addAdditionalCharge = "/additional-charge/add";
   static String getAdditionalChargeById(String id) => "/additional-charge/$id";
   static const String updateAdditionalCharge = "/additional-charge/edit";
@@ -830,7 +878,17 @@ class ApiConstants {
   static const String uomDropdown = "/uom/dropdown";
 
   // Tax
-  static const String getAllTax = "/tax/all";
+  static String getAllTax({
+    int? page,
+    int? limit,
+    String? search,
+    String? activeFilter,
+  }) => buildUrl("/tax/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+  });
   static const String addTax = "/tax/add";
   static String getTaxById(String id) => "/tax/$id";
   static const String updateTax = "/tax/edit";
@@ -923,7 +981,8 @@ class ApiConstants {
   static String loyaltyPointsById(String id) => "/loyalty-points/$id";
 
   // Prefix
-  static const String getAllPrefix = "/prefix/all";
+  static String getAllPrefix({int? page, int? limit, String? search}) =>
+      buildUrl("/prefix/all", {"page": page, "limit": limit, "search": search});
   static const String addPrefix = "/prefix/add";
   static String getPrefixById(String id) => "/prefix/$id";
   static String getPrefixByModule(String module) => "/prefix/module/$module";
@@ -1000,4 +1059,9 @@ class ApiConstants {
   static String getSalaryById(String id) => "/salary/$id";
   static const String updateSalary = "/salary/edit";
   static String deleteSalary(String id) => "/salary/$id";
+
+  // permission
+  static String getPermitionById(String id) => "/permission/details?userId=$id";
+  static String getPermitionTabs(String id) =>
+      "/permission/child/details?userId=$id";
 }

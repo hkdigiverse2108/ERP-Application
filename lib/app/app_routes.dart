@@ -1,22 +1,21 @@
 abstract class Routes {
   static const splash = '/splash';
   static const signIn = '/sign-in';
-  static const home = '/home';
+  static const dashboard = '/dashboard';
   static const editUser = '/edit-user';
-  static const user = '/user';
+  static const user = '/users';
   static const product = '/product';
   static const stock = '/stock';
-  static const billOfLive = '/bill-of-live';
-  static const stockVarification = '/stock-varification';
-  static const recipt = '/recipt';
-  // static const payment = '/payment';
+  static const billOfLive = '/bill-of-materials';
+  static const stockVerification = '/stock-verification';
+  static const recipe = '/recipe';
   static const materialConsumption = '/material-consumption';
-  static const debit = '/debit';
-  static const credit = '/credit';
+  static const debit = '/debit-note'; // Accounting Debit Note
+  static const credit = '/credit-note'; // Accounting Credit Note
   static const contact = '/contact';
   static const bank = '/bank';
   static const bankTransaction = '/bank-transaction';
-  static const posPayment = '/pos-payment';
+  static const posPayment = '/payment';
   static const receipt = '/receipt';
   static const expense = '/expense';
   static const salary = '/salary';
@@ -24,17 +23,33 @@ abstract class Routes {
   static const salesOrder = '/sales-order';
   static const invoice = '/invoice';
   static const deliveryChallan = '/delivery-challan';
-  static const salesCreditNote = '/sales-credit-note';
+  static const salesCreditNote =
+      '/sales-credit-note'; // ← FIX: was '/credit-note' (duplicate of Routes.credit)
   static const purchaseOrder = '/purchase-order';
   static const supplierBill = '/supplier-bill';
-  static const purchaseReturn = '/purchase-debit-note';
-  static const posSalesRegister = '/pos-sales-register';
-  static const posOrderList = '/pos-order-list';
+  static const purchaseReturn = '/purchase-debit-note'; // Purchase Debit Note
+  static const posSalesRegister = '/sales-register';
+  static const posOrderList = '/order-list';
   static const posCreditNote = '/pos-credit-note';
-  
+
   // CRM
   static const coupon = '/coupon';
   static const discount = '/discount';
   static const loyalty = '/loyalty';
-}
 
+  // Settings
+  static const settings = '/setting/general';
+  static const settingsUserProfile = '/setting/user-profile';
+  static const settingsCompanyProfile = '/setting/company-profile';
+  static const settingsTaxes = '/setting/taxes';
+  static const settingsUserRoles = '/setting/user-roles';
+  static const settingsPrefix = '/setting/prefix';
+  static const settingsPaymentTerms = '/setting/payment-terms';
+  static const settingsAdditionalCharge = '/setting/additional-charge';
+  static const settingsConsumptionType = '/setting/consumption-type';
+
+  // TODO: uncomment when AI Credentials page is built
+  // static const aiCredentials = '/credentials';
+
+  static const accessDenied = '/access-denied';
+}

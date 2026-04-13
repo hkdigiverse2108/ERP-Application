@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 
 class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
+  final Color primary;
   final Color sectionSell;
   final Color sectionSellPurchase;
   final Color sectionPaid;
@@ -12,7 +13,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color textPrimary;
   final Color textSecondary;
 
+  /// Alias for textPrimary to resolve compilation errors in some views.
+  Color get text => textPrimary;
+
   const AppColorsExtension({
+    required this.primary,
     required this.sectionSell,
     required this.sectionSellPurchase,
     required this.sectionPaid,
@@ -26,6 +31,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
 
   @override
   ThemeExtension<AppColorsExtension> copyWith({
+    Color? primary,
     Color? sectionSell,
     Color? sectionSellPurchase,
     Color? sectionPaid,
@@ -37,6 +43,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? textSecondary,
   }) {
     return AppColorsExtension(
+      primary: primary ?? this.primary,
       sectionSell: sectionSell ?? this.sectionSell,
       sectionSellPurchase: sectionSellPurchase ?? this.sectionSellPurchase,
       sectionPaid: sectionPaid ?? this.sectionPaid,
@@ -58,6 +65,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       return this;
     }
     return AppColorsExtension(
+      primary: Color.lerp(primary, other.primary, t)!,
       sectionSell: Color.lerp(sectionSell, other.sectionSell, t)!,
       sectionSellPurchase: Color.lerp(
         sectionSellPurchase,
@@ -75,6 +83,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   }
 
   static const light = AppColorsExtension(
+    primary: AppColors.primary,
     sectionSell: AppColors.lightSectionSell,
     sectionSellPurchase: AppColors.lightSectionSellPurchase,
     sectionPaid: AppColors.lightSectionPaid,
@@ -87,6 +96,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   );
 
   static const dark = AppColorsExtension(
+    primary: AppColors.primary,
     sectionSell: AppColors.darkSectionSell,
     sectionSellPurchase: AppColors.darkSectionSellPurchase,
     sectionPaid: AppColors.darkSectionPaid,

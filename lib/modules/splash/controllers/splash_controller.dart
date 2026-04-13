@@ -1,8 +1,10 @@
+import 'package:ai_setu/core/services/permission_service.dart';
+import 'package:ai_setu/core/services/storage_service.dart';
+import 'package:ai_setu/data/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/images.dart';
-import 'package:ai_setu/core/services/storage_service.dart';
 
 class SplashController extends GetxController {
   @override
@@ -20,15 +22,29 @@ class SplashController extends GetxController {
     }
   }
 
-  void _navigateToNext() {
-    Future.delayed(const Duration(seconds: 2), () {
-      final isLoggedIn =
-          StorageService.instance.read<bool>(StorageKeys.isLoggedIn) ?? false;
-      if (isLoggedIn) {
-        Get.offAllNamed(Routes.home);
+  Future<void> _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 2));
+    final isLoggedIn =
+        StorageService.instance.read<bool>(StorageKeys.isLoggedIn) ?? false;
+    
+    if (isLoggedIn) {
+      final userData = StorageService.instance.read<Map<String, dynamic>>(
+        StorageKeys.userData,
+      );
+      if (userData != null) {
+        try {
+          final user = UserModel.fromJson(userData);
+          await PermissionService.to.fetchPermissions(user.id);
+          Get.offAllNamed(PermissionService.to.defaultRoute);
+        } catch (e) {
+          Get.log("Splash: Error loading permissions, redirecting to login: $e");
+          Get.offAllNamed(Routes.signIn);
+        }
       } else {
         Get.offAllNamed(Routes.signIn);
       }
-    });
+    } else {
+      Get.offAllNamed(Routes.signIn);
+    }
   }
 }

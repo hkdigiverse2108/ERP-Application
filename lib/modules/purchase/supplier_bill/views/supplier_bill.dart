@@ -8,7 +8,6 @@ import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class SupplierBillPage extends StatelessWidget {
   const SupplierBillPage({super.key});

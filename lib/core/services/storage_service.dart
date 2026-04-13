@@ -58,4 +58,5 @@ class StorageKeys {
   static const String refreshToken = 'refreshToken';
   static const String userData = 'userData';
   static const String onboardingCompleted = 'onboardingCompleted';
+  static const String userPermissions = 'userPermissions';
 }

@@ -26,11 +26,14 @@ class CommonTable<T> extends StatelessWidget {
   final VoidCallback? onAddItem;
   final Function(T item)? onRemoveItem;
   final Function(T item)? onEditItem;
+  final bool Function(T item)? canEdit;
+  final bool Function(T item)? canDelete;
   final String? addLabel;
   final Widget? emptyState;
   final Widget? footer;
   final bool showSerial;
   final bool isLoading;
+  final double? rowPadding;
 
   // Pagination params
   final int? currentPage;
@@ -46,11 +49,14 @@ class CommonTable<T> extends StatelessWidget {
     this.onAddItem,
     this.onRemoveItem,
     this.onEditItem,
+    this.canEdit,
+    this.canDelete,
     this.addLabel,
     this.emptyState,
     this.footer,
     this.showSerial = true,
     this.isLoading = false,
+    this.rowPadding,
     this.currentPage,
     this.totalPages,
     this.onPageChanged,
@@ -227,8 +233,8 @@ class CommonTable<T> extends StatelessWidget {
   Widget _buildHeaderRow(Color headerBg) {
     return Container(
       color: headerBg,
-      padding: const EdgeInsets.symmetric(
-        vertical: Sizes.paddingS + 2,
+      padding: EdgeInsets.symmetric(
+        vertical: (rowPadding ?? Sizes.paddingS) + 2,
         horizontal: Sizes.paddingS,
       ),
       child: Row(
@@ -283,8 +289,8 @@ class CommonTable<T> extends StatelessWidget {
   ) {
     final item = items[index];
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: Sizes.paddingS,
+      padding: EdgeInsets.symmetric(
+        vertical: rowPadding ?? Sizes.paddingS,
         horizontal: Sizes.paddingS,
       ),
       decoration: BoxDecoration(
@@ -316,48 +322,64 @@ class CommonTable<T> extends StatelessWidget {
 
           // Actions
           if (onRemoveItem != null || onEditItem != null)
-            SizedBox(
-              width: _colActions,
-              child: PopupMenuButton<String>(
-                padding: EdgeInsets.zero,
-                iconSize: 18,
-                icon: const Icon(PhosphorIconsBold.dotsThreeVertical, size: 16),
-                onSelected: (value) {
-                  if (value == 'edit') onEditItem?.call(item);
-                  if (value == 'delete') onRemoveItem?.call(item);
-                },
-                itemBuilder: (context) => [
-                  if (onEditItem != null)
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Row(
-                        children: [
-                          Icon(PhosphorIconsBold.pencilSimple, size: 16),
-                          SizedBox(width: 8),
-                          Text('Edit'),
-                        ],
-                      ),
+            Builder(
+              builder: (context) {
+                final showEdit =
+                    onEditItem != null && (canEdit?.call(item) ?? true);
+                final showDelete =
+                    onRemoveItem != null && (canDelete?.call(item) ?? true);
+
+                if (!showEdit && !showDelete) {
+                  return const SizedBox(width: _colActions);
+                }
+
+                return SizedBox(
+                  width: _colActions,
+                  child: PopupMenuButton<String>(
+                    padding: EdgeInsets.zero,
+                    iconSize: 18,
+                    icon: const Icon(
+                      PhosphorIconsBold.dotsThreeVertical,
+                      size: 16,
                     ),
-                  if (onRemoveItem != null)
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(
-                            PhosphorIconsBold.trash,
-                            size: 16,
-                            color: AppColors.error,
+                    onSelected: (value) {
+                      if (value == 'edit') onEditItem?.call(item);
+                      if (value == 'delete') onRemoveItem?.call(item);
+                    },
+                    itemBuilder: (context) => [
+                      if (showEdit)
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(PhosphorIconsBold.pencilSimple, size: 16),
+                              SizedBox(width: 8),
+                              Text('Edit'),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Delete',
-                            style: TextStyle(color: AppColors.error),
+                        ),
+                      if (showDelete)
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(
+                                PhosphorIconsBold.trash,
+                                size: 16,
+                                color: AppColors.error,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Delete',
+                                style: TextStyle(color: AppColors.error),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+                        ),
+                    ],
+                  ),
+                );
+              },
             ),
         ],
       ),
