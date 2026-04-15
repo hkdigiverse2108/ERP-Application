@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:async';
-import 'package:ai_setu/app/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
@@ -52,24 +50,36 @@ class ApiService extends GetxService {
           ),
         ),
         barrierDismissible: false,
-      );
+      ).then((_) {
+        // Safety: if dialog closed without retry completing, fail all pending
+        if (_isNoInternetDialogShowing) {
+          _isNoInternetDialogShowing = false;
+          for (var c in _connectivityCompleters) {
+            if (!c.isCompleted) c.complete(false);
+          }
+          _connectivityCompleters.clear();
+        }
+      });
     }
     return completer.future;
   }
 
   // Check internet connectivity
   Future<bool> hasConnection() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      return false;
-    }
-
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    return await InternetConnection.createInstance(
+      customCheckOptions: [
+        // Primary: your own server
+        InternetCheckOption(
+          uri: Uri.parse(baseUrl),
+          timeout: const Duration(seconds: 5),
+        ),
+        // Fallback: Cloudflare
+        InternetCheckOption(
+          uri: Uri.parse(ApiConstants.baseUrl),
+          timeout: const Duration(seconds: 5),
+        ),
+      ],
+    ).hasInternetAccess;
   }
 
   // GET request

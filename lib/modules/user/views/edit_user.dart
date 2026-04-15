@@ -1,12 +1,13 @@
-import 'dart:io';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/modules/user/controllers/update_user_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
-import 'package:ai_setu/shared/widgets/containers/border_container.dart';
+import 'package:ai_setu/shared/widgets/containers/edit_section.dart';
+import 'package:ai_setu/shared/widgets/images/edit_image_picker.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
+import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -47,29 +48,27 @@ class EditUser extends GetView<UpdateUserController> {
                       const Divider(),
 
                       /// BASIC DETAILS
-                      _section(
-                        Column(
+                      EditSection(
+                        title: "Basic Details",
+                        icon: PhosphorIconsLight.identificationCard,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionTitle("Basic Details"),
-                            const Divider(),
-                            const Gap(Sizes.defVerticalSpace),
-
-                            _textFormField(
-                              "Full Name",
-                              controller.fullNameController,
+                            EditTextField(
+                              label: "Full Name",
+                              controller: controller.fullNameController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "User Name",
-                              controller.userNameController,
+                            EditTextField(
+                              label: "User Name",
+                              controller: controller.userNameController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "User Description",
-                              controller.userDescriptionController,
+                            EditTextField(
+                              label: "User Description",
+                              controller: controller.userDescriptionController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
@@ -92,9 +91,9 @@ class EditUser extends GetView<UpdateUserController> {
                               children: [
                                 SizedBox(
                                   width: 100,
-                                  child: _textFormField(
-                                    "Code",
-                                    controller.countryCodeController,
+                                  child: EditTextField(
+                                    label: "Code",
+                                    controller: controller.countryCodeController,
                                     keyboardType: TextInputType.phone,
                                     readOnly: true,
                                     onTap: () {
@@ -130,9 +129,9 @@ class EditUser extends GetView<UpdateUserController> {
                                 ),
                                 const Gap(Sizes.defHorizontalSpace),
                                 Expanded(
-                                  child: _textFormField(
-                                    "Phone No.",
-                                    controller.phoneController,
+                                  child: EditTextField(
+                                    label: "Phone No.",
+                                    controller: controller.phoneController,
                                     keyboardType: TextInputType.phone,
                                   ),
                                 ),
@@ -140,23 +139,29 @@ class EditUser extends GetView<UpdateUserController> {
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField("Email", controller.emailController),
+                            EditTextField(
+                              label: "Email",
+                              controller: controller.emailController,
+                            ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField("PAN No.", controller.panController),
+                            EditTextField(
+                              label: "PAN No.",
+                              controller: controller.panController,
+                            ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Branch",
-                              controller.branchController,
+                            EditTextField(
+                              label: "Branch",
+                              controller: controller.branchController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
                             Obx(
-                              () => _textFormField(
-                                "Password",
-                                controller.passwordController,
-                                obscure: !controller.isPasswordVisible.value,
+                              () => EditTextField(
+                                label: "Password",
+                                controller: controller.passwordController,
+                                obscureText: !controller.isPasswordVisible.value,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     controller.isPasswordVisible.value
@@ -173,17 +178,15 @@ class EditUser extends GetView<UpdateUserController> {
                       ),
 
                       /// ADDRESS DETAILS
-                      _section(
-                        Column(
+                      EditSection(
+                        title: "Address Details",
+                        icon: PhosphorIconsLight.mapPin,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionTitle("Address Details"),
-                            const Divider(),
-                            const Gap(Sizes.defVerticalSpace),
-
-                            _textFormField(
-                              "Address",
-                              controller.addressController,
+                            EditTextField(
+                              label: "Address",
+                              controller: controller.addressController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
@@ -232,91 +235,90 @@ class EditUser extends GetView<UpdateUserController> {
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Pin Code",
-                              controller.zipCodeController,
+                            EditTextField(
+                              label: "Pin Code",
+                              controller: controller.zipCodeController,
                             ),
                           ],
                         ),
                       ),
 
                       /// BANK DETAILS
-                      _section(
-                        Column(
+                      EditSection(
+                        title: "Bank Details",
+                        icon: PhosphorIconsLight.bank,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionTitle("Bank Details"),
-                            const Divider(),
-                            const Gap(Sizes.defVerticalSpace),
-
-                            _textFormField(
-                              "Bank Name",
-                              controller.bankNameController,
+                            EditTextField(
+                              label: "Bank Name",
+                              controller: controller.bankNameController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Account Number",
-                              controller.accountNumberController,
+                            EditTextField(
+                              label: "Account Number",
+                              controller: controller.accountNumberController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "IFSC Code",
-                              controller.ifscCodeController,
+                            EditTextField(
+                              label: "IFSC Code",
+                              controller: controller.ifscCodeController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Branch",
-                              controller.branchController,
+                            EditTextField(
+                              label: "Branch",
+                              controller: controller.branchController,
                             ),
                           ],
                         ),
                       ),
 
                       /// SALARY DETAILS
-                      _section(
-                        Column(
+                      EditSection(
+                        title: "Salary Details",
+                        icon: PhosphorIconsLight.money,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionTitle("Salary Details"),
-                            const Divider(),
-                            const Gap(Sizes.defVerticalSpace),
-
-                            _textFormField("Wages", controller.wagesController),
-                            const Gap(Sizes.defVerticalSpace),
-
-                            _textFormField(
-                              "Commission",
-                              controller.commissionController,
+                            EditTextField(
+                              label: "Wages",
+                              controller: controller.wagesController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Extra Wages",
-                              controller.extraWagesController,
+                            EditTextField(
+                              label: "Commission",
+                              controller: controller.commissionController,
                             ),
                             const Gap(Sizes.defVerticalSpace),
 
-                            _textFormField(
-                              "Target",
-                              controller.targetController,
+                            EditTextField(
+                              label: "Extra Wages",
+                              controller: controller.extraWagesController,
+                            ),
+                            const Gap(Sizes.defVerticalSpace),
+
+                            EditTextField(
+                              label: "Target",
+                              controller: controller.targetController,
                             ),
                           ],
                         ),
                       ),
 
                       /// IMAGE
-                      _section(
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle("Image"),
-                            const Divider(),
-                            const Gap(Sizes.defVerticalSpace),
-                            _imagePicker(context),
-                          ],
+                      EditSection(
+                        title: "Image",
+                        icon: PhosphorIconsLight.image,
+                        child: Obx(
+                          () => EditImagePicker(
+                            imagePath: controller.selectedImage.value?.path,
+                            onPickImage: controller.pickImageFromGallery,
+                            onRemoveImage: controller.removeImage,
+                          ),
                         ),
                       ),
                     ],
@@ -331,116 +333,6 @@ class EditUser extends GetView<UpdateUserController> {
     );
   }
 
-  /// SECTION WRAPPER
-  Widget _section(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Sizes.paddingM,
-        vertical: Sizes.paddingS,
-      ),
-      child: BorderContainer(
-        padding: const EdgeInsets.all(Sizes.paddingM),
-        child: child,
-      ),
-    );
-  }
-
-  /// SECTION TITLE
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
-    );
-  }
-
-  /// TEXT FIELD
-  Widget _textFormField(
-    String label,
-    TextEditingController controller, {
-    bool obscure = false,
-    Widget? suffixIcon,
-    TextInputType? keyboardType,
-    bool readOnly = false,
-    VoidCallback? onTap,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      keyboardType: keyboardType,
-      readOnly: readOnly,
-      onTap: onTap,
-
-      style: TextHelper.bodyMedium,
-      decoration: InputDecoration(
-        labelText: label,
-        suffixIcon: suffixIcon,
-        labelStyle: TextHelper.bodySmall,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-      ),
-    );
-  }
-
-  /// IMAGE PICKER
-  Widget _imagePicker(BuildContext context) {
-    return Obx(() {
-      final image = controller.selectedImage.value;
-      return Column(
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: controller.pickImageFromGallery,
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                  ),
-                  child: image == null
-                      ? Icon(
-                          PhosphorIconsLight.plus,
-                          size: 32,
-                          color: Colors.grey,
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            Sizes.borderRadiusM,
-                          ),
-                          child: GetPlatform.isWeb
-                              ? Image.network(image.path, fit: BoxFit.cover)
-                              : Image.file(File(image.path), fit: BoxFit.cover),
-                        ),
-                ),
-              ),
-              const Gap(Sizes.defHorizontalSpace),
-              if (image != null)
-                IconButton(
-                  onPressed: controller.removeImage,
-                  icon: Icon(PhosphorIconsLight.trash, color: Colors.red),
-                ),
-            ],
-          ),
-          const Gap(Sizes.paddingS),
-          Text(
-            image == null ? "Tap to select an image" : "Tap to change image",
-            style: TextHelper.bodySmall,
-          ),
-        ],
-      );
-    });
-  }
 
   /// BUTTONS
   Widget _buildButton(BuildContext context) {

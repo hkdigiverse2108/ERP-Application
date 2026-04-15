@@ -83,6 +83,8 @@ class TextHelper {
       h3.copyWith(color: Theme.of(context).colorScheme.onSurface);
   static TextStyle h4Style(BuildContext context) =>
       h4.copyWith(color: Theme.of(context).colorScheme.onSurface);
+  static TextStyle h5Style(BuildContext context) =>
+      h4.copyWith(color: Theme.of(context).colorScheme.onSurface);
   static TextStyle bodyLargeStyle(BuildContext context) =>
       bodyLarge.copyWith(color: Theme.of(context).colorScheme.onSurface);
   static TextStyle bodyMediumStyle(BuildContext context) =>

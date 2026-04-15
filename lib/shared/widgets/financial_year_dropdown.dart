@@ -16,11 +16,28 @@ class FinancialYearDropdown extends StatefulWidget {
 
 class _FinancialYearDropdownState extends State<FinancialYearDropdown> {
   late String _selectedYear;
+  List<Map> years = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedYear = widget.initialValue ?? "2025-2026";
+    _selectedYear = widget.initialValue ?? calculateCurrunt();
+  }
+
+  String calculateCurrunt() {
+    final year = DateTime.now();
+
+    if (year.month >= 4) {
+      return "${year.year} - ${year.year + 1}";
+    } else {
+      return "${year.year - 1} - ${year.year}";
+    }
+  }
+
+  void getUntilNow() {
+
+    
+
   }
 
   @override

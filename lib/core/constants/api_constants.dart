@@ -127,7 +127,7 @@ class ApiConstants {
     "productTypeIdFilter": productTypeIdFilter,
   });
   static String getProductById(String id) => "/product/$id";
-  static const String productDropdown = "/product/dropdown";
+  static const String productDropdownNew = "/product/dropdown?isNewProduct=true";
 
   // Product Category
   static const String getAllProductCategory = "/product-category/all";

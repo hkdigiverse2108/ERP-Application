@@ -7,7 +7,8 @@ abstract class Routes {
 
   // inventory
   static const product = '/product';
-  static const addProduct = '/add-product';
+  static const addUpdateProduct = '/add-update-product';
+  static const addItem = '/add-item';
   static const stock = '/stock';
   static const billOfLive = '/bill-of-materials';
   static const stockVerification = '/stock-verification';
@@ -60,9 +61,6 @@ abstract class Routes {
   static const settingsPaymentTerms = '/setting/payment-terms';
   static const settingsAdditionalCharge = '/setting/additional-charge';
   static const settingsConsumptionType = '/setting/consumption-type';
-
-  // TODO: uncomment when AI Credentials page is built
-  // static const aiCredentials = '/credentials';
 
   static const accessDenied = '/access-denied';
 }

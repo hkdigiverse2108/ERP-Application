@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -12,7 +13,6 @@ import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ProductTable extends StatelessWidget {
@@ -41,16 +41,11 @@ class ProductTable extends StatelessWidget {
                   ),
                   const Gap(8),
                   SectionButton(
-                    onTap: () {},
+                    onTap: () => Get.toNamed(Routes.addItem),
                     label: 'Add Item',
-                    // icon: PhosphorIconsLight.fileArchive,
                   ),
                   const Gap(8),
-                  SectionButton(
-                    onTap: () {},
-                    label: 'Remove Item',
-                    // icon: PhosphorIconsLight.fileArchive,
-                  ),
+                  SectionButton(onTap: () {}, label: 'Remove Item'),
                 ],
               ),
               Gap(Sizes.defHorizontalSpace),
@@ -64,6 +59,8 @@ class ProductTable extends StatelessWidget {
                 () => CommonTable<ProductItemModel>(
                   isLoading: controller.isLodding.value,
                   items: controller.products,
+                  onEditItem: (item) =>
+                      Get.toNamed(Routes.addUpdateProduct, arguments: item),
                   columns: [
                     TableColumn(
                       title: 'Name',

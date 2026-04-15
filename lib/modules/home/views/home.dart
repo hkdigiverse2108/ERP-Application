@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:intl/intl.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
@@ -176,16 +177,25 @@ class Home extends StatelessWidget {
                                         },
                                       ),
                                       Gap(Sizes.lgHorizontalSpace),
-                                      const AppBarChart(
-                                        values: [45, 80, 65, 30, 90, 50, 70],
-                                        labels: [
-                                          'Mon',
-                                          'Tue',
-                                          'Wed',
-                                          'Thu',
-                                          'Fri',
-                                          'Sat',
-                                          'Sun',
+                                      AppBarChart(
+                                        values: homeController
+                                            .salesAndPurchaseGraph
+                                            .map((e) => [e.sales, e.purchase])
+                                            .toList(),
+                                        labels: homeController
+                                            .salesAndPurchaseGraph
+                                            .map((e) => _formatChartDate(
+                                                e.date,
+                                                homeController
+                                                    .selectedDateRange.value))
+                                            .toList(),
+                                        colors: [
+                                          context.appColors.sectionSell,
+                                          context.appColors.sectionSellPurchase,
+                                        ],
+                                        seriesNames: const [
+                                          'Sales',
+                                          'Purchase'
                                         ],
                                       ),
                                       Gap(Sizes.lgVerticalSpace),
@@ -219,15 +229,38 @@ class Home extends StatelessWidget {
                                         },
                                       ),
                                       Gap(Sizes.lgHorizontalSpace),
-                                      const AppBarChart(
-                                        values: [15, 60, 65, 45, 62, 20, 40],
-                                        labels: [
-                                          '1 Mar',
-                                          '5 Mar',
-                                          '10 Mar',
-                                          '15 Mar',
-                                          '20 Mar',
-                                          '25 Mar',
+                                      AppBarChart(
+                                        values: homeController.transactionGraph
+                                            .map((e) => [
+                                                  e.cash,
+                                                  e.upi,
+                                                  e.bank,
+                                                  e.card,
+                                                  e.cheque,
+                                                  e.other
+                                                ])
+                                            .toList(),
+                                        labels: homeController.transactionGraph
+                                            .map((e) => _formatChartDate(
+                                                e.date,
+                                                homeController
+                                                    .selectedDateRange.value))
+                                            .toList(),
+                                        colors: const [
+                                          Colors.green,
+                                          Colors.blue,
+                                          Colors.orange,
+                                          Colors.purple,
+                                          Colors.teal,
+                                          Colors.grey,
+                                        ],
+                                        seriesNames: const [
+                                          'Cash',
+                                          'UPI',
+                                          'Bank',
+                                          'Card',
+                                          'Cheque',
+                                          'Other'
                                         ],
                                       ),
                                       Gap(Sizes.lgVerticalSpace),
@@ -336,5 +369,19 @@ class Home extends StatelessWidget {
         style: TextHelper.h4.copyWith(fontWeight: FontWeight.w600),
       ),
     );
+  }
+
+  String _formatChartDate(String rawDate, DateTimeRange range) {
+    final date = DateTime.tryParse(rawDate);
+    if (date == null) return rawDate;
+
+    final days = range.end.difference(range.start).inDays;
+    if (days >= 300) {
+      return DateFormat('MMM yy').format(date);
+    } else if (days > 180) {
+      return DateFormat('d MMM yy').format(date);
+    } else {
+      return DateFormat('d MMM').format(date);
+    }
   }
 }

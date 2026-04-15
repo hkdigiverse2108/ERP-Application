@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
   get: ^4.7.3
@@ -24,9 +26,12 @@ dependencies:
   image_picker: ^1.2.1
   connectivity_plus: ^7.0.0
   http: ^1.6.0
+  flutter_quill: ^11.5.0
+  flutter_quill_extensions: ^11.0.0
   animated_text_kit: ^4.3.0
   visibility_detector: ^0.4.0+2
   country_picker: ^2.0.27
+  internet_connection_checker_plus: ^2.9.1+2
 
 dev_dependencies:
   flutter_test:

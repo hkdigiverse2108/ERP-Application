@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -46,7 +47,7 @@ class Product extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
-          onAdd: () {},
+          onAdd: () => Get.toNamed(Routes.addUpdateProduct),
           filters: [
             FilterOption(
               label: 'Active Status',

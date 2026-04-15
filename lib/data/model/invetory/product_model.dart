@@ -323,9 +323,9 @@ final userTypeValues = EnumValues({
 class Nutrition {
   final String name;
   final String value;
-  final String id;
+  final String? id;
 
-  Nutrition({required this.name, required this.value, required this.id});
+  Nutrition({required this.name, required this.value, this.id});
 
   factory Nutrition.fromRawJson(String str) =>
       Nutrition.fromJson(json.decode(str));

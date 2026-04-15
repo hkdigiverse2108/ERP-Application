@@ -43,35 +43,33 @@ class OrderListPage extends StatelessWidget {
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: Obx(
-        () => FilterSection(
-          title: 'Order List',
-          filters: [
-            FilterOption(
-              label: 'Select Status',
-              filterKey: 'statusFilter',
-              options: {
-                for (var e in OrderStatus.values)
-                  ?e.name.replaceAll('_', ' ').capitalizeFirst: e.name,
-              },
-            ),
-            // FilterOption(
-            //   label: 'Branch',
-            //   filterKey: 'branchId',
-            //   options: {
-            //     for (var e in controller.orderList)
-            //       e.branchId.name: e.branchId.id,
-            //   },
-            // ),
-            FilterOption(
-              label: 'Active Status',
-              filterKey: 'activeFilter',
-              options: const {'Active': 'true', 'Inactive': 'false'},
-            ),
-          ],
-          onSearchChanged: (query) => controller.onSearch(query),
-          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
-        ),
+      child: FilterSection(
+        title: 'Order List',
+        filters: [
+          FilterOption(
+            label: 'Select Status',
+            filterKey: 'statusFilter',
+            options: {
+              for (var e in OrderStatus.values)
+                ?e.name.replaceAll('_', ' ').capitalizeFirst: e.name,
+            },
+          ),
+          // FilterOption(
+          //   label: 'Branch',
+          //   filterKey: 'branchId',
+          //   options: {
+          //     for (var e in controller.orderList)
+          //       e.branchId.name: e.branchId.id,
+          //   },
+          // ),
+          FilterOption(
+            label: 'Active Status',
+            filterKey: 'activeFilter',
+            options: const {'Active': 'true', 'Inactive': 'false'},
+          ),
+        ],
+        onSearchChanged: (query) => controller.onSearch(query),
+        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
+import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
@@ -48,5 +49,40 @@ class ProductRepository {
     }
 
     throw Exception(res.message ?? 'Failed to load product');
+  }
+
+  Future<bool> addProduct(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(ApiConstants.addProduct, body: data);
+
+    if (res.status == 200) {
+      return true;
+    }
+
+    throw Exception(res.message ?? 'Failed to add product');
+  }
+
+  Future<bool> updateProduct(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(
+      ApiConstants.updateProduct,
+      body: data,
+    );
+
+    if (res.status == 200) {
+      return true;
+    }
+
+    throw Exception(res.message ?? 'Failed to update product');
+  }
+
+  Future<List<CommonDropdownModel>> getProductDropdown() async {
+    final ResModel res = await _api.get(ApiConstants.productDropdownNew);
+
+    if (res.status == 200 && res.data != null) {
+      return (res.data as List)
+          .map((e) => CommonDropdownModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    throw Exception(res.message ?? 'Failed to load product dropdown');
   }
 }
