@@ -3,8 +3,14 @@ import 'package:ai_setu/modules/accounting/credit/bindings/credit_binding.dart';
 import 'package:ai_setu/modules/accounting/credit/views/credit.dart';
 import 'package:ai_setu/modules/accounting/debit/bindings/debit_binding.dart';
 import 'package:ai_setu/modules/accounting/debit/views/debit.dart';
+import 'package:ai_setu/modules/auth/bindings/forgot_password_bindings.dart';
+import 'package:ai_setu/modules/auth/bindings/set_new_password_bindings.dart';
 import 'package:ai_setu/modules/auth/bindings/sign_in_bindings.dart';
+import 'package:ai_setu/modules/auth/bindings/verification_bindings.dart';
+import 'package:ai_setu/modules/auth/views/forgot_password.dart';
+import 'package:ai_setu/modules/auth/views/set_new_password.dart';
 import 'package:ai_setu/modules/auth/views/sign_in.dart';
+import 'package:ai_setu/modules/auth/views/verification.dart';
 import 'package:ai_setu/modules/bank_cash/bank/bindings/bank_binding.dart';
 import 'package:ai_setu/modules/bank_cash/bank/views/bank.dart';
 import 'package:ai_setu/modules/bank_cash/bank_transaction/bindings/bank_transaction_binding.dart';
@@ -114,6 +120,21 @@ class AppPages {
       name: Routes.signIn,
       page: () => SignIn(),
       binding: SignInBindings(),
+    ),
+    GetPage(
+      name: Routes.forgotPassword,
+      page: () => ForgotPassword(),
+      binding: ForgotPasswordBindings(),
+    ),
+    GetPage(
+      name: Routes.verification,
+      page: () => Verification(),
+      binding: VerificationBindings(),
+    ),
+    GetPage(
+      name: Routes.setNewPassword,
+      page: () => SetNewPassword(),
+      binding: SetNewPasswordBindings(),
     ),
     GetPage(
       name: Routes.product,

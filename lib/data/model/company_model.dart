@@ -37,6 +37,8 @@ class CompanyModel {
   final BankInfo? bankId;
   final bool? isActive;
   final bool? isDeleted;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   CompanyModel({
     required this.id,
@@ -75,6 +77,8 @@ class CompanyModel {
     this.bankId,
     this.isActive,
     this.isDeleted,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory CompanyModel.fromRawJson(String str) =>
@@ -122,6 +126,12 @@ class CompanyModel {
         : (json["bankName"] != null ? BankInfo.fromFlatJson(json) : null),
     isActive: json["isActive"],
     isDeleted: json["isDeleted"],
+    createdAt: (json["createdAt"] ?? json["created_at"]) != null
+        ? DateTime.parse(json["createdAt"] ?? json["created_at"])
+        : null,
+    updatedAt: (json["updatedAt"] ?? json["updated_at"]) != null
+        ? DateTime.parse(json["updatedAt"] ?? json["updated_at"])
+        : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -162,6 +172,8 @@ class CompanyModel {
     "bankId": bankId?.toJson(),
     "isActive": isActive,
     "isDeleted": isDeleted,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
   };
 }
 

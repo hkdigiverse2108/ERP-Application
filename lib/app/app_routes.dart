@@ -1,6 +1,9 @@
 abstract class Routes {
   static const splash = '/splash';
   static const signIn = '/sign-in';
+  static const forgotPassword = '/forgot-password';
+  static const verification = '/verification';
+  static const setNewPassword = '/set-new-password';
   static const dashboard = '/dashboard';
   static const editUser = '/edit-user';
   static const user = '/users';

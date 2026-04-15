@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
@@ -40,6 +41,18 @@ class PurchaseOrderController extends GetxController {
   final totalItems = 0.obs;
 
   final isLodding = false.obs;
+  Worker? _fyWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    selectedDateRange.value = FinancialYearController.to.selectedRange;
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        updateDateRange(year.dateRange);
+      }
+    });
+  }
 
   @override
   void onReady() {
@@ -146,6 +159,7 @@ class PurchaseOrderController extends GetxController {
 
   @override
   void onClose() {
+    _fyWorker?.dispose();
     _debounceTimer?.cancel();
     super.onClose();
   }

@@ -1,38 +1,59 @@
 import 'dart:developer';
 
-import 'package:ai_setu/core/utils/app_snackbar.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:ai_setu/core/services/api_servicess.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
-import 'package:ai_setu/core/services/financial_year_controller.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/repositories/auth_repository.dart';
 import 'package:ai_setu/data/repositories/settings/company_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SignInController extends GetxController {
-  static SignInController get instance => Get.find();
+class SetNewPasswordController extends GetxController {
+  static SetNewPasswordController get instance => Get.find();
 
-  // Services
-  final StorageService storageService = StorageService.instance;
-  final ApiService apiService = ApiService.to;
   final _repo = AuthRepository();
   final _companyRepo = CompanyRepository();
 
   final isLoading = false.obs;
-  final showPassword = false.obs;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final loginFormKey = GlobalKey<FormState>();
 
-  Future<void> login() async {
-    if (!loginFormKey.currentState!.validate()) return;
+  final formKey = GlobalKey<FormState>();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  final showNewPassword = false.obs;
+  final showConfirmPassword = false.obs;
+
+  void toggleShowNewPassword() => showNewPassword.toggle();
+  void toggleShowConfirmPassword() => showConfirmPassword.toggle();
+
+  Future<void> saveAndLogin() async {
+    if (!(formKey.currentState?.validate() ?? false)) return;
+
+    final email = Get.arguments as String?;
+    if (email == null) {
+      AppSnackbar.error("Email not found. Please try again.");
+      return;
+    }
+
     try {
       isLoading.value = true;
-      final result = await _repo.login(
-        emailController.text.trim(),
-        passwordController.text.trim(),
+
+      // First update the password
+      await _repo.updatePassword(
+        email.trim(),
+        newPasswordController.text.trim(),
+        confirmPasswordController.text.trim(),
       );
+
+      AppSnackbar.success("Password updated successfully. Logging in...");
+
+      // Then attempt login
+      final result = await _repo.login(
+        email.trim(),
+        newPasswordController.text.trim(),
+      );
+
       await StorageService.instance.write(
         StorageKeys.accessToken,
         result.user.token,
@@ -43,7 +64,6 @@ class SignInController extends GetxController {
         result.user.toJson(),
       );
 
-      // Fetch permissions
       await PermissionService.to.fetchPermissions(result.user.id);
 
       // Fetch Company Details for Financial Year
@@ -55,17 +75,13 @@ class SignInController extends GetxController {
           StorageKeys.companyInfo,
           company.toJson(),
         );
-        // Also keep financialYear for legacy/convenience if needed,
-        // though we'll primarily use companyInfo now.
         await StorageService.instance.write(
           StorageKeys.financialYear,
           company.financialYear,
         );
-        // Regenerate and load years in the controller
         FinancialYearController.to.init();
       } catch (e) {
         log("Failed to fetch company details: $e");
-        // Non-blocking for login, but log it
       }
 
       Get.offAllNamed(PermissionService.to.defaultRoute);
@@ -77,14 +93,9 @@ class SignInController extends GetxController {
     }
   }
 
-  void toggleShowPass() {
-    showPassword.toggle();
-  }
-
   @override
   void onClose() {
-    // Note: Manual disposal of TextEditingControllers removed to avoid
-    // "used after disposed" crashes during GetX route transitions.
+    // Manual disposal removed to avoid race condition during navigation.
     super.onClose();
   }
 }

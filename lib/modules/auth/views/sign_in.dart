@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/app/app_routes.dart';
 
 class SignIn extends GetView<SignInController> {
   const SignIn({super.key});
@@ -16,11 +17,11 @@ class SignIn extends GetView<SignInController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.33,
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -31,11 +32,7 @@ class SignIn extends GetView<SignInController> {
               alignment: Alignment.center,
               child: Image.asset(Images.lightAisetuLogo),
             ),
-          ),
-
-          Expanded(
-            flex: 4,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: controller.loginFormKey,
@@ -85,7 +82,23 @@ class SignIn extends GetView<SignInController> {
                         ),
                       ),
                     ),
-                    Gap(20),
+                    Gap(10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.forgotPassword);
+                        },
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextHelper.bodySmall.copyWith(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(10),
                     Obx(
                       () => CommonButton(
                         onPressed: () {
@@ -99,8 +112,8 @@ class SignIn extends GetView<SignInController> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

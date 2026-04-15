@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/dashboard/category_sales_model.dart';
 import 'package:ai_setu/data/model/dashboard/category_wise_customers_count_model.dart';
@@ -69,6 +70,29 @@ class HomeController extends GetxController {
   final loginLogs = <LoginLogModel>[].obs;
 
   final isLoaded = false.obs;
+  Worker? _fyWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Listen to financial year changes globally
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+        // Reset all section flags to force refresh
+        graphsLoaded.value = false;
+        customersLoaded.value = false;
+        productsLoaded.value = false;
+        financeLoaded.value = false;
+
+        // Refresh the immediate top section
+        getTopSectionData();
+      }
+    });
+
+    // Initialize date range from current selection
+    selectedDateRange.value = FinancialYearController.to.selectedRange;
+  }
 
   // Pagination states for Each Table (Client-side)
   final topCustomersPage = 1.obs;
@@ -340,5 +364,11 @@ class HomeController extends GetxController {
     } finally {
       loginLogsLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    _fyWorker?.dispose();
+    super.onClose();
   }
 }

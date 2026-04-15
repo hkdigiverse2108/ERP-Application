@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/data/model/pos/sales_register_model.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/pos/sales_register_repository.dart';
@@ -37,6 +38,18 @@ class SalesRegisterController extends GetxController {
   final totalItems = 0.obs;
 
   final isLoading = false.obs;
+  Worker? _fyWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    selectedDateRange.value = FinancialYearController.to.selectedRange;
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        updateDateRange(year.dateRange);
+      }
+    });
+  }
 
   @override
   void onReady() {
@@ -129,6 +142,7 @@ class SalesRegisterController extends GetxController {
 
   @override
   void onClose() {
+    _fyWorker?.dispose();
     _debounceTimer?.cancel();
     super.onClose();
   }

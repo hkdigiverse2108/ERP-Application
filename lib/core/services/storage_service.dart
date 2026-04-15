@@ -42,6 +42,8 @@ class StorageService {
     await remove(StorageKeys.accessToken);
     await remove(StorageKeys.refreshToken);
     await remove(StorageKeys.userData);
+    await remove(StorageKeys.isLoggedIn);
+    await remove(StorageKeys.userPermissions);
   }
 
   /// Check if key exists
@@ -59,4 +61,6 @@ class StorageKeys {
   static const String userData = 'userData';
   static const String onboardingCompleted = 'onboardingCompleted';
   static const String userPermissions = 'userPermissions';
+  static const String financialYear = 'financialYear';
+  static const String companyInfo = 'companyInfo';
 }
