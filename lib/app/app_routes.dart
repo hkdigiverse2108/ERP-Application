@@ -105,4 +105,9 @@ abstract class Routes {
 
   // Recipe Details
   static const recipeDetails = '/recipe-details';
+
+  // CRM Details
+  static const couponDetails = '/coupon-details';
+  static const discountDetails = '/discount-details';
+  static const loyaltyDetails = '/loyalty-details';
 }

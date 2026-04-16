@@ -1,6 +1,6 @@
 class ApiConstants {
-  // static const String baseUrl = "http://192.168.29.26:4001";
-  static const String baseUrl = "https://api.ai-setu.com";
+  static const String baseUrl = "http://192.168.29.26:4001";
+  // static const String baseUrl = "https://api.ai-setu.com";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {
@@ -21,7 +21,6 @@ class ApiConstants {
   static const String verifyOtp = "/auth/verify-otp";
   static const String resendOtp = "/auth/resend-otp";
   static const String updatePassword = "/auth/update-password";
-
 
   // Dashboard
   static const String transactions = "/dashboard/transactions";
@@ -132,7 +131,8 @@ class ApiConstants {
     "productTypeIdFilter": productTypeIdFilter,
   });
   static String getProductById(String id) => "/product/$id";
-  static const String productDropdownNew = "/product/dropdown?isNewProduct=true";
+  static const String productDropdownNew =
+      "/product/dropdown?isNewProduct=true";
 
   // Product Category
   static const String getAllProductCategory = "/product-category/all";

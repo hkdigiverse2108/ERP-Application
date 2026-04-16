@@ -32,10 +32,13 @@ import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
 import 'package:ai_setu/modules/crm/coupon/bindings/coupon_binding.dart';
 import 'package:ai_setu/modules/crm/coupon/views/coupon.dart';
+import 'package:ai_setu/modules/crm/coupon/views/coupon_details.dart';
 import 'package:ai_setu/modules/crm/discount/bindings/discount_binding.dart';
 import 'package:ai_setu/modules/crm/discount/views/discount.dart';
+import 'package:ai_setu/modules/crm/discount/views/discount_details.dart';
 import 'package:ai_setu/modules/crm/loyalty/bindings/loyalty_binding.dart';
 import 'package:ai_setu/modules/crm/loyalty/views/loyalty.dart';
+import 'package:ai_setu/modules/crm/loyalty/views/loyalty_details.dart';
 import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/views/recipe.dart';
@@ -63,6 +66,7 @@ import 'package:ai_setu/modules/sales/invoice/bindings/invoice_binding.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/bindings/sales_credit_note_binding.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note.dart';
+import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note_details.dart';
 import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_binding.dart';
 import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
@@ -445,6 +449,26 @@ class AppPages {
       name: Routes.deliveryChallanDetails,
       page: () => const DeliveryChallanDetails(),
       binding: DeliveryChallanBinding(),
+    ),
+    GetPage(
+      name: Routes.couponDetails,
+      page: () => const CouponDetails(),
+      binding: CouponBinding(),
+    ),
+    GetPage(
+      name: Routes.discountDetails,
+      page: () => const DiscountDetails(),
+      binding: DiscountBinding(),
+    ),
+    GetPage(
+      name: Routes.loyaltyDetails,
+      page: () => const LoyaltyDetails(),
+      binding: LoyaltyBinding(),
+    ),
+    GetPage(
+      name: Routes.salesCreditNoteDetails,
+      page: () => const SalesCreditNoteDetails(),
+      binding: SalesCreditNoteBinding(),
     ),
     GetPage(
       name: Routes.purchaseOrderDetails,

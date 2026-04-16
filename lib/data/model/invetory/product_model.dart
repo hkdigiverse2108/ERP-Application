@@ -6,7 +6,7 @@ class ProductModel {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   final String updatedBy;
   final String? companyId;
   final List<String> images;
@@ -64,7 +64,7 @@ class ProductModel {
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
     this.companyId,
     required this.images,
@@ -128,7 +128,9 @@ class ProductModel {
     id: json["_id"] ?? '',
     isDeleted: json["isDeleted"] ?? false,
     isActive: json["isActive"] ?? false,
-    createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
+    createdBy: json["createdBy"] == null
+        ? null
+        : CreatedBy.fromJson(json["createdBy"]),
     updatedBy: json["updatedBy"] ?? '',
     companyId: json["companyId"],
     images: json["images"] != null
@@ -216,7 +218,7 @@ class ProductModel {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
     "updatedBy": updatedBy,
     "companyId": companyId,
     "images": List<dynamic>.from(images.map((x) => x)),
@@ -303,8 +305,8 @@ class CreatedBy {
   String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"] ?? '',
-    fullName: json["fullName"] ?? '',
+    id: json["_id"]?.toString() ?? '',
+    fullName: json["fullName"]?.toString() ?? '',
     userType: userTypeValues.map[json["userType"]] ?? UserType.admin,
   );
 
@@ -415,7 +417,7 @@ class ProductItemModel {
   final int mrp;
   final int sellingPrice;
   final double qty;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
 
   ProductItemModel({
     required this.id,
@@ -429,7 +431,7 @@ class ProductItemModel {
     required this.mrp,
     required this.sellingPrice,
     required this.qty,
-    required this.createdBy,
+    this.createdBy,
   });
 
   factory ProductItemModel.fromRawJson(String str) =>
@@ -456,7 +458,9 @@ class ProductItemModel {
         mrp: json["mrp"] ?? 0,
         sellingPrice: json["sellingPrice"] ?? 0,
         qty: json["qty"]?.toDouble() ?? 0.0,
-        createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
+        createdBy: json["createdBy"] == null
+            ? null
+            : CreatedBy.fromJson(json["createdBy"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -471,6 +475,6 @@ class ProductItemModel {
     "mrp": mrp,
     "sellingPrice": sellingPrice,
     "qty": qty,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
   };
 }

@@ -6,7 +6,7 @@ class StockModel {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   final String updatedBy;
   final List<String> images;
   final ProductType productType;
@@ -59,7 +59,7 @@ class StockModel {
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
     required this.images,
     required this.productType,
@@ -118,8 +118,10 @@ class StockModel {
     id: json["_id"],
     isDeleted: json["isDeleted"],
     isActive: json["isActive"],
-    createdBy: CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"],
+    createdBy: json["createdBy"] == null
+        ? null
+        : CreatedBy.fromJson(json["createdBy"]),
+    updatedBy: json["updatedBy"] ?? "",
     images: List<String>.from(json["images"].map((x) => x)),
     productType: productTypeValues.map[json["productType"]]!,
     name: json["name"],
@@ -184,7 +186,7 @@ class StockModel {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
     "updatedBy": updatedBy,
     "images": List<dynamic>.from(images.map((x) => x)),
     "productType": productTypeValues.reverse[productType],
@@ -266,9 +268,9 @@ class CreatedBy {
   String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: userTypeValues.map[json["userType"]]!,
+    id: json["_id"]?.toString() ?? "",
+    fullName: json["fullName"]?.toString() ?? "",
+    userType: userTypeValues.map[json["userType"]] ?? UserType.admin,
   );
 
   Map<String, dynamic> toJson() => {
@@ -327,7 +329,7 @@ class StockItemModel {
   final Id? brandId;
   final Id? subBrandId;
   final double availableQty;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
 
   StockItemModel({
     required this.id,
@@ -337,7 +339,7 @@ class StockItemModel {
     this.brandId,
     this.subBrandId,
     required this.availableQty,
-    required this.createdBy,
+    this.createdBy,
   });
 
   factory StockItemModel.fromRawJson(String str) =>
@@ -359,7 +361,9 @@ class StockItemModel {
         ? null
         : Id.fromJson(json["subBrandId"]),
     availableQty: (json["availableQty"] ?? 0).toDouble(),
-    createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
+    createdBy: json["createdBy"] == null
+        ? null
+        : CreatedBy.fromJson(json["createdBy"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -370,6 +374,6 @@ class StockItemModel {
     "brandId": brandId?.toJson(),
     "subBrandId": subBrandId?.toJson(),
     "availableQty": availableQty,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
   };
 }

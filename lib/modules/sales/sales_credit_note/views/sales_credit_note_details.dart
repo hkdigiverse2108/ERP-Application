@@ -14,9 +14,19 @@ class SalesCreditNoteDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Credit Note Details')),
+        body: const Center(child: Text('No data found')),
+      );
+    }
     final SalesCreditNoteModel note = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(note.creditNoteDate ?? DateTime.now());
-    final dueDateStr = DateFormat('dd MMM yyyy').format(note.dueDate ?? DateTime.now());
+    final dateStr = DateFormat(
+      'dd MMM yyyy',
+    ).format(note.creditNoteDate ?? DateTime.now());
+    final dueDateStr = DateFormat(
+      'dd MMM yyyy',
+    ).format(note.dueDate ?? DateTime.now());
 
     return DetailsView(
       title: 'Credit Note #${note.creditNoteNo}',
@@ -49,12 +59,11 @@ class SalesCreditNoteDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Customer',
-                  value: '${note.customerId?.firstName} ${note.customerId?.lastName}',
+                  value: note.customerId != null
+                      ? '${note.customerId?.firstName ?? ""} ${note.customerId?.lastName ?? ""}'
+                      : '-',
                 ),
-                DetailItem(
-                  label: 'Reason',
-                  value: note.reason ?? '-',
-                ),
+                DetailItem(label: 'Reason', value: note.reason ?? '-'),
                 DetailItem(
                   label: 'Place of Supply',
                   value: note.placeOfSupply ?? '-',
@@ -68,7 +77,9 @@ class SalesCreditNoteDetails extends StatelessWidget {
             ),
           ],
         ),
-        if (note.productDetails != null && note.productDetails is List && (note.productDetails as List).isNotEmpty)
+        if (note.productDetails != null &&
+            note.productDetails is List &&
+            (note.productDetails as List).isNotEmpty)
           DetailSection(
             title: 'Items',
             children: [_buildItemsTable(context, note.productDetails as List)],
@@ -124,7 +135,9 @@ class SalesCreditNoteDetails extends StatelessWidget {
                         children: [
                           Text(
                             'Billing Address',
-                            style: TextHelper.caption.copyWith(fontWeight: FontWeight.bold),
+                            style: TextHelper.caption.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Gap(8),
                           _buildAddressText(note.billingAddress!),
@@ -139,10 +152,12 @@ class SalesCreditNoteDetails extends StatelessWidget {
                         children: [
                           Text(
                             'Shipping Address',
-                            style: TextHelper.caption.copyWith(fontWeight: FontWeight.bold),
+                            style: TextHelper.caption.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Gap(8),
-                          _buildAddressText(note.shippingAddress!),
+                          _buildAddressText(note.shippingAddress),
                         ],
                       ),
                     ),
@@ -151,13 +166,15 @@ class SalesCreditNoteDetails extends StatelessWidget {
               ),
             ],
           ),
-        if (note.notes != null && note.notes!.isNotEmpty)
+        if (note.notes != null && note.notes?.isNotEmpty == true)
           DetailSection(
             title: 'Notes',
             children: [
               Text(
                 note.notes!,
-                style: TextHelper.bodySmall.copyWith(color: AppColors.lightTextSecondary),
+                style: TextHelper.bodySmall.copyWith(
+                  color: AppColors.lightTextSecondary,
+                ),
               ),
             ],
           ),
@@ -194,24 +211,24 @@ class SalesCreditNoteDetails extends StatelessWidget {
         ],
         rows: items.map((item) {
           // Handling dynamic productDetails items
-          final name = item['productId'] != null ? (item['productId']['name'] ?? '-') : '-';
+          final name = item['productId'] != null
+              ? (item['productId']['name'] ?? '-')
+              : '-';
           final qty = item['qty'] ?? 0;
           final price = item['price'] ?? 0;
           final total = item['totalAmount'] ?? 0;
 
           return DataRow(
             cells: [
-              DataCell(
-                Text('$name', style: TextHelper.bodySmall),
-              ),
-              DataCell(
-                Text('$qty', style: TextHelper.bodySmall),
-              ),
+              DataCell(Text('$name', style: TextHelper.bodySmall)),
+              DataCell(Text('$qty', style: TextHelper.bodySmall)),
               DataCell(Text('₹$price', style: TextHelper.bodySmall)),
               DataCell(
                 Text(
                   '₹$total',
-                  style: TextHelper.bodySmall.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodySmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -238,14 +255,17 @@ class SalesCreditNoteDetails extends StatelessWidget {
             label,
             style: isTotal
                 ? TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold)
-                : TextHelper.bodyMedium.copyWith(color: AppColors.lightTextSecondary),
+                : TextHelper.bodyMedium.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
           ),
           Text(
             '₹${amount.toStringAsFixed(2)}',
             style: (isTotal || isBold)
                 ? TextHelper.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: color ?? (isTotal ? context.appColors.primary : null),
+                    color:
+                        color ?? (isTotal ? context.appColors.primary : null),
                   )
                 : TextHelper.bodyMedium.copyWith(
                     color: color,
@@ -257,12 +277,14 @@ class SalesCreditNoteDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(Address? addr) {
+    if (addr == null) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(addr.addressLine1, style: TextHelper.bodySmall),
-        if (addr.addressLine2 != null) Text(addr.addressLine2!, style: TextHelper.bodySmall),
+        if (addr.addressLine2 != null)
+          Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
           '${addr.city?.name}, ${addr.state?.name}, ${addr.country?.name} - ${addr.pinCode}',
           style: TextHelper.bodySmall,

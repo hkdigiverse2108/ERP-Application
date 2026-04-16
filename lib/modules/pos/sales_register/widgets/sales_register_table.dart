@@ -25,7 +25,7 @@ class SalesRegisterTable extends StatelessWidget {
         if (controller.isLoading.value && controller.salesRegisters.isEmpty) {
           return const TableShimmer();
         }
-        
+
         final items = controller.salesRegisters;
         if (items.isEmpty && !controller.isLoading.value) {
           return BorderContainer(
@@ -128,7 +128,10 @@ class SalesRegisterTable extends StatelessWidget {
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
-                onRowTap: (item) => Get.toNamed(Routes.posSalesRegisterDetails, arguments: item),
+                onRowTap: (item) => Get.toNamed(
+                  Routes.posSalesRegisterDetails,
+                  arguments: item,
+                ),
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

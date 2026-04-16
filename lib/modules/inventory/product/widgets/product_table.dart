@@ -163,9 +163,9 @@ class ProductTable extends StatelessWidget {
                       width: 120,
                       alignment: TextAlign.center,
                       cellBuilder: (context, item, index) => Text(
-                        (item.createdBy.userType == UserType.superAdmin)
+                        (item.createdBy?.userType == UserType.superAdmin)
                             ? "system generated"
-                            : item.createdBy.fullName,
+                            : item.createdBy?.fullName ?? "N/A",
                         textAlign: TextAlign.center,
                         style: TextHelper.bodySmall,
                       ),

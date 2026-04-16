@@ -122,7 +122,7 @@ class ProductDetails extends StatelessWidget {
                 ),
                 DetailItem(
                   label: 'Created By',
-                  value: product.createdBy.fullName,
+                  value: product.createdBy?.fullName ?? 'N/A',
                   icon: PhosphorIconsLight.user,
                 ),
               ],

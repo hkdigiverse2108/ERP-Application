@@ -40,7 +40,8 @@ class SalesCreditNoteTable extends StatelessWidget {
               CommonTable<SalesCreditNoteModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.creditNotes,
-                onRowTap: (item) => Get.toNamed(Routes.salesCreditNoteDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.salesCreditNoteDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Credit Note No.',

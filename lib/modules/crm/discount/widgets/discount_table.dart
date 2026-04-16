@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/crm/dicount_model.dart';
@@ -152,6 +153,8 @@ class DiscountTable extends StatelessWidget {
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
                 onPageChanged: (page) => controller.goToPage(page),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.discountDetails, arguments: item),
               ),
             ],
           ),
