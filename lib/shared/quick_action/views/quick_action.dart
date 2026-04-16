@@ -3,7 +3,9 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -73,7 +75,7 @@ class QuickAction extends StatelessWidget {
           _buildRoundedIconButton(
             context: context,
             icon: PhosphorIconsBold.magnifyingGlass,
-            onPressed: () {},
+            onPressed: () => Get.toNamed(Routes.quickSearch),
           ),
           const Gap(8),
           _buildRoundedIconButton(

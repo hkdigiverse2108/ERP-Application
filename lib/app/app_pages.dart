@@ -67,6 +67,8 @@ import 'package:ai_setu/modules/sales/invoice/views/invoice.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/bindings/sales_credit_note_binding.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note_details.dart';
+import 'package:ai_setu/shared/quick_action/bindings/quick_search_binding.dart';
+import 'package:ai_setu/shared/quick_action/views/quick_search_view.dart';
 import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_binding.dart';
 import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
@@ -469,6 +471,11 @@ class AppPages {
       name: Routes.salesCreditNoteDetails,
       page: () => const SalesCreditNoteDetails(),
       binding: SalesCreditNoteBinding(),
+    ),
+    GetPage(
+      name: Routes.quickSearch,
+      page: () => const QuickSearchView(),
+      binding: QuickSearchBinding(),
     ),
     GetPage(
       name: Routes.purchaseOrderDetails,

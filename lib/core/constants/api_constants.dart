@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.29.26:4001";
-  // static const String baseUrl = "https://api.ai-setu.com";
+  // static const String baseUrl = "http://192.168.29.26:4001";
+  static const String baseUrl = "https://api.ai-setu.com";
 
   // Helper method to build URLs with query parameters
   static String buildUrl(String path, Map<String, dynamic> params) {

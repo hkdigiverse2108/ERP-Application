@@ -110,4 +110,7 @@ abstract class Routes {
   static const couponDetails = '/coupon-details';
   static const discountDetails = '/discount-details';
   static const loyaltyDetails = '/loyalty-details';
+
+  // Quick Search
+  static const quickSearch = '/quick-search';
 }
