@@ -1,10 +1,10 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/shared/widgets/financial_year_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -14,7 +14,7 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: AppColors.primary,
+      backgroundColor: context.appColors.primary,
       scrolledUnderElevation: 0,
       centerTitle: false,
       title: Row(
@@ -42,7 +42,10 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
             CircleAvatar(
               radius: 18,
               backgroundColor: Colors.white,
-              child: Icon(PhosphorIconsBold.user, color: AppColors.primary),
+              child: Icon(
+                PhosphorIconsBold.user,
+                color: context.appColors.primary,
+              ),
             ),
             Gap(10),
           ],

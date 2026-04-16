@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/sales_order_model.dart';
@@ -39,6 +40,8 @@ class SalesOrderTable extends StatelessWidget {
               CommonTable<SalesOrderModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.salesOrders,
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.salesOrderDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Sales Order No',

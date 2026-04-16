@@ -1,6 +1,6 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -44,10 +44,16 @@ class EditSection extends StatelessWidget {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.08),
+                            color: context.appColors.primary.withValues(
+                              alpha: 0.08,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Icon(icon, size: 15, color: AppColors.primary),
+                          child: Icon(
+                            icon,
+                            size: 15,
+                            color: context.appColors.primary,
+                          ),
                         ),
                         const Gap(Sizes.paddingS),
                       ],
@@ -55,7 +61,9 @@ class EditSection extends StatelessWidget {
                         title,
                         style: TextHelper.h4.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: icon != null ? AppColors.primary : null,
+                          color: icon != null
+                              ? context.appColors.primary
+                              : null,
                         ),
                       ),
                     ],

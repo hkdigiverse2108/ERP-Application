@@ -38,7 +38,7 @@ class FinancialYearController extends GetxService {
       final company = CompanyModel.fromJson(companyJson);
 
       // 1. Detection from createdAt
-      startDate = company.createdAt;
+      startDate = company.createdAt ?? DateTime.now();
       debugPrint("FinancialYearController: Extracted startDate: $startDate");
 
       // 2. Detection from financialYear string (e.g. "2024 - 2025")
@@ -92,7 +92,11 @@ class FinancialYearController extends GetxService {
           financialYear: "$y - ${y + 1}",
           dateRange: DateTimeRange(
             start: DateTime(y, 4, 1),
-            end: DateTime(y + 1, 3, 31, 23, 59, 59),
+            end: DateTime(
+              y + 1,
+              4,
+              1,
+            ).subtract(const Duration(microseconds: 1)),
           ),
         ),
       );

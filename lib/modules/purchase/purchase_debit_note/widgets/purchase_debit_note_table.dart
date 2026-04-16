@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/purchase/purchase_debit_note_model.dart';
@@ -40,6 +41,10 @@ class PurchaseDebitNoteTable extends StatelessWidget {
               CommonTable<PurchaseDebitNoteModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.purchaseDebitNotes,
+                onRowTap: (item) => Get.toNamed(
+                  Routes.purchaseDebitNoteDetails,
+                  arguments: item,
+                ),
                 columns: [
                   TableColumn(
                     title: 'Debit Note No',

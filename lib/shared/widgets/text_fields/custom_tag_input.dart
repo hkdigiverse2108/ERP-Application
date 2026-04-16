@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -69,9 +68,8 @@ class CustomTagInput extends StatelessWidget {
                                       color: context.appColors.textPrimary,
                                     ),
                               ),
-                              backgroundColor: AppColors.primary.withValues(
-                                alpha: 0.1,
-                              ),
+                              backgroundColor: context.appColors.primary
+                                  .withValues(alpha: 0.1),
                               deleteIcon: Icon(
                                 Icons.close,
                                 size: 14,

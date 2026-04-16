@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
@@ -39,6 +40,8 @@ class ContactTable extends StatelessWidget {
               CommonTable<ContactModel>(
                 isLoading: contactController.isLoading.value,
                 items: items,
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.contactDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Name',

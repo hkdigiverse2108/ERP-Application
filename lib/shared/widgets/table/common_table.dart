@@ -26,6 +26,7 @@ class CommonTable<T> extends StatelessWidget {
   final VoidCallback? onAddItem;
   final Function(T item)? onRemoveItem;
   final Function(T item)? onEditItem;
+  final Function(T item)? onRowTap;
   final bool Function(T item)? canEdit;
   final bool Function(T item)? canDelete;
   final String? addLabel;
@@ -49,6 +50,7 @@ class CommonTable<T> extends StatelessWidget {
     this.onAddItem,
     this.onRemoveItem,
     this.onEditItem,
+    this.onRowTap,
     this.canEdit,
     this.canDelete,
     this.addLabel,
@@ -84,8 +86,8 @@ class CommonTable<T> extends StatelessWidget {
       dark: AppColors.darkBorder,
     );
     final headerBg = context.responsive(
-      light: AppColors.primary.withValues(alpha: 0.08),
-      dark: AppColors.primary.withValues(alpha: 0.25),
+      light: context.appColors.primary.withValues(alpha: 0.08),
+      dark: context.appColors.primary.withValues(alpha: 0.25),
     );
     final surfaceColor = context.responsive(
       light: AppColors.lightSurface,
@@ -157,7 +159,7 @@ class CommonTable<T> extends StatelessWidget {
         // Add Item Button
         if (onAddItem != null) ...[
           const SizedBox(height: Sizes.defHorizontalSpace),
-          _buildAddButton(),
+          _buildAddButton(context),
         ],
       ],
     );
@@ -288,100 +290,103 @@ class CommonTable<T> extends StatelessWidget {
     Color borderColor,
   ) {
     final item = items[index];
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: rowPadding ?? Sizes.paddingS,
-        horizontal: Sizes.paddingS,
-      ),
-      decoration: BoxDecoration(
-        color: rowColor,
-        border: Border(top: BorderSide(color: borderColor, width: 0.5)),
-      ),
-      child: Row(
-        children: [
-          // Serial No
-          if (showSerial)
-            SizedBox(
-              width: _colSerial,
-              child: Text(
-                '${index + 1 + ((currentPage ?? 1) - 1) * pageSize}',
-                style: TextHelper.bodySmall,
+    return InkWell(
+      onTap: onRowTap != null ? () => onRowTap!(item) : null,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: rowPadding ?? Sizes.paddingS,
+          horizontal: Sizes.paddingS,
+        ),
+        decoration: BoxDecoration(
+          color: rowColor,
+          border: Border(top: BorderSide(color: borderColor, width: 0.5)),
+        ),
+        child: Row(
+          children: [
+            // Serial No
+            if (showSerial)
+              SizedBox(
+                width: _colSerial,
+                child: Text(
+                  '${index + 1 + ((currentPage ?? 1) - 1) * pageSize}',
+                  style: TextHelper.bodySmall,
+                ),
+              ),
+
+            // Dynamic Columns
+            ...columns.map(
+              (col) => SizedBox(
+                width: col.width,
+                child: Align(
+                  alignment: _getAlignment(col.alignment),
+                  child: col.cellBuilder(context, item, index),
+                ),
               ),
             ),
 
-          // Dynamic Columns
-          ...columns.map(
-            (col) => SizedBox(
-              width: col.width,
-              child: Align(
-                alignment: _getAlignment(col.alignment),
-                child: col.cellBuilder(context, item, index),
-              ),
-            ),
-          ),
+            // Actions
+            if (onRemoveItem != null || onEditItem != null)
+              Builder(
+                builder: (context) {
+                  final showEdit =
+                      onEditItem != null && (canEdit?.call(item) ?? true);
+                  final showDelete =
+                      onRemoveItem != null && (canDelete?.call(item) ?? true);
 
-          // Actions
-          if (onRemoveItem != null || onEditItem != null)
-            Builder(
-              builder: (context) {
-                final showEdit =
-                    onEditItem != null && (canEdit?.call(item) ?? true);
-                final showDelete =
-                    onRemoveItem != null && (canDelete?.call(item) ?? true);
+                  if (!showEdit && !showDelete) {
+                    return const SizedBox(width: _colActions);
+                  }
 
-                if (!showEdit && !showDelete) {
-                  return const SizedBox(width: _colActions);
-                }
-
-                return SizedBox(
-                  width: _colActions,
-                  child: PopupMenuButton<String>(
-                    padding: EdgeInsets.zero,
-                    iconSize: 18,
-                    icon: const Icon(
-                      PhosphorIconsBold.dotsThreeVertical,
-                      size: 16,
+                  return SizedBox(
+                    width: _colActions,
+                    child: PopupMenuButton<String>(
+                      padding: EdgeInsets.zero,
+                      iconSize: 18,
+                      icon: const Icon(
+                        PhosphorIconsBold.dotsThreeVertical,
+                        size: 16,
+                      ),
+                      onSelected: (value) {
+                        if (value == 'edit') onEditItem?.call(item);
+                        if (value == 'delete') onRemoveItem?.call(item);
+                      },
+                      itemBuilder: (context) => [
+                        if (showEdit)
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(PhosphorIconsBold.pencilSimple, size: 16),
+                                SizedBox(width: 8),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
+                        if (showDelete)
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  PhosphorIconsBold.trash,
+                                  size: 16,
+                                  color: AppColors.error,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(color: AppColors.error),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
                     ),
-                    onSelected: (value) {
-                      if (value == 'edit') onEditItem?.call(item);
-                      if (value == 'delete') onRemoveItem?.call(item);
-                    },
-                    itemBuilder: (context) => [
-                      if (showEdit)
-                        const PopupMenuItem(
-                          value: 'edit',
-                          child: Row(
-                            children: [
-                              Icon(PhosphorIconsBold.pencilSimple, size: 16),
-                              SizedBox(width: 8),
-                              Text('Edit'),
-                            ],
-                          ),
-                        ),
-                      if (showDelete)
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              Icon(
-                                PhosphorIconsBold.trash,
-                                size: 16,
-                                color: AppColors.error,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Delete',
-                                style: TextStyle(color: AppColors.error),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                );
-              },
-            ),
-        ],
+                  );
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -405,7 +410,7 @@ class CommonTable<T> extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton() {
+  Widget _buildAddButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
@@ -413,8 +418,8 @@ class CommonTable<T> extends StatelessWidget {
         icon: const Icon(PhosphorIconsBold.plus, size: 16),
         label: Text(addLabel ?? 'Add Item'),
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary, width: 1.5),
+          foregroundColor: context.appColors.primary,
+          side: BorderSide(color: context.appColors.primary, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
           ),

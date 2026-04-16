@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
@@ -35,6 +36,8 @@ class SalaryTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<SalaryModel>(
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.salaryDetails, arguments: item),
                 isLoading: controller.isLodding.value,
                 items: controller.salaries,
                 columns: [

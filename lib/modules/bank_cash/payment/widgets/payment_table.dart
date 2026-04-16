@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
@@ -34,6 +35,14 @@ class PaymentTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<PosPaymentModel>(
+                onRowTap: (item) {
+                  if (item.voucherType.toLowerCase() == 'receipt' ||
+                      item.voucherType.toLowerCase() == 'pos') {
+                    Get.toNamed(Routes.receiptDetails, arguments: item);
+                  } else {
+                    Get.toNamed(Routes.paymentDetails, arguments: item);
+                  }
+                },
                 isLoading: controller.isLodding.value,
                 items: controller.payments,
                 columns: [

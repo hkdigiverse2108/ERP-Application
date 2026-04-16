@@ -1,6 +1,6 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/modules/settings/user_profile/controllers/user_profile_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -150,11 +150,13 @@ class UserProfilePage extends GetView<UserProfileController> {
                 // Avatar (no ring — cleaner)
                 CircleAvatar(
                   radius: 28,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                  backgroundColor: context.appColors.primary.withValues(
+                    alpha: 0.1,
+                  ),
                   child: Text(
                     user.fullName.substring(0, 1).toUpperCase(),
                     style: TextHelper.h3.copyWith(
-                      color: AppColors.primary,
+                      color: context.appColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -238,7 +240,7 @@ class UserProfilePage extends GetView<UserProfileController> {
                 Text(
                   "${(progress * 100).toInt()}%",
                   style: TextHelper.bodySmall.copyWith(
-                    color: AppColors.primary,
+                    color: context.appColors.primary,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
@@ -252,8 +254,8 @@ class UserProfilePage extends GetView<UserProfileController> {
                 value: progress,
                 minHeight: 5,
                 backgroundColor: Colors.grey.withValues(alpha: 0.12),
-                valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppColors.primary,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  context.appColors.primary,
                 ),
               ),
             ),
@@ -291,17 +293,21 @@ class UserProfilePage extends GetView<UserProfileController> {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.08),
+                      color: context.appColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(icon, size: 15, color: AppColors.primary),
+                    child: Icon(
+                      icon,
+                      size: 15,
+                      color: context.appColors.primary,
+                    ),
                   ),
                   const Gap(Sizes.paddingS),
                   Text(
                     title,
                     style: TextHelper.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: context.appColors.primary,
                     ),
                   ),
                 ],

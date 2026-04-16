@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/pos/order_list_model.dart';
@@ -66,6 +67,8 @@ class OrderListTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<OrderListModel>(
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.posOrderDetails, arguments: item),
                 isLoading: controller.isLoading.value,
                 items: controller.orderList.toList(),
                 columns: [
@@ -86,7 +89,9 @@ class OrderListTable extends StatelessWidget {
                     width: 120,
                     cellBuilder: (context, item, index) {
                       return Text(
-                        DateFormat('dd-MM-yyyy').format(item.holdDate ?? DateTime.now()),
+                        DateFormat(
+                          'dd-MM-yyyy',
+                        ).format(item.holdDate ?? DateTime.now()),
                         style: TextHelper.bodySmall,
                       );
                     },
@@ -97,7 +102,9 @@ class OrderListTable extends StatelessWidget {
                     cellBuilder: (context, item, index) {
                       return Text(
                         item.payLater.dueDate != null
-                            ? DateFormat('dd-MM-yyyy').format(item.payLater.dueDate!)
+                            ? DateFormat(
+                                'dd-MM-yyyy',
+                              ).format(item.payLater.dueDate!)
                             : "N/A",
                         style: TextHelper.bodySmall,
                       );
@@ -107,7 +114,8 @@ class OrderListTable extends StatelessWidget {
                     title: 'Customer Name',
                     width: 150,
                     cellBuilder: (context, item, index) => Text(
-                      "${item.customerId?.firstName ?? ''} ${item.customerId?.lastName ?? ''}".trim(),
+                      "${item.customerId?.firstName ?? ''} ${item.customerId?.lastName ?? ''}"
+                          .trim(),
                       textAlign: TextAlign.center,
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,

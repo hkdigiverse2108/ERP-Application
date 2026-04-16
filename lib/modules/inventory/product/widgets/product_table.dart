@@ -61,6 +61,8 @@ class ProductTable extends StatelessWidget {
                   items: controller.products,
                   onEditItem: (item) =>
                       Get.toNamed(Routes.addUpdateProduct, arguments: item),
+                  onRowTap: (item) =>
+                      Get.toNamed(Routes.productDetails, arguments: item),
                   columns: [
                     TableColumn(
                       title: 'Name',

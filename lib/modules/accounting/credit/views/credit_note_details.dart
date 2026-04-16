@@ -1,0 +1,92 @@
+import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
+import 'package:ai_setu/shared/widgets/details/details_view.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+class CreditNoteDetails extends StatelessWidget {
+  const CreditNoteDetails({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final CreditNoteModel note = Get.arguments;
+    final dateStr = DateFormat('dd MMM yyyy').format(note.date);
+
+    return DetailsView(
+      title: 'Credit Note #${note.voucherNumber}',
+      subtitle: 'Date: $dateStr',
+      heroIcon: PhosphorIconsFill.fileArrowUp,
+      status: note.isActive ? 'Active' : 'Inactive',
+      statusColor: note.isActive ? Colors.green : Colors.grey,
+      actions: [
+        DetailAction(
+          label: 'Print',
+          icon: PhosphorIconsFill.printer,
+          onTap: () {},
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () {},
+        ),
+      ],
+      sections: [
+        DetailSection(
+          title: 'Transaction Details',
+          children: [
+            DataGrid(
+              items: [
+                DetailItem(label: 'Person Name', value: note.personName ?? '-'),
+                DetailItem(
+                  label: 'Phone',
+                  value: '${note.phoneNo.countryCode} ${note.phoneNo.phoneNo}',
+                ),
+                DetailItem(label: 'Account', value: note.bankAccountId.name),
+                DetailItem(
+                  label: 'Amount',
+                  value: '₹${note.amount.toStringAsFixed(2)}',
+                  color: Colors.green,
+                ),
+                DetailItem(label: 'Type', value: note.type),
+              ],
+            ),
+          ],
+        ),
+        if (note.description != null && note.description!.isNotEmpty)
+          DetailSection(
+            title: 'Description',
+            children: [
+              Text(
+                note.description!,
+                style: TextHelper.bodyMediumStyle(context),
+              ),
+            ],
+          ),
+        DetailSection(
+          title: 'System Information',
+          children: [
+            DataGrid(
+              items: [
+                DetailItem(label: 'Created By', value: note.createdBy.fullName),
+                DetailItem(
+                  label: 'Created At',
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(note.createdAt),
+                ),
+                DetailItem(
+                  label: 'Last Updated',
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(note.updatedAt),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

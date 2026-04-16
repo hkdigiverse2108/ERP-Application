@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/estimate_model.dart';
@@ -39,6 +40,8 @@ class EstimateTable extends StatelessWidget {
               CommonTable<EstimateModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.estimates,
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.estimateDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Estimate No',

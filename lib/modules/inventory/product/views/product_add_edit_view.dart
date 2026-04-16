@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -49,7 +48,9 @@ class ProductAddEditView extends GetView<ProductAddEditController> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
+                          color: context.appColors.primary.withValues(
+                            alpha: 0.1,
+                          ),
                           borderRadius: BorderRadius.circular(
                             Sizes.borderRadiusL,
                           ),
@@ -58,7 +59,7 @@ class ProductAddEditView extends GetView<ProductAddEditController> {
                           controller.isEdit.value
                               ? PhosphorIconsLight.pencilSimple
                               : PhosphorIconsLight.package,
-                          color: AppColors.primary,
+                          color: context.appColors.primary,
                           size: 28,
                         ),
                       ),

@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
@@ -60,9 +59,9 @@ class _AppSearchBarState extends State<AppSearchBar> {
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           hintText: widget.hint,
-          hintStyle: TextHelper.bodyMediumStyle(context).copyWith(
-            color: context.appColors.textSecondary,
-          ),
+          hintStyle: TextHelper.bodyMediumStyle(
+            context,
+          ).copyWith(color: context.appColors.textSecondary),
           prefixIcon: Icon(
             PhosphorIconsLight.magnifyingGlass,
             size: 18,
@@ -93,7 +92,10 @@ class _AppSearchBarState extends State<AppSearchBar> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+            borderSide: BorderSide(
+              color: context.appColors.primary,
+              width: 1.5,
+            ),
           ),
         ),
       ),

@@ -66,4 +66,43 @@ abstract class Routes {
   static const settingsConsumptionType = '/setting/consumption-type';
 
   static const accessDenied = '/access-denied';
+
+  // Details
+  static const productDetails = '/product-details';
+  static const contactDetails = '/contact-details';
+  static const invoiceDetails = '/invoice-details';
+  static const estimateDetails = '/estimate-details';
+  static const salesOrderDetails = '/sales-order-details';
+  static const deliveryChallanDetails = '/delivery-challan-details';
+  static const salesCreditNoteDetails = '/sales-credit-note-details';
+  static const purchaseOrderDetails = '/purchase-order-details';
+  static const supplierBillDetails = '/supplier-bill-details';
+  static const purchaseDebitNoteDetails = '/purchase-debit-note-details';
+
+  // Finance Details
+  static const receiptDetails = '/receipt-details';
+  static const paymentDetails = '/payment-details';
+  static const expenseDetails = '/expense-details';
+  static const salaryDetails = '/salary-details';
+
+  // Inventory & Manufacturing Details
+  static const stockVerificationDetails = '/stock-verification-details';
+  static const bomDetails = '/bill-of-materials-details';
+  static const materialConsumptionDetails = '/material-consumption-details';
+
+  // POS Details
+  static const posOrderDetails = '/pos-order-details';
+  static const posCreditNoteDetails = '/pos-credit-note-details';
+  static const posSalesRegisterDetails = '/sales-register-details';
+
+  // Accounting Details
+  static const debitDetails = '/debit-note-details';
+  static const creditDetails = '/credit-note-details';
+
+  // Bank & Cash Details
+  static const bankTransactionDetails = '/bank-transaction-details';
+  static const bankDetails = '/bank-details';
+
+  // Recipe Details
+  static const recipeDetails = '/recipe-details';
 }

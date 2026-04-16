@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/pos/sales_register_model.dart';
@@ -127,6 +128,7 @@ class SalesRegisterTable extends StatelessWidget {
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
+                onRowTap: (item) => Get.toNamed(Routes.posSalesRegisterDetails, arguments: item),
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

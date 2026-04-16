@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 
 class EditTextField extends StatelessWidget {
@@ -61,7 +62,7 @@ class EditTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: context.appColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusM),

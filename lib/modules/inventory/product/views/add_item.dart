@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -41,14 +40,16 @@ class AddItem extends GetView<AddItemController> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
+                          color: context.appColors.primary.withValues(
+                            alpha: 0.1,
+                          ),
                           borderRadius: BorderRadius.circular(
                             Sizes.borderRadiusL,
                           ),
                         ),
                         child: Icon(
                           PhosphorIconsLight.package,
-                          color: AppColors.primary,
+                          color: context.appColors.primary,
                           size: 28,
                         ),
                       ),
@@ -164,6 +165,7 @@ class AddItem extends GetView<AddItemController> {
                             child: _buildInclusionSwitch(
                               "Incl.",
                               controller.purchaseTaxIncluding,
+                              context,
                             ),
                           ),
                         ],
@@ -199,6 +201,7 @@ class AddItem extends GetView<AddItemController> {
                             child: _buildInclusionSwitch(
                               "Incl.",
                               controller.salesTaxIncluding,
+                              context,
                             ),
                           ),
                         ],
@@ -280,7 +283,7 @@ class AddItem extends GetView<AddItemController> {
                               ? null
                               : () => controller.saveItem(),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
+                            backgroundColor: context.appColors.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                 Sizes.borderRadiusM,
@@ -316,7 +319,11 @@ class AddItem extends GetView<AddItemController> {
     );
   }
 
-  Widget _buildInclusionSwitch(String label, RxBool value) {
+  Widget _buildInclusionSwitch(
+    String label,
+    RxBool value,
+    BuildContext context,
+  ) {
     return Obx(() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,7 +336,7 @@ class AddItem extends GetView<AddItemController> {
               child: Switch(
                 value: value.value,
                 onChanged: (val) => value.value = val,
-                activeThumbColor: AppColors.primary,
+                activeThumbColor: context.appColors.primary,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),

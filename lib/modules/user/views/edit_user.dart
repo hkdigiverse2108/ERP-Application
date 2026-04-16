@@ -1,6 +1,6 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/modules/user/controllers/update_user_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -93,7 +93,8 @@ class EditUser extends GetView<UpdateUserController> {
                                   width: 100,
                                   child: EditTextField(
                                     label: "Code",
-                                    controller: controller.countryCodeController,
+                                    controller:
+                                        controller.countryCodeController,
                                     keyboardType: TextInputType.phone,
                                     readOnly: true,
                                     onTap: () {
@@ -161,7 +162,8 @@ class EditUser extends GetView<UpdateUserController> {
                               () => EditTextField(
                                 label: "Password",
                                 controller: controller.passwordController,
-                                obscureText: !controller.isPasswordVisible.value,
+                                obscureText:
+                                    !controller.isPasswordVisible.value,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     controller.isPasswordVisible.value
@@ -333,7 +335,6 @@ class EditUser extends GetView<UpdateUserController> {
     );
   }
 
-
   /// BUTTONS
   Widget _buildButton(BuildContext context) {
     return Container(
@@ -367,7 +368,7 @@ class EditUser extends GetView<UpdateUserController> {
             child: Obx(
               () => ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: context.appColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: Sizes.paddingM),
                   shape: RoundedRectangleBorder(

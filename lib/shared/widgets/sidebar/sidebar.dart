@@ -127,7 +127,7 @@ class SideBar extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.primary,
+              color: context.appColors.primary,
               borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
             ),
             child: Image.asset(
@@ -179,10 +179,10 @@ class SideBar extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(Sizes.paddingM),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.05),
+              color: context.appColors.primary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
               border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.1),
+                color: context.appColors.primary.withValues(alpha: 0.1),
               ),
             ),
             child: Column(
@@ -192,7 +192,7 @@ class SideBar extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextHelper.bodySmallStyle(context).copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: context.appColors.primary,
                   ),
                 ),
                 const Gap(8),
@@ -237,7 +237,7 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = AppColors.primary;
+    final activeColor = context.appColors.primary;
     final inactiveColor = context.responsive(
       light: AppColors.lightTextSecondary.withValues(alpha: 0.8),
       dark: AppColors.darkTextSecondary.withValues(alpha: 0.8),
@@ -320,14 +320,14 @@ class _ExpandableMenuItem extends StatelessWidget {
                   PhosphorIconsLight.arrowBendDownRight,
                   size: 14,
                   color: isActive 
-                      ? AppColors.primary 
+                      ? context.appColors.primary 
                       : textColor.withValues(alpha: 0.6),
                 ),
                 const Gap(8),
                 Text(
                   subTab.displayName,
                   style: TextHelper.bodySmallStyle(context).copyWith(
-                    color: isActive ? AppColors.primary : textColor,
+                    color: isActive ? context.appColors.primary : textColor,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),

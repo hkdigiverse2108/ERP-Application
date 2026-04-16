@@ -57,6 +57,7 @@ import 'package:ai_setu/modules/pos/sales_register/views/sales_register.dart';
 
 import 'package:ai_setu/modules/sales/delivery_challan/bindings/delivery_challan_binding.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/views/delivery_challan.dart';
+import 'package:ai_setu/modules/sales/delivery_challan/views/delivery_challan_details.dart';
 import 'package:ai_setu/modules/sales/estimate/views/estimate.dart';
 import 'package:ai_setu/modules/sales/invoice/bindings/invoice_binding.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice.dart';
@@ -67,6 +68,10 @@ import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
+import 'package:ai_setu/modules/inventory/product/views/product_details.dart';
+import 'package:ai_setu/modules/contact/views/contact_details.dart';
+import 'package:ai_setu/modules/sales/invoice/views/invoice_details.dart';
+import 'package:ai_setu/modules/sales/estimate/views/estimate_details.dart';
 import 'package:ai_setu/app/middleware/permission_middleware.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
@@ -74,10 +79,13 @@ import 'package:ai_setu/modules/splash/views/splash.dart';
 import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/bindings/purchase_debit_note_binding.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/views/purchase_debit_note.dart';
+import 'package:ai_setu/modules/purchase/purchase_debit_note/views/purchase_debit_note_details.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/bindings/purchase_order_binding.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order.dart';
+import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order_details.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/bindings/supplier_bill_binding.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill.dart';
+import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill_details.dart';
 import 'package:ai_setu/modules/settings/additional_charge/bindings/additional_charge_binding.dart';
 import 'package:ai_setu/modules/settings/additional_charge/views/additional_charge_page.dart';
 import 'package:ai_setu/modules/settings/bindings/settings_binding.dart';
@@ -98,6 +106,21 @@ import 'package:ai_setu/modules/settings/user_roles/views/user_roles_page.dart';
 import 'package:ai_setu/modules/settings/views/settings.dart';
 import 'package:ai_setu/modules/access_denied/bindings/access_denied_binding.dart';
 import 'package:ai_setu/modules/access_denied/views/access_denied_page.dart';
+import 'package:ai_setu/modules/pos/order_list/views/pos_order_details.dart';
+import 'package:ai_setu/modules/bank_cash/receipt/views/receipt_details.dart';
+import 'package:ai_setu/modules/bank_cash/payment/views/payment_details.dart';
+import 'package:ai_setu/modules/bank_cash/expense/views/expense_details.dart';
+import 'package:ai_setu/modules/bank_cash/salary/views/salary_details.dart';
+import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification_details.dart';
+import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bom_details.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/views/material_consumption_details.dart';
+import 'package:ai_setu/modules/accounting/debit/views/debit_note_details.dart';
+import 'package:ai_setu/modules/accounting/credit/views/credit_note_details.dart';
+import 'package:ai_setu/modules/bank_cash/bank_transaction/views/bank_transaction_details.dart';
+import 'package:ai_setu/modules/inventory/recipe/views/recipe_details.dart';
+import 'package:ai_setu/modules/pos/credit_note/views/pos_credit_note_details.dart';
+import 'package:ai_setu/modules/bank_cash/bank/views/bank_details.dart';
+import 'package:ai_setu/modules/pos/sales_register/views/sales_register_details.dart';
 
 class AppPages {
   // static const initial = Routes.user;
@@ -397,6 +420,121 @@ class AppPages {
       name: Routes.accessDenied,
       page: () => const AccessDeniedPage(),
       binding: AccessDeniedBinding(),
+    ),
+    GetPage(
+      name: Routes.productDetails,
+      page: () => const ProductDetails(),
+      binding: ProductBinding(),
+    ),
+    GetPage(
+      name: Routes.contactDetails,
+      page: () => const ContactDetails(),
+      binding: ContactBinding(),
+    ),
+    GetPage(
+      name: Routes.invoiceDetails,
+      page: () => const InvoiceDetails(),
+      binding: InvoiceBinding(),
+    ),
+    GetPage(
+      name: Routes.estimateDetails,
+      page: () => const EstimateDetails(),
+      binding: EstimateBinding(),
+    ),
+    GetPage(
+      name: Routes.deliveryChallanDetails,
+      page: () => const DeliveryChallanDetails(),
+      binding: DeliveryChallanBinding(),
+    ),
+    GetPage(
+      name: Routes.purchaseOrderDetails,
+      page: () => const PurchaseOrderDetails(),
+      binding: PurchaseOrderBinding(),
+    ),
+    GetPage(
+      name: Routes.supplierBillDetails,
+      page: () => const SupplierBillDetails(),
+      binding: SupplierBillBinding(),
+    ),
+    GetPage(
+      name: Routes.purchaseDebitNoteDetails,
+      page: () => const PurchaseDebitNoteDetails(),
+      binding: PurchaseDebitNoteBinding(),
+    ),
+    GetPage(
+      name: Routes.receiptDetails,
+      page: () => const ReceiptDetails(),
+      binding: ReceiptBinding(),
+    ),
+    GetPage(
+      name: Routes.paymentDetails,
+      page: () => const PaymentDetails(),
+      binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: Routes.expenseDetails,
+      page: () => const ExpenseDetails(),
+      binding: ExpenseBinding(),
+    ),
+    GetPage(
+      name: Routes.salaryDetails,
+      page: () => const SalaryDetails(),
+      binding: SalaryBinding(),
+    ),
+    GetPage(
+      name: Routes.stockVerificationDetails,
+      page: () => const StockVerificationDetails(),
+      binding: StockVerificationBinding(),
+    ),
+    GetPage(
+      name: Routes.bomDetails,
+      page: () => const BOMDetails(),
+      binding: BillOfLiveProductBinding(),
+    ),
+    GetPage(
+      name: Routes.materialConsumptionDetails,
+      page: () => const MaterialConsumptionDetails(),
+      binding: MaterialConsumptionBinding(),
+    ),
+    GetPage(
+      name: Routes.posOrderDetails,
+      page: () => const POSOrderDetails(),
+      binding: OrderListBinding(),
+    ),
+    GetPage(
+      name: Routes.posCreditNoteDetails,
+      page: () => const POSCreditNoteDetails(),
+      binding: CreditNoteBinding(),
+    ),
+    GetPage(
+      name: Routes.debitDetails,
+      page: () => const DebitNoteDetails(),
+      binding: DebitBinding(),
+    ),
+    GetPage(
+      name: Routes.creditDetails,
+      page: () => const CreditNoteDetails(),
+      binding: CreditBinding(),
+    ),
+    GetPage(
+      name: Routes.bankTransactionDetails,
+      page: () => const BankTransactionDetails(),
+      binding: BankTransactionBinding(),
+    ),
+    GetPage(
+      name: Routes.bankDetails,
+      page: () => const BankDetails(),
+      binding: BankBinding(),
+    ),
+    GetPage(
+      name: Routes.recipeDetails,
+      page: () => const RecipeDetails(),
+      binding: RecipeBinding(),
+    ),
+    GetPage(
+      name: Routes.posSalesRegisterDetails,
+      page: () => const SalesRegisterDetails(),
+      binding: SalesRegisterBinding(),
     ),
   ];
 }

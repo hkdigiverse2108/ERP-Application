@@ -1,6 +1,6 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/company_model.dart';
 import 'package:ai_setu/modules/settings/company_profile/controllers/company_profile_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -59,7 +59,7 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
                     context,
                     title: "Basic Details",
                     icon: PhosphorIconsLight.info,
-                    trailing: _buildEditButton(),
+                    trailing: _buildEditButton(context),
                     items: [
                       _InfoData("Accounting Type", company.accountingType),
                       _InfoData("Name", company.name),
@@ -178,13 +178,13 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
     );
   }
 
-  Widget _buildEditButton() {
+  Widget _buildEditButton(BuildContext context) {
     return TextButton.icon(
       onPressed: controller.goToEdit,
       icon: const Icon(PhosphorIconsLight.notePencil, size: 18),
       label: const Text("Edit"),
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.primary,
+        foregroundColor: context.appColors.primary,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -225,17 +225,23 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.08),
+                          color: context.appColors.primary.withValues(
+                            alpha: 0.08,
+                          ),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Icon(icon, size: 15, color: AppColors.primary),
+                        child: Icon(
+                          icon,
+                          size: 15,
+                          color: context.appColors.primary,
+                        ),
                       ),
                       const Gap(Sizes.paddingS),
                       Text(
                         title,
                         style: TextHelper.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
+                          color: context.appColors.primary,
                         ),
                       ),
                     ],
@@ -310,17 +316,21 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.08),
+                      color: context.appColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(icon, size: 15, color: AppColors.primary),
+                    child: Icon(
+                      icon,
+                      size: 15,
+                      color: context.appColors.primary,
+                    ),
                   ),
                   const Gap(Sizes.paddingS),
                   Text(
                     title,
                     style: TextHelper.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: context.appColors.primary,
                     ),
                   ),
                 ],
@@ -380,17 +390,25 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
           runSpacing: 20,
           alignment: WrapAlignment.spaceEvenly,
           children: [
-            _buildLogoItem("Logo", company.logo),
-            _buildLogoItem("Watermark", company.waterMark),
-            _buildLogoItem("Report Logo", company.reportFormatLogo ?? ''),
-            _buildLogoItem("Signature", company.authorizedSignature ?? ''),
+            _buildLogoItem("Logo", company.logo, context),
+            _buildLogoItem("Watermark", company.waterMark, context),
+            _buildLogoItem(
+              "Report Logo",
+              company.reportFormatLogo ?? '',
+              context,
+            ),
+            _buildLogoItem(
+              "Signature",
+              company.authorizedSignature ?? '',
+              context,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLogoItem(String label, String url) {
+  Widget _buildLogoItem(String label, String url, BuildContext context) {
     return Column(
       children: [
         Container(
@@ -442,13 +460,13 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
+                    color: context.appColors.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     PhosphorIconsLight.magnifyingGlassPlus,
                     size: 12,
-                    color: AppColors.primary,
+                    color: context.appColors.primary,
                   ),
                 ),
               ),
@@ -486,6 +504,7 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
             "Automatically round off totals in invoices",
             company.allowRoundOff == "true",
             PhosphorIconsLight.coins,
+            context,
           ),
           const Divider(height: 1),
           _buildSettingTile(
@@ -493,6 +512,7 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
             "Allow customers to provide feedback on orders",
             company.enableFeedbackModule == "true",
             PhosphorIconsLight.chatCircleDots,
+            context,
           ),
         ],
       ),
@@ -504,16 +524,17 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
     String subtitle,
     bool value,
     IconData icon,
+    BuildContext context,
   ) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.05),
+          color: context.appColors.primary.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, size: 20, color: AppColors.primary),
+        child: Icon(icon, size: 20, color: context.appColors.primary),
       ),
       title: Text(
         title,
@@ -526,7 +547,7 @@ class CompanyProfilePage extends GetView<CompanyProfileController> {
       trailing: Switch.adaptive(
         value: value,
         onChanged: (v) {},
-        activeTrackColor: AppColors.primary,
+        activeTrackColor: context.appColors.primary,
       ),
     );
   }

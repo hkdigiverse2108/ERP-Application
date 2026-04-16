@@ -11,8 +11,8 @@ class DarkTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
+        seedColor: AppColors.primaryDark,
+        primary: AppColors.primaryDark,
         secondary: AppColors.secondary,
         surface: AppColors.darkSurface,
         error: AppColors.error,
@@ -45,7 +45,7 @@ class DarkTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: BorderSide(color: AppColors.primaryDark),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusS),

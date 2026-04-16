@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -36,6 +37,7 @@ class BillLiveProductTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<BillOfLiveProductModel>(
+                onRowTap: (item) => Get.toNamed(Routes.bomDetails, arguments: item),
                 isLoading: controller.isLoading.value,
                 items: controller.billOfLiveProducts,
                 columns: [

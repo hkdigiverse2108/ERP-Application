@@ -83,7 +83,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   }
 
   static const light = AppColorsExtension(
-    primary: AppColors.primary,
+    primary: AppColors.primaryLight,
     sectionSell: AppColors.lightSectionSell,
     sectionSellPurchase: AppColors.lightSectionSellPurchase,
     sectionPaid: AppColors.lightSectionPaid,
@@ -96,7 +96,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   );
 
   static const dark = AppColorsExtension(
-    primary: AppColors.primary,
+    primary: AppColors.primaryDark,
     sectionSell: AppColors.darkSectionSell,
     sectionSellPurchase: AppColors.darkSectionSellPurchase,
     sectionPaid: AppColors.darkSectionPaid,

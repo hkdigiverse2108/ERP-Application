@@ -11,8 +11,8 @@ class LightTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
+        seedColor: AppColors.primaryLight,
+        primary: AppColors.primaryLight,
         secondary: AppColors.secondary,
         surface: AppColors.lightSurface,
         error: AppColors.error,
@@ -45,7 +45,7 @@ class LightTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: BorderSide(color: AppColors.primaryLight),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadiusS),

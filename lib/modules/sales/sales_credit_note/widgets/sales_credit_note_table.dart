@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/sales_credit_note_model.dart';
@@ -39,6 +40,7 @@ class SalesCreditNoteTable extends StatelessWidget {
               CommonTable<SalesCreditNoteModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.creditNotes,
+                onRowTap: (item) => Get.toNamed(Routes.salesCreditNoteDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Credit Note No.',

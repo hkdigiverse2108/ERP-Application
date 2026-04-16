@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -161,7 +160,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                       vertical: 12,
                                     ),
                                     color: isSelected
-                                        ? AppColors.primary.withValues(
+                                        ? context.appColors.primary.withValues(
                                             alpha: 0.05,
                                           )
                                         : null,
@@ -175,7 +174,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                                   context,
                                                 ).copyWith(
                                                   color: isSelected
-                                                      ? AppColors.primary
+                                                      ? context
+                                                            .appColors
+                                                            .primary
                                                       : context
                                                             .appColors
                                                             .textPrimary,
@@ -186,10 +187,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                           ),
                                         ),
                                         if (isSelected)
-                                          const Icon(
+                                          Icon(
                                             Icons.check,
                                             size: 16,
-                                            color: AppColors.primary,
+                                            color: context.appColors.primary,
                                           ),
                                       ],
                                     ),
@@ -257,8 +258,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                borderSide: const BorderSide(
-                  color: AppColors.primary,
+                borderSide: BorderSide(
+                  color: context.appColors.primary,
                   width: 1.5,
                 ),
               ),

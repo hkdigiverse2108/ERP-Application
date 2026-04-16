@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/helper/route_resolver.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -340,7 +339,7 @@ class _NavItem extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isActive
-              ? (isDark ? AppColors.primary : AppDrawer._activeBg)
+              ? (isDark ? context.appColors.primary : AppDrawer._activeBg)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
@@ -446,7 +445,7 @@ class _SocialIcon extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        color: isDark ? Colors.white : AppColors.primary,
+        color: isDark ? Colors.white : context.appColors.primary,
         size: 20,
       ),
     );

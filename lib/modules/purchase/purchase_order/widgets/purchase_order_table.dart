@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/purchase/purchase_order_model.dart';
@@ -39,6 +40,8 @@ class PurchaseOrderTable extends StatelessWidget {
               CommonTable<PurchaseOrderModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.purchaseOrders,
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.purchaseOrderDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Order No',

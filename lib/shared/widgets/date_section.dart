@@ -106,7 +106,7 @@ class _RangedDatePickerState extends State<RangedDatePicker> {
               PhosphorIconsLight.calendarDots,
               size: 20,
               color: context.responsive(
-                light: AppColors.primaryLight,
+                light: context.appColors.primary,
                 dark: AppColors.darkIconSecondary,
               ),
             ),
@@ -202,7 +202,7 @@ class _DatePickerBottomSheet extends StatelessWidget {
                   return Theme(
                     data: Theme.of(context).copyWith(
                       colorScheme: Theme.of(context).colorScheme.copyWith(
-                        primary: AppColors.primary,
+                        primary: context.appColors.primary,
                         onPrimary: Colors.white,
                         surface: isDark ? AppColors.darkSurface : Colors.white,
                         onSurface: isDark
@@ -236,17 +236,19 @@ class _DatePickerBottomSheet extends StatelessWidget {
       leading: Icon(
         icon,
         color: isSelected
-            ? AppColors.primary
+            ? context.appColors.primary
             : Theme.of(context).iconTheme.color,
       ),
       title: Text(
         title,
         style: TextHelper.bodyMediumStyle(context).copyWith(
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? AppColors.primary : null,
+          color: isSelected ? context.appColors.primary : null,
         ),
       ),
-      trailing: isSelected ? Icon(Icons.check, color: AppColors.primary) : null,
+      trailing: isSelected
+          ? Icon(Icons.check, color: context.appColors.primary)
+          : null,
       onTap: () {
         onRangeSelected(range);
         Navigator.pop(context);

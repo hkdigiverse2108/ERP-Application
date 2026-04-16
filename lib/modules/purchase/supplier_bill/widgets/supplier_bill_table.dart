@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/purchase/supplier_bill_model.dart';
@@ -39,6 +40,8 @@ class SupplierBillTable extends StatelessWidget {
               CommonTable<SupplierBillModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.supplierBills,
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.supplierBillDetails, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Status',

@@ -43,5 +43,7 @@ class ColorHelper {
   }
 
   /// Get a primary color that works well for both themes
-  static Color get primary => AppColors.primary;
+  static Color get primary => ThemeService().isDarkMode
+      ? AppColors.primaryDark
+      : AppColors.primaryLight;
 }
