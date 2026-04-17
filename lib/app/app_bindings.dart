@@ -3,6 +3,7 @@ import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/repositories/permission_repository.dart';
+import 'package:ai_setu/modules/settings/company_profile/controllers/company_profile_controller.dart';
 import 'package:get/get.dart';
 
 class AppBindings extends Bindings {
@@ -13,5 +14,6 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => PermissionRepository(), fenix: true);
     Get.put(PermissionService(), permanent: true);
     Get.put(FinancialYearController(), permanent: true);
+    Get.lazyPut(() => CompanyProfileController(), fenix: true);
   }
 }

@@ -7,6 +7,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class DeliveryChallanDetails extends StatelessWidget {
@@ -15,8 +17,12 @@ class DeliveryChallanDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DeliveryChallanModel challan = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(challan.date ?? DateTime.now());
-    final dueDateStr = DateFormat('dd MMM yyyy').format(challan.dueDate ?? DateTime.now());
+    final dateStr = DateFormat(
+      'dd MMM yyyy',
+    ).format(challan.date ?? DateTime.now());
+    final dueDateStr = DateFormat(
+      'dd MMM yyyy',
+    ).format(challan.dueDate ?? DateTime.now());
 
     return DetailsView(
       title: 'Challan #${challan.deliveryChallanNo}',
@@ -28,17 +34,18 @@ class DeliveryChallanDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapDeliveryChallan(challan);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
-        ),
-        DetailAction(
-          label: 'Download',
-          icon: PhosphorIconsFill.downloadSimple,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapDeliveryChallan(challan);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
         DetailAction(
           label: 'Mark Delivered',
@@ -55,17 +62,16 @@ class DeliveryChallanDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Customer',
-                  value: '${challan.customerId?.firstName} ${challan.customerId?.lastName}',
+                  value:
+                      '${challan.customerId?.firstName} ${challan.customerId?.lastName}',
                 ),
                 DetailItem(
                   label: 'Place of Supply',
                   value: challan.placeOfSupply ?? '-',
                 ),
-                if (challan.dueDate != null) DetailItem(label: 'Due Date', value: dueDateStr),
-                DetailItem(
-                  label: 'Tax Type',
-                  value: challan.taxType ?? '-',
-                ),
+                if (challan.dueDate != null)
+                  DetailItem(label: 'Due Date', value: dueDateStr),
+                DetailItem(label: 'Tax Type', value: challan.taxType ?? '-'),
                 DetailItem(
                   label: 'Reverse Charge',
                   value: challan.reverseCharge ? 'Yes' : 'No',
@@ -87,12 +93,16 @@ class DeliveryChallanDetails extends StatelessWidget {
                   if (challan.salesOrderIds.isNotEmpty)
                     DetailItem(
                       label: 'Sales Orders',
-                      value: challan.salesOrderIds.map((e) => '#${e.salesOrderNo}').join(', '),
+                      value: challan.salesOrderIds
+                          .map((e) => '#${e.salesOrderNo}')
+                          .join(', '),
                     ),
                   if (challan.invoiceIds.isNotEmpty)
                     DetailItem(
                       label: 'Invoices',
-                      value: challan.invoiceIds.map((e) => '#${e.invoiceNo}').join(', '),
+                      value: challan.invoiceIds
+                          .map((e) => '#${e.invoiceNo}')
+                          .join(', '),
                     ),
                 ],
               ),
@@ -128,7 +138,10 @@ class DeliveryChallanDetails extends StatelessWidget {
             if (challan.additionalCharges.isNotEmpty)
               _buildSummaryRow(
                 'Additional Charges',
-                challan.additionalCharges.fold(0.0, (sum, item) => sum + item.totalAmount),
+                challan.additionalCharges.fold(
+                  0.0,
+                  (sum, item) => sum + item.totalAmount,
+                ),
                 context: context,
               ),
             _buildSummaryRow(
@@ -159,7 +172,9 @@ class DeliveryChallanDetails extends StatelessWidget {
                         children: [
                           Text(
                             'Billing Address',
-                            style: TextHelper.caption.copyWith(fontWeight: FontWeight.bold),
+                            style: TextHelper.caption.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Gap(8),
                           _buildAddressText(challan.billingAddress!),
@@ -174,7 +189,9 @@ class DeliveryChallanDetails extends StatelessWidget {
                         children: [
                           Text(
                             'Shipping Address',
-                            style: TextHelper.caption.copyWith(fontWeight: FontWeight.bold),
+                            style: TextHelper.caption.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Gap(8),
                           _buildAddressText(challan.shippingAddress!),
@@ -218,7 +235,9 @@ class DeliveryChallanDetails extends StatelessWidget {
             children: [
               Text(
                 challan.notes!,
-                style: TextHelper.bodySmall.copyWith(color: AppColors.lightTextSecondary),
+                style: TextHelper.bodySmall.copyWith(
+                  color: AppColors.lightTextSecondary,
+                ),
               ),
             ],
           ),
@@ -263,16 +282,24 @@ class DeliveryChallanDetails extends StatelessWidget {
                 Text(item.productId?.name ?? '-', style: TextHelper.bodySmall),
               ),
               DataCell(
-                Text('${item.qty} ${item.unit ?? ""}', style: TextHelper.bodySmall),
+                Text(
+                  '${item.qty} ${item.unit ?? ""}',
+                  style: TextHelper.bodySmall,
+                ),
               ),
               DataCell(Text('₹${item.price}', style: TextHelper.bodySmall)),
               DataCell(
-                Text('${item.taxId?.percentage ?? 0}%', style: TextHelper.bodySmall),
+                Text(
+                  '${item.taxId?.percentage ?? 0}%',
+                  style: TextHelper.bodySmall,
+                ),
               ),
               DataCell(
                 Text(
                   '₹${item.totalAmount}',
-                  style: TextHelper.bodySmall.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodySmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -299,14 +326,17 @@ class DeliveryChallanDetails extends StatelessWidget {
             label,
             style: isTotal
                 ? TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold)
-                : TextHelper.bodyMedium.copyWith(color: AppColors.lightTextSecondary),
+                : TextHelper.bodyMedium.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
           ),
           Text(
             '₹${amount.toStringAsFixed(2)}',
             style: (isTotal || isBold)
                 ? TextHelper.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: color ?? (isTotal ? context.appColors.primary : null),
+                    color:
+                        color ?? (isTotal ? context.appColors.primary : null),
                   )
                 : TextHelper.bodyMedium.copyWith(
                     color: color,
@@ -323,7 +353,8 @@ class DeliveryChallanDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(addr.addressLine1, style: TextHelper.bodySmall),
-        if (addr.addressLine2 != null) Text(addr.addressLine2!, style: TextHelper.bodySmall),
+        if (addr.addressLine2 != null)
+          Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
           '${addr.city?.name}, ${addr.state?.name}, ${addr.country?.name} - ${addr.pinCode}',
           style: TextHelper.bodySmall,

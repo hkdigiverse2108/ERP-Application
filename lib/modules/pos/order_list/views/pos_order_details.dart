@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class POSOrderDetails extends StatelessWidget {
@@ -26,7 +28,18 @@ class POSOrderDetails extends StatelessWidget {
         DetailAction(
           label: 'Print Invoice',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapPOSOrder(order);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapPOSOrder(order);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
         DetailAction(
           label: 'Refund',
@@ -63,11 +76,13 @@ class POSOrderDetails extends StatelessWidget {
                 items: [
                   DetailItem(
                     label: 'Customer',
-                    value: '${order.customerId!.firstName} ${order.customerId!.lastName}',
+                    value:
+                        '${order.customerId!.firstName} ${order.customerId!.lastName}',
                   ),
                   DetailItem(
                     label: 'Phone',
-                    value: '${order.customerId!.phoneNo.countryCode} ${order.customerId!.phoneNo.phoneNo}',
+                    value:
+                        '${order.customerId!.phoneNo.countryCode} ${order.customerId!.phoneNo.phoneNo}',
                   ),
                   if (order.customerId!.email != null)
                     DetailItem(label: 'Email', value: order.customerId!.email!),
@@ -84,12 +99,28 @@ class POSOrderDetails extends StatelessWidget {
         DetailSection(
           title: 'Financial Breakdown',
           children: [
-            _buildFinancialRow('Subtotal (MRP)', '₹${order.totalMrp.toStringAsFixed(2)}'),
-            _buildFinancialRow('Discount', '-₹${order.totalDiscount.toStringAsFixed(2)}', color: AppColors.error),
-            _buildFinancialRow('Tax', '+₹${order.totalTaxAmount.toStringAsFixed(2)}'),
+            _buildFinancialRow(
+              'Subtotal (MRP)',
+              '₹${order.totalMrp.toStringAsFixed(2)}',
+            ),
+            _buildFinancialRow(
+              'Discount',
+              '-₹${order.totalDiscount.toStringAsFixed(2)}',
+              color: AppColors.error,
+            ),
+            _buildFinancialRow(
+              'Tax',
+              '+₹${order.totalTaxAmount.toStringAsFixed(2)}',
+            ),
             if (order.totalAdditionalCharge > 0)
-              _buildFinancialRow('Add. Charges', '+₹${order.totalAdditionalCharge.toStringAsFixed(2)}'),
-            _buildFinancialRow('Round Off', '₹${order.roundOff.toStringAsFixed(2)}'),
+              _buildFinancialRow(
+                'Add. Charges',
+                '+₹${order.totalAdditionalCharge.toStringAsFixed(2)}',
+              ),
+            _buildFinancialRow(
+              'Round Off',
+              '₹${order.roundOff.toStringAsFixed(2)}',
+            ),
             const Divider(height: 24),
             _buildFinancialRow(
               'Grand Total',
@@ -97,17 +128,23 @@ class POSOrderDetails extends StatelessWidget {
               isBold: true,
               fontSize: 18,
             ),
-            _buildFinancialRow('Paid Amount', '₹${order.paidAmount.toStringAsFixed(2)}', color: AppColors.success),
+            _buildFinancialRow(
+              'Paid Amount',
+              '₹${order.paidAmount.toStringAsFixed(2)}',
+              color: AppColors.success,
+            ),
             if (order.dueAmount > 0)
-              _buildFinancialRow('Due Amount', '₹${order.dueAmount.toStringAsFixed(2)}', color: AppColors.error),
+              _buildFinancialRow(
+                'Due Amount',
+                '₹${order.dueAmount.toStringAsFixed(2)}',
+                color: AppColors.error,
+              ),
           ],
         ),
         if (order.remark != null && order.remark!.isNotEmpty)
           DetailSection(
             title: 'Remarks',
-            children: [
-              Text(order.remark!, style: TextHelper.bodyMedium),
-            ],
+            children: [Text(order.remark!, style: TextHelper.bodyMedium)],
           ),
       ],
     );
@@ -120,7 +157,9 @@ class POSOrderDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.appColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.appColors.border.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: context.appColors.border.withValues(alpha: 0.5),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,12 +170,16 @@ class POSOrderDetails extends StatelessWidget {
               Expanded(
                 child: Text(
                   item.productId.name,
-                  style: TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Text(
                 'x${item.qty}',
-                style: TextHelper.h4Style(context).copyWith(color: context.appColors.primary),
+                style: TextHelper.h4Style(
+                  context,
+                ).copyWith(color: context.appColors.primary),
               ),
             ],
           ),
@@ -146,11 +189,15 @@ class POSOrderDetails extends StatelessWidget {
             children: [
               Text(
                 'Price: ₹${item.unitCost.toStringAsFixed(2)}',
-                style: TextHelper.bodySmall.copyWith(color: AppColors.lightTextSecondary),
+                style: TextHelper.bodySmall.copyWith(
+                  color: AppColors.lightTextSecondary,
+                ),
               ),
               Text(
                 'Total: ₹${item.netAmount.toStringAsFixed(2)}',
-                style: TextHelper.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                style: TextHelper.bodyMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -159,7 +206,13 @@ class POSOrderDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildFinancialRow(String label, String value, {Color? color, bool isBold = false, double? fontSize}) {
+  Widget _buildFinancialRow(
+    String label,
+    String value, {
+    Color? color,
+    bool isBold = false,
+    double? fontSize,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(

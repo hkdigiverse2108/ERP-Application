@@ -1,11 +1,13 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class BOMDetails extends StatelessWidget {
@@ -27,7 +29,18 @@ class BOMDetails extends StatelessWidget {
         DetailAction(
           label: 'Print BOM',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapBOM(bom);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapBOM(bom);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
         DetailAction(
           label: 'Export CSV',

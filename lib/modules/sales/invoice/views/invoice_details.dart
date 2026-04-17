@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -32,22 +34,17 @@ class InvoiceDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {
-            // Print logic
+          onTap: () async {
+            final pdfData = PdfMappers.mapInvoice(invoice);
+            await PdfService.generateAndPrint(pdfData);
           },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {
-            // Share logic
-          },
-        ),
-        DetailAction(
-          label: 'Download',
-          icon: PhosphorIconsFill.downloadSimple,
-          onTap: () {
-            // Download logic
+          onTap: () async {
+            final pdfData = PdfMappers.mapInvoice(invoice);
+            await PdfService.generateAndShare(pdfData);
           },
         ),
         DetailAction(

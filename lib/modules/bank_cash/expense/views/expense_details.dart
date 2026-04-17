@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ExpenseDetails extends StatelessWidget {
@@ -27,12 +29,18 @@ class ExpenseDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapExpense(expense);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapExpense(expense);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
         if (expense.image != null)
           DetailAction(
@@ -51,7 +59,9 @@ class ExpenseDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Party/Payee',
-                  value: expense.partyId.fullName.isNotEmpty ? expense.partyId.fullName : '-',
+                  value: expense.partyId.fullName.isNotEmpty
+                      ? expense.partyId.fullName
+                      : '-',
                 ),
                 DetailItem(
                   label: 'Category',
@@ -61,11 +71,9 @@ class ExpenseDetails extends StatelessWidget {
                   label: 'Is Salary',
                   value: expense.isSalary ? 'Yes' : 'No',
                 ),
-                if (expense.description != null && expense.description!.isNotEmpty)
-                  DetailItem(
-                    label: 'Description',
-                    value: expense.description!,
-                  ),
+                if (expense.description != null &&
+                    expense.description!.isNotEmpty)
+                  DetailItem(label: 'Description', value: expense.description!),
               ],
             ),
           ],
@@ -73,13 +81,22 @@ class ExpenseDetails extends StatelessWidget {
         DetailSection(
           title: 'Financial Details',
           children: [
-            _buildAmountRow('Expense Amount', expense.amount.toDouble(), context: context),
+            _buildAmountRow(
+              'Expense Amount',
+              expense.amount.toDouble(),
+              context: context,
+            ),
             if (expense.incentive != null && expense.incentive! > 0)
-              _buildAmountRow('Incentive', expense.incentive!.toDouble(), context: context),
+              _buildAmountRow(
+                'Incentive',
+                expense.incentive!.toDouble(),
+                context: context,
+              ),
             const Divider(height: 32),
             _buildAmountRow(
               'Total Amount',
-              (expense.total ?? (expense.amount + (expense.incentive ?? 0))).toDouble(),
+              (expense.total ?? (expense.amount + (expense.incentive ?? 0)))
+                  .toDouble(),
               isTotal: true,
               context: context,
             ),
@@ -99,10 +116,15 @@ class ExpenseDetails extends StatelessWidget {
                     label: 'To Date',
                     value: DateFormat('dd MMM yyyy').format(expense.toDate!),
                   ),
-                DetailItem(label: 'Registered By', value: expense.createdBy.fullName),
+                DetailItem(
+                  label: 'Registered By',
+                  value: expense.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Log Date',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(expense.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(expense.createdAt),
                 ),
               ],
             ),
@@ -129,14 +151,17 @@ class ExpenseDetails extends StatelessWidget {
             label,
             style: isTotal
                 ? TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold)
-                : TextHelper.bodyMedium.copyWith(color: AppColors.lightTextSecondary),
+                : TextHelper.bodyMedium.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
           ),
           Text(
             '₹${amount.toStringAsFixed(2)}',
             style: (isTotal || isBold)
                 ? TextHelper.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: color ?? (isTotal ? context.appColors.primary : null),
+                    color:
+                        color ?? (isTotal ? context.appColors.primary : null),
                   )
                 : TextHelper.bodyMedium.copyWith(
                     color: color,

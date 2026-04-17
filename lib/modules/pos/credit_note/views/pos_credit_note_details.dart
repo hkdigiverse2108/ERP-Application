@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class POSCreditNoteDetails extends StatelessWidget {
@@ -25,7 +27,18 @@ class POSCreditNoteDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapPOSCreditNote(note);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapPOSCreditNote(note);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -36,13 +49,18 @@ class POSCreditNoteDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Customer',
-                  value: '${note.customerId.firstName} ${note.customerId.lastName}',
+                  value:
+                      '${note.customerId.firstName} ${note.customerId.lastName}',
                 ),
                 DetailItem(
                   label: 'Phone',
-                  value: '${note.customerId.phoneNo.countryCode} ${note.customerId.phoneNo.phoneNo}',
+                  value:
+                      '${note.customerId.phoneNo.countryCode} ${note.customerId.phoneNo.phoneNo}',
                 ),
-                DetailItem(label: 'Order Reference', value: note.returnPosOrderId.returnOrderNo),
+                DetailItem(
+                  label: 'Order Reference',
+                  value: note.returnPosOrderId.returnOrderNo,
+                ),
               ],
             ),
           ],
@@ -75,7 +93,9 @@ class POSCreditNoteDetails extends StatelessWidget {
           DetailSection(
             title: 'Returned Items',
             children: [
-              ...note.returnPosOrderId.items.map((item) => _buildItemCard(item, context)),
+              ...note.returnPosOrderId.items.map(
+                (item) => _buildItemCard(item, context),
+              ),
             ],
           ),
         DetailSection(
@@ -86,7 +106,9 @@ class POSCreditNoteDetails extends StatelessWidget {
                 DetailItem(label: 'Created By', value: note.createdBy.fullName),
                 DetailItem(
                   label: 'Created At',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(note.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(note.createdAt),
                 ),
               ],
             ),
@@ -119,7 +141,9 @@ class POSCreditNoteDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.appColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.appColors.border.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: context.appColors.border.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         children: [
@@ -129,11 +153,15 @@ class POSCreditNoteDetails extends StatelessWidget {
               children: [
                 Text(
                   item.productId.name,
-                  style: TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   'MRP: ₹${(item.mrp ?? 0).toStringAsFixed(2)}',
-                  style: TextHelper.bodySmall.copyWith(color: context.appColors.textSecondary),
+                  style: TextHelper.bodySmall.copyWith(
+                    color: context.appColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -141,13 +169,12 @@ class POSCreditNoteDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                'Qty',
-                style: TextHelper.captionStyle(context),
-              ),
+              Text('Qty', style: TextHelper.captionStyle(context)),
               Text(
                 '${item.returnedQty ?? item.qty ?? 0}',
-                style: TextHelper.h4Style(context).copyWith(color: context.appColors.primary),
+                style: TextHelper.h4Style(
+                  context,
+                ).copyWith(color: context.appColors.primary),
               ),
             ],
           ),

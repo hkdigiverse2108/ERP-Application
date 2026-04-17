@@ -4,6 +4,8 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class DebitNoteDetails extends StatelessWidget {
@@ -24,12 +26,18 @@ class DebitNoteDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapAccountingDebitNote(note);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapAccountingDebitNote(note);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [

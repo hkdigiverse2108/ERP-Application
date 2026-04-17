@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SupplierBillDetails extends StatelessWidget {
@@ -32,17 +34,18 @@ class SupplierBillDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapSupplierBill(bill);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
-        ),
-        DetailAction(
-          label: 'Download',
-          icon: PhosphorIconsFill.downloadSimple,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapSupplierBill(bill);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
         if (bill.balanceAmount > 0)
           DetailAction(

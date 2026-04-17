@@ -4,6 +4,8 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SalesRegisterDetails extends StatelessWidget {
@@ -26,7 +28,18 @@ class SalesRegisterDetails extends StatelessWidget {
         DetailAction(
           label: 'Print Summary',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapSalesRegister(register);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapSalesRegister(register);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [

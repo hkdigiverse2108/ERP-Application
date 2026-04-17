@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class RecipeDetails extends StatelessWidget {
@@ -25,7 +27,18 @@ class RecipeDetails extends StatelessWidget {
         DetailAction(
           label: 'Print Recipe',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapRecipe(recipe);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapRecipe(recipe);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -54,7 +67,9 @@ class RecipeDetails extends StatelessWidget {
         DetailSection(
           title: 'Ingredients / Raw Materials',
           children: [
-            ...recipe.rawProducts.map((item) => _buildRawProductCard(item, context)),
+            ...recipe.rawProducts.map(
+              (item) => _buildRawProductCard(item, context),
+            ),
           ],
         ),
         DetailSection(
@@ -62,14 +77,21 @@ class RecipeDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Created By', value: recipe.createdBy.fullName),
+                DetailItem(
+                  label: 'Created By',
+                  value: recipe.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Created At',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(recipe.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(recipe.createdAt),
                 ),
                 DetailItem(
                   label: 'Last Updated',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(recipe.updatedAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(recipe.updatedAt),
                 ),
               ],
             ),
@@ -86,7 +108,9 @@ class RecipeDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.appColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.appColors.border.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: context.appColors.border.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,12 +121,16 @@ class RecipeDetails extends StatelessWidget {
               children: [
                 Text(
                   item.productId?.name ?? '-',
-                  style: TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'MRP: ₹${item.mrp.toStringAsFixed(2)}',
-                  style: TextHelper.bodySmall.copyWith(color: context.appColors.textSecondary),
+                  style: TextHelper.bodySmall.copyWith(
+                    color: context.appColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -110,13 +138,12 @@ class RecipeDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                'Qty Used',
-                style: TextHelper.captionStyle(context),
-              ),
+              Text('Qty Used', style: TextHelper.captionStyle(context)),
               Text(
                 '${item.useQty}',
-                style: TextHelper.h4Style(context).copyWith(color: context.appColors.primary),
+                style: TextHelper.h4Style(
+                  context,
+                ).copyWith(color: context.appColors.primary),
               ),
             ],
           ),

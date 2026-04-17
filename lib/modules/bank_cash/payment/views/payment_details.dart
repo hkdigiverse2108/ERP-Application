@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class PaymentDetails extends StatelessWidget {
@@ -27,17 +29,18 @@ class PaymentDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapBankPayment(payment);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
-        ),
-        DetailAction(
-          label: 'Download',
-          icon: PhosphorIconsFill.downloadSimple,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapBankPayment(payment);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -58,7 +61,9 @@ class PaymentDetails extends StatelessWidget {
                 ),
                 DetailItem(
                   label: 'Note',
-                  value: payment.expenseType.isNotEmpty ? payment.expenseType : '-',
+                  value: payment.expenseType.isNotEmpty
+                      ? payment.expenseType
+                      : '-',
                 ),
                 if (payment.posOrderId.orderNo.isNotEmpty)
                   DetailItem(
@@ -74,7 +79,11 @@ class PaymentDetails extends StatelessWidget {
           children: [
             _buildAmountRow('Base Amount', payment.amount, context: context),
             if (payment.discountAmount > 0)
-              _buildAmountRow('Discount', -payment.discountAmount.toDouble(), context: context),
+              _buildAmountRow(
+                'Discount',
+                -payment.discountAmount.toDouble(),
+                context: context,
+              ),
             const Divider(height: 32),
             _buildAmountRow(
               'Net Payment',
@@ -103,14 +112,21 @@ class PaymentDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Processed By', value: payment.createdBy.fullName),
+                DetailItem(
+                  label: 'Processed By',
+                  value: payment.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Entry Date',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(payment.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(payment.createdAt),
                 ),
                 DetailItem(
                   label: 'Last Modified',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(payment.updatedAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(payment.updatedAt),
                 ),
               ],
             ),
@@ -153,14 +169,17 @@ class PaymentDetails extends StatelessWidget {
             label,
             style: isTotal
                 ? TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold)
-                : TextHelper.bodyMedium.copyWith(color: AppColors.lightTextSecondary),
+                : TextHelper.bodyMedium.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
           ),
           Text(
             '₹${amount.toStringAsFixed(2)}',
             style: (isTotal || isBold)
                 ? TextHelper.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: color ?? (isTotal ? context.appColors.primary : null),
+                    color:
+                        color ?? (isTotal ? context.appColors.primary : null),
                   )
                 : TextHelper.bodyMedium.copyWith(
                     color: color,

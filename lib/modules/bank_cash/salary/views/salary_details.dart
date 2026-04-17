@@ -5,6 +5,8 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -26,19 +28,20 @@ class SalaryDetails extends StatelessWidget {
       // backgroundHeroColor: Colors.indigo.shade700,
       actions: [
         DetailAction(
-          label: 'Print Payslip',
+          label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapSalary(salary);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
           label: 'Share',
           icon: PhosphorIconsFill.shareNetwork,
-          onTap: () {},
-        ),
-        DetailAction(
-          label: 'Download',
-          icon: PhosphorIconsFill.downloadSimple,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapSalary(salary);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -49,7 +52,9 @@ class SalaryDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Employee Name',
-                  value: salary.partyId.fullName.isNotEmpty ? salary.partyId.fullName : '-',
+                  value: salary.partyId.fullName.isNotEmpty
+                      ? salary.partyId.fullName
+                      : '-',
                   icon: PhosphorIconsLight.user,
                 ),
                 DetailItem(
@@ -57,11 +62,9 @@ class SalaryDetails extends StatelessWidget {
                   value: '$fromDateStr to $toDateStr',
                   icon: PhosphorIconsLight.calendar,
                 ),
-                if (salary.description != null && salary.description!.isNotEmpty)
-                  DetailItem(
-                    label: 'Notes',
-                    value: salary.description!,
-                  ),
+                if (salary.description != null &&
+                    salary.description!.isNotEmpty)
+                  DetailItem(label: 'Notes', value: salary.description!),
               ],
             ),
           ],
@@ -69,9 +72,17 @@ class SalaryDetails extends StatelessWidget {
         DetailSection(
           title: 'Salary Breakdown',
           children: [
-            _buildAmountRow('Basic / Base Salary', salary.amount.toDouble(), context: context),
+            _buildAmountRow(
+              'Basic / Base Salary',
+              salary.amount.toDouble(),
+              context: context,
+            ),
             if (salary.incentive > 0)
-              _buildAmountRow('Incentive / Bonus', salary.incentive.toDouble(), context: context),
+              _buildAmountRow(
+                'Incentive / Bonus',
+                salary.incentive.toDouble(),
+                context: context,
+              ),
             const Divider(height: 32),
             _buildAmountRow(
               'Net Salary Payable',
@@ -86,14 +97,21 @@ class SalaryDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Processed By', value: salary.createdBy.fullName),
+                DetailItem(
+                  label: 'Processed By',
+                  value: salary.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Record Date',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(salary.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(salary.createdAt),
                 ),
                 DetailItem(
                   label: 'Last Modified',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(salary.updatedAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(salary.updatedAt),
                 ),
               ],
             ),
@@ -120,14 +138,17 @@ class SalaryDetails extends StatelessWidget {
             label,
             style: isTotal
                 ? TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold)
-                : TextHelper.bodyMedium.copyWith(color: AppColors.lightTextSecondary),
+                : TextHelper.bodyMedium.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
           ),
           Text(
             '₹${amount.toStringAsFixed(2)}',
             style: (isTotal || isBold)
                 ? TextHelper.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: color ?? (isTotal ? context.appColors.primary : null),
+                    color:
+                        color ?? (isTotal ? context.appColors.primary : null),
                   )
                 : TextHelper.bodyMedium.copyWith(
                     color: color,

@@ -5,6 +5,8 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -27,12 +29,18 @@ class MaterialConsumptionDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapMaterialConsumption(consumption);
+            await PdfService.generateAndPrint(pdfData);
+          },
         ),
         DetailAction(
-          label: 'Export',
-          icon: PhosphorIconsFill.export,
-          onTap: () {},
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapMaterialConsumption(consumption);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -42,7 +50,10 @@ class MaterialConsumptionDetails extends StatelessWidget {
             DataGrid(
               items: [
                 DetailItem(label: 'Voucher No', value: consumption.number),
-                DetailItem(label: 'Type', value: consumption.consumptionTypeId.name),
+                DetailItem(
+                  label: 'Type',
+                  value: consumption.consumptionTypeId.name,
+                ),
                 DetailItem(
                   label: 'Total Qty',
                   value: consumption.totalQty.toStringAsFixed(2),
@@ -53,17 +64,17 @@ class MaterialConsumptionDetails extends StatelessWidget {
                 ),
               ],
             ),
-            if (consumption.remark != null && consumption.remark!.isNotEmpty) ...[
+            if (consumption.remark != null &&
+                consumption.remark!.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
                 'Remarks',
-                style: TextHelper.label.copyWith(color: AppColors.lightTextSecondary),
+                style: TextHelper.label.copyWith(
+                  color: AppColors.lightTextSecondary,
+                ),
               ),
               const SizedBox(height: 4),
-              Text(
-                consumption.remark!,
-                style: TextHelper.bodyMedium,
-              ),
+              Text(consumption.remark!, style: TextHelper.bodyMedium),
             ],
           ],
         ),
@@ -78,15 +89,17 @@ class MaterialConsumptionDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Created By', value: consumption.createdBy.fullName),
+                DetailItem(
+                  label: 'Created By',
+                  value: consumption.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Log Date',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(consumption.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(consumption.createdAt),
                 ),
-                DetailItem(
-                  label: 'Branch',
-                  value: consumption.branchId.name,
-                ),
+                DetailItem(label: 'Branch', value: consumption.branchId.name),
               ],
             ),
           ],
@@ -102,7 +115,9 @@ class MaterialConsumptionDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.appColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.appColors.border.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: context.appColors.border.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,11 +128,15 @@ class MaterialConsumptionDetails extends StatelessWidget {
               children: [
                 Text(
                   item.productId.name,
-                  style: TextHelper.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: TextHelper.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   'Unit Price: ₹${item.price.toStringAsFixed(2)}',
-                  style: TextHelper.bodySmall.copyWith(color: AppColors.lightTextSecondary),
+                  style: TextHelper.bodySmall.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
                 ),
               ],
             ),
@@ -127,7 +146,9 @@ class MaterialConsumptionDetails extends StatelessWidget {
             children: [
               Text(
                 'Qty: ${item.qty}',
-                style: TextHelper.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                style: TextHelper.bodyMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 '₹${item.totalPrice.toStringAsFixed(2)}',

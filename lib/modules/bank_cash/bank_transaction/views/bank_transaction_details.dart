@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/pdf_service.dart';
+import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class BankTransactionDetails extends StatelessWidget {
@@ -13,7 +15,9 @@ class BankTransactionDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BankTransactionModel transaction = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(transaction.transactionDate);
+    final dateStr = DateFormat(
+      'dd MMM yyyy',
+    ).format(transaction.transactionDate);
 
     return DetailsView(
       title: 'Transaction #${transaction.voucherNo}',
@@ -25,7 +29,18 @@ class BankTransactionDetails extends StatelessWidget {
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
-          onTap: () {},
+          onTap: () async {
+            final pdfData = PdfMappers.mapBankTransaction(transaction);
+            await PdfService.generateAndPrint(pdfData);
+          },
+        ),
+        DetailAction(
+          label: 'Share',
+          icon: PhosphorIconsFill.shareNetwork,
+          onTap: () async {
+            final pdfData = PdfMappers.mapBankTransaction(transaction);
+            await PdfService.generateAndShare(pdfData);
+          },
         ),
       ],
       sections: [
@@ -35,8 +50,14 @@ class BankTransactionDetails extends StatelessWidget {
             DataGrid(
               items: [
                 DetailItem(label: 'Type', value: transaction.transactionType),
-                DetailItem(label: 'From Account', value: transaction.fromAccount.name),
-                DetailItem(label: 'To Account', value: transaction.toAccount?.name ?? '-'),
+                DetailItem(
+                  label: 'From Account',
+                  value: transaction.fromAccount.name,
+                ),
+                DetailItem(
+                  label: 'To Account',
+                  value: transaction.toAccount?.name ?? '-',
+                ),
                 DetailItem(
                   label: 'Amount',
                   value: '₹${transaction.amount.toStringAsFixed(2)}',
@@ -61,14 +82,21 @@ class BankTransactionDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Created By', value: transaction.createdBy.fullName),
+                DetailItem(
+                  label: 'Created By',
+                  value: transaction.createdBy.fullName,
+                ),
                 DetailItem(
                   label: 'Created At',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(transaction.createdAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(transaction.createdAt),
                 ),
                 DetailItem(
                   label: 'Last Updated',
-                  value: DateFormat('dd MMM yyyy, hh:mm a').format(transaction.updatedAt),
+                  value: DateFormat(
+                    'dd MMM yyyy, hh:mm a',
+                  ).format(transaction.updatedAt),
                 ),
               ],
             ),
