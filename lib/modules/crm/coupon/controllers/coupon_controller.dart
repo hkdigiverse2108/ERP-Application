@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/crm/coupon_model.dart';
 import 'package:ai_setu/data/repositories/crm/coupon_repository.dart';
@@ -71,7 +72,7 @@ class CouponController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("CRM Module Error (Coupon)", e);
     } finally {
       isLoading.value = false;
     }

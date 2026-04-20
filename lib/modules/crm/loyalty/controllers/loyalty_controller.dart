@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/data/model/crm/loyalty_model.dart';
@@ -84,7 +85,7 @@ class LoyaltyController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("CRM Module Error", e);
     } finally {
       isLoading.value = false;
     }

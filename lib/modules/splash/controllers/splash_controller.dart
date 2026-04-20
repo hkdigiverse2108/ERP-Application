@@ -37,7 +37,6 @@ class SplashController extends GetxController {
           await PermissionService.to.fetchPermissions(user.id);
           Get.offAllNamed(PermissionService.to.defaultRoute);
         } catch (e) {
-          Get.log("Splash: Error loading permissions, redirecting to login: $e");
           Get.offAllNamed(Routes.signIn);
         }
       } else {

@@ -1,8 +1,8 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/debit_note_model.dart';
 import 'package:ai_setu/data/repositories/accounting_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DebitController extends GetxController {
@@ -69,7 +69,7 @@ class DebitController extends GetxController {
         totalItems.value = res.data["totalData"] ?? 0;
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Accounting Module Error (Debit)", e);
     } finally {
       isLodding.value = false;
     }

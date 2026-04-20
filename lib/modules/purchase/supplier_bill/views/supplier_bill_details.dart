@@ -47,13 +47,13 @@ class SupplierBillDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        if (bill.balanceAmount > 0)
-          DetailAction(
-            label: 'Pay Now',
-            icon: PhosphorIconsFill.creditCard,
-            color: Colors.green,
-            onTap: () {},
-          ),
+        // if (bill.balanceAmount > 0)
+        // DetailAction(
+        //   label: 'Pay Now',
+        //   icon: PhosphorIconsFill.creditCard,
+        //   color: Colors.green,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

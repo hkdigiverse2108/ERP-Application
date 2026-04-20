@@ -4,48 +4,17 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/data/model/permission_model.dart';
-import 'package:ai_setu/data/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/shared/widgets/dialogs/logout_confirmation_dialog.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
   void _showLogoutDialog(BuildContext context) {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('Logout', style: TextHelper.h3),
-        content: Text(
-          'Are you sure you want to log out?',
-          style: TextHelper.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'Cancel',
-              style: TextHelper.bodyMedium.copyWith(color: Colors.grey),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              AuthRepository().logout();
-            },
-            child: Text(
-              'Logout',
-              style: TextHelper.bodyMedium.copyWith(
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    LogoutConfirmationDialog.show();
   }
 
   static const Color _activeBg = Color(0xFFE8F0FF);

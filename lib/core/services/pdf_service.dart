@@ -58,7 +58,10 @@ class PdfService {
 
   static Future<pw.Document> _generateDocument(DetailPdfData data) async {
     final doc = pw.Document();
-    final company = CompanyProfileController.instance.company.value;
+    dynamic company;
+    if (Get.isRegistered<CompanyProfileController>()) {
+      company = CompanyProfileController.instance.company.value;
+    }
 
     // Load fonts if needed, here we use standard ones
     final font = await PdfGoogleFonts.interRegular();

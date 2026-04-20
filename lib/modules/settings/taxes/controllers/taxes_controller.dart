@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
@@ -82,7 +83,7 @@ class TaxesController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint('Error fetching taxes: $e');
+      Log.e("Settings Module Error (Taxes)", e);
     } finally {
       isLoading.value = false;
     }

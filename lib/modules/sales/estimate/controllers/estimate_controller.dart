@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
 import 'package:ai_setu/core/services/financial_year_controller.dart';
@@ -67,7 +68,7 @@ class EstimateController extends GetxController {
       );
       customers.value = res;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Sales Module Error (Estimate)", e);
     }
   }
 
@@ -115,7 +116,7 @@ class EstimateController extends GetxController {
         currentPage.value = currentPage.value; // Stay on requested page
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Sales Module Error (Estimate)", e);
     } finally {
       isLodding.value = false;
     }

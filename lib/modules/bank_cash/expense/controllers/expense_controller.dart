@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 
@@ -73,7 +74,7 @@ class ExpenseController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Bank/Cash Module Error (Expense)", e);
     } finally {
       isLodding.value = false;
     }

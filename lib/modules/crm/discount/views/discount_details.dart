@@ -19,8 +19,10 @@ class DiscountDetails extends StatelessWidget {
     }
     final DiscountModel discount = Get.arguments;
 
-    final startDateStr = DateFormat('dd MMM yyyy, hh:mm a').format(discount.startDateTime);
-    final endDateStr = discount.endDateTime != null 
+    final startDateStr = DateFormat(
+      'dd MMM yyyy, hh:mm a',
+    ).format(discount.startDateTime);
+    final endDateStr = discount.endDateTime != null
         ? DateFormat('dd MMM yyyy, hh:mm a').format(discount.endDateTime!)
         : 'Evergreen';
 
@@ -29,13 +31,15 @@ class DiscountDetails extends StatelessWidget {
       subtitle: 'Code: ${discount.discountCode}',
       heroIcon: PhosphorIconsFill.tag,
       status: discount.status,
-      statusColor: discount.status == 'active' ? AppColors.success : AppColors.error,
+      statusColor: discount.status == 'active'
+          ? AppColors.success
+          : AppColors.error,
       actions: [
-        DetailAction(
-          label: 'Statistics',
-          icon: PhosphorIconsFill.chartBar,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Statistics',
+        //   icon: PhosphorIconsFill.chartBar,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(
@@ -57,7 +61,7 @@ class DiscountDetails extends StatelessWidget {
                 ),
                 DetailItem(
                   label: 'Requirement',
-                  value: discount.minimumRequirement == 'none' 
+                  value: discount.minimumRequirement == 'none'
                       ? 'None'
                       : '${discount.minimumRequirement}: ${discount.minimumPurchaseAmount ?? discount.minimumQuantity ?? ""}',
                 ),
@@ -83,10 +87,7 @@ class DiscountDetails extends StatelessWidget {
                   value: '₹${discount.revenue.toStringAsFixed(2)}',
                   color: AppColors.success,
                 ),
-                DetailItem(
-                  label: 'Orders',
-                  value: discount.orders.toString(),
-                ),
+                DetailItem(label: 'Orders', value: discount.orders.toString()),
               ],
             ),
           ],
@@ -96,18 +97,28 @@ class DiscountDetails extends StatelessWidget {
             title: 'Inclusions',
             children: [
               if (discount.categoryIds.isNotEmpty) ...[
-                const Text('Categories:', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Categories:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Wrap(
                   spacing: 8,
-                  children: discount.categoryIds.map((e) => Chip(label: Text(e.name))).toList(),
+                  children: discount.categoryIds
+                      .map((e) => Chip(label: Text(e.name)))
+                      .toList(),
                 ),
                 const SizedBox(height: 12),
               ],
               if (discount.productIds.isNotEmpty) ...[
-                const Text('Specific Products:', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Specific Products:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Wrap(
                   spacing: 8,
-                  children: discount.productIds.map((e) => Chip(label: Text(e.name))).toList(),
+                  children: discount.productIds
+                      .map((e) => Chip(label: Text(e.name)))
+                      .toList(),
                 ),
               ],
             ],

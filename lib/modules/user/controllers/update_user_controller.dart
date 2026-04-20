@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
@@ -174,7 +175,7 @@ class UpdateUserController extends GetxController {
       final res = await _locationRepo.countryDropdown();
       countryList.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("User Module Error", e);
     }
   }
 
@@ -183,7 +184,7 @@ class UpdateUserController extends GetxController {
       final res = await _roleRepo.roleDropdown();
       roleList.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("User Module Error", e);
     }
   }
 
@@ -245,7 +246,7 @@ class UpdateUserController extends GetxController {
       final res = await _locationRepo.stateDropdown(id);
       stateList.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("User Module Error", e);
     }
   }
 
@@ -258,7 +259,7 @@ class UpdateUserController extends GetxController {
       final res = await _locationRepo.cityDropdown(id);
       cityList.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("User Module Error", e);
     }
   }
 
@@ -315,7 +316,7 @@ class UpdateUserController extends GetxController {
         AppSnackbar.error(res.message ?? "Failed to update user");
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("User Module Error", e);
     } finally {
       isUpdating.value = false;
     }

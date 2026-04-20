@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/company_model.dart';
 import 'package:ai_setu/data/model/year_model.dart';
@@ -24,7 +25,7 @@ class FinancialYearController extends GetxService {
   }
 
   void generateYears() {
-    debugPrint("FinancialYearController: generateYears() triggered");
+    Log.d("FinancialYearController: generateYears() triggered");
     final companyJson = _storage.read<Map<String, dynamic>>(
       StorageKeys.companyInfo,
     );
@@ -32,29 +33,23 @@ class FinancialYearController extends GetxService {
     int? parsedStartYear;
 
     if (companyJson != null) {
-      debugPrint(
-        "FinancialYearController: Found companyInfo in storage: ${companyJson.keys.toList()}",
-      );
+    Log.d("FinancialYearController: Found companyInfo in storage: ${companyJson.keys.toList()}");
       final company = CompanyModel.fromJson(companyJson);
 
       // 1. Detection from createdAt
       startDate = company.createdAt ?? DateTime.now();
-      debugPrint("FinancialYearController: Extracted startDate: $startDate");
+      Log.d("FinancialYearController: Extracted startDate: $startDate");
 
       // 2. Detection from financialYear string (e.g. "2024 - 2025")
       if (company.financialYear.isNotEmpty) {
         final yearMatch = RegExp(r'(\d{4})').firstMatch(company.financialYear);
         if (yearMatch != null) {
           parsedStartYear = int.parse(yearMatch.group(1)!);
-          debugPrint(
-            "FinancialYearController: Parsed start year from metadata string: $parsedStartYear",
-          );
+    Log.d("FinancialYearController: Parsed start year from metadata string: $parsedStartYear");
         }
       }
     } else {
-      debugPrint(
-        "FinancialYearController: companyInfo IS NULL in storage. Please log out and log in again.",
-      );
+    Log.d("FinancialYearController: companyInfo IS NULL in storage. Please log out and log in again.");
     }
 
     // Default to today if no dates found
@@ -73,9 +68,7 @@ class FinancialYearController extends GetxService {
     int startFY = startFYFromDate;
     if (parsedStartYear != null && parsedStartYear < startFY) {
       startFY = parsedStartYear;
-      debugPrint(
-        "FinancialYearController: Overriding startFY with earlier metadata year: $startFY",
-      );
+    Log.d("FinancialYearController: Overriding startFY with earlier metadata year: $startFY");
     }
 
     int currentFY = now.month < 4 ? now.year - 1 : now.year;
@@ -103,9 +96,7 @@ class FinancialYearController extends GetxService {
     }
 
     availableYears.assignAll(generated.reversed.toList()); // Latest year first
-    debugPrint(
-      "FinancialYearController: Generated ${availableYears.length} financial years.",
-    );
+    Log.d("FinancialYearController: Generated ${availableYears.length} financial years.");
   }
 
   void _loadSelectedYear() {

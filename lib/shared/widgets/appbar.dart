@@ -32,10 +32,10 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Row(
           children: [
-            GestureDetector(
-              onTap: () => Scaffold.of(context).openDrawer(),
-              child: SvgPicture.asset(AppIcons.menuBar, height: 40, width: 40),
-            ),
+            // GestureDetector(
+            //   onTap: () => Scaffold.of(context).openDrawer(),
+            //   child: SvgPicture.asset(AppIcons.menuBar, height: 40, width: 40),
+            // ),
             Gap(10),
             Icon(PhosphorIconsFill.bell, color: Colors.white, size: 20),
             Gap(20),

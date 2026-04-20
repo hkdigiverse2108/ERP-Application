@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/data/model/pos/sales_register_model.dart';
@@ -68,7 +69,7 @@ class SalesRegisterController extends GetxController {
       final res = await _userRepository.getUserDropDown();
       users.value = res;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("POS Module Error (SalesRegister)", e);
     }
   }
 
@@ -101,7 +102,7 @@ class SalesRegisterController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("POS Module Error (SalesRegister)", e);
     } finally {
       isLoading.value = false;
     }

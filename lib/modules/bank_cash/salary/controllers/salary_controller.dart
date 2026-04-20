@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 
@@ -71,7 +72,7 @@ class SalaryController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Bank/Cash Module Error", e);
     } finally {
       isLodding.value = false;
     }

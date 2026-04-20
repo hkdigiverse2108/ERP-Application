@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/bank_transaction_model.dart';
 
@@ -72,7 +73,7 @@ class BankTransactionController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Bank/Cash Module Error (BankTransaction)", e);
     } finally {
       isLodding.value = false;
     }

@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
@@ -88,7 +89,7 @@ class ContactController extends GetxController {
       totalItems.value = response.totalItems;
       currentPage.value = response.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Contact Module Error", e);
     } finally {
       isLoading.value = false;
     }

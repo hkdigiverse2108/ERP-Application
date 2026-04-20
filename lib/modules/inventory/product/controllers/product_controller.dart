@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/brand/brand_model.dart';
 import 'package:ai_setu/data/model/category/category_model.dart';
@@ -85,7 +86,7 @@ class ProductController extends GetxController {
         parentCategoryFilter: id,
       );
     } catch (e) {
-      debugPrint('Sub-category load failed: $e');
+      Log.e('Inventory Module Error (Product) - Sub-category load failed', e);
     }
   }
 
@@ -106,7 +107,7 @@ class ProductController extends GetxController {
     try {
       subBrand.value = await _brandRepo.getBrands(parentBrandFilter: id);
     } catch (e) {
-      debugPrint('Sub-brand load failed: $e');
+      Log.e('Inventory Module Error (Product) - Sub-brand load failed', e);
     }
   }
 
@@ -121,7 +122,7 @@ class ProductController extends GetxController {
       brand.value = results[1] as List<BrandDropdownModel>;
       tax.value = results[2] as List<TaxDropdownModel>;
     } catch (e) {
-      debugPrint('Filter data load failed: $e');
+      Log.e('Inventory Module Error (Product) - Filter data load failed', e);
     }
   }
 
@@ -155,7 +156,7 @@ class ProductController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (Product)", e);
     } finally {
       isLodding.value = false;
     }

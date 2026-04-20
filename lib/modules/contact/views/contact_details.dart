@@ -1,4 +1,4 @@
-import 'package:ai_setu/app/app_routes.dart';
+// import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
@@ -21,11 +21,11 @@ class ContactDetails extends StatelessWidget {
       status: contact.isActive ? 'Active' : 'Inactive',
       statusColor: contact.isActive ? AppColors.success : AppColors.error,
       actions: [
-        DetailAction(
-          label: 'Edit',
-          icon: PhosphorIconsFill.pencilSimple,
-          onTap: () => Get.toNamed(Routes.contact, arguments: contact),
-        ),
+        // DetailAction(
+        //   label: 'Edit',
+        //   icon: PhosphorIconsFill.pencilSimple,
+        //   onTap: () => Get.toNamed(Routes.contact, arguments: contact),
+        // ),
         DetailAction(
           label: 'Call',
           icon: PhosphorIconsFill.phone,
@@ -41,13 +41,13 @@ class ContactDetails extends StatelessWidget {
             // Initiate WhatsApp
           },
         ),
-        DetailAction(
-          label: 'Ledger',
-          icon: PhosphorIconsFill.article,
-          onTap: () {
-            // View ledger
-          },
-        ),
+        // DetailAction(
+        //   label: 'Ledger',
+        //   icon: PhosphorIconsFill.article,
+        //   onTap: () {
+        //     // View ledger
+        //   },
+        // ),
       ],
       sections: [
         DetailSection(
@@ -57,13 +57,15 @@ class ContactDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Phone',
-                  value: '+${contact.phoneNo?.countryCode} ${contact.phoneNo?.phoneNo}',
+                  value:
+                      '+${contact.phoneNo?.countryCode} ${contact.phoneNo?.phoneNo}',
                   icon: PhosphorIconsLight.phone,
                   isCopyable: true,
                 ),
                 DetailItem(
                   label: 'WhatsApp',
-                  value: '+${contact.whatsappNo?.countryCode} ${contact.whatsappNo?.phoneNo}',
+                  value:
+                      '+${contact.whatsappNo?.countryCode} ${contact.whatsappNo?.phoneNo}',
                   icon: PhosphorIconsLight.whatsappLogo,
                 ),
                 DetailItem(
@@ -125,7 +127,9 @@ class ContactDetails extends StatelessWidget {
         if (contact.address.isNotEmpty)
           DetailSection(
             title: 'Addresses',
-            children: contact.address.map((addr) => _buildAddressItem(addr)).toList(),
+            children: contact.address
+                .map((addr) => _buildAddressItem(addr))
+                .toList(),
           ),
         if (contact.bankDetails != null)
           DetailSection(
@@ -175,7 +179,9 @@ class ContactDetails extends StatelessWidget {
           ),
           Text(
             '${addr.city?.name}, ${addr.state?.name}, ${addr.country?.name} - ${addr.pinCode}',
-            style: TextHelper.bodySmall.copyWith(color: AppColors.lightTextSecondary),
+            style: TextHelper.bodySmall.copyWith(
+              color: AppColors.lightTextSecondary,
+            ),
           ),
           const Divider(height: 24),
         ],

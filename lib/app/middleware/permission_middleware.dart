@@ -33,7 +33,6 @@ class PermissionMiddleware extends GetMiddleware {
     }
 
     if (!permissionService.isRoutePermitted(route)) {
-      Get.log("ROUTE BLOCKED: $route");
       return const RouteSettings(name: Routes.accessDenied);
     }
 

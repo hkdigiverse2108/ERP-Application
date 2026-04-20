@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
 import 'package:ai_setu/data/model/brand/brand_model.dart';
@@ -82,7 +83,7 @@ class StockController extends GetxController {
       category.value = results[0] as List<CategoryDropdownModel>;
       brand.value = results[1] as List<BrandDropdownModel>;
     } catch (e) {
-      debugPrint('Filter data load failed: $e');
+      Log.e('Inventory Module Error (Stock) - Filter data load failed', e);
     }
   }
 
@@ -105,7 +106,7 @@ class StockController extends GetxController {
         parentCategoryFilter: id,
       );
     } catch (e) {
-      debugPrint('Sub-category load failed: $e');
+      Log.e('Inventory Module Error (Stock) - Sub-category load failed', e);
     }
   }
 
@@ -126,7 +127,7 @@ class StockController extends GetxController {
     try {
       subBrand.value = await _brandRepo.getBrands(parentBrandFilter: id);
     } catch (e) {
-      debugPrint('Sub-brand load failed: $e');
+      Log.e('Inventory Module Error (Stock) - Sub-brand load failed', e);
     }
   }
 
@@ -171,7 +172,7 @@ class StockController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (Stock)", e);
     } finally {
       isLoading.value = false;
     }

@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
 import 'package:ai_setu/data/repositories/bill_of_live_product_repository.dart';
@@ -68,7 +69,7 @@ class BillOfLiveProductController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (BillOfLiveProduct)", e);
     } finally {
       isLoading.value = false;
     }

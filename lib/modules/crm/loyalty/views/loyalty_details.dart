@@ -29,11 +29,11 @@ class LoyaltyDetails extends StatelessWidget {
       status: loyalty.isActive ? 'Active' : 'Inactive',
       statusColor: loyalty.isActive ? AppColors.success : AppColors.error,
       actions: [
-        DetailAction(
-          label: 'Edit Program',
-          icon: PhosphorIconsFill.pencil,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Edit Program',
+        //   icon: PhosphorIconsFill.pencil,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

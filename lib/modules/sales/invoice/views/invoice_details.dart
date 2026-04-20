@@ -47,14 +47,14 @@ class InvoiceDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Payment',
-          icon: PhosphorIconsFill.currencyInr,
-          color: Colors.green,
-          onTap: () {
-            // Record payment logic
-          },
-        ),
+        // DetailAction(
+        //   label: 'Payment',
+        //   icon: PhosphorIconsFill.currencyInr,
+        //   color: Colors.green,
+        //   onTap: () {
+        //     // Record payment logic
+        //   },
+        // ),
       ],
       sections: [
         DetailSection(

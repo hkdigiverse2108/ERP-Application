@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/dashboard/category_sales_model.dart';
@@ -125,7 +126,7 @@ class HomeController extends GetxController {
       );
       topSectionData.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
       AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       topSectionLoading.value = false;
@@ -148,7 +149,7 @@ class HomeController extends GetxController {
       );
       salesAndPurchaseGraph.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       salesAndPurchaseGraphLoading.value = false;
     }
@@ -163,7 +164,7 @@ class HomeController extends GetxController {
       );
       transactionGraph.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       transactionGraphLoading.value = false;
     }
@@ -188,7 +189,7 @@ class HomeController extends GetxController {
       );
       topCustomers.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       topCustomersLoading.value = false;
     }
@@ -203,7 +204,7 @@ class HomeController extends GetxController {
       );
       categoryWiseCustomers.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       categoryWiseCustomersLoading.value = false;
     }
@@ -218,7 +219,7 @@ class HomeController extends GetxController {
       );
       categoryWiseCustomersCount.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       categoryWiseCustomersCountLoading.value = false;
     }
@@ -243,7 +244,7 @@ class HomeController extends GetxController {
       );
       bestSelling.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       bestSellingLoading.value = false;
     }
@@ -258,7 +259,7 @@ class HomeController extends GetxController {
       );
       leastSelling.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       leastSellingLoading.value = false;
     }
@@ -273,7 +274,7 @@ class HomeController extends GetxController {
       );
       categorySales.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       categorySalesLoading.value = false;
     }
@@ -300,7 +301,7 @@ class HomeController extends GetxController {
       );
       topExpenses.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       topExpensesLoading.value = false;
     }
@@ -315,7 +316,7 @@ class HomeController extends GetxController {
       );
       topCoupons.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       topCouponsLoading.value = false;
     }
@@ -330,7 +331,7 @@ class HomeController extends GetxController {
       );
       receivables.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       receivablesLoading.value = false;
     }
@@ -345,7 +346,7 @@ class HomeController extends GetxController {
       );
       payables.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       payablesLoading.value = false;
     }
@@ -360,7 +361,7 @@ class HomeController extends GetxController {
       );
       loginLogs.value = response;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Home Module Error", e);
     } finally {
       loginLogsLoading.value = false;
     }

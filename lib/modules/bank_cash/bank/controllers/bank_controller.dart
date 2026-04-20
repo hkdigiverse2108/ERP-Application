@@ -1,8 +1,8 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/bank_model.dart';
 
 import 'package:ai_setu/data/repositories/bank_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BankController extends GetxController {
@@ -61,7 +61,7 @@ class BankController extends GetxController {
       totalPages.value = pagination.totalPages;
       totalItems.value = pagination.totalItems;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Bank/Cash Module Error (Bank)", e);
     } finally {
       isLodding.value = false;
     }

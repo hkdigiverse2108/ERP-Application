@@ -1,8 +1,8 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
 import 'package:ai_setu/data/repositories/accounting_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreditController extends GetxController {
@@ -73,7 +73,7 @@ class CreditController extends GetxController {
         totalItems.value = res.data["totalData"] ?? 0;
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Accounting Module Error (Credit)", e);
     } finally {
       isLodding.value = false;
     }

@@ -47,12 +47,12 @@ class EstimateDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Accept',
-          icon: PhosphorIconsFill.checkCircle,
-          color: Colors.green,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Accept',
+        //   icon: PhosphorIconsFill.checkCircle,
+        //   color: Colors.green,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

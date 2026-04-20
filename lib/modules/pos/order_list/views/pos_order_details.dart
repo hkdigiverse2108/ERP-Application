@@ -41,11 +41,11 @@ class POSOrderDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Refund',
-          icon: PhosphorIconsFill.arrowCounterClockwise,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Refund',
+        //   icon: PhosphorIconsFill.arrowCounterClockwise,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

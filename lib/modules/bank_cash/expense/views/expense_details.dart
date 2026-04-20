@@ -42,14 +42,14 @@ class ExpenseDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        if (expense.image != null)
-          DetailAction(
-            label: 'Receipt Image',
-            icon: PhosphorIconsFill.image,
-            onTap: () {
-              // Show image logic
-            },
-          ),
+        // if (expense.image != null)
+        // DetailAction(
+        //   label: 'Receipt Image',
+        //   icon: PhosphorIconsFill.image,
+        //   onTap: () {
+        //     // Show image logic
+        //   },
+        // ),
       ],
       sections: [
         DetailSection(

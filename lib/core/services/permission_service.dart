@@ -54,7 +54,7 @@ class PermissionService extends GetxService {
         jsonEncode(result.map((e) => e.toJson()).toList()),
       );
     } catch (e) {
-      Get.log("Error fetching permissions: $e");
+      // Error handled silently, falls back to loading state or empty list
     } finally {
       isLoading.value = false;
     }
@@ -146,7 +146,7 @@ class PermissionService extends GetxService {
 
   bool isRoutePermitted(String? route) {
     if (route == null || route.isEmpty) return false;
-    if (route == '/home' || route == '/dashboard') {
+    if (route == Routes.dashboard) {
       return isTabPermitted("dashboard");
     }
     return _checkRouteInTabs(permittedTabs, route);

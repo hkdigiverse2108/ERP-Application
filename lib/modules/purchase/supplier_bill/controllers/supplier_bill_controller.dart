@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
@@ -71,7 +72,7 @@ class SupplierBillController extends GetxController {
           .getContactDropdown(typeFilter: ContactType.supplier.name);
       suppliers.value = res;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Purchase Module Error (SupplierBill)", e);
     }
   }
 
@@ -117,7 +118,7 @@ class SupplierBillController extends GetxController {
         totalItems.value = res.data["totalData"] ?? 0;
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Purchase Module Error (SupplierBill)", e);
     } finally {
       isLodding.value = false;
     }

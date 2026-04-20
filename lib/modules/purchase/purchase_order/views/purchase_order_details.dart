@@ -44,12 +44,12 @@ class PurchaseOrderDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Convert to Bill',
-          icon: PhosphorIconsFill.receipt,
-          color: Colors.blue,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Convert to Bill',
+        //   icon: PhosphorIconsFill.receipt,
+        //   color: Colors.blue,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

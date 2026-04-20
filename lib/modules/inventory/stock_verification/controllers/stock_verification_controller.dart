@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
 import 'package:ai_setu/data/repositories/stock_verification_repository.dart';
@@ -68,7 +69,7 @@ class StockVerificationController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (StockVerification)", e);
     } finally {
       isLoading.value = false;
     }

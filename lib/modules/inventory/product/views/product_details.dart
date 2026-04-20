@@ -19,35 +19,35 @@ class ProductDetails extends StatelessWidget {
       heroIcon: PhosphorIconsFill.package,
       status: '${product.qty}',
       statusColor: product.qty > 10 ? Colors.green : Colors.red,
-      actions: [
-        DetailAction(
-          label: 'Edit',
-          icon: PhosphorIconsFill.pencilSimple,
-          onTap: () => Get.toNamed(Routes.addUpdateProduct, arguments: product),
-        ),
-        DetailAction(
-          label: 'Stock History',
-          icon: PhosphorIconsFill.chartBar,
-          onTap: () {
-            // Navigate to stock report
-          },
-        ),
-        DetailAction(
-          label: 'Clone',
-          icon: PhosphorIconsFill.copy,
-          onTap: () {
-            // Clone product logic
-          },
-        ),
-        DetailAction(
-          label: 'Delete',
-          icon: PhosphorIconsFill.trash,
-          color: AppColors.error,
-          onTap: () {
-            // Show delete confirmation
-          },
-        ),
-      ],
+      // actions: [
+      // DetailAction(
+      //   label: 'Edit',
+      //   icon: PhosphorIconsFill.pencilSimple,
+      //   onTap: () => Get.toNamed(Routes.addUpdateProduct, arguments: product),
+      // ),
+      // DetailAction(
+      //   label: 'Stock History',
+      //   icon: PhosphorIconsFill.chartBar,
+      //   onTap: () {
+      //     // Navigate to stock report
+      //   },
+      // ),
+      //   DetailAction(
+      //     label: 'Clone',
+      //     icon: PhosphorIconsFill.copy,
+      //     onTap: () {
+      //       // Clone product logic
+      //     },
+      //   ),
+      //   DetailAction(
+      //     label: 'Delete',
+      //     icon: PhosphorIconsFill.trash,
+      //     color: AppColors.error,
+      //     onTap: () {
+      //       // Show delete confirmation
+      //     },
+      //   ),
+      // ],
       sections: [
         DetailSection(
           title: 'General Information',

@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
 import 'package:ai_setu/core/services/financial_year_controller.dart';
@@ -68,7 +69,7 @@ class SalesOrderController extends GetxController {
       );
       customers.value = res;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Sales Module Error (SalesOrder)", e);
     }
   }
 
@@ -117,7 +118,7 @@ class SalesOrderController extends GetxController {
         totalItems.value = res.data["totalData"] ?? 0;
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Sales Module Error (SalesOrder)", e);
     } finally {
       isLodding.value = false;
     }

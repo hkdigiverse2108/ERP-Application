@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/consumption_type/consumption_type_model.dart';
 import 'package:ai_setu/data/repositories/settings/consumption_type_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ConsumptionTypeController extends GetxController {
@@ -66,7 +66,7 @@ class ConsumptionTypeController extends GetxController {
       _cache[cacheKey] = result.items;
       _cacheTimestamp[cacheKey] = DateTime.now();
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Settings Module Error (ConsumptionType)", e);
     } finally {
       isLoading.value = false;
     }

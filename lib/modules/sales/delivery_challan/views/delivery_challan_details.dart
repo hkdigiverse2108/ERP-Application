@@ -47,12 +47,12 @@ class DeliveryChallanDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Mark Delivered',
-          icon: PhosphorIconsFill.checkCircle,
-          color: Colors.green,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Mark Delivered',
+        //   icon: PhosphorIconsFill.checkCircle,
+        //   color: Colors.green,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

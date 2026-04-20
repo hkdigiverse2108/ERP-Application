@@ -47,12 +47,12 @@ class SalesOrderDetails extends StatelessWidget {
             await PdfService.generateAndShare(pdfData);
           },
         ),
-        DetailAction(
-          label: 'Ready for delivery',
-          icon: PhosphorIconsFill.truck,
-          color: Colors.blue,
-          onTap: () {},
-        ),
+        // DetailAction(
+        //   label: 'Ready for delivery',
+        //   icon: PhosphorIconsFill.truck,
+        //   color: Colors.blue,
+        //   onTap: () {},
+        // ),
       ],
       sections: [
         DetailSection(

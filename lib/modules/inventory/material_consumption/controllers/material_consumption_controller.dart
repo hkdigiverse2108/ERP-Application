@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/material_consumption_model.dart';
@@ -49,7 +50,7 @@ class MaterialConsumptionController extends GetxController {
       final res = await _branchRepo.getBranchesDropdown();
       branches.value = res;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (MaterialConsumption)", e);
     }
   }
 
@@ -82,7 +83,7 @@ class MaterialConsumptionController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (MaterialConsumption)", e);
     } finally {
       isLoading.value = false;
     }

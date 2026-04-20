@@ -12,7 +12,7 @@ class QuickSearchController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeItems();
-    
+
     // Update results whenever search query or all items change
     ever(searchQuery, (_) => _filterItems());
     ever(allItems, (_) => _filterItems());
@@ -20,11 +20,11 @@ class QuickSearchController extends GetxController {
 
   void _initializeItems() {
     final List<PermissionModel> leafNodes = [];
-    
+
     void findLeafNodes(List<PermissionModel> tabs) {
       for (final tab in tabs) {
         if (!tab.view) continue;
-        
+
         if (tab.children.isNotEmpty) {
           findLeafNodes(tab.children);
         } else {
@@ -38,18 +38,19 @@ class QuickSearchController extends GetxController {
 
     findLeafNodes(PermissionService.to.permittedTabs);
     allItems.value = leafNodes;
+    _filterItems();
   }
 
   void _filterItems() {
     final query = searchQuery.value.toLowerCase().trim();
-    
+
     final filtered = allItems.where((item) {
       if (query.isEmpty) return true;
-      
+
       final matchesName = item.displayName.toLowerCase().contains(query);
       final matchesParent = item.parentName.toLowerCase().contains(query);
       final matchesTabName = item.tabName.toLowerCase().contains(query);
-      
+
       return matchesName || matchesParent || matchesTabName;
     }).toList();
 

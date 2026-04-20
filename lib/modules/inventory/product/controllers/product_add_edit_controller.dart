@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/category/category_model.dart';
@@ -136,7 +137,7 @@ class ProductAddEditController extends GetxController {
         _fetchUoms(),
       ]);
     } catch (e) {
-      debugPrint("Error loading dropdown data: $e");
+      Log.e("Inventory Module Error (ProductAddEdit) - Dropdown data", e);
     } finally {
       isLoading.value = false;
     }
@@ -147,7 +148,7 @@ class ProductAddEditController extends GetxController {
       final res = await _categoryRepo.getCategories();
       categories.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 
@@ -158,7 +159,7 @@ class ProductAddEditController extends GetxController {
       // let's assume it has id and name
       brands.assignAll(res.map((e) => Id(id: e.id, name: e.name)).toList());
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 
@@ -167,7 +168,7 @@ class ProductAddEditController extends GetxController {
       final res = await _taxRepo.getTaxes();
       taxes.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 
@@ -176,7 +177,7 @@ class ProductAddEditController extends GetxController {
       final res = await _uomRepo.getUomDropdown();
       uoms.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 
@@ -187,7 +188,7 @@ class ProductAddEditController extends GetxController {
       );
       subCategories.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 
@@ -196,7 +197,7 @@ class ProductAddEditController extends GetxController {
       final res = await _brandRepo.getBrands(parentBrandFilter: parentId);
       subBrands.assignAll(res.map((e) => Id(id: e.id, name: e.name)).toList());
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
   }
 

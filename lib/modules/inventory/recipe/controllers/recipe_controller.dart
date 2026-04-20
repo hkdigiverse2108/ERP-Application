@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
 import 'package:ai_setu/data/repositories/recipe_repository.dart';
@@ -67,7 +68,7 @@ class RecipeController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = res.currentPage;
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (Recipe)", e);
     } finally {
       isLoading.value = false;
     }

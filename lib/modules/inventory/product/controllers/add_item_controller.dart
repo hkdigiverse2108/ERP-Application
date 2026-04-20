@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/product_repository.dart';
@@ -54,7 +55,7 @@ class AddItemController extends GetxController {
     try {
       await Future.wait([_fetchTaxes(), _fetchUoms(), _fetchProducts()]);
     } catch (e) {
-      debugPrint("Error loading dropdown data: $e");
+      Log.e("Inventory Module Error (AddItem) - Dropdown data", e);
     } finally {
       isLoading.value = false;
     }
@@ -65,7 +66,7 @@ class AddItemController extends GetxController {
       final res = await _taxRepo.getTaxes();
       taxes.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (AddItem)", e);
     }
   }
 
@@ -74,7 +75,7 @@ class AddItemController extends GetxController {
       final res = await _uomRepo.getUomDropdown();
       uoms.assignAll(res);
     } catch (e) {
-      debugPrint(e.toString());
+      Log.e("Inventory Module Error (AddItem)", e);
     }
   }
 
@@ -83,7 +84,7 @@ class AddItemController extends GetxController {
       final res = await _productRepo.getProductDropdown();
       products.assignAll(res);
     } catch (e) {
-      debugPrint("Error fetching products: $e");
+      Log.e("Inventory Module Error (AddItem) - Fetching products", e);
     }
   }
 

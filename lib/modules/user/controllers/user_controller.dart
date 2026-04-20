@@ -1,7 +1,7 @@
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/user_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -81,7 +81,7 @@ class UserController extends GetxController {
       totalItems.value = res.totalItems;
       currentPage.value = page;
     } catch (e) {
-      debugPrint("Error fetching users: $e");
+      Log.e("Error fetching users", e);
     } finally {
       isLodding.value = false;
     }

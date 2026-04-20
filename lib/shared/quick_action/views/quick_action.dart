@@ -38,6 +38,8 @@ class QuickAction extends StatelessWidget {
             builder: (buttonContext) {
               return GestureDetector(
                 onTap: () {
+                  debugPrint("Quick Action");
+                  Scaffold.of(context).openDrawer();
                   // final RenderBox renderBox =
                   //     buttonContext.findRenderObject() as RenderBox;
                   // final offset = renderBox.localToGlobal(Offset.zero);
@@ -94,13 +96,13 @@ class QuickAction extends StatelessWidget {
               ),
             ),
           ),
-          const Gap(8),
-          _buildRoundedIconButton(
-            context: context,
-            icon: null,
-            svg: AppIcons.cashCounter,
-            onPressed: () {},
-          ),
+          // const Gap(8),
+          // _buildRoundedIconButton(
+          //   context: context,
+          //   icon: null,
+          //   svg: AppIcons.cashCounter,
+          //   onPressed: () {},
+          // ),
         ],
       ),
     );
