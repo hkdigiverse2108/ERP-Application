@@ -15,7 +15,7 @@ class ExpenseModel {
   final DateTime fromDate;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String branchId;
+  final BranchId branchId;
   final int? incentive;
   final DateTime? toDate;
   final int? total;
@@ -83,7 +83,9 @@ class ExpenseModel {
           ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
           : DateTime.now(),
 
-      branchId: json["branchId"] ?? "",
+      branchId: json["branchId"] is Map
+          ? BranchId.fromJson(json["branchId"])
+          : BranchId.empty(),
 
       incentive: json["incentive"] != null ? (json["incentive"]).toInt() : null,
 
@@ -109,11 +111,25 @@ class ExpenseModel {
     "fromDate": fromDate.toIso8601String(),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId,
+    "branchId": branchId.toJson(),
     "incentive": incentive,
     "toDate": toDate?.toIso8601String(),
     "total": total,
   };
+}
+
+class BranchId {
+  final String id;
+  final String name;
+
+  BranchId({required this.id, required this.name});
+
+  factory BranchId.fromJson(Map<String, dynamic> json) =>
+      BranchId(id: json["_id"] ?? "", name: json["name"] ?? "");
+
+  factory BranchId.empty() => BranchId(id: "", name: "");
+
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class CompanyId {

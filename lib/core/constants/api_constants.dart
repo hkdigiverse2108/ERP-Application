@@ -1366,6 +1366,7 @@ class ApiConstants {
     String? fromDate,
     String? toDate,
     String? typeFilter,
+    bool? avoidSalary,
     String? activeFilter,
   }) => buildUrl("/expense/all", {
     "page": page,
@@ -1375,6 +1376,7 @@ class ApiConstants {
     "fromDate": fromDate,
     "toDate": toDate,
     "typeFilter": typeFilter,
+    "avoidSalary": avoidSalary,
     "activeFilter": activeFilter,
   });
 

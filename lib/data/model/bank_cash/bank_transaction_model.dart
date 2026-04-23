@@ -1,4 +1,3 @@
-
 class BankTransactionModel {
   final String id;
   final bool isDeleted;

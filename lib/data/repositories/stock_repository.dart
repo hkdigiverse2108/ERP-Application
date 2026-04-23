@@ -31,8 +31,9 @@ class StockRepository {
     );
     if (response.status == 200) {
       final items = List<StockItemModel>.from(
-        (response.data['stock_data'] as List)
-            .map((x) => StockItemModel.fromJson(x)),
+        (response.data['stock_data'] as List).map(
+          (x) => StockItemModel.fromJson(x),
+        ),
       );
       return PaginationModel.fromJson(response.data, items);
     }

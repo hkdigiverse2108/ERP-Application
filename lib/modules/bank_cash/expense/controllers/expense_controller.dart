@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
@@ -36,6 +37,16 @@ class ExpenseController extends GetxController {
   final isLodding = false.obs;
 
   @override
+  void onInit() {
+    super.onInit();
+    // Listen to branch changes
+    ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getExpensesData();
+    });
+  }
+
+  @override
   void onReady() {
     super.onReady();
     getExpensesData();
@@ -65,7 +76,9 @@ class ExpenseController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
         typeFilter: filters['typeFilter'],
+        avoidSalary: false,
         activeFilter: filters['activeFilter'],
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
 
       _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());

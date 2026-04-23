@@ -14,7 +14,9 @@ class ExpenseRepository {
     String? toDate,
     String? search,
     String? typeFilter,
+    bool? avoidSalary,
     String? activeFilter,
+    String? branchId,
   }) async {
     final ResModel res = await _api.get(
       ApiConstants.getAllExpense(
@@ -24,7 +26,9 @@ class ExpenseRepository {
         toDate: toDate,
         search: search,
         typeFilter: typeFilter,
+        avoidSalary: avoidSalary,
         activeFilter: activeFilter,
+        branchId: branchId,
       ),
     );
 

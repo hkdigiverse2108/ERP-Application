@@ -1,3 +1,4 @@
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 
 class SalaryModel {
   final String id;
@@ -18,7 +19,7 @@ class SalaryModel {
   final int total;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String branchId;
+  final IdNameModel branchId;
 
   SalaryModel({
     required this.id,
@@ -91,10 +92,10 @@ class SalaryModel {
           : DateTime.now(),
 
       updatedAt: json["updatedAt"] != null
-          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
+          ? DateTime.parse(json["updatedAt"])
           : DateTime.now(),
 
-      branchId: json["branchId"] ?? "",
+      branchId: IdNameModel.fromJson(json["branchId"]),
     );
   }
 
@@ -117,7 +118,7 @@ class SalaryModel {
     "total": total,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId,
+    "branchId": branchId.toJson(),
   };
 }
 

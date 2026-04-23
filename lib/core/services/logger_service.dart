@@ -31,10 +31,24 @@ class Log {
   static void w(String message) => _logger.w(message);
 
   /// Log a message at level [Level.error]
-  static void e(String message, [dynamic error, StackTrace? stackTrace]) =>
+  static void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
+    try {
       _logger.e(message, error: error, stackTrace: stackTrace);
+    } catch (e) {
+      debugPrint("Logging Error: $e");
+      debugPrint("Original Message: $message");
+      debugPrint("Original Error: $error");
+    }
+  }
 
   /// Log a message at level [Level.fatal]
-  static void f(String message, [dynamic error, StackTrace? stackTrace]) =>
+  static void f(dynamic message, [dynamic error, StackTrace? stackTrace]) {
+    try {
       _logger.f(message, error: error, stackTrace: stackTrace);
+    } catch (e) {
+      debugPrint("Logging Fatal Error: $e");
+      debugPrint("Original Message: $message");
+      debugPrint("Original Error: $error");
+    }
+  }
 }

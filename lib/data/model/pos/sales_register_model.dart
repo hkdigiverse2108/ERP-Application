@@ -104,7 +104,8 @@ class SalesRegisterModel {
             ? null
             : SalesManId.fromJson(json["salesManId"]),
         cashPayment: int.tryParse(json["cashPayment"]?.toString() ?? "0") ?? 0,
-        chequePayment: int.tryParse(json["chequePayment"]?.toString() ?? "0") ?? 0,
+        chequePayment:
+            int.tryParse(json["chequePayment"]?.toString() ?? "0") ?? 0,
         cardPayment: int.tryParse(json["cardPayment"]?.toString() ?? "0") ?? 0,
         bankPayment: int.tryParse(json["bankPayment"]?.toString() ?? "0") ?? 0,
         upiPayment: int.tryParse(json["upiPayment"]?.toString() ?? "0") ?? 0,
@@ -115,12 +116,15 @@ class SalesRegisterModel {
         numberOfItems: int.tryParse(json["numberOfItems"]?.toString() ?? "0"),
         totalDiscount: int.tryParse(json["totalDiscount"]?.toString() ?? "0"),
         taxAmount: json["taxAmount"]?.toDouble() ?? 0.0,
-        creditAdvanceRedeemed: int.tryParse(json["creditAdvanceRedeemed"]?.toString() ?? "0") ?? 0,
+        creditAdvanceRedeemed:
+            int.tryParse(json["creditAdvanceRedeemed"]?.toString() ?? "0") ?? 0,
         payLater: int.tryParse(json["payLater"]?.toString() ?? "0") ?? 0,
         expense: int.tryParse(json["expense"]?.toString() ?? "0") ?? 0,
-        purchasePayment: int.tryParse(json["purchasePayment"]?.toString() ?? "0") ?? 0,
+        purchasePayment:
+            int.tryParse(json["purchasePayment"]?.toString() ?? "0") ?? 0,
         totalSales: int.tryParse(json["totalSales"]?.toString() ?? "0") ?? 0,
-        bankTransferAmount: int.tryParse(json["bankTransferAmount"]?.toString() ?? "0") ?? 0,
+        bankTransferAmount:
+            int.tryParse(json["bankTransferAmount"]?.toString() ?? "0") ?? 0,
         cashFlow: int.tryParse(json["cashFlow"]?.toString() ?? "0") ?? 0,
         status: json["status"]?.toString() ?? "Open",
         denominations: json["denominations"] == null
@@ -128,14 +132,26 @@ class SalesRegisterModel {
             : List<Denomination>.from(
                 json["denominations"].map((x) => Denomination.fromJson(x)),
               ),
-        createdAt: DateTime.tryParse(json["createdAt"]?.toString() ?? "") ?? DateTime.now(),
-        updatedAt: DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ?? DateTime.now(),
+        createdAt:
+            DateTime.tryParse(json["createdAt"]?.toString() ?? "") ??
+            DateTime.now(),
+        updatedAt:
+            DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ??
+            DateTime.now(),
         branchId: BranchIdClass.fromJson(json["branchId"] ?? {}),
-        physicalDrawerCash: int.tryParse(json["physicalDrawerCash"]?.toString() ?? "0"),
-        totalCashInDrawer: int.tryParse(json["totalCashInDrawer"]?.toString() ?? "0"),
-        totalCashLeftInDrawer: int.tryParse(json["totalCashLeftInDrawer"]?.toString() ?? "0"),
+        physicalDrawerCash: int.tryParse(
+          json["physicalDrawerCash"]?.toString() ?? "0",
+        ),
+        totalCashInDrawer: int.tryParse(
+          json["totalCashInDrawer"]?.toString() ?? "0",
+        ),
+        totalCashLeftInDrawer: int.tryParse(
+          json["totalCashLeftInDrawer"]?.toString() ?? "0",
+        ),
         closingNote: json["closingNote"]?.toString(),
-        totalDenominationAmount: int.tryParse(json["totalDenominationAmount"]?.toString() ?? "0"),
+        totalDenominationAmount: int.tryParse(
+          json["totalDenominationAmount"]?.toString() ?? "0",
+        ),
         walletPayment: int.tryParse(json["walletPayment"]?.toString() ?? "0"),
         bankAccountId: json["bankAccountId"],
       );
@@ -195,11 +211,10 @@ class BranchIdClass {
 
   String toRawJson() => json.encode(toJson());
 
-  factory BranchIdClass.fromJson(Map<String, dynamic> json) =>
-      BranchIdClass(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-      );
+  factory BranchIdClass.fromJson(Map<String, dynamic> json) => BranchIdClass(
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
@@ -217,10 +232,10 @@ class CreatedBy {
   String toRawJson() => json.encode(toJson());
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-        id: json["_id"]?.toString() ?? "",
-        fullName: json["fullName"]?.toString() ?? "",
-        userType: json["userType"]?.toString() ?? "",
-      );
+    id: json["_id"]?.toString() ?? "",
+    fullName: json["fullName"]?.toString() ?? "",
+    userType: json["userType"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -246,10 +261,10 @@ class Denomination {
   String toRawJson() => json.encode(toJson());
 
   factory Denomination.fromJson(Map<String, dynamic> json) => Denomination(
-        currency: int.tryParse(json["currency"]?.toString() ?? "0") ?? 0,
-        count: int.tryParse(json["count"]?.toString() ?? "0") ?? 0,
-        amount: int.tryParse(json["amount"]?.toString() ?? "0") ?? 0,
-      );
+    currency: int.tryParse(json["currency"]?.toString() ?? "0") ?? 0,
+    count: int.tryParse(json["count"]?.toString() ?? "0") ?? 0,
+    amount: int.tryParse(json["amount"]?.toString() ?? "0") ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
     "currency": currency,
@@ -270,9 +285,9 @@ class SalesManId {
   String toRawJson() => json.encode(toJson());
 
   factory SalesManId.fromJson(Map<String, dynamic> json) => SalesManId(
-        id: json["_id"]?.toString() ?? "",
-        fullName: json["fullName"]?.toString() ?? "",
-      );
+    id: json["_id"]?.toString() ?? "",
+    fullName: json["fullName"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"_id": id, "fullName": fullName};
 }

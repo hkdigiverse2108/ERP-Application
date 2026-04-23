@@ -190,7 +190,9 @@ class AdditionalCharge {
 
   factory AdditionalCharge.fromJson(Map<String, dynamic> json) =>
       AdditionalCharge(
-        chargeId: json["chargeId"] == null ? null : ChargeId.fromJson(json["chargeId"]),
+        chargeId: json["chargeId"] == null
+            ? null
+            : ChargeId.fromJson(json["chargeId"]),
         taxId: json["taxId"] == null ? null : TaxId.fromJson(json["taxId"]),
         amount: json["amount"] ?? 0,
         totalAmount: json["totalAmount"] ?? 0,
@@ -218,12 +220,11 @@ class ChargeId {
 
   String toRawJson() => json.encode(toJson());
 
-  factory ChargeId.fromJson(Map<String, dynamic> json) =>
-      ChargeId(
-        id: json["_id"]?.toString() ?? "",
-        type: json["type"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? ""
-      );
+  factory ChargeId.fromJson(Map<String, dynamic> json) => ChargeId(
+    id: json["_id"]?.toString() ?? "",
+    type: json["type"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"_id": id, "type": type, "name": name};
 }
@@ -265,8 +266,8 @@ class AdditionalChargesClass {
 
   factory AdditionalChargesClass.fromJson(Map<String, dynamic> json) =>
       AdditionalChargesClass(
-        items: json["items"] == null 
-            ? [] 
+        items: json["items"] == null
+            ? []
             : List<AdditionalChargesItem>.from(
                 json["items"].map((x) => AdditionalChargesItem.fromJson(x)),
               ),
@@ -343,7 +344,9 @@ class Address {
   factory Address.fromJson(Map<String, dynamic> json) => Address(
     addressLine1: json["addressLine1"]?.toString() ?? "",
     addressLine2: json["addressLine2"]?.toString() ?? "",
-    country: json["country"] == null ? null : CompanyId.fromJson(json["country"]),
+    country: json["country"] == null
+        ? null
+        : CompanyId.fromJson(json["country"]),
     state: json["state"] == null ? null : CompanyId.fromJson(json["state"]),
     city: json["city"] == null ? null : CompanyId.fromJson(json["city"]),
     pinCode: json["pinCode"]?.toString() ?? "",
@@ -372,11 +375,10 @@ class CompanyId {
 
   String toRawJson() => json.encode(toJson());
 
-  factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(
-        id: json["_id"]?.toString() ?? "", 
-        name: json["name"]?.toString() ?? ""
-      );
+  factory CompanyId.fromJson(Map<String, dynamic> json) => CompanyId(
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
@@ -418,12 +420,11 @@ class PaymentTermsId {
 
   String toRawJson() => json.encode(toJson());
 
-  factory PaymentTermsId.fromJson(Map<String, dynamic> json) =>
-      PaymentTermsId(
-        id: json["_id"]?.toString() ?? "", 
-        name: json["name"]?.toString() ?? "", 
-        day: json["day"] ?? 0
-      );
+  factory PaymentTermsId.fromJson(Map<String, dynamic> json) => PaymentTermsId(
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+    day: json["day"] ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name, "day": day};
 }
@@ -467,7 +468,9 @@ class ProductDetail {
   String toRawJson() => json.encode(toJson());
 
   factory ProductDetail.fromJson(Map<String, dynamic> json) => ProductDetail(
-    productId: json["productId"] == null ? null : ProductId.fromJson(json["productId"]),
+    productId: json["productId"] == null
+        ? null
+        : ProductId.fromJson(json["productId"]),
     unit: json["unit"]?.toString(),
     uomId: json["uomId"] == null ? null : CompanyId.fromJson(json["uomId"]),
     unitCost: json["unitCost"]?.toDouble() ?? 0.0,
@@ -546,8 +549,8 @@ class ProductDetailsClass {
 
   factory ProductDetailsClass.fromJson(Map<String, dynamic> json) =>
       ProductDetailsClass(
-        items: json["items"] == null 
-            ? [] 
+        items: json["items"] == null
+            ? []
             : List<ProductDetailsItem>.from(
                 json["items"].map((x) => ProductDetailsItem.fromJson(x)),
               ),
@@ -773,11 +776,9 @@ class SupplierId {
     companyName: json["companyName"]?.toString() ?? "",
     email: json["email"]?.toString() ?? "",
     phoneNo: json["phoneNo"]?.toString() ?? "",
-    address: json["address"] == null 
-        ? [] 
-        : List<Address>.from(
-          json["address"].map((x) => Address.fromJson(x)),
-        ),
+    address: json["address"] == null
+        ? []
+        : List<Address>.from(json["address"].map((x) => Address.fromJson(x))),
     contactType: json["contactType"]?.toString() ?? "",
   );
 
@@ -803,11 +804,10 @@ class PhoneNo {
 
   String toRawJson() => json.encode(toJson());
 
-  factory PhoneNo.fromJson(Map<String, dynamic> json) =>
-      PhoneNo(
-        countryCode: json["countryCode"]?.toString() ?? "", 
-        phoneNo: json["phoneNo"] ?? 0
-      );
+  factory PhoneNo.fromJson(Map<String, dynamic> json) => PhoneNo(
+    countryCode: json["countryCode"]?.toString() ?? "",
+    phoneNo: json["phoneNo"] ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
     "countryCode": countryCode,

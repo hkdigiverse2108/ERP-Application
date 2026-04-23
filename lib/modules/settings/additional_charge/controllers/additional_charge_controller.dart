@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AdditionalChargeController extends GetxController {
@@ -65,7 +67,7 @@ class AdditionalChargeController extends GetxController {
       _cache[cacheKey] = result.items;
       _cacheTimestamp[cacheKey] = DateTime.now();
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      Log.e("Settings Module Error (AdditionalCharge)", e);
     } finally {
       isLoading.value = false;
     }

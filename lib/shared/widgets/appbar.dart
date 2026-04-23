@@ -23,7 +23,7 @@ class DefAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: context.appColors.primary,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      title: Image.asset(Images.lightAiLogo, height: 32, width: 32),
+      title: Image.asset(Images.lightAisetuLogo, height: 32, width: 96),
       actions: [
         Row(
           children: [

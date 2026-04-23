@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ai_setu/core/constants/enums.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 
 class ProductModel {
   final String id;
@@ -38,22 +39,22 @@ class ProductModel {
   final List<Nutrition> nutrition;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String? branchId;
+  final IdNameModel? branchId;
   final TaxId? purchaseTaxId;
   final TaxId? salesTaxId;
   final bool isPurchaseTaxIncluding;
   final bool isSalesTaxIncluding;
   final double qty;
   final UomId? uomId;
-  final Id? categoryId;
-  final Id? brandId;
+  final IdNameModel? categoryId;
+  final IdNameModel? brandId;
   final String? sku;
   final int? expiryDays;
   final String? calculateExpiryOn;
   final DateTime? expiryReferenceDate;
-  final Id? productTypeId;
-  final Id? subCategoryId;
-  final Id? subBrandId;
+  final IdNameModel? productTypeId;
+  final IdNameModel? subCategoryId;
+  final IdNameModel? subBrandId;
   final String? hsnCode;
   final String? description;
   final String? shortDescription;
@@ -177,7 +178,7 @@ class ProductModel {
     updatedAt: json["updatedAt"] != null
         ? DateTime.parse(json["updatedAt"])
         : DateTime.now(),
-    branchId: json["branchId"],
+    branchId: IdNameModel.fromJson(json["branchId"]),
     purchaseTaxId: json["purchaseTaxId"] == null
         ? null
         : TaxId.fromJson(json["purchaseTaxId"]),
@@ -190,8 +191,10 @@ class ProductModel {
     uomId: json["uomId"] == null ? null : UomId.fromJson(json["uomId"]),
     categoryId: json["categoryId"] == null
         ? null
-        : Id.fromJson(json["categoryId"]),
-    brandId: json["brandId"] == null ? null : Id.fromJson(json["brandId"]),
+        : IdNameModel.fromJson(json["categoryId"]),
+    brandId: json["brandId"] == null
+        ? null
+        : IdNameModel.fromJson(json["brandId"]),
     sku: json["sku"],
     expiryDays: json["expiryDays"],
     calculateExpiryOn: json["calculateExpiryOn"],
@@ -200,13 +203,13 @@ class ProductModel {
         : DateTime.parse(json["expiryReferenceDate"]),
     productTypeId: json["productTypeId"] == null
         ? null
-        : Id.fromJson(json["productTypeId"]),
+        : IdNameModel.fromJson(json["productTypeId"]),
     subCategoryId: json["subCategoryId"] == null
         ? null
-        : Id.fromJson(json["subCategoryId"]),
+        : IdNameModel.fromJson(json["subCategoryId"]),
     subBrandId: json["subBrandId"] == null
         ? null
-        : Id.fromJson(json["subBrandId"]),
+        : IdNameModel.fromJson(json["subBrandId"]),
     hsnCode: json["hsnCode"],
     description: json["description"],
     shortDescription: json["shortDescription"],
@@ -252,7 +255,7 @@ class ProductModel {
     "nutrition": List<dynamic>.from(nutrition.map((x) => x.toJson())),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId,
+    "branchId": branchId?.toJson(),
     "purchaseTaxId": purchaseTaxId?.toJson(),
     "salesTaxId": salesTaxId?.toJson(),
     "isPurchaseTaxIncluding": isPurchaseTaxIncluding,
@@ -274,22 +277,6 @@ class ProductModel {
     "netWeight": netWeight,
     "additionalInfo": additionalInfo,
   };
-}
-
-class Id {
-  final String id;
-  final String name;
-
-  Id({required this.id, required this.name});
-
-  factory Id.fromRawJson(String str) => Id.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Id.fromJson(Map<String, dynamic> json) =>
-      Id(id: json["_id"] ?? '', name: json["name"] ?? '');
-
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class CreatedBy {
@@ -409,8 +396,8 @@ class ProductItemModel {
   final String id;
   final String name;
   final String printName;
-  final Id? categoryId;
-  final Id? brandId;
+  final IdNameModel? categoryId;
+  final IdNameModel? brandId;
   final TaxId? purchaseTaxId;
   final TaxId? salesTaxId;
   final int purchasePrice;
@@ -446,8 +433,10 @@ class ProductItemModel {
         printName: json["printName"] ?? '',
         categoryId: json["categoryId"] == null
             ? null
-            : Id.fromJson(json["categoryId"]),
-        brandId: json["brandId"] == null ? null : Id.fromJson(json["brandId"]),
+            : IdNameModel.fromJson(json["categoryId"]),
+        brandId: json["brandId"] == null
+            ? null
+            : IdNameModel.fromJson(json["brandId"]),
         purchaseTaxId: json["purchaseTaxId"] == null
             ? null
             : TaxId.fromJson(json["purchaseTaxId"]),

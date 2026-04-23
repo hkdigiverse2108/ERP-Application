@@ -4,6 +4,7 @@ import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/category/category_model.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/brand_repository.dart';
@@ -85,12 +86,12 @@ class ProductAddEditController extends GetxController {
 
   // Dropdown Lists
   final categories = <CategoryDropdownModel>[].obs;
-  final brands =
-      <Id>[].obs; // Using Id model from ProductModel for brands as it's simple
+  final brands = <IdNameModel>[]
+      .obs; // Using Id model from ProductModel for brands as it's simple
   final taxes = <TaxDropdownModel>[].obs;
   final uoms = <CommonDropdownModel>[].obs;
   final subCategories = <CategoryDropdownModel>[].obs;
-  final subBrands = <Id>[].obs;
+  final subBrands = <IdNameModel>[].obs;
 
   @override
   void onInit() {
@@ -157,7 +158,9 @@ class ProductAddEditController extends GetxController {
       final res = await _brandRepo.getBrands();
       // BrandRepository seems to return List<BrandDropdownModel> or similar,
       // let's assume it has id and name
-      brands.assignAll(res.map((e) => Id(id: e.id, name: e.name)).toList());
+      brands.assignAll(
+        res.map((e) => IdNameModel(id: e.id, name: e.name)).toList(),
+      );
     } catch (e) {
       Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
@@ -195,7 +198,9 @@ class ProductAddEditController extends GetxController {
   Future<void> _fetchSubBrands(String parentId) async {
     try {
       final res = await _brandRepo.getBrands(parentBrandFilter: parentId);
-      subBrands.assignAll(res.map((e) => Id(id: e.id, name: e.name)).toList());
+      subBrands.assignAll(
+        res.map((e) => IdNameModel(id: e.id, name: e.name)).toList(),
+      );
     } catch (e) {
       Log.e("Inventory Module Error (ProductAddEdit)", e);
     }
@@ -209,7 +214,7 @@ class ProductAddEditController extends GetxController {
     _fetchSubCategories(cat.id);
   }
 
-  void onBrandSelected(Id brand) {
+  void onBrandSelected(IdNameModel brand) {
     brandId.value = brand.id;
     brandName.value = brand.name;
     subBrandId.value = "";
