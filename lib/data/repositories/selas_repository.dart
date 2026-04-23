@@ -14,6 +14,7 @@ class SalesRepository {
     String? activeFilter,
     String? customerFilter,
     String? statusFilter,
+    String? branchId,
   }) async {
     final String url = ApiConstants.getAllEstimate(
       page: page,
@@ -24,6 +25,7 @@ class SalesRepository {
       activeFilter: activeFilter,
       customerFilter: customerFilter,
       statusFilter: statusFilter,
+      branchId: branchId,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -39,6 +41,7 @@ class SalesRepository {
     String? activeFilter,
     String? customerFilter,
     String? statusFilter,
+    String? branchId,
   }) async {
     final String url = ApiConstants.getAllSalesOrder(
       page: page,
@@ -49,6 +52,7 @@ class SalesRepository {
       activeFilter: activeFilter,
       customerFilter: customerFilter,
       statusFilter: statusFilter,
+      branchId: branchId,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -64,6 +68,7 @@ class SalesRepository {
     String? activeFilter,
     String? customerFilter,
     String? statusFilter,
+    String? branchId,
   }) async {
     final String url = ApiConstants.getAllInvoice(
       page: page,
@@ -74,6 +79,7 @@ class SalesRepository {
       activeFilter: activeFilter,
       customerFilter: customerFilter,
       statusFilter: statusFilter,
+      branchId: branchId,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -89,6 +95,7 @@ class SalesRepository {
     String? activeFilter,
     String? customerFilter,
     String? statusFilter,
+    String? branchId,
   }) async {
     final String url = ApiConstants.getAllDeliveryChallan(
       page: page,
@@ -99,6 +106,7 @@ class SalesRepository {
       activeFilter: activeFilter,
       customerFilter: customerFilter,
       statusFilter: statusFilter,
+      branchId: branchId,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;
@@ -114,6 +122,7 @@ class SalesRepository {
     String? activeFilter,
     String? customerFilter,
     String? statusFilter,
+    String? branchId,
   }) async {
     final String url = ApiConstants.getAllSalesCreditNote(
       page: page,
@@ -124,6 +133,7 @@ class SalesRepository {
       activeFilter: activeFilter,
       customerFilter: customerFilter,
       statusFilter: statusFilter,
+      branchId: branchId,
     );
     final ResModel res = await _api.get(url);
     if (res.status == 200 && res.data != null) return res;

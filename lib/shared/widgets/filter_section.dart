@@ -1,12 +1,16 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/constants/strings.dart';
+import 'package:ai_setu/core/services/showcase_service.dart';
 import 'package:ai_setu/shared/widgets/buttons/smoll_section_button.dart';
 import 'package:ai_setu/shared/widgets/text_fields/search_field.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/shared/widgets/app_showcase_tooltip.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class FilterOption {
   final String label;
@@ -134,57 +138,70 @@ class _FilterSectionState extends State<FilterSection>
               ),
             const Gap(5),
             // Active filter badge + button
-            InkWell(
-              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              onTap: _toggleFilters,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: _filtersOpen || _activeCount > 0
-                      ? context.appColors.sectionSell
-                      : Colors.transparent,
-                  border: Border.all(
-                    color: _filtersOpen || _activeCount > 0
-                        ? Theme.of(context).colorScheme.primary
-                        : context.appColors.border,
+            Showcase.withWidget(
+              key: ShowcaseService.to.productFilterKey,
+              container: AppShowcaseTooltip(
+                title: Strings.showcaseFilterTitle,
+                description: Strings.showcaseFilterDesc,
+                onNext: () => ShowcaseView.get().next(),
+                onSkip: () => ShowcaseView.get().dismiss(),
+              ),
+              targetShapeBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              ),
+              targetPadding: const EdgeInsets.all(8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                onTap: _toggleFilters,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
                   ),
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      PhosphorIconsLight.funnelSimple,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.onSurface,
+                  decoration: BoxDecoration(
+                    color: _filtersOpen || _activeCount > 0
+                        ? context.appColors.sectionSell
+                        : Colors.transparent,
+                    border: Border.all(
+                      color: _filtersOpen || _activeCount > 0
+                          ? Theme.of(context).colorScheme.primary
+                          : context.appColors.border,
                     ),
-                    const Gap(4),
-                    Text('Filter', style: TextHelper.bodySmallStyle(context)),
-                    if (_activeCount > 0) ...[
-                      const Gap(6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 1,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          '$_activeCount',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        PhosphorIconsLight.funnelSimple,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      const Gap(4),
+                      Text('Filter', style: TextHelper.bodySmallStyle(context)),
+                      if (_activeCount > 0) ...[
+                        const Gap(6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 1,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$_activeCount',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -194,10 +211,23 @@ class _FilterSectionState extends State<FilterSection>
         const Gap(8),
 
         // ── Search always visible ──
-        AppSearchBar(
-          hint: 'Search ${widget.title.toLowerCase()}...',
-          controller: widget.searchController,
-          onChanged: widget.onSearchChanged,
+        Showcase.withWidget(
+          key: ShowcaseService.to.productSearchKey,
+          container: AppShowcaseTooltip(
+            title: Strings.showcaseProductSearchTitle,
+            description: Strings.showcaseProductSearchDesc,
+            onNext: () => ShowcaseView.get().next(),
+            onSkip: () => ShowcaseView.get().dismiss(),
+          ),
+          targetShapeBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+          ),
+          targetPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          child: AppSearchBar(
+            hint: 'Search ${widget.title.toLowerCase()}...',
+            controller: widget.searchController,
+            onChanged: widget.onSearchChanged,
+          ),
         ),
 
         // ── Filter panel ──

@@ -75,7 +75,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
               offset: Offset(0, size.height + 5),
               child: Material(
                 elevation: 8,
-                shadowColor: context.isDarkMode
+                shadowColor: Theme.of(context).brightness == Brightness.dark
                     ? Colors.black12
                     : Colors.black26,
                 borderRadius: BorderRadius.circular(12),

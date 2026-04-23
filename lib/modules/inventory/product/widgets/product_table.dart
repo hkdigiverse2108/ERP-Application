@@ -3,6 +3,7 @@ import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/showcase_service.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/modules/inventory/product/controllers/product_controller.dart';
 import 'package:ai_setu/shared/widgets/buttons/smoll_section_button.dart';
@@ -176,6 +177,7 @@ class ProductTable extends StatelessWidget {
                   totalItems: controller.totalItems.value,
                   onPageChanged: (page) => controller.goToPage(page),
                   pageSize: controller.limit.value,
+                  showcaseKey: ShowcaseService.to.tableRowKey,
                 ),
               ),
             ],

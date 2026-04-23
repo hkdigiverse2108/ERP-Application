@@ -28,8 +28,7 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor = color ?? context.appColors.background;
-    return AnimatedContainer(
-      duration: ThemeService.themeTransitionDuration,
+    return Container(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(12),

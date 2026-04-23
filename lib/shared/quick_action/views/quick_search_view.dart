@@ -39,7 +39,7 @@ class QuickSearchView extends GetView<QuickSearchController> {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final isDark = ThemeService().isDarkMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
       top: false,

@@ -60,7 +60,10 @@ class BOMDetails extends StatelessWidget {
                   label: 'Reverse Calc',
                   value: bom.allowReverseCalculation ? 'Enabled' : 'Disabled',
                 ),
-                DetailItem(label: 'Created By', value: bom.createdBy.fullName),
+                DetailItem(
+                  label: 'Created By',
+                  value: bom.createdBy?.fullName ?? "-",
+                ),
               ],
             ),
           ],

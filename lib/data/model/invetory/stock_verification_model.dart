@@ -4,9 +4,9 @@ class StockVerificationModel {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
-  final UpdatedBy updatedBy;
-  final Id companyId;
+  final CreatedBy? createdBy;
+  final UpdatedBy? updatedBy;
+  final Id? companyId;
   final String stockVerificationNo;
   final List<Item> items;
   final double totalProducts;
@@ -20,9 +20,9 @@ class StockVerificationModel {
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.companyId,
+    this.createdBy,
+    this.updatedBy,
+    this.companyId,
     required this.stockVerificationNo,
     required this.items,
     required this.totalProducts,
@@ -43,15 +43,21 @@ class StockVerificationModel {
         id: json["_id"],
         isDeleted: json["isDeleted"],
         isActive: json["isActive"],
-        createdBy: CreatedBy.fromJson(json["createdBy"]),
-        updatedBy: UpdatedBy.fromJson(json["updatedBy"]),
-        companyId: Id.fromJson(json["companyId"]),
+        createdBy: json["createdBy"] == null
+            ? null
+            : CreatedBy.fromJson(json["createdBy"]),
+        updatedBy: json["updatedBy"] == null
+            ? null
+            : UpdatedBy.fromJson(json["updatedBy"]),
+        companyId: json["companyId"] == null
+            ? null
+            : Id.fromJson(json["companyId"]),
         stockVerificationNo: json["stockVerificationNo"],
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        totalProducts: json["totalProducts"].toDouble(),
-        totalPhysicalQty: json["totalPhysicalQty"].toDouble(),
-        totalDifferenceAmount: json["totalDifferenceAmount"].toDouble(),
-        status: json["status"],
+        totalProducts: (json["totalProducts"] ?? 0).toDouble(),
+        totalPhysicalQty: (json["totalPhysicalQty"] ?? 0).toDouble(),
+        totalDifferenceAmount: (json["totalDifferenceAmount"] ?? 0).toDouble(),
+        status: json["status"] ?? 'pending',
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
@@ -60,9 +66,9 @@ class StockVerificationModel {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
-    "updatedBy": updatedBy.toJson(),
-    "companyId": companyId.toJson(),
+    "createdBy": createdBy?.toJson(),
+    "updatedBy": updatedBy?.toJson(),
+    "companyId": companyId?.toJson(),
     "stockVerificationNo": stockVerificationNo,
     "items": List<dynamic>.from(items.map((x) => x.toJson())),
     "totalProducts": totalProducts,

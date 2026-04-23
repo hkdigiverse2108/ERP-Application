@@ -1,5 +1,3 @@
-import 'package:ai_setu/app/app_routes.dart';
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';

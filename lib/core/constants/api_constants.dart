@@ -48,12 +48,14 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/user/all", {
     "typeFilter": typeFilter,
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addUser = "/user/add";
@@ -75,11 +77,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/role/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addRole = "/role/add";
@@ -105,6 +109,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
     String? categoryFilter,
     String? subCategoryFilter,
@@ -119,6 +124,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
     "categoryFilter": categoryFilter,
     "subCategoryFilter": subCategoryFilter,
@@ -135,7 +141,17 @@ class ApiConstants {
       "/product/dropdown?isNewProduct=true";
 
   // Product Category
-  static const String getAllProductCategory = "/product-category/all";
+  static String getAllProductCategory({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/product-category/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addProductCategory = "/product-category/add";
   static const String updateProductCategory = "/product-category/edit";
   static String deleteProductCategory(String id) => "/product-category/$id";
@@ -143,8 +159,17 @@ class ApiConstants {
   static const String productCategoryDropdown = "/product-category/dropdown";
 
   // Product Type
-  static String getAllProductType(String page, String limit) =>
-      buildUrl("/product-type/add", {"page": page, "limit": limit});
+  static String getAllProductType({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/product-type/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addProductType = "/product-type/add";
   static const String updateProductType = "/product-type/edit";
   static String deleteProductType(String id) => "/product-type/$id";
@@ -156,12 +181,14 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
     String? statusFilter,
   }) => buildUrl("/product-request/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
     "statusFilter": statusFilter,
   });
@@ -183,6 +210,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
     String? categoryFilter,
     String? subCategoryFilter,
@@ -192,6 +220,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
     "categoryFilter": categoryFilter,
     "subCategoryFilter": subCategoryFilter,
@@ -209,11 +238,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/bill-of-live-product/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addBillOfLiveProduct = "/bill-of-live-product/add";
@@ -233,12 +264,14 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
     String? statusFilter,
   }) => buildUrl("/stock-verification/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
     "statusFilter": statusFilter,
   });
@@ -253,11 +286,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/recipe/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addRecipe = "/recipe/add";
@@ -272,6 +307,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -282,6 +318,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,
@@ -295,13 +332,43 @@ class ApiConstants {
   static const String updatePosPayment = "/pos-payment/edit";
 
   // Voucher
-  static const String getAllVoucher = "/voucher/alll";
+  static String getAllVoucher({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/voucher/alll", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addVoucher = "/voucher/add";
   static const String updateVoucher = "/voucher/edit";
   static String deleteVoucher(String id) => "/voucher/$id";
-  static const String getAllPaymentVoucher = "/voucher/payment/all";
+  static String getAllPaymentVoucher({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/voucher/payment/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addPaymentVoucher = "/voucher/payment/add";
-  static const String getAllReceiptVoucher = "/voucher/receipt/all";
+  static String getAllReceiptVoucher({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/voucher/receipt/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addReceiptVoucher = "/voucher/receipt/add";
   static const String updatePaymentVoucher = "/voucher/payment/edit";
   static const String getExpense = "/voucher/expense/all";
@@ -312,11 +379,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/payment-term/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String paymentTermDropdown = "/payment-term/dropdown";
@@ -326,7 +395,17 @@ class ApiConstants {
   static String deletePaymentTerm(String id) => "/payment-term/$id";
 
   // Material
-  static const String getAllMaterial = "/material/all";
+  static String getAllMaterial({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/material/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addMaterial = "/material/add";
   static String getMaterialById(String id) => "/material/$id";
   static const String updateMaterial = "/material/edit";
@@ -337,14 +416,14 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
-    String? branchFilter,
   }) => buildUrl("/material-consumption/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
-    "branchFilter": branchFilter,
   });
   static const String addMaterialConsumption = "/material-consumption/add";
   static const String getMaterialConsumptionById =
@@ -354,7 +433,17 @@ class ApiConstants {
       "/material-consumption/dropdown";
 
   // Announcement
-  static const String getAllAnnouncement = "/announcement/all";
+  static String getAllAnnouncement({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/announcement/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addAnnouncement = "/announcement/add";
   static String getAnnouncementById(String id) => "/announcement/$id";
   static const String updateAnnouncement = "/announcement/edit";
@@ -365,11 +454,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/consumption-type/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addConsumptionType = "/consumption-type/add";
@@ -382,12 +473,14 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/bank/all", {
     "type": "bank",
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
 
@@ -402,6 +495,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -410,6 +504,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,
@@ -421,14 +516,36 @@ class ApiConstants {
   static String getBankTransactionById(String id) => "/bank-transaction/$id";
 
   //Debit Note
-  static const String getAllDebitNote = "/debit-note/all";
+  static String getAllDebitNote({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+    String? activeFilter,
+  }) => buildUrl("/debit-note/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+    "branchFilter": branchId,
+  });
   static const String addDebitNote = "/debit-note/add";
   static const String updateDebitNote = "/debit-note/edit";
   static String deleteDebitNote(String id) => "/debit-note/$id";
   static String getDebitNoteById(String id) => "/debit-note/$id";
 
   // Sales Debit Note
-  static const String getAllSalesDebitNote = "/sales-debit-note/all";
+  static String getAllSalesDebitNote({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/sales-debit-note/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addSalesDebitNote = "/sales-debit-note/add";
   static const String updateSalesDebitNote = "/sales-debit-note/edit";
   static String deleteSalesDebitNote(String id) => "/sales-debit-note/$id";
@@ -439,6 +556,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -448,6 +566,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -461,7 +580,19 @@ class ApiConstants {
   static String getPosCreditNoteById(String id) => "/pos-credit-note/$id";
 
   //Credit Note
-  static const String getAllCreditNote = "/credit-note/all";
+  static String getAllCreditNote({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+    String? activeFilter,
+  }) => buildUrl("/credit-note/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "activeFilter": activeFilter,
+    "branchFilter": branchId,
+  });
   static const String addCreditNote = "/credit-note/add";
   static const String updateCreditNote = "/credit-note/edit";
   static String deleteCreditNote(String id) => "/credit-note/$id";
@@ -472,6 +603,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -481,6 +613,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -497,6 +630,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? statusFilter,
@@ -505,6 +639,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "startDate": fromDate,
     "endDate": toDate,
     "statusFilter": statusFilter,
@@ -533,6 +668,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? supplierFilter,
@@ -542,6 +678,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "supplierFilter": supplierFilter,
@@ -555,8 +692,11 @@ class ApiConstants {
   static const String supplierBillDropdown = "/supplier-bill/dropdown";
 
   // Cash Control
-  static String getAllCashControl(String registerFilter) =>
-      buildUrl("/cash-control/all", {"registerFilter": registerFilter});
+  static String getAllCashControl({String? registerFilter, String? branchId}) =>
+      buildUrl("/cash-control/all", {
+        "registerFilter": registerFilter,
+        "branchFilter": branchId,
+      });
   static const String addCashControl = "/cash-control/add";
   static String getCashControlById(String id) => "/cash-control/$id";
   static const String updateCashControl = "/cash-control/edit";
@@ -569,6 +709,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? salesManFilter,
@@ -578,6 +719,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "startDate": fromDate,
     "endDate": toDate,
     "salesManFilter": salesManFilter,
@@ -592,29 +734,83 @@ class ApiConstants {
   static const String posCashRegisterDropdown = "/pos-cash-register/dropdown";
 
   // Pay Later
-  static const String getAllPayLater = "/pay-later/all";
+  static String getAllPayLater({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/pay-later/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addPayLater = "/pay-later/add";
   static String getPayLaterById(String id) => "/pay-later/$id";
   static const String updatePayLater = "/pay-later/edit";
   static String deletePayLater(String id) => "/pay-later/$id";
 
   // Return POS Order
-  static const String getAllReturnPosOrder = "/return-pos-order/all";
+  static String getAllReturnPosOrder({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/return-pos-order/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addReturnPosOrder = "/return-pos-order/add";
   static String getReturnPosOrderById(String id) => "/return-pos-order/$id";
   static const String updateReturnPosOrder = "/return-pos-order/edit";
   static String deleteReturnPosOrder(String id) => "/return-pos-order/$id";
 
   // Call Request
-  static const String getAllCallRequest = "/call-request/all";
-  static const String getAllCallRequestByBranchId = "/call-request/all";
+  static String getAllCallRequest({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/call-request/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
+  static String getAllCallRequestByBranchId({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/call-request/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addCallRequest = "/call-request/add";
   static String getCallRequestById(String id) => "/call-request/$id";
   static String updateCallRequest(String id) => "/call-request/$id";
   static String deleteCallRequest(String id) => "/call-request/$id";
 
   // Contacts
-  static const String getAllContact = "/contacts/all";
+  static String getAllContact({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+    String? typeFilter,
+    String? activeFilter,
+  }) => buildUrl("/contacts/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+    "typeFilter": typeFilter,
+    "activeFilter": activeFilter,
+  });
   static const String addContact = "/contacts/add";
   static String getContactById(String id) => "/contacts/$id";
   static const String updateContact = "/contacts/edit";
@@ -631,6 +827,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? supplierFilter,
@@ -640,6 +837,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "supplierFilter": supplierFilter,
@@ -657,6 +855,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -666,6 +865,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -679,7 +879,17 @@ class ApiConstants {
   static const String salesOrderDropdown = "/sales-order/dropdown";
 
   // Purchase Request
-  static const String getAllPurchaseRequest = "/purchase-request/all";
+  static String getAllPurchaseRequest({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/purchase-request/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addPurchaseRequest = "/purchase-request/add";
   static String getPurchaseRequestById(String id) => "/purchase-request/$id";
   static const String updatePurchaseRequest = "/purchase-request/edit";
@@ -687,7 +897,17 @@ class ApiConstants {
   static const String purchaseRequestDropdown = "/purchase-request/dropdown";
 
   // Branch
-  static const String getAllBranch = "/branch/all";
+  static String getAllBranch({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/branch/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addBranch = "/branch/add";
   static String getBranchById(String id) => "/branch/$id";
   static const String updateBranch = "/branch/edit";
@@ -696,7 +916,17 @@ class ApiConstants {
       buildUrl("/branch/dropdown", {"companyFilter": companyFilter, "id": id});
 
   // Brand
-  static const String getAllBrand = "/brand/all";
+  static String getAllBrand({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/brand/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addBrand = "/brand/add";
   static String getBrandById(String id) => "/brand/$id";
   static const String updateBrand = "/brand/edit";
@@ -711,7 +941,17 @@ class ApiConstants {
   static const String getAllBrandTree = "brand/tree/all";
 
   // Category
-  static const String getAllCategory = "/category/all";
+  static String getAllCategory({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/category/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addCategory = "/category/add";
   static String getCategoryById(String id) => "/category/$id";
   static const String updateCategory = "/category/edit";
@@ -730,11 +970,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/additional-charge/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addAdditionalCharge = "/additional-charge/add";
@@ -744,7 +986,17 @@ class ApiConstants {
   static const String additionalChargeDropdown = "/additional-charge/dropdown";
 
   // Terms and Condition
-  static const String getAllTermsAndCondition = "/terms-and-condition/all";
+  static String getAllTermsAndCondition({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/terms-and-condition/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addTermsAndCondition = "/terms-and-condition/add";
   static String getTermsAndConditionById(String id) =>
       "/terms-and-condition/$id";
@@ -759,6 +1011,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? supplierFilter,
@@ -768,6 +1021,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "supplierFilter": supplierFilter,
@@ -788,6 +1042,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -797,6 +1052,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -814,6 +1070,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -823,6 +1080,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -840,6 +1098,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? customerFilter,
@@ -849,6 +1108,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "customerFilter": customerFilter,
@@ -867,15 +1127,26 @@ class ApiConstants {
   static String getCity({String? id}) =>
       (id == null) ? "/location/city" : "/location/city/$id";
   static const String addLocation = "/location/add";
-  static String getAllLocation(String parentFilter, String typeFilter) =>
-      "/location/all?parentFilter=$parentFilter&typeFilter=$typeFilter";
+  static String getAllLocation({
+    String? parentFilter,
+    String? typeFilter,
+    String? branchId,
+  }) => buildUrl("/location/all", {
+    "parentFilter": parentFilter,
+    "typeFilter": typeFilter,
+    "branchFilter": branchId,
+  });
   static String updateLocation(String id) => "/location/edit";
   static String deleteLocation(String id) => "/location/$id";
   static String locationById(String id) => "/location/dropdown?id=$id";
 
   // UOM
-  static String getAllUOM(String page, String limit) =>
-      "/uom/all?page=$page&limit=$limit";
+  static String getAllUOM({String? page, String? limit, String? branchId}) =>
+      buildUrl("/uom/all", {
+        "page": page,
+        "limit": limit,
+        "branchFilter": branchId,
+      });
   static const String addUOM = "/uom/add";
   static String getUOMById(String id) => "/uom/$id";
   static const String updateUOM = "/uom/edit";
@@ -887,11 +1158,13 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? activeFilter,
   }) => buildUrl("/tax/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "activeFilter": activeFilter,
   });
   static const String addTax = "/tax/add";
@@ -902,13 +1175,24 @@ class ApiConstants {
 
   // Setting
   static const String updateSetting = "/settings/updatet";
-  static const String getAllSetting = "/settings/all";
+  static String getAllSetting({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/settings/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
 
   // Coupon
   static String getAllCoupon({
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -916,6 +1200,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,
@@ -932,6 +1217,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -939,6 +1225,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,
@@ -953,7 +1240,17 @@ class ApiConstants {
   static const String discountApply = "/discount/apply";
 
   // Feedback
-  static const String getAllFeedback = "/feedback/all";
+  static String getAllFeedback({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/feedback/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addFeedback = "/feedback/add";
   static String getFeedbackById(String id) => "/feedback/$id";
   static const String updateFeedback = "/feedback/edit";
@@ -964,6 +1261,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -971,6 +1269,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,
@@ -986,8 +1285,17 @@ class ApiConstants {
   static String loyaltyPointsById(String id) => "/loyalty-points/$id";
 
   // Prefix
-  static String getAllPrefix({int? page, int? limit, String? search}) =>
-      buildUrl("/prefix/all", {"page": page, "limit": limit, "search": search});
+  static String getAllPrefix({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/prefix/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addPrefix = "/prefix/add";
   static String getPrefixById(String id) => "/prefix/$id";
   static String getPrefixByModule(String module) => "/prefix/module/$module";
@@ -996,7 +1304,17 @@ class ApiConstants {
   static const String prefixDropdown = "/prefix/dropdown";
 
   // Module
-  static const String getAllModule = "/module/all";
+  static String getAllModule({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/module/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addModule = "/module/add";
   static String getModuleById(String id) => "/module/$id";
   static const String updateModule = "/module/edit";
@@ -1006,14 +1324,34 @@ class ApiConstants {
       "/module/user/permissions/$moduleId";
 
   // Company Drivers
-  static const String getAllCompanyDrivers = "/company-drivers/all";
+  static String getAllCompanyDrivers({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/company-drivers/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addCompanyDrivers = "/company-drivers/add";
   static String getCompanyDriversById(String id) => "/company-drivers/$id";
   static const String updateCompanyDrivers = "/company-drivers/edit";
   static String deleteCompanyDrivers(String id) => "/company-drivers/$id";
 
   // Journal Voucher
-  static const String getAllJournalVoucher = "/journal-voucher/all";
+  static String getAllJournalVoucher({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+  }) => buildUrl("/journal-voucher/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+  });
   static const String addJournalVoucher = "/journal-voucher/add";
   static String getJournalVoucherById(String id) => "/journal-voucher/$id";
   static const String updateJournalVoucher = "/journal-voucher/edit";
@@ -1024,6 +1362,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? typeFilter,
@@ -1032,6 +1371,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "typeFilter": typeFilter,
@@ -1048,6 +1388,7 @@ class ApiConstants {
     int? page,
     int? limit,
     String? search,
+    String? branchId,
     String? fromDate,
     String? toDate,
     String? activeFilter,
@@ -1055,6 +1396,7 @@ class ApiConstants {
     "page": page,
     "limit": limit,
     "search": search,
+    "branchFilter": branchId,
     "fromDate": fromDate,
     "toDate": toDate,
     "activeFilter": activeFilter,

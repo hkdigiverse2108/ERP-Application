@@ -39,14 +39,11 @@ class ThemeService {
 }
 
 extension ThemeContext on BuildContext {
-  /// Convenient way to access ThemeService().isDarkMode
-  bool get isDarkMode => ThemeService().isDarkMode;
-
   /// Access custom app colors defined in ThemeExtensions
   AppColorsExtension get appColors =>
       Theme.of(this).extension<AppColorsExtension>()!;
 
-  /// Shortcut for responsive values
+  /// Shortcut for responsive values based on current theme brightness
   T responsive<T>({required T light, required T dark}) =>
-      isDarkMode ? dark : light;
+      Theme.of(this).brightness == Brightness.dark ? dark : light;
 }

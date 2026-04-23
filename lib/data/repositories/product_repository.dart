@@ -13,12 +13,14 @@ class ProductRepository {
     int? limit,
     String? search,
     Map<String, dynamic>? filters,
+    String? branchId,
   }) async {
     final ResModel res = await _api.get(
       ApiConstants.getAllProduct(
         page: page,
         limit: limit,
         search: search,
+        branchId: branchId,
         activeFilter: filters?['activeFilter'],
         categoryFilter: filters?['categoryFilter'],
         brandFilter: filters?['brandFilter'],

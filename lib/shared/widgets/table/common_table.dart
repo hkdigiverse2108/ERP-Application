@@ -2,9 +2,12 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
+import 'package:ai_setu/shared/widgets/app_showcase_tooltip.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class TableColumn<T> {
   final String title;
@@ -35,6 +38,7 @@ class CommonTable<T> extends StatelessWidget {
   final bool showSerial;
   final bool isLoading;
   final double? rowPadding;
+  final GlobalKey? showcaseKey;
 
   // Pagination params
   final int? currentPage;
@@ -64,6 +68,7 @@ class CommonTable<T> extends StatelessWidget {
     this.onPageChanged,
     this.totalItems,
     this.pageSize = 10,
+    this.showcaseKey,
   });
 
   static const double _colSerial = 40;
@@ -290,7 +295,7 @@ class CommonTable<T> extends StatelessWidget {
     Color borderColor,
   ) {
     final item = items[index];
-    return InkWell(
+    Widget rowContent = InkWell(
       onTap: onRowTap != null ? () => onRowTap!(item) : null,
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -389,23 +394,44 @@ class CommonTable<T> extends StatelessWidget {
         ),
       ),
     );
+
+    if (index == 0 && showcaseKey != null) {
+      return Showcase.withWidget(
+        key: showcaseKey!,
+        container: AppShowcaseTooltip(
+          title: Strings.showcaseRowTitle,
+          description: Strings.showcaseRowDesc,
+          onNext: () => ShowcaseView.get().next(),
+          onSkip: () => ShowcaseView.get().dismiss(),
+        ),
+        targetShapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+        ),
+        targetPadding: const EdgeInsets.all(4),
+        child: rowContent,
+      );
+    }
+
+    return rowContent;
   }
 
   Widget _buildEmptyState(Color surfaceColor) {
-    return Container(
-      color: surfaceColor,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 32),
-      child: Column(
-        children: [
-          Icon(
-            PhosphorIconsLight.package,
-            size: 40,
-            color: AppColors.lightTextSecondary,
-          ),
-          const SizedBox(height: 8),
-          Text('No items added yet', style: TextHelper.label),
-        ],
+    return Builder(
+      builder: (context) => Container(
+        color: surfaceColor,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        child: Column(
+          children: [
+            Icon(
+              PhosphorIconsLight.package,
+              size: 40,
+              color: context.appColors.textSecondary,
+            ),
+            const SizedBox(height: 8),
+            Text('No items added yet', style: TextHelper.label),
+          ],
+        ),
       ),
     );
   }
@@ -470,7 +496,7 @@ class _CommonTableShimmerState extends State<_CommonTableShimmer>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ThemeService().isDarkMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseColor = isDark ? Colors.grey[800]! : Colors.grey[300]!;
     final highlightColor = isDark ? Colors.grey[700]! : Colors.grey[100]!;
 

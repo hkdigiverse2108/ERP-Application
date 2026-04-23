@@ -55,7 +55,7 @@ class DetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ThemeService().isDarkMode;
+    final isDark = context.isDarkMode;
     final surfaceColor = context.responsive(
       light: AppColors.lightSurface,
       dark: AppColors.darkSurface,

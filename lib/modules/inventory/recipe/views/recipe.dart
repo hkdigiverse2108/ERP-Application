@@ -44,6 +44,7 @@ class Recipe extends StatelessWidget {
       child: FilterSection(
         title: 'Recipe List',
         filters: const [],
+        onAdd: () {},
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),

@@ -1,4 +1,5 @@
 abstract class Routes {
+  static const announcement = '/announcement';
   static const splash = '/splash';
   static const signIn = '/sign-in';
   static const forgotPassword = '/forgot-password';
@@ -113,4 +114,7 @@ abstract class Routes {
 
   // Quick Search
   static const quickSearch = '/quick-search';
+
+  // Support
+  static const support = '/support';
 }

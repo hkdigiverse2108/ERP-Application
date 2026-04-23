@@ -4,11 +4,13 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/data/model/permission_model.dart';
+import 'package:ai_setu/modules/settings/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:ai_setu/shared/widgets/dialogs/logout_confirmation_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -48,6 +50,22 @@ class AppDrawer extends StatelessWidget {
         return PhosphorIconsLight.bank;
       default:
         return PhosphorIconsLight.list;
+    }
+  }
+
+  IconData _getSocialIcon(String iconName) {
+    switch (iconName.toLowerCase()) {
+      case 'instagram':
+        return PhosphorIconsLight.instagramLogo;
+      case 'facebook':
+        return PhosphorIconsLight.facebookLogo;
+      case 'youtube':
+        return PhosphorIconsLight.youtubeLogo;
+      case 'twitter':
+      case 'x':
+        return PhosphorIconsLight.x;
+      default:
+        return PhosphorIconsLight.link;
     }
   }
 
@@ -112,7 +130,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final isDark = ThemeService().isDarkMode;
+    final isDark = context.isDarkMode;
     final permissionService = PermissionService.to;
 
     return Drawer(
@@ -241,18 +259,28 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                     const Gap(16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _SocialIcon(icon: PhosphorIconsLight.instagramLogo),
-                        const Gap(12),
-                        _SocialIcon(icon: PhosphorIconsLight.facebookLogo),
-                        const Gap(12),
-                        _SocialIcon(icon: PhosphorIconsLight.youtubeLogo),
-                        const Gap(12),
-                        _SocialIcon(icon: PhosphorIconsLight.x),
-                      ],
-                    ),
+                    Obx(() {
+                      final settings =
+                          SettingsController.instance.settings.value;
+                      final links =
+                          settings?.links.where((l) => l.isActive).toList() ??
+                          [];
+
+                      if (links.isEmpty) return const SizedBox.shrink();
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: links.map((link) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
+                            child: _SocialIcon(
+                              icon: _getSocialIcon(link.icon),
+                              url: link.link,
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -286,7 +314,7 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final isDark = ThemeService().isDarkMode;
+    final isDark = context.isDarkMode;
 
     return GestureDetector(
       onTap: () {
@@ -388,34 +416,49 @@ class _ExpandableSection extends StatelessWidget {
 
 class _SocialIcon extends StatelessWidget {
   final IconData icon;
+  final String url;
 
-  const _SocialIcon({required this.icon});
+  const _SocialIcon({required this.icon, required this.url});
+
+  Future<void> _launchUrl() async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      Get.snackbar(
+        "Error",
+        "Could not launch $url",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final isDark = ThemeService().isDarkMode;
+    final isDark = context.isDarkMode;
 
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: isDark ? colors.background : Colors.white,
-        shape: BoxShape.circle,
-        border: Border.all(color: colors.border.withValues(alpha: 0.5)),
-        boxShadow: isDark
-            ? []
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-      ),
-      child: Icon(
-        icon,
-        color: isDark ? Colors.white : context.appColors.primary,
-        size: 20,
+    return GestureDetector(
+      onTap: _launchUrl,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isDark ? colors.background : Colors.white,
+          shape: BoxShape.circle,
+          border: Border.all(color: colors.border.withValues(alpha: 0.5)),
+          boxShadow: isDark
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+        ),
+        child: Icon(
+          icon,
+          color: isDark ? Colors.white : context.appColors.primary,
+          size: 20,
+        ),
       ),
     );
   }

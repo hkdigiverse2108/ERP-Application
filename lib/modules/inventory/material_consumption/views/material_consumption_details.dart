@@ -50,10 +50,7 @@ class MaterialConsumptionDetails extends StatelessWidget {
             DataGrid(
               items: [
                 DetailItem(label: 'Voucher No', value: consumption.number),
-                DetailItem(
-                  label: 'Type',
-                  value: consumption.consumptionTypeId.name,
-                ),
+                DetailItem(label: 'Type', value: consumption.displayType),
                 DetailItem(
                   label: 'Total Qty',
                   value: consumption.totalQty.toStringAsFixed(2),
@@ -91,7 +88,7 @@ class MaterialConsumptionDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Created By',
-                  value: consumption.createdBy.fullName,
+                  value: consumption.createdBy?.fullName ?? '-',
                 ),
                 DetailItem(
                   label: 'Log Date',
@@ -99,7 +96,10 @@ class MaterialConsumptionDetails extends StatelessWidget {
                     'dd MMM yyyy, hh:mm a',
                   ).format(consumption.createdAt),
                 ),
-                DetailItem(label: 'Branch', value: consumption.branchId.name),
+                DetailItem(
+                  label: 'Branch',
+                  value: consumption.branchId?.name ?? '-',
+                ),
               ],
             ),
           ],

@@ -21,10 +21,12 @@ class DashboardRepository {
   Future<TransactionsModel> getTransactions({
     required DateTime startDate,
     required DateTime endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.transactions, {
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -38,10 +40,12 @@ class DashboardRepository {
   Future<List<TopCustomerModel>> getTopCustomers({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.topCustomers, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -57,10 +61,12 @@ class DashboardRepository {
   Future<List<SellingsModel>> getBestSellingProducts({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.bestSellingProducts, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -74,11 +80,13 @@ class DashboardRepository {
   Future<List<SellingsModel>> getLeastSellingProducts({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url =
         ApiConstants.buildUrl(ApiConstants.leastSellingProducts, {
           if (startDate != null) 'startDate': startDate.toIso8601String(),
           if (endDate != null) 'endDate': endDate.toIso8601String(),
+          'branchFilter': branchId ?? 'all',
         });
     final ResModel res = await _api.get(url);
 
@@ -92,11 +100,13 @@ class DashboardRepository {
   Future<List<CategoryWiseCustomersModel>> getCategoryWiseCustomers({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url =
         ApiConstants.buildUrl(ApiConstants.categoryWiseCustomers, {
           if (startDate != null) 'startDate': startDate.toIso8601String(),
           if (endDate != null) 'endDate': endDate.toIso8601String(),
+          'branchFilter': branchId ?? 'all',
         });
     final ResModel res = await _api.get(url);
 
@@ -112,11 +122,13 @@ class DashboardRepository {
   Future<List<CategoryWiseCustomersCountModel>> getCategoryWiseCustomersCount({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url =
         ApiConstants.buildUrl(ApiConstants.categoryWiseCustomersCount, {
           if (startDate != null) 'startDate': startDate.toIso8601String(),
           if (endDate != null) 'endDate': endDate.toIso8601String(),
+          'branchFilter': branchId ?? 'all',
         });
     final ResModel res = await _api.get(url);
 
@@ -134,10 +146,12 @@ class DashboardRepository {
   Future<List<TransactionGraphModel>> getTransactionGraph({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.transactionGraph, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -153,11 +167,13 @@ class DashboardRepository {
   Future<List<SalesAndPurchaseGraphModel>> getSalesAndPurchaseGraph({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url =
         ApiConstants.buildUrl(ApiConstants.salesAndPurchaseGraph, {
           if (startDate != null) 'startDate': startDate.toIso8601String(),
           if (endDate != null) 'endDate': endDate.toIso8601String(),
+          'branchFilter': branchId ?? 'all',
         });
     final ResModel res = await _api.get(url);
 
@@ -173,10 +189,12 @@ class DashboardRepository {
   Future<List<CategorySalesModel>> getCategorySales({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.categorySales, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -192,10 +210,12 @@ class DashboardRepository {
   Future<List<TopExpensesModel>> getTopExpenses({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.topExpenses, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -211,10 +231,12 @@ class DashboardRepository {
   Future<List<TopCouponsModel>> getTopCoupons({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.topCoupons, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -230,10 +252,12 @@ class DashboardRepository {
   Future<List<ReceivableModel>> getReceivables({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.receivable, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -249,10 +273,12 @@ class DashboardRepository {
   Future<List<PayableModel>> getPayables({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.payable, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -266,10 +292,12 @@ class DashboardRepository {
   Future<List<LoginLogModel>> getLoginLogs({
     DateTime? startDate,
     DateTime? endDate,
+    String? branchId,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.loginLog, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
+      'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 

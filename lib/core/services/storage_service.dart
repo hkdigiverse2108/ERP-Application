@@ -63,4 +63,5 @@ class StorageKeys {
   static const String userPermissions = 'userPermissions';
   static const String financialYear = 'financialYear';
   static const String companyInfo = 'companyInfo';
+  static const String isMainBranch = 'isMainBranch';
 }

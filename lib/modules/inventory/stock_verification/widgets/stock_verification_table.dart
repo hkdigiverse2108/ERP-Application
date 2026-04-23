@@ -110,7 +110,7 @@ class StockVerificationTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       textAlign: TextAlign.center,
                       style: TextHelper.bodySmall,
                     ),

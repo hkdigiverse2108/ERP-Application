@@ -1,6 +1,5 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
-import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:flutter/material.dart';
 
@@ -91,7 +90,7 @@ class _TableShimmerState extends State<TableShimmer>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ThemeService().isDarkMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseColor = isDark ? Colors.grey[800]! : Colors.grey[300]!;
     final highlightColor = isDark ? Colors.grey[700]! : Colors.grey[100]!;
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;

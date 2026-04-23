@@ -128,6 +128,11 @@ import 'package:ai_setu/modules/pos/credit_note/views/pos_credit_note_details.da
 import 'package:ai_setu/modules/bank_cash/bank/views/bank_details.dart';
 import 'package:ai_setu/modules/pos/sales_register/views/sales_register_details.dart';
 
+import 'package:ai_setu/modules/announcement/bindings/announcement_binding.dart';
+import 'package:ai_setu/modules/announcement/views/announcement_view.dart';
+import 'package:ai_setu/modules/support/bindings/support_binding.dart';
+import 'package:ai_setu/modules/support/views/support.dart';
+
 class AppPages {
   // static const initial = Routes.user;
   static const initial = Routes.splash;
@@ -566,6 +571,16 @@ class AppPages {
       name: Routes.posSalesRegisterDetails,
       page: () => const SalesRegisterDetails(),
       binding: SalesRegisterBinding(),
+    ),
+    GetPage(
+      name: Routes.announcement,
+      page: () => const AnnouncementView(),
+      binding: AnnouncementBinding(),
+    ),
+    GetPage(
+      name: Routes.support,
+      page: () => const Support(),
+      binding: SupportBinding(),
     ),
   ];
 }

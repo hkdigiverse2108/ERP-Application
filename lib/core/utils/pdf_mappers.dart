@@ -353,7 +353,7 @@ class PdfMappers {
             ),
             PdfItemData(
               label: 'Responsible',
-              value: verification.createdBy.fullName,
+              value: verification.createdBy?.fullName ?? '-',
             ),
           ],
         ),
@@ -828,7 +828,7 @@ class PdfMappers {
             PdfItemData(label: 'Voucher No', value: consumption.number),
             PdfItemData(
               label: 'Type',
-              value: consumption.consumptionTypeId.name,
+              value: consumption.displayType,
             ),
             PdfItemData(
               label: 'Total Qty',
@@ -838,7 +838,10 @@ class PdfMappers {
               label: 'Total Amount',
               value: '₹${consumption.totalAmount}',
             ),
-            PdfItemData(label: 'Branch', value: consumption.branchId.name),
+            PdfItemData(
+              label: 'Branch',
+              value: consumption.branchId?.name ?? '-',
+            ),
           ],
         ),
         PdfSectionData(

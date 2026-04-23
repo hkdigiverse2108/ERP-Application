@@ -1,11 +1,14 @@
-import 'package:ai_setu/core/constants/colors.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
+import 'package:ai_setu/core/constants/strings.dart';
+import 'package:ai_setu/core/services/showcase_service.dart';
 import 'package:ai_setu/data/model/year_model.dart';
-import 'package:ai_setu/shared/widgets/containers/border_container.dart';
+import 'package:ai_setu/shared/widgets/app_showcase_tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class FinancialYearDropdown extends StatelessWidget {
   final ValueChanged<String>? onChanged;
@@ -22,55 +25,87 @@ class FinancialYearDropdown extends StatelessWidget {
           controller.selectedYear.value?.financialYear ?? "Select Year";
       final availableYears = controller.availableYears;
 
-      return PopupMenuButton<YearModel>(
-        offset: const Offset(0, 40),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        onSelected: (YearModel value) {
-          controller.selectYear(value);
-          if (onChanged != null) {
-            onChanged!(value.financialYear);
-          }
-        },
-        itemBuilder: (context) => [
-          const PopupMenuItem(
-            enabled: false,
-            child: Center(
+      return Showcase.withWidget(
+        key: ShowcaseService.to.yearSelectionKey,
+        container: AppShowcaseTooltip(
+          title: Strings.showcaseYearTitle,
+          description: Strings.showcaseYearDesc,
+          onNext: () => ShowcaseView.getNamed(ShowcaseService.homeScope).next(),
+          onSkip: () =>
+              ShowcaseView.getNamed(ShowcaseService.homeScope).dismiss(),
+        ),
+        targetShapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+        ),
+        targetPadding: const EdgeInsets.all(4),
+        child: PopupMenuButton<YearModel>(
+          offset: const Offset(0, 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          onSelected: (YearModel value) {
+            controller.selectYear(value);
+            if (onChanged != null) {
+              onChanged!(value.financialYear);
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              enabled: false,
               child: Text(
-                "Financial Year",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                "Select Financial Year",
+                style: context.textTheme.labelSmall?.copyWith(
+                  color: context.appColors.textSecondary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const PopupMenuDivider(),
-          if (availableYears.isEmpty)
-            const PopupMenuItem(
-              enabled: false,
-              child: Text("No years available"),
+            const PopupMenuDivider(),
+            if (availableYears.isEmpty)
+              const PopupMenuItem(
+                enabled: false,
+                child: Text("No years available"),
+              ),
+            ...availableYears.map((e) => _buildPopupItem(e)),
+          ],
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusXL),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.2),
+                width: 1,
+              ),
             ),
-          ...availableYears.map((e) => _buildPopupItem(e)),
-        ],
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.paddingS),
-          child: BorderContainer(
             padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.paddingM,
-              vertical: Sizes.paddingS,
+              horizontal: Sizes.paddingS,
+              vertical: 4,
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  selectedYear,
-                  style: const TextStyle(
-                    color: AppColors.darkTextPrimary,
-                    fontSize: Sizes.textSizeM,
-                  ),
+                const Icon(
+                  PhosphorIconsFill.calendar,
+                  size: 16,
+                  color: Colors.white,
                 ),
                 const SizedBox(width: Sizes.paddingS),
+                Flexible(
+                  child: Text(
+                    selectedYear,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: Sizes.textSizeM,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: Sizes.paddingS / 2),
                 const Icon(
-                  PhosphorIconsLight.caretDown,
-                  size: 16,
-                  color: AppColors.darkTextSecondary,
+                  PhosphorIconsFill.caretDown,
+                  size: 14,
+                  color: Colors.white70,
                 ),
               ],
             ),
@@ -87,7 +122,10 @@ class FinancialYearDropdown extends StatelessWidget {
         children: [
           const Icon(PhosphorIconsLight.calendar, size: 18),
           const SizedBox(width: 10),
-          Text(year.financialYear),
+          Text(
+            year.financialYear,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );

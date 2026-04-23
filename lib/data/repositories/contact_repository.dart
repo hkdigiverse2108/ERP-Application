@@ -17,7 +17,7 @@ class ContactRepository {
     String? activeFilter,
   }) async {
     final ResModel response = await _apiService.get(
-      ApiConstants.buildUrl(ApiConstants.getAllContact, {
+      ApiConstants.buildUrl(ApiConstants.getAllContact(), {
         "page": page,
         "limit": limit,
         "search": search,

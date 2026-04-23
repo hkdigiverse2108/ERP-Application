@@ -5,10 +5,12 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/permission_model.dart';
+import 'package:ai_setu/modules/settings/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({super.key});
@@ -119,6 +121,42 @@ class SideBar extends StatelessWidget {
     }
   }
 
+  IconData _getSocialIcon(String iconName) {
+    switch (iconName.toLowerCase()) {
+      case 'instagram':
+        return PhosphorIconsFill.instagramLogo;
+      case 'facebook':
+        return PhosphorIconsFill.facebookLogo;
+      case 'youtube':
+        return PhosphorIconsFill.youtubeLogo;
+      case 'twitter':
+      case 'x':
+        return PhosphorIconsFill.xLogo;
+      case 'linkedin':
+        return PhosphorIconsFill.linkedinLogo;
+      default:
+        return PhosphorIconsFill.link;
+    }
+  }
+
+  Color _getSocialColor(String iconName) {
+    switch (iconName.toLowerCase()) {
+      case 'instagram':
+        return const Color(0xFFE4405F);
+      case 'facebook':
+        return const Color(0xFF1877F2);
+      case 'youtube':
+        return const Color(0xFFFF0000);
+      case 'twitter':
+      case 'x':
+        return Colors.black87;
+      case 'linkedin':
+        return const Color(0xFF0A66C2);
+      default:
+        return Colors.grey;
+    }
+  }
+
   Widget _buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Sizes.paddingM),
@@ -140,10 +178,9 @@ class SideBar extends StatelessWidget {
           const Gap(Sizes.paddingS),
           Text(
             'TailAdmin', // Matches the image, but maybe we should use 'AI Setu'?
-            style: TextHelper.h3Style(context).copyWith(
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
+            style: TextHelper.h3Style(
+              context,
+            ).copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5),
           ),
         ],
       ),
@@ -203,15 +240,24 @@ class SideBar extends StatelessWidget {
                   ),
                 ),
                 const Gap(Sizes.paddingS),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _SocialIcon(iconPath: PhosphorIconsFill.facebookLogo, color: const Color(0xFF1877F2)),
-                    _SocialIcon(iconPath: PhosphorIconsFill.instagramLogo, color: const Color(0xFFE4405F)),
-                    _SocialIcon(iconPath: PhosphorIconsFill.linkedinLogo, color: const Color(0xFF0A66C2)),
-                    _SocialIcon(iconPath: PhosphorIconsFill.xLogo, color: Colors.black87),
-                  ],
-                ),
+                Obx(() {
+                  final settings = SettingsController.instance.settings.value;
+                  final links =
+                      settings?.links.where((l) => l.isActive).toList() ?? [];
+
+                  if (links.isEmpty) return const SizedBox.shrink();
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: links.map((link) {
+                      return _SocialIcon(
+                        iconPath: _getSocialIcon(link.icon),
+                        color: _getSocialColor(link.icon),
+                        url: link.link,
+                      );
+                    }).toList(),
+                  );
+                }),
               ],
             ),
           ),
@@ -246,11 +292,13 @@ class _MenuItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       decoration: BoxDecoration(
-        color: isActive ? activeColor.withValues(alpha: 0.08) : Colors.transparent,
+        color: isActive
+            ? activeColor.withValues(alpha: 0.08)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
-        border: isActive 
-          ? Border(left: BorderSide(color: activeColor, width: 3))
-          : null,
+        border: isActive
+            ? Border(left: BorderSide(color: activeColor, width: 3))
+            : null,
       ),
       child: ListTile(
         onTap: onTap,
@@ -297,10 +345,9 @@ class _ExpandableMenuItem extends StatelessWidget {
         leading: Icon(icon, color: textColor, size: 20),
         title: Text(
           label,
-          style: TextHelper.bodyMediumStyle(context).copyWith(
-            fontWeight: FontWeight.w500,
-            color: textColor,
-          ),
+          style: TextHelper.bodyMediumStyle(
+            context,
+          ).copyWith(fontWeight: FontWeight.w500, color: textColor),
         ),
         trailing: Icon(
           PhosphorIconsLight.caretDown,
@@ -319,8 +366,8 @@ class _ExpandableMenuItem extends StatelessWidget {
                 Icon(
                   PhosphorIconsLight.arrowBendDownRight,
                   size: 14,
-                  color: isActive 
-                      ? context.appColors.primary 
+                  color: isActive
+                      ? context.appColors.primary
                       : textColor.withValues(alpha: 0.6),
                 ),
                 const Gap(8),
@@ -349,18 +396,37 @@ class _ExpandableMenuItem extends StatelessWidget {
 class _SocialIcon extends StatelessWidget {
   final IconData iconPath;
   final Color color;
+  final String url;
 
-  const _SocialIcon({required this.iconPath, required this.color});
+  const _SocialIcon({
+    required this.iconPath,
+    required this.color,
+    required this.url,
+  });
+
+  Future<void> _launchUrl() async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      Get.snackbar(
+        "Error",
+        "Could not launch $url",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+    return GestureDetector(
+      onTap: _launchUrl,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+        ),
+        child: Icon(iconPath, size: 18, color: color),
       ),
-      child: Icon(iconPath, size: 18, color: color),
     );
   }
 }

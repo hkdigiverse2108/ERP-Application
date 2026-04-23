@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/dashboard/category_sales_model.dart';
@@ -93,6 +94,18 @@ class HomeController extends GetxController {
 
     // Initialize date range from current selection
     selectedDateRange.value = FinancialYearController.to.selectedRange;
+
+    // Listen to branch changes globally
+    ever(BranchController.to.selectedBranch, (_) {
+      // Reset all section flags to force refresh
+      graphsLoaded.value = false;
+      customersLoaded.value = false;
+      productsLoaded.value = false;
+      financeLoaded.value = false;
+
+      // Refresh the immediate top section
+      getTopSectionData();
+    });
   }
 
   // Pagination states for Each Table (Client-side)
@@ -123,6 +136,7 @@ class HomeController extends GetxController {
       final response = await _repo.getTransactions(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       topSectionData.value = response;
     } catch (e) {
@@ -146,6 +160,7 @@ class HomeController extends GetxController {
       final response = await _repo.getSalesAndPurchaseGraph(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       salesAndPurchaseGraph.value = response;
     } catch (e) {
@@ -161,6 +176,7 @@ class HomeController extends GetxController {
       final response = await _repo.getTransactionGraph(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       transactionGraph.value = response;
     } catch (e) {
@@ -186,6 +202,7 @@ class HomeController extends GetxController {
       final response = await _repo.getTopCustomers(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       topCustomers.value = response;
     } catch (e) {
@@ -201,6 +218,7 @@ class HomeController extends GetxController {
       final response = await _repo.getCategoryWiseCustomers(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       categoryWiseCustomers.value = response;
     } catch (e) {
@@ -216,6 +234,7 @@ class HomeController extends GetxController {
       final response = await _repo.getCategoryWiseCustomersCount(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       categoryWiseCustomersCount.value = response;
     } catch (e) {
@@ -241,6 +260,7 @@ class HomeController extends GetxController {
       final response = await _repo.getBestSellingProducts(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       bestSelling.value = response;
     } catch (e) {
@@ -256,6 +276,7 @@ class HomeController extends GetxController {
       final response = await _repo.getLeastSellingProducts(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       leastSelling.value = response;
     } catch (e) {
@@ -271,6 +292,7 @@ class HomeController extends GetxController {
       final response = await _repo.getCategorySales(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       categorySales.value = response;
     } catch (e) {
@@ -298,6 +320,7 @@ class HomeController extends GetxController {
       final response = await _repo.getTopExpenses(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       topExpenses.value = response;
     } catch (e) {
@@ -313,6 +336,7 @@ class HomeController extends GetxController {
       final response = await _repo.getTopCoupons(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       topCoupons.value = response;
     } catch (e) {
@@ -328,6 +352,7 @@ class HomeController extends GetxController {
       final response = await _repo.getReceivables(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       receivables.value = response;
     } catch (e) {
@@ -343,6 +368,7 @@ class HomeController extends GetxController {
       final response = await _repo.getPayables(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       payables.value = response;
     } catch (e) {
@@ -358,6 +384,7 @@ class HomeController extends GetxController {
       final response = await _repo.getLoginLogs(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
       loginLogs.value = response;
     } catch (e) {

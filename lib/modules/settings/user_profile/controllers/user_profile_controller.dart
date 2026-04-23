@@ -37,6 +37,12 @@ class UserProfileController extends GetxController {
 
       final profile = await _userRepo.getUserById(userId);
       user.value = profile;
+
+      if (profile.branchId != null && profile.branchId?.isHeadBranch == true) {
+        _storageService.write(StorageKeys.isMainBranch, true);
+      } else {
+        _storageService.write(StorageKeys.isMainBranch, false);
+      }
     } catch (e) {
       log("Error fetching profile: $e");
       AppSnackbar.error("Failed to load profile details");

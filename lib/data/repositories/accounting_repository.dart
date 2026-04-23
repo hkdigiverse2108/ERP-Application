@@ -11,13 +11,15 @@ class AccountingRepository {
     int limit = 10,
     String? search,
     String? activeFilter,
+    String? branchId,
   }) async {
-    final String url = ApiConstants.buildUrl(ApiConstants.getAllCreditNote, {
-      "page": page,
-      "limit": limit,
-      "search": search,
-      "activeFilter": activeFilter,
-    });
+    final String url = ApiConstants.getAllCreditNote(
+      page: page,
+      limit: limit,
+      search: search,
+      activeFilter: activeFilter,
+      branchId: branchId,
+    );
 
     final ResModel res = await _api.get(url);
 
@@ -33,13 +35,15 @@ class AccountingRepository {
     int limit = 10,
     String? search,
     String? activeFilter,
+    String? branchId,
   }) async {
-    final String url = ApiConstants.buildUrl(ApiConstants.getAllDebitNote, {
-      "page": page,
-      "limit": limit,
-      "search": search,
-      "activeFilter": activeFilter,
-    });
+    final String url = ApiConstants.getAllDebitNote(
+      page: page,
+      limit: limit,
+      search: search,
+      activeFilter: activeFilter,
+      branchId: branchId,
+    );
 
     final ResModel res = await _api.get(url);
 

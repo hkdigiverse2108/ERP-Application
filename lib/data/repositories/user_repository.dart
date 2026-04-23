@@ -13,6 +13,7 @@ class UserRepository {
     int? limit,
     String? search,
     String? activeFilter,
+    String? branchId,
   }) async {
     final ResModel res = await _api.get(
       ApiConstants.getAllUser(
@@ -21,6 +22,7 @@ class UserRepository {
         limit: limit,
         search: search,
         activeFilter: activeFilter,
+        branchId: branchId,
       ),
     );
     if (res.status == 200) {

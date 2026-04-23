@@ -1,7 +1,9 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:intl/intl.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/services/showcase_service.dart';
 import 'package:ai_setu/modules/home/controllers/home_controller.dart';
 import 'package:ai_setu/modules/home/widgets/dashboard_stat_widget.dart';
 import 'package:ai_setu/modules/home/widgets/report_cart.dart';
@@ -29,12 +31,92 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:showcaseview/showcaseview.dart';
+// ignore: implementation_imports
+import 'package:showcaseview/src/showcase/showcase_service.dart' as sp;
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return const _HomeBody();
+  }
+}
+
+class _HomeBody extends StatefulWidget {
+  const _HomeBody();
+
+  @override
+  State<_HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<_HomeBody> {
+  @override
+  void initState() {
+    super.initState();
+
+    final homeController = Get.find<HomeController>();
+
+    ShowcaseView.register(
+      scope: ShowcaseService.homeScope,
+      onFinish: () {
+        ShowcaseService.to.startProductTour();
+        Get.toNamed(Routes.product);
+      },
+      blurValue: 1,
+      autoPlay: false,
+      onComplete: (index, key) {
+        debugPrint('Showcase step $index complete: $key');
+      },
+    );
+
+    // Watch for data loading before starting the tour
+    // This ensures DashboardStatWidget targets (salesKey, purchaseKey) are in the tree
+    ever(homeController.isLoaded, (bool loaded) {
+      if (loaded && !ShowcaseService.to.hasSeenTour && mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ShowcaseView.getNamed(ShowcaseService.homeScope).startShowCase([
+            ShowcaseService.to.drawerKey,
+            ShowcaseService.to.searchKey,
+            ShowcaseService.to.themeKey,
+            ShowcaseService.to.yearSelectionKey,
+            ShowcaseService.to.salesKey,
+            ShowcaseService.to.purchaseKey,
+          ]);
+        });
+      }
+    });
+
+    // Check if data was already loaded (in case ever doesn't trigger for initial true)
+    if (homeController.isLoaded.value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!ShowcaseService.to.hasSeenTour && mounted) {
+          ShowcaseView.getNamed(ShowcaseService.homeScope).startShowCase([
+            ShowcaseService.to.drawerKey,
+            ShowcaseService.to.searchKey,
+            ShowcaseService.to.themeKey,
+            ShowcaseService.to.yearSelectionKey,
+            ShowcaseService.to.salesKey,
+            ShowcaseService.to.purchaseKey,
+          ]);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    ShowcaseView.getNamed(ShowcaseService.homeScope).unregister();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Sync the current scope to this page to ensure shared widgets (QuickAction)
+    // find the correct tour controllers during rebuilds or back-navigation.
+    sp.ShowcaseService.instance.updateCurrentScope(ShowcaseService.homeScope);
+
     final homeController = Get.find<HomeController>();
 
     return PopScope(

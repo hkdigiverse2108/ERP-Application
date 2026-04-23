@@ -6,6 +6,7 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetails extends StatelessWidget {
   const ContactDetails({super.key});
@@ -29,17 +30,13 @@ class ContactDetails extends StatelessWidget {
         DetailAction(
           label: 'Call',
           icon: PhosphorIconsFill.phone,
-          onTap: () {
-            // Initiate call
-          },
+          onTap: () => call(contact.phoneNo?.phoneNo.toString() ?? ''),
         ),
         DetailAction(
           label: 'WhatsApp',
           icon: PhosphorIconsFill.whatsappLogo,
           color: Colors.green,
-          onTap: () {
-            // Initiate WhatsApp
-          },
+          onTap: () => whatsapp(contact.whatsappNo?.phoneNo.toString() ?? ''),
         ),
         // DetailAction(
         //   label: 'Ledger',
@@ -188,4 +185,18 @@ class ContactDetails extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _launchUrl(Uri url) async {
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
+  }
+}
+
+void call(String number) {
+  _launchUrl(Uri.parse('tel:$number'));
+}
+
+void whatsapp(String number) {
+  _launchUrl(Uri.parse('https://wa.me/$number'));
 }

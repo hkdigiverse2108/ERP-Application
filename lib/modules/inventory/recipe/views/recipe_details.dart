@@ -79,7 +79,7 @@ class RecipeDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Created By',
-                  value: recipe.createdBy.fullName,
+                  value: recipe.createdBy?.fullName ?? "-",
                 ),
                 DetailItem(
                   label: 'Created At',

@@ -4,9 +4,9 @@ class RecipeModel {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   final String updatedBy;
-  final Id companyId;
+  final Id? companyId;
   final String name;
   final DateTime date;
   final String number;
@@ -20,9 +20,9 @@ class RecipeModel {
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
-    required this.companyId,
+    this.companyId,
     required this.name,
     required this.date,
     required this.number,
@@ -40,30 +40,40 @@ class RecipeModel {
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) => RecipeModel(
     id: json["_id"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"],
-    companyId: Id.fromJson(json["companyId"]),
-    name: json["name"],
-    date: DateTime.parse(json["date"]),
-    number: json["number"],
-    type: json["type"],
-    rawProducts: List<RawProduct>.from(
-      json["rawProducts"].map((x) => RawProduct.fromJson(x)),
-    ),
-    finalProducts: FinalProducts.fromJson(json["finalProducts"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    isDeleted: json["isDeleted"] ?? false,
+    isActive: json["isActive"] ?? true,
+    createdBy: json["createdBy"] == null
+        ? null
+        : CreatedBy.fromJson(json["createdBy"]),
+    updatedBy: json["updatedBy"] ?? '',
+    companyId: json["companyId"] == null
+        ? null
+        : Id.fromJson(json["companyId"]),
+    name: json["name"] ?? '',
+    date: json["date"] == null ? DateTime.now() : DateTime.parse(json["date"]),
+    number: json["number"] ?? '',
+    type: json["type"] ?? '',
+    rawProducts: json["rawProducts"] == null
+        ? []
+        : List<RawProduct>.from(
+            json["rawProducts"].map((x) => RawProduct.fromJson(x)),
+          ),
+    finalProducts: FinalProducts.fromJson(json["finalProducts"] ?? {}),
+    createdAt: json["createdAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["updatedAt"]),
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
     "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
+    "companyId": companyId?.toJson(),
     "name": name,
     "date": date.toIso8601String(),
     "number": number,

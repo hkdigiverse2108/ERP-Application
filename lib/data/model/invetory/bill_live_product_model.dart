@@ -9,9 +9,9 @@ class BillOfLiveProductModel {
   final List<ProductDetail> productDetails;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   final String updatedBy;
-  final Id companyId;
+  final Id? companyId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -24,9 +24,9 @@ class BillOfLiveProductModel {
     required this.productDetails,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
-    required this.companyId,
+    this.companyId,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,20 +39,34 @@ class BillOfLiveProductModel {
   factory BillOfLiveProductModel.fromJson(Map<String, dynamic> json) =>
       BillOfLiveProductModel(
         id: json["_id"],
-        date: DateTime.parse(json["date"]),
-        number: json["number"],
-        recipeId: List<Id>.from(json["recipeId"].map((x) => Id.fromJson(x))),
-        allowReverseCalculation: json["allowReverseCalculation"],
-        productDetails: List<ProductDetail>.from(
-          json["productDetails"].map((x) => ProductDetail.fromJson(x)),
-        ),
-        isDeleted: json["isDeleted"],
-        isActive: json["isActive"],
-        createdBy: CreatedBy.fromJson(json["createdBy"]),
-        updatedBy: json["updatedBy"],
-        companyId: Id.fromJson(json["companyId"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        date: json["date"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["date"]),
+        number: json["number"] ?? '',
+        recipeId: json["recipeId"] == null
+            ? []
+            : List<Id>.from(json["recipeId"].map((x) => Id.fromJson(x))),
+        allowReverseCalculation: json["allowReverseCalculation"] ?? false,
+        productDetails: json["productDetails"] == null
+            ? []
+            : List<ProductDetail>.from(
+                json["productDetails"].map((x) => ProductDetail.fromJson(x)),
+              ),
+        isDeleted: json["isDeleted"] ?? false,
+        isActive: json["isActive"] ?? true,
+        createdBy: json["createdBy"] == null
+            ? null
+            : CreatedBy.fromJson(json["createdBy"]),
+        updatedBy: json["updatedBy"] ?? '',
+        companyId: json["companyId"] == null
+            ? null
+            : Id.fromJson(json["companyId"]),
+        createdAt: json["createdAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,9 +78,9 @@ class BillOfLiveProductModel {
     "productDetails": List<dynamic>.from(productDetails.map((x) => x.toJson())),
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
     "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
+    "companyId": companyId?.toJson(),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
   };

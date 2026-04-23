@@ -37,7 +37,10 @@ class MaterialConsumptionTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<MaterialConsumptionModel>(
-                onRowTap: (item) => Get.toNamed(Routes.materialConsumptionDetails, arguments: item),
+                onRowTap: (item) => Get.toNamed(
+                  Routes.materialConsumptionDetails,
+                  arguments: item,
+                ),
                 isLoading: controller.isLoading.value,
                 items: controller.materialConsumptions,
                 columns: [
@@ -56,16 +59,16 @@ class MaterialConsumptionTable extends StatelessWidget {
                   TableColumn(
                     title: 'Branch',
                     width: 150,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.branchId.name, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.branchId?.name ?? '-',
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'Type',
                     width: 120,
-                    cellBuilder: (context, item, index) => Text(
-                      item.consumptionTypeId.name,
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.displayType, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Total Qty',
@@ -101,7 +104,7 @@ class MaterialConsumptionTable extends StatelessWidget {
                     title: 'Created By',
                     width: 150,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "-",
                       style: TextHelper.bodySmall,
                     ),
                   ),

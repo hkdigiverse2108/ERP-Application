@@ -4,13 +4,14 @@ class MaterialConsumptionModel {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   final String updatedBy;
-  final Id companyId;
-  final Id branchId;
+  final Id? companyId;
+  final Id? branchId;
   final String number;
   final DateTime date;
-  final Id consumptionTypeId;
+  final Id? consumptionTypeId;
+  final String? type;
   final List<Item> items;
   final double totalQty;
   final double totalAmount;
@@ -22,13 +23,14 @@ class MaterialConsumptionModel {
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
-    required this.companyId,
-    required this.branchId,
+    this.companyId,
+    this.branchId,
     required this.number,
     required this.date,
-    required this.consumptionTypeId,
+    this.consumptionTypeId,
+    this.type,
     required this.items,
     required this.totalQty,
     required this.totalAmount,
@@ -36,6 +38,8 @@ class MaterialConsumptionModel {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  String get displayType => consumptionTypeId?.name ?? type ?? '-';
 
   factory MaterialConsumptionModel.fromRawJson(String str) =>
       MaterialConsumptionModel.fromJson(json.decode(str));
@@ -47,13 +51,22 @@ class MaterialConsumptionModel {
         id: json["_id"],
         isDeleted: json["isDeleted"],
         isActive: json["isActive"],
-        createdBy: CreatedBy.fromJson(json["createdBy"]),
+        createdBy: json["createdBy"] == null
+            ? null
+            : CreatedBy.fromJson(json["createdBy"]),
         updatedBy: json["updatedBy"],
-        companyId: Id.fromJson(json["companyId"]),
-        branchId: Id.fromJson(json["branchId"]),
+        companyId: json["companyId"] == null
+            ? null
+            : Id.fromJson(json["companyId"]),
+        branchId: json["branchId"] == null
+            ? null
+            : Id.fromJson(json["branchId"]),
         number: json["number"],
         date: DateTime.parse(json["date"]),
-        consumptionTypeId: Id.fromJson(json["consumptionTypeId"]),
+        consumptionTypeId: json["consumptionTypeId"] == null
+            ? null
+            : Id.fromJson(json["consumptionTypeId"]),
+        type: json["type"],
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
         totalQty: (json["totalQty"] ?? 0).toDouble(),
         totalAmount: (json["totalAmount"] ?? 0).toDouble(),
@@ -66,13 +79,14 @@ class MaterialConsumptionModel {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy.toJson(),
+    "createdBy": createdBy?.toJson(),
     "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
-    "branchId": branchId.toJson(),
+    "companyId": companyId?.toJson(),
+    "branchId": branchId?.toJson(),
     "number": number,
     "date": date.toIso8601String(),
-    "consumptionTypeId": consumptionTypeId.toJson(),
+    "consumptionTypeId": consumptionTypeId?.toJson(),
+    "type": type,
     "items": List<dynamic>.from(items.map((x) => x.toJson())),
     "totalQty": totalQty,
     "totalAmount": totalAmount,

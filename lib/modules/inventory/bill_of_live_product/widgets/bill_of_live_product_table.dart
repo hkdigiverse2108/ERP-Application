@@ -65,7 +65,7 @@ class BillLiveProductTable extends StatelessWidget {
                     title: 'Created By',
                     width: 150,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? "-",
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w500,
                       ),

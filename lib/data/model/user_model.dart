@@ -253,8 +253,9 @@ class BankDetails {
 class IdName {
   final String id;
   final String name;
+  final bool? isHeadBranch;
 
-  IdName({required this.id, required this.name});
+  IdName({required this.id, required this.name, this.isHeadBranch});
 
   factory IdName.fromJson(dynamic json) {
     // ✅ If API returns only ID string
@@ -263,10 +264,18 @@ class IdName {
     }
 
     // ✅ If API returns object
-    return IdName(id: json["_id"] ?? '', name: json["name"] ?? '');
+    return IdName(
+      id: json["_id"] ?? '',
+      name: json["name"] ?? '',
+      isHeadBranch: json["isHeadBranch"] ?? false,
+    );
   }
   // add to json
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    if (isHeadBranch != null) "isHeadBranch": isHeadBranch,
+  };
 }
 
 class PhoneNo {

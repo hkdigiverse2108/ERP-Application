@@ -20,7 +20,7 @@ class MaterialConsumptionRepository {
         limit: limit,
         search: search,
         activeFilter: activeFilter,
-        branchFilter: filter?['branchFilter'],
+        branchId: filter?['branchFilter'],
       ),
     );
 

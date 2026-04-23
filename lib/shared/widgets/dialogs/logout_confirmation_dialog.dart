@@ -24,7 +24,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final isDark = ThemeContext(context).isDarkMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),

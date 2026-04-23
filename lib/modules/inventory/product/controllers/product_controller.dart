@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/brand/brand_model.dart';
@@ -58,6 +59,11 @@ class ProductController extends GetxController {
     ever(selectedCategoryId, (id) => _loadSubCategories(id));
     // Watch for brand change to load sub-brands
     ever(selectedBrandId, (id) => _loadSubBrands(id));
+    // Watch for branch change to refresh data
+    ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getProductsData();
+    });
   }
 
   @override
@@ -127,7 +133,7 @@ class ProductController extends GetxController {
   }
 
   String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}';
+      '${page}_${searchQuery.value}_${filters.toString()}_${BranchController.to.selectedBranch.value?.id}';
 
   Future<void> getProductsData() async {
     final key = _getCacheKey(currentPage.value);
@@ -147,6 +153,7 @@ class ProductController extends GetxController {
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
         filters: filters.isEmpty ? null : filters,
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());

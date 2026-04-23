@@ -67,7 +67,7 @@ class StockVerificationDetails extends StatelessWidget {
                 ),
                 DetailItem(
                   label: 'Responsible',
-                  value: verification.createdBy.fullName,
+                  value: verification.createdBy?.fullName ?? '-',
                 ),
               ],
             ),
