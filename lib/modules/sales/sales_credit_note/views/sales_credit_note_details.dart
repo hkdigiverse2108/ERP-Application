@@ -280,7 +280,7 @@ class SalesCreditNoteDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address? addr) {
+  Widget _buildAddressText(SalesCreditNoteAddress? addr) {
     if (addr == null) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -16,7 +16,7 @@ class SupplierBillDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SupplierBillModel bill = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(bill.supplierBillDate);
+    final dateStr = bill.supplierBillDate != null ? DateFormat('dd MMM yyyy').format(bill.supplierBillDate!) : '-';
     final dueDateStr = bill.dueDate != null
         ? DateFormat('dd MMM yyyy').format(bill.dueDate!)
         : '-';
@@ -25,10 +25,10 @@ class SupplierBillDetails extends StatelessWidget {
       title: 'Supplier Bill #${bill.supplierBillNo}',
       subtitle: 'Date: $dateStr',
       heroIcon: PhosphorIconsFill.receipt,
-      status: bill.paymentStatus.isNotEmpty ? bill.paymentStatus : bill.status,
+      status: (bill.paymentStatus?.isNotEmpty == true) ? bill.paymentStatus! : (bill.status ?? 'Pending'),
       statusColor: _getStatusColor(
         context,
-        bill.paymentStatus.isNotEmpty ? bill.paymentStatus : bill.status,
+        (bill.paymentStatus?.isNotEmpty == true) ? bill.paymentStatus! : (bill.status ?? 'Pending'),
       ),
       actions: [
         DetailAction(
@@ -63,13 +63,14 @@ class SupplierBillDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Supplier',
-                  value:
-                      '${bill.supplierId.firstName} ${bill.supplierId.lastName}',
+                  value: bill.supplierId != null
+                      ? '${bill.supplierId?.firstName} ${bill.supplierId?.lastName}'
+                      : '-',
                 ),
                 DetailItem(
                   label: 'Reference No.',
-                  value: bill.referenceBillNo.isNotEmpty
-                      ? bill.referenceBillNo
+                  value: (bill.referenceBillNo?.isNotEmpty == true)
+                      ? bill.referenceBillNo!
                       : '-',
                 ),
                 DetailItem(
@@ -79,7 +80,7 @@ class SupplierBillDetails extends StatelessWidget {
                 DetailItem(label: 'Due Date', value: dueDateStr),
                 DetailItem(
                   label: 'Payment Status',
-                  value: bill.paymentStatus.toUpperCase(),
+                  value: (bill.paymentStatus ?? '-').toUpperCase(),
                 ),
                 DetailItem(
                   label: 'Reverse Charge',
@@ -101,45 +102,45 @@ class SupplierBillDetails extends StatelessWidget {
           children: [
             _buildSummaryRow(
               'Gross Amount',
-              bill.summary.grossAmount,
+              bill.summary?.grossAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Discount',
-              -bill.summary.discountAmount.toDouble(),
+              -(bill.summary?.discountAmount ?? 0),
               context: context,
             ),
             _buildSummaryRow(
               'Taxable Amount',
-              bill.summary.taxableAmount,
+              bill.summary?.taxableAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Tax Amount',
-              bill.summary.taxAmount,
+              bill.summary?.taxAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Round Off',
-              bill.summary.roundOff.toDouble(),
+              bill.summary?.roundOff ?? 0,
               context: context,
             ),
             const Divider(height: 32),
             _buildSummaryRow(
               'Net Amount',
-              bill.summary.netAmount,
+              bill.summary?.netAmount ?? 0,
               isTotal: true,
               context: context,
             ),
             _buildSummaryRow(
               'Paid Amount',
-              bill.paidAmount.toDouble(),
+              bill.paidAmount,
               color: AppColors.success,
               context: context,
             ),
             _buildSummaryRow(
               'Balance Amount',
-              bill.balanceAmount.toDouble(),
+              bill.balanceAmount,
               color: AppColors.error,
               isBold: true,
               context: context,
@@ -263,15 +264,15 @@ class SupplierBillDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(SupplierBillAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(addr.addressLine1, style: TextHelper.bodySmall),
-        if (addr.addressLine2.isNotEmpty)
-          Text(addr.addressLine2, style: TextHelper.bodySmall),
+        if (addr.addressLine2 != null && addr.addressLine2!.isNotEmpty)
+          Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
-          '${addr.city.name}, ${addr.state?.name ?? ""}, ${addr.country.name} - ${addr.pinCode ?? ""}',
+          '${addr.city?.name ?? ""}, ${addr.state?.name ?? ""}, ${addr.country?.name ?? ""} - ${addr.pinCode ?? ""}',
           style: TextHelper.bodySmall,
         ),
       ],

@@ -25,9 +25,9 @@ class BankRepository {
 
     if (res.status == 200 && res.data != null) {
       final items = (res.data['bank_data'] as List)
-          .map((e) => BankModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => BankModel.fromMap(e as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to fetch bank cash');
@@ -58,17 +58,16 @@ class BankRepository {
           res.data['bank_transaction_data'] ??
           res.data['bankTransaction_data'];
 
-      final items =
-          dataList != null
-              ? dataList
-                  .map(
-                    (e) =>
-                        BankTransactionModel.fromJson(e as Map<String, dynamic>),
-                  )
-                  .toList()
-              : <BankTransactionModel>[];
-              
-      return PaginationModel.fromJson(res.data, items);
+      final items = dataList != null
+          ? dataList
+                .map(
+                  (e) =>
+                      BankTransactionModel.fromMap(e as Map<String, dynamic>),
+                )
+                .toList()
+          : <BankTransactionModel>[];
+
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to fetch bank transactions');

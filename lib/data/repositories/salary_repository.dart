@@ -30,10 +30,10 @@ class SalaryRepository {
       final List? dataList = res.data['salary_data'];
       final items = dataList != null
           ? dataList
-                .map((e) => SalaryModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => SalaryModel.fromMap(e as Map<String, dynamic>))
                 .toList()
           : <SalaryModel>[];
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to fetch salary');

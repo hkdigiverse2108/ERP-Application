@@ -63,7 +63,7 @@ class EstimateDetails extends StatelessWidget {
                 DetailItem(
                   label: 'Customer',
                   value:
-                      '${estimate.customerId?.firstName} ${estimate.customerId?.lastName}',
+                      '${estimate.customerId?.firstName ?? '-'} ${estimate.customerId?.lastName ?? ''}'.trim(),
                 ),
                 DetailItem(
                   label: 'Place of Supply',
@@ -210,7 +210,7 @@ class EstimateDetails extends StatelessWidget {
     }
   }
 
-  Widget _buildItemsTable(BuildContext context, List<Item> items) {
+  Widget _buildItemsTable(BuildContext context, List<EstimateItem> items) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -297,7 +297,7 @@ class EstimateDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(EstimateAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -305,7 +305,7 @@ class EstimateDetails extends StatelessWidget {
         if (addr.addressLine2 != null)
           Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
-          '${addr.city?.name}, ${addr.state?.name}, ${addr.country?.name} - ${addr.pinCode}',
+          '${addr.city?.name ?? '-'}, ${addr.state?.name ?? '-'}, ${addr.country?.name ?? '-'} - ${addr.pinCode}',
           style: TextHelper.bodySmall,
         ),
       ],

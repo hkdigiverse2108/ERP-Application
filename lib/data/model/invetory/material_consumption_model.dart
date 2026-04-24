@@ -1,25 +1,27 @@
-import 'dart:convert';
+import 'dart:convert' hide json;
+import 'package:equatable/equatable.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 
-class MaterialConsumptionModel {
+class MaterialConsumptionModel extends Equatable {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy? createdBy;
+  final MaterialConsumptionCreatedBy? createdBy;
   final String updatedBy;
-  final Id? companyId;
-  final Id? branchId;
+  final IdNameModel? companyId;
+  final IdNameModel? branchId;
   final String number;
   final DateTime date;
-  final Id? consumptionTypeId;
+  final IdNameModel? consumptionTypeId;
   final String? type;
-  final List<Item> items;
+  final List<MaterialConsumptionItem> items;
   final double totalQty;
   final double totalAmount;
   final String? remark;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  MaterialConsumptionModel({
+  const MaterialConsumptionModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
@@ -41,130 +43,237 @@ class MaterialConsumptionModel {
 
   String get displayType => consumptionTypeId?.name ?? type ?? '-';
 
-  factory MaterialConsumptionModel.fromRawJson(String str) =>
-      MaterialConsumptionModel.fromJson(json.decode(str));
+  MaterialConsumptionModel copyWith({
+    String? id,
+    bool? isDeleted,
+    bool? isActive,
+    MaterialConsumptionCreatedBy? createdBy,
+    String? updatedBy,
+    IdNameModel? companyId,
+    IdNameModel? branchId,
+    String? number,
+    DateTime? date,
+    IdNameModel? consumptionTypeId,
+    String? type,
+    List<MaterialConsumptionItem>? items,
+    double? totalQty,
+    double? totalAmount,
+    String? remark,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return MaterialConsumptionModel(
+      id: id ?? this.id,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      branchId: branchId ?? this.branchId,
+      number: number ?? this.number,
+      date: date ?? this.date,
+      consumptionTypeId: consumptionTypeId ?? this.consumptionTypeId,
+      type: type ?? this.type,
+      items: items ?? this.items,
+      totalQty: totalQty ?? this.totalQty,
+      totalAmount: totalAmount ?? this.totalAmount,
+      remark: remark ?? this.remark,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory MaterialConsumptionModel.fromJson(String json) =>
+      MaterialConsumptionModel.fromMap(
+          jsonDecode(json) as Map<String, dynamic>);
 
-  factory MaterialConsumptionModel.fromJson(Map<String, dynamic> json) =>
+  String toJson() => jsonEncode(toMap());
+
+  factory MaterialConsumptionModel.fromMap(Map<String, dynamic> map) =>
       MaterialConsumptionModel(
-        id: json["_id"],
-        isDeleted: json["isDeleted"],
-        isActive: json["isActive"],
-        createdBy: json["createdBy"] == null
+        id: map["_id"]?.toString() ?? '',
+        isDeleted: map["isDeleted"] as bool? ?? false,
+        isActive: map["isActive"] as bool? ?? true,
+        createdBy: map["createdBy"] == null
             ? null
-            : CreatedBy.fromJson(json["createdBy"]),
-        updatedBy: json["updatedBy"],
-        companyId: json["companyId"] == null
+            : MaterialConsumptionCreatedBy.fromMap(
+                map["createdBy"] as Map<String, dynamic>),
+        updatedBy: map["updatedBy"]?.toString() ?? "",
+        companyId: map["companyId"] == null
             ? null
-            : Id.fromJson(json["companyId"]),
-        branchId: json["branchId"] == null
+            : IdNameModel.fromMap(map["companyId"]),
+        branchId: map["branchId"] == null
             ? null
-            : Id.fromJson(json["branchId"]),
-        number: json["number"],
-        date: DateTime.parse(json["date"]),
-        consumptionTypeId: json["consumptionTypeId"] == null
+            : IdNameModel.fromMap(map["branchId"]),
+        number: map["number"]?.toString() ?? "",
+        date: map["date"] != null
+            ? DateTime.parse(map["date"].toString())
+            : DateTime.now(),
+        consumptionTypeId: map["consumptionTypeId"] == null
             ? null
-            : Id.fromJson(json["consumptionTypeId"]),
-        type: json["type"],
-        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        totalQty: (json["totalQty"] ?? 0).toDouble(),
-        totalAmount: (json["totalAmount"] ?? 0).toDouble(),
-        remark: json["remark"] ?? json["notes"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+            : IdNameModel.fromMap(map["consumptionTypeId"]),
+        type: map["type"]?.toString(),
+        items: List<MaterialConsumptionItem>.from(
+          (map["items"] as List<dynamic>?)?.map(
+                (x) => MaterialConsumptionItem.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        totalQty: (map["totalQty"] as num? ?? 0).toDouble(),
+        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        remark: (map["remark"] ?? map["notes"])?.toString(),
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : DateTime.now(),
+        updatedAt: map["updatedAt"] != null
+            ? DateTime.parse(map["updatedAt"].toString())
+            : DateTime.now(),
       );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy?.toJson(),
-    "updatedBy": updatedBy,
-    "companyId": companyId?.toJson(),
-    "branchId": branchId?.toJson(),
-    "number": number,
-    "date": date.toIso8601String(),
-    "consumptionTypeId": consumptionTypeId?.toJson(),
-    "type": type,
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "totalQty": totalQty,
-    "totalAmount": totalAmount,
-    "remark": remark,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-  };
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "isDeleted": isDeleted,
+        "isActive": isActive,
+        "createdBy": createdBy?.toMap(),
+        "updatedBy": updatedBy,
+        "companyId": companyId?.toMap(),
+        "branchId": branchId?.toMap(),
+        "number": number,
+        "date": date.toIso8601String(),
+        "consumptionTypeId": consumptionTypeId?.toMap(),
+        "type": type,
+        "items": items.map((x) => x.toMap()).toList(),
+        "totalQty": totalQty,
+        "totalAmount": totalAmount,
+        "remark": remark,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+      };
+
+  @override
+  List<Object?> get props => [
+        id,
+        isDeleted,
+        isActive,
+        createdBy,
+        updatedBy,
+        companyId,
+        branchId,
+        number,
+        date,
+        consumptionTypeId,
+        type,
+        items,
+        totalQty,
+        totalAmount,
+        remark,
+        createdAt,
+        updatedAt,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class Id {
-  final String id;
-  final String name;
-
-  Id({required this.id, required this.name});
-
-  factory Id.fromRawJson(String str) => Id.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Id.fromJson(Map<String, dynamic> json) =>
-      Id(id: json["_id"], name: json["name"]);
-
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
-}
-
-class CreatedBy {
+class MaterialConsumptionCreatedBy extends Equatable {
   final String id;
   final String fullName;
   final String userType;
 
-  CreatedBy({required this.id, required this.fullName, required this.userType});
+  const MaterialConsumptionCreatedBy({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+  });
 
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
+  MaterialConsumptionCreatedBy copyWith({
+    String? id,
+    String? fullName,
+    String? userType,
+  }) {
+    return MaterialConsumptionCreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory MaterialConsumptionCreatedBy.fromJson(String json) =>
+      MaterialConsumptionCreatedBy.fromMap(
+          jsonDecode(json) as Map<String, dynamic>);
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
-  );
+  String toJson() => jsonEncode(toMap());
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-  };
+  factory MaterialConsumptionCreatedBy.fromMap(Map<String, dynamic> map) =>
+      MaterialConsumptionCreatedBy(
+        id: map["_id"]?.toString() ?? "",
+        fullName: map["fullName"]?.toString() ?? "",
+        userType: map["userType"]?.toString() ?? "",
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "fullName": fullName,
+        "userType": userType,
+      };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class Item {
-  final Id productId;
+class MaterialConsumptionItem extends Equatable {
+  final IdNameModel productId;
   final double qty;
   final double price;
   final double totalPrice;
 
-  Item({
+  const MaterialConsumptionItem({
     required this.productId,
     required this.qty,
     required this.price,
     required this.totalPrice,
   });
 
-  factory Item.fromRawJson(String str) => Item.fromJson(json.decode(str));
+  MaterialConsumptionItem copyWith({
+    IdNameModel? productId,
+    double? qty,
+    double? price,
+    double? totalPrice,
+  }) {
+    return MaterialConsumptionItem(
+      productId: productId ?? this.productId,
+      qty: qty ?? this.qty,
+      price: price ?? this.price,
+      totalPrice: totalPrice ?? this.totalPrice,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory MaterialConsumptionItem.fromJson(String json) =>
+      MaterialConsumptionItem.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
-    productId: Id.fromJson(json["productId"]),
-    qty: (json["qty"] ?? 0).toDouble(),
-    price: (json["price"] ?? 0).toDouble(),
-    totalPrice: (json["totalPrice"] ?? 0).toDouble(),
-  );
+  String toJson() => jsonEncode(toMap());
 
-  Map<String, dynamic> toJson() => {
-    "productId": productId.toJson(),
-    "qty": qty,
-    "price": price,
-    "totalPrice": totalPrice,
-  };
+  factory MaterialConsumptionItem.fromMap(Map<String, dynamic> map) =>
+      MaterialConsumptionItem(
+        productId: IdNameModel.fromMap(map["productId"]),
+        qty: (map["qty"] as num? ?? 0).toDouble(),
+        price: (map["price"] as num? ?? 0).toDouble(),
+        totalPrice: (map["totalPrice"] as num? ?? 0).toDouble(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "productId": productId.toMap(),
+        "qty": qty,
+        "price": price,
+        "totalPrice": totalPrice,
+      };
+
+  @override
+  List<Object?> get props => [productId, qty, price, totalPrice];
+
+  @override
+  bool get stringify => true;
 }

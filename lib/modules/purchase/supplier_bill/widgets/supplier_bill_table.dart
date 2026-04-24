@@ -57,8 +57,8 @@ class SupplierBillTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        item.paymentStatus.isNotEmpty
-                            ? item.paymentStatus
+                        (item.paymentStatus?.isNotEmpty == true)
+                            ? item.paymentStatus!
                             : "Pending",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
@@ -71,7 +71,7 @@ class SupplierBillTable extends StatelessWidget {
                     title: 'Bill No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.supplierBillNo,
+                      item.supplierBillNo ?? '-',
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -83,9 +83,9 @@ class SupplierBillTable extends StatelessWidget {
                     title: 'Supplier',
                     width: 180,
                     cellBuilder: (context, item, index) => Text(
-                      item.supplierId.companyName.isNotEmpty
-                          ? item.supplierId.companyName
-                          : "${item.supplierId.firstName} ${item.supplierId.lastName}",
+                      (item.supplierId?.companyName.isNotEmpty == true)
+                          ? item.supplierId!.companyName
+                          : "${item.supplierId?.firstName ?? ''} ${item.supplierId?.lastName ?? ''}",
                       style: TextHelper.bodySmall,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -96,7 +96,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.supplierBillDate),
+                      DateFormat('dd MMM yyyy').format(item.supplierBillDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -105,7 +105,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.summary.netAmount.toStringAsFixed(2)}',
+                      '₹${(item.summary?.netAmount ?? 0).toStringAsFixed(2)}',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -114,7 +114,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.paidAmount.toStringAsFixed(2)}',
+                      '₹${(item.paidAmount).toStringAsFixed(2)}',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -123,7 +123,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.balanceAmount.toStringAsFixed(2)}',
+                      '₹${(item.balanceAmount).toStringAsFixed(2)}',
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.summary.taxAmount}',
+                      '₹${item.summary?.taxAmount ?? 0}',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -155,7 +155,7 @@ class SupplierBillTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),

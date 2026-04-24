@@ -36,10 +36,10 @@ class PaymentRepository {
       final List? dataList = res.data['posPayment_data'];
       final items = dataList != null
           ? dataList
-                .map((e) => PosPaymentModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => PosPaymentModel.fromMap(e as Map<String, dynamic>))
                 .toList()
           : <PosPaymentModel>[];
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to fetch payment terms');

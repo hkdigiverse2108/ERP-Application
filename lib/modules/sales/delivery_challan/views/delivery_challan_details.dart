@@ -94,14 +94,14 @@ class DeliveryChallanDetails extends StatelessWidget {
                     DetailItem(
                       label: 'Sales Orders',
                       value: challan.salesOrderIds
-                          .map((e) => '#${e.salesOrderNo}')
+                          .map((e) => '#${e.name}')
                           .join(', '),
                     ),
                   if (challan.invoiceIds.isNotEmpty)
                     DetailItem(
                       label: 'Invoices',
                       value: challan.invoiceIds
-                          .map((e) => '#${e.invoiceNo}')
+                          .map((e) => '#${e.name}')
                           .join(', '),
                     ),
                 ],
@@ -261,7 +261,10 @@ class DeliveryChallanDetails extends StatelessWidget {
     }
   }
 
-  Widget _buildItemsTable(BuildContext context, List<Item> items) {
+  Widget _buildItemsTable(
+    BuildContext context,
+    List<DeliveryChallanItem> items,
+  ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -348,7 +351,7 @@ class DeliveryChallanDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(DeliveryChallanAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

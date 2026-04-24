@@ -28,3 +28,5 @@ enum SalesRegisterStatus { open, closed }
 enum ContactType { customer, supplier, transporter }
 
 enum BillStatus { paid, unpaid }
+
+enum RecipeType { assemble, unassemble }

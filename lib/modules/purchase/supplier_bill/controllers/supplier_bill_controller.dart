@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/purchase/supplier_bill_model.dart';
 import 'package:ai_setu/data/repositories/contact_repository.dart';
 import 'package:ai_setu/data/repositories/purchase_repository.dart';
@@ -88,7 +87,7 @@ class SupplierBillController extends GetxController {
 
     try {
       isLodding.value = true;
-      final ResModel res = await _repository.getAllSupplierBill(
+      final res = await _repository.getAllSupplierBill(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
@@ -99,24 +98,11 @@ class SupplierBillController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
       );
 
-      if (res.status == 200 && res.data != null) {
-        final List? dataList =
-            res.data["supplierBill_data"] ?? res.data["supplier_bill_data"];
-        final items = dataList != null
-            ? dataList
-                  .map(
-                    (e) =>
-                        SupplierBillModel.fromJson(e as Map<String, dynamic>),
-                  )
-                  .toList()
-            : <SupplierBillModel>[];
+      _cache[key] = (items: res.items, fetchedAt: DateTime.now());
 
-        _cache[key] = (items: items, fetchedAt: DateTime.now());
-
-        supplierBills.value = items;
-        totalPages.value = res.data["state"]?["totalPages"] ?? 1;
-        totalItems.value = res.data["totalData"] ?? 0;
-      }
+      supplierBills.value = res.items;
+      totalPages.value = res.totalPages;
+      totalItems.value = res.totalItems;
     } catch (e) {
       Log.e("Purchase Module Error (SupplierBill)", e);
     } finally {

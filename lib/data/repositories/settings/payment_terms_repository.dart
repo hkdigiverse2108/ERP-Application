@@ -25,7 +25,7 @@ class PaymentTermsRepository {
       final items = (response.data['paymentTerm_data'] as List)
           .map((e) => PaymentTermsModel.fromJson(e as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
     throw Exception(response.message ?? "Failed to load payment terms");
   }

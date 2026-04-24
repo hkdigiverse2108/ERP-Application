@@ -10,7 +10,7 @@ class UomRepository {
     final ResModel response = await _api.get(ApiConstants.uomDropdown);
     if (response.status == 200) {
       return List<CommonDropdownModel>.from(
-        (response.data as List).map((x) => CommonDropdownModel.fromJson(x)),
+        (response.data as List).map((x) => CommonDropdownModel.fromMap(x)),
       );
     }
     throw Exception(response.message ?? "Failed to load UOMs");

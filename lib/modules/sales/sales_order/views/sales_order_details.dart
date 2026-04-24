@@ -235,7 +235,7 @@ class SalesOrderDetails extends StatelessWidget {
     }
   }
 
-  Widget _buildItemsTable(BuildContext context, List<Item> items) {
+  Widget _buildItemsTable(BuildContext context, List<SalesOrderItem> items) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -317,7 +317,7 @@ class SalesOrderDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(SalesOrderAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -1,36 +1,40 @@
-class PosPaymentModel {
+import 'dart:convert' hide json;
+import 'package:equatable/equatable.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
+
+class PosPaymentModel extends Equatable {
   final String id;
   final String paymentNo;
   final String voucherType;
   final String paymentType;
-  final PartyId partyId;
-  final PosOrderId posOrderId;
+  final PosPaymentParty? partyId;
+  final PosPaymentOrder? posOrderId;
   final String posCashRegisterId;
   final String paymentMode;
-  final int totalAmount;
-  final int paidAmount;
-  final int pendingAmount;
-  final int kasar;
+  final double totalAmount;
+  final double paidAmount;
+  final double pendingAmount;
+  final double kasar;
   final String expenseType;
-  final int discountAmount;
+  final double discountAmount;
   final double amount;
   final bool isNonGst;
   final String status;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final PosPaymentCreatedBy? createdBy;
   final String updatedBy;
-  final CompanyId companyId;
+  final IdNameModel? companyId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  PosPaymentModel({
+  const PosPaymentModel({
     required this.id,
     required this.paymentNo,
     required this.voucherType,
     required this.paymentType,
-    required this.partyId,
-    required this.posOrderId,
+    this.partyId,
+    this.posOrderId,
     required this.posCashRegisterId,
     required this.paymentMode,
     required this.totalAmount,
@@ -44,169 +48,279 @@ class PosPaymentModel {
     required this.status,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
-    required this.companyId,
+    this.companyId,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory PosPaymentModel.fromJson(Map<String, dynamic> json) {
+  PosPaymentModel copyWith({
+    String? id,
+    String? paymentNo,
+    String? voucherType,
+    String? paymentType,
+    PosPaymentParty? partyId,
+    PosPaymentOrder? posOrderId,
+    String? posCashRegisterId,
+    String? paymentMode,
+    double? totalAmount,
+    double? paidAmount,
+    double? pendingAmount,
+    double? kasar,
+    String? expenseType,
+    double? discountAmount,
+    double? amount,
+    bool? isNonGst,
+    String? status,
+    bool? isDeleted,
+    bool? isActive,
+    PosPaymentCreatedBy? createdBy,
+    String? updatedBy,
+    IdNameModel? companyId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
     return PosPaymentModel(
-      id: json["_id"] ?? "",
-      paymentNo: json["paymentNo"] ?? "",
-      voucherType: json["voucherType"] ?? "",
-      paymentType: json["paymentType"] ?? "",
-
-      partyId: json["partyId"] != null
-          ? PartyId.fromJson(json["partyId"])
-          : PartyId.empty(),
-
-      posOrderId: json["posOrderId"] != null
-          ? PosOrderId.fromJson(json["posOrderId"])
-          : PosOrderId.empty(),
-
-      posCashRegisterId: json["posCashRegisterId"] ?? "",
-      paymentMode: json["paymentMode"] ?? "",
-
-      totalAmount: (json["totalAmount"] ?? 0).toInt(),
-      paidAmount: (json["paidAmount"] ?? 0).toInt(),
-      pendingAmount: (json["pendingAmount"] ?? 0).toInt(),
-      kasar: (json["kasar"] ?? 0).toInt(),
-
-      expenseType: json["expenseType"] ?? "",
-      discountAmount: (json["discountAmount"] ?? 0).toInt(),
-
-      amount: (json["amount"] ?? 0).toDouble(),
-
-      isNonGst: json["isNonGST"] ?? json["isNonGst"] ?? false,
-
-      status: json["status"] ?? "",
-      isDeleted: json["isDeleted"] ?? false,
-      isActive: json["isActive"] ?? false,
-
-      createdBy: json["createdBy"] != null
-          ? CreatedBy.fromJson(json["createdBy"])
-          : CreatedBy.empty(),
-
-      updatedBy: json["updatedBy"] ?? "",
-
-      companyId: json["companyId"] != null
-          ? CompanyId.fromJson(json["companyId"])
-          : CompanyId.empty(),
-
-      createdAt: json["createdAt"] != null
-          ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
-          : DateTime.now(),
-
-      updatedAt: json["updatedAt"] != null
-          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
-          : DateTime.now(),
+      id: id ?? this.id,
+      paymentNo: paymentNo ?? this.paymentNo,
+      voucherType: voucherType ?? this.voucherType,
+      paymentType: paymentType ?? this.paymentType,
+      partyId: partyId ?? this.partyId,
+      posOrderId: posOrderId ?? this.posOrderId,
+      posCashRegisterId: posCashRegisterId ?? this.posCashRegisterId,
+      paymentMode: paymentMode ?? this.paymentMode,
+      totalAmount: totalAmount ?? this.totalAmount,
+      paidAmount: paidAmount ?? this.paidAmount,
+      pendingAmount: pendingAmount ?? this.pendingAmount,
+      kasar: kasar ?? this.kasar,
+      expenseType: expenseType ?? this.expenseType,
+      discountAmount: discountAmount ?? this.discountAmount,
+      amount: amount ?? this.amount,
+      isNonGst: isNonGst ?? this.isNonGst,
+      status: status ?? this.status,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "paymentNo": paymentNo,
-    "voucherType": voucherType,
-    "paymentType": paymentType,
-    "partyId": partyId.toJson(),
-    "posOrderId": posOrderId.toJson(),
-    "posCashRegisterId": posCashRegisterId,
-    "paymentMode": paymentMode,
-    "totalAmount": totalAmount,
-    "paidAmount": paidAmount,
-    "pendingAmount": pendingAmount,
-    "kasar": kasar,
-    "expenseType": expenseType,
-    "discountAmount": discountAmount,
-    "amount": amount,
-    "isNonGST": isNonGst,
-    "status": status,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy.toJson(),
-    "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-  };
+  factory PosPaymentModel.fromJson(String json) =>
+      PosPaymentModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory PosPaymentModel.fromMap(Map<String, dynamic> map) => PosPaymentModel(
+        id: map["_id"]?.toString() ?? "",
+        paymentNo: map["paymentNo"]?.toString() ?? "",
+        voucherType: map["voucherType"]?.toString() ?? "",
+        paymentType: map["paymentType"]?.toString() ?? "",
+        partyId: map["partyId"] == null
+            ? null
+            : PosPaymentParty.fromMap(map["partyId"] as Map<String, dynamic>),
+        posOrderId: map["posOrderId"] == null
+            ? null
+            : PosPaymentOrder.fromMap(map["posOrderId"] as Map<String, dynamic>),
+        posCashRegisterId: map["posCashRegisterId"]?.toString() ?? "",
+        paymentMode: map["paymentMode"]?.toString() ?? "",
+        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
+        pendingAmount: (map["pendingAmount"] as num? ?? 0).toDouble(),
+        kasar: (map["kasar"] as num? ?? 0).toDouble(),
+        expenseType: map["expenseType"]?.toString() ?? "",
+        discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
+        amount: (map["amount"] as num? ?? 0).toDouble(),
+        isNonGst: map["isNonGST"] as bool? ?? map["isNonGst"] as bool? ?? false,
+        status: map["status"]?.toString() ?? "",
+        isDeleted: map["isDeleted"] as bool? ?? false,
+        isActive: map["isActive"] as bool? ?? true,
+        createdBy: map["createdBy"] == null
+            ? null
+            : PosPaymentCreatedBy.fromMap(
+                map["createdBy"] as Map<String, dynamic>),
+        updatedBy: map["updatedBy"]?.toString() ?? "",
+        companyId:
+            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : DateTime.now(),
+        updatedAt: map["updatedAt"] != null
+            ? DateTime.parse(map["updatedAt"].toString())
+            : DateTime.now(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "paymentNo": paymentNo,
+        "voucherType": voucherType,
+        "paymentType": paymentType,
+        "partyId": partyId?.toMap(),
+        "posOrderId": posOrderId?.toMap(),
+        "posCashRegisterId": posCashRegisterId,
+        "paymentMode": paymentMode,
+        "totalAmount": totalAmount,
+        "paidAmount": paidAmount,
+        "pendingAmount": pendingAmount,
+        "kasar": kasar,
+        "expenseType": expenseType,
+        "discountAmount": discountAmount,
+        "amount": amount,
+        "isNonGST": isNonGst,
+        "status": status,
+        "isDeleted": isDeleted,
+        "isActive": isActive,
+        "createdBy": createdBy?.toMap(),
+        "updatedBy": updatedBy,
+        "companyId": companyId?.toMap(),
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+      };
+
+  @override
+  List<Object?> get props => [
+        id,
+        paymentNo,
+        voucherType,
+        paymentType,
+        partyId,
+        posOrderId,
+        posCashRegisterId,
+        paymentMode,
+        totalAmount,
+        paidAmount,
+        pendingAmount,
+        kasar,
+        expenseType,
+        discountAmount,
+        amount,
+        isNonGst,
+        status,
+        isDeleted,
+        isActive,
+        createdBy,
+        updatedBy,
+        companyId,
+        createdAt,
+        updatedAt,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class CompanyId {
-  final String id;
-  final String name;
-
-  CompanyId({required this.id, required this.name});
-
-  factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(id: json["_id"] ?? "", name: json["name"] ?? "");
-
-  factory CompanyId.empty() => CompanyId(id: "", name: "");
-
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
-}
-
-class CreatedBy {
+class PosPaymentCreatedBy extends Equatable {
   final String id;
   final String fullName;
   final String userType;
 
-  CreatedBy({required this.id, required this.fullName, required this.userType});
+  const PosPaymentCreatedBy({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+  });
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"] ?? "",
-    fullName: json["fullName"] ?? "",
-    userType: json["userType"] ?? "",
-  );
+  PosPaymentCreatedBy copyWith({
+    String? id,
+    String? fullName,
+    String? userType,
+  }) {
+    return PosPaymentCreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  factory CreatedBy.empty() => CreatedBy(id: "", fullName: "", userType: "");
+  factory PosPaymentCreatedBy.fromJson(String json) =>
+      PosPaymentCreatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  factory PosPaymentCreatedBy.fromMap(Map<String, dynamic> map) =>
+      PosPaymentCreatedBy(
+        id: map["_id"]?.toString() ?? "",
+        fullName: map["fullName"]?.toString() ?? "",
+        userType: map["userType"]?.toString() ?? "",
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "fullName": fullName,
+        "userType": userType,
+      };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class PartyId {
+class PosPaymentParty extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
   final String? companyName;
 
-  PartyId({
+  const PosPaymentParty({
     required this.id,
     required this.firstName,
     required this.lastName,
     this.companyName,
   });
 
-  factory PartyId.fromJson(Map<String, dynamic> json) => PartyId(
-    id: json["_id"] ?? "",
-    firstName: json["firstName"] ?? "",
-    lastName: json["lastName"] ?? "",
-    companyName: json["companyName"],
-  );
+  PosPaymentParty copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? companyName,
+  }) {
+    return PosPaymentParty(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      companyName: companyName ?? this.companyName,
+    );
+  }
 
-  factory PartyId.empty() => PartyId(id: "", firstName: "", lastName: "");
+  factory PosPaymentParty.fromJson(String json) =>
+      PosPaymentParty.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "companyName": companyName,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  factory PosPaymentParty.fromMap(Map<String, dynamic> map) => PosPaymentParty(
+        id: map["_id"]?.toString() ?? "",
+        firstName: map["firstName"]?.toString() ?? "",
+        lastName: map["lastName"]?.toString() ?? "",
+        companyName: map["companyName"]?.toString(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "firstName": firstName,
+        "lastName": lastName,
+        "companyName": companyName,
+      };
+
+  @override
+  List<Object?> get props => [id, firstName, lastName, companyName];
+
+  @override
+  bool get stringify => true;
 }
 
-class PosOrderId {
+class PosPaymentOrder extends Equatable {
   final String id;
   final String orderNo;
   final double totalAmount;
   final double paidAmount;
   final DateTime createdAt;
 
-  PosOrderId({
+  const PosPaymentOrder({
     required this.id,
     required this.orderNo,
     required this.totalAmount,
@@ -214,29 +328,48 @@ class PosOrderId {
     required this.createdAt,
   });
 
-  factory PosOrderId.fromJson(Map<String, dynamic> json) => PosOrderId(
-    id: json["_id"] ?? "",
-    orderNo: json["orderNo"] ?? "",
-    totalAmount: (json["totalAmount"] ?? 0).toDouble(),
-    paidAmount: (json["paidAmount"] ?? 0).toDouble(),
-    createdAt: json["createdAt"] != null
-        ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
-        : DateTime.now(),
-  );
+  PosPaymentOrder copyWith({
+    String? id,
+    String? orderNo,
+    double? totalAmount,
+    double? paidAmount,
+    DateTime? createdAt,
+  }) {
+    return PosPaymentOrder(
+      id: id ?? this.id,
+      orderNo: orderNo ?? this.orderNo,
+      totalAmount: totalAmount ?? this.totalAmount,
+      paidAmount: paidAmount ?? this.paidAmount,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
-  factory PosOrderId.empty() => PosOrderId(
-    id: "",
-    orderNo: "",
-    totalAmount: 0,
-    paidAmount: 0,
-    createdAt: DateTime.now(),
-  );
+  factory PosPaymentOrder.fromJson(String json) =>
+      PosPaymentOrder.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "orderNo": orderNo,
-    "totalAmount": totalAmount,
-    "paidAmount": paidAmount,
-    "createdAt": createdAt.toIso8601String(),
-  };
+  String toJson() => jsonEncode(toMap());
+
+  factory PosPaymentOrder.fromMap(Map<String, dynamic> map) => PosPaymentOrder(
+        id: map["_id"]?.toString() ?? "",
+        orderNo: map["orderNo"]?.toString() ?? "",
+        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : DateTime.now(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "orderNo": orderNo,
+        "totalAmount": totalAmount,
+        "paidAmount": paidAmount,
+        "createdAt": createdAt.toIso8601String(),
+      };
+
+  @override
+  List<Object?> get props => [id, orderNo, totalAmount, paidAmount, createdAt];
+
+  @override
+  bool get stringify => true;
 }

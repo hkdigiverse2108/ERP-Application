@@ -19,7 +19,7 @@ class PrefixRepository {
       final items = (res.data['prefix_data'] as List)
           .map((e) => PrefixModel.fromJson(e as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
   }

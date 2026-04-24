@@ -1,20 +1,42 @@
 import 'dart:convert';
+import 'package:equatable/equatable.dart';
 
-class BrandModel {}
+class BrandModel extends Equatable {
+  const BrandModel();
 
-class BrandDropdownModel {
+  @override
+  List<Object?> get props => [];
+
+  @override
+  bool get stringify => true;
+}
+
+class BrandDropdownModel extends Equatable {
   final String id;
   final String name;
 
-  BrandDropdownModel({required this.id, required this.name});
+  const BrandDropdownModel({required this.id, required this.name});
 
-  factory BrandDropdownModel.fromRawJson(String str) =>
-      BrandDropdownModel.fromJson(json.decode(str));
+  BrandDropdownModel copyWith({String? id, String? name}) {
+    return BrandDropdownModel(id: id ?? this.id, name: name ?? this.name);
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory BrandDropdownModel.fromJson(String json) =>
+      BrandDropdownModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory BrandDropdownModel.fromJson(Map<String, dynamic> json) =>
-      BrandDropdownModel(id: json["_id"], name: json["name"]);
+  factory BrandDropdownModel.fromMap(Map<String, dynamic> map) =>
+      BrandDropdownModel(
+        id: map['_id'] as String? ?? '',
+        name: map['name'] as String? ?? '',
+      );
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {'_id': id, 'name': name};
+
+  @override
+  List<Object?> get props => [id, name];
+
+  @override
+  bool get stringify => true;
 }

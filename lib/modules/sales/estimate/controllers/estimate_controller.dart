@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/selas/estimate_model.dart';
 import 'package:ai_setu/data/repositories/contact_repository.dart';
 import 'package:ai_setu/data/repositories/selas_repository.dart';
@@ -89,7 +88,7 @@ class EstimateController extends GetxController {
 
     try {
       isLodding.value = true;
-      final ResModel res = await _repository.getEstimate(
+      final pagination = await _repository.getEstimate(
         page: currentPage.value,
         limit: limit.value,
         fromDate: _formatDate(selectedDateRange.value.start),
@@ -100,21 +99,12 @@ class EstimateController extends GetxController {
         activeFilter: filters['activeFilter'],
       );
 
-      if (res.status == 200 && res.data != null) {
-        final List? dataList = res.data["estimate_data"];
-        final items = dataList != null
-            ? dataList
-                  .map((e) => EstimateModel.fromJson(e as Map<String, dynamic>))
-                  .toList()
-            : <EstimateModel>[];
+      _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());
 
-        _cache[key] = (items: items, fetchedAt: DateTime.now());
-
-        estimates.value = items;
-        totalPages.value = res.data["state"]?["totalPages"] ?? 1;
-        totalItems.value = res.data["totalData"] ?? 0;
-        currentPage.value = currentPage.value; // Stay on requested page
-      }
+      estimates.value = pagination.items;
+      totalPages.value = pagination.totalPages;
+      totalItems.value = pagination.totalItems;
+      currentPage.value = pagination.currentPage;
     } catch (e) {
       Log.e("Sales Module Error (Estimate)", e);
     } finally {

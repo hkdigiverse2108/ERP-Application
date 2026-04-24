@@ -18,7 +18,7 @@ class CategoryRepository {
     );
     if (response.status == 200) {
       return List<CategoryDropdownModel>.from(
-        (response.data as List).map((x) => CategoryDropdownModel.fromJson(x)),
+        (response.data as List).map((x) => CategoryDropdownModel.fromMap(x)),
       );
     }
 

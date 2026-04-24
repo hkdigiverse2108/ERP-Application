@@ -34,7 +34,7 @@ class SalesRegisterRepository {
       final items = (res.data['posCashRegister_data'] as List)
           .map((e) => SalesRegisterModel.fromJson(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     } else {
       throw Exception(res.message);
     }

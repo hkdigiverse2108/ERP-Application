@@ -72,7 +72,7 @@ class BankTransactionTable extends StatelessWidget {
                     width: 180,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.fromAccount.name,
+                      item.fromAccount?.name ?? '-',
                       style: TextHelper.bodySmall,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -106,7 +106,7 @@ class BankTransactionTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -114,7 +114,8 @@ class BankTransactionTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
-                onRowTap: (item) => Get.toNamed(Routes.bankTransactionDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.bankTransactionDetails, arguments: item),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

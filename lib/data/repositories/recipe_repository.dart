@@ -24,9 +24,9 @@ class RecipeRepository {
 
     if (response.status == 200) {
       final items = (response.data['recipe_data'] as List)
-          .map((x) => RecipeModel.fromJson(x))
+          .map((x) => RecipeModel.fromMap(x as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
 
     throw Exception(response.message ?? 'Failed to load recipes');
@@ -36,7 +36,7 @@ class RecipeRepository {
     final ResModel response = await _api.get(ApiConstants.getRecipeById(id));
 
     if (response.status == 200 && response.data != null) {
-      return RecipeModel.fromJson(response.data as Map<String, dynamic>);
+      return RecipeModel.fromMap(response.data as Map<String, dynamic>);
     }
 
     throw Exception(response.message ?? 'Failed to load recipe detail');

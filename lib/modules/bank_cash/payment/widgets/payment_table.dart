@@ -65,7 +65,7 @@ class PaymentTable extends StatelessWidget {
                     cellBuilder: (context, item, index) {
                       final party = item.partyId;
                       return Text(
-                        "${party.firstName} ${party.lastName}",
+                        party != null ? "${party.firstName} ${party.lastName}" : "-",
                         style: TextHelper.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

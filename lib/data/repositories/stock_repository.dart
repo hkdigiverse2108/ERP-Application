@@ -32,10 +32,10 @@ class StockRepository {
     if (response.status == 200) {
       final items = List<StockItemModel>.from(
         (response.data['stock_data'] as List).map(
-          (x) => StockItemModel.fromJson(x),
+          (x) => StockItemModel.fromMap(x as Map<String, dynamic>),
         ),
       );
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
 
     throw Exception(response.message ?? 'Failed to load product stock');
@@ -45,7 +45,7 @@ class StockRepository {
     final ResModel response = await _api.get(ApiConstants.getStockById(id));
 
     if (response.status == 200 && response.data != null) {
-      return StockModel.fromJson(response.data as Map<String, dynamic>);
+      return StockModel.fromMap(response.data as Map<String, dynamic>);
     }
 
     throw Exception(response.message ?? 'Failed to load product');

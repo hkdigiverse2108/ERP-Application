@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_debit_note_model.dart';
 import 'package:ai_setu/data/repositories/contact_repository.dart';
 import 'package:ai_setu/data/repositories/purchase_repository.dart';
@@ -90,7 +89,7 @@ class PurchaseDebitNoteController extends GetxController {
 
     try {
       isLodding.value = true;
-      final ResModel res = await _repository.getAllPurchaseDebitNote(
+      final res = await _repository.getAllPurchaseDebitNote(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
@@ -101,26 +100,11 @@ class PurchaseDebitNoteController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
       );
 
-      if (res.status == 200 && res.data != null) {
-        final List? dataList =
-            res.data["purchaseDebitNote_data"] ??
-            res.data["purchase_debit_note_data"];
-        final items = dataList != null
-            ? dataList
-                  .map(
-                    (e) => PurchaseDebitNoteModel.fromJson(
-                      e as Map<String, dynamic>,
-                    ),
-                  )
-                  .toList()
-            : <PurchaseDebitNoteModel>[];
+      _cache[key] = (items: res.items, fetchedAt: DateTime.now());
 
-        _cache[key] = (items: items, fetchedAt: DateTime.now());
-
-        purchaseDebitNotes.value = items;
-        totalPages.value = res.data["state"]?["totalPages"] ?? 1;
-        totalItems.value = res.data["totalData"] ?? 0;
-      }
+      purchaseDebitNotes.value = res.items;
+      totalPages.value = res.totalPages;
+      totalItems.value = res.totalItems;
     } catch (e) {
       Log.e("Purchase Module Error (PurchaseDebitNote)", e);
     } finally {

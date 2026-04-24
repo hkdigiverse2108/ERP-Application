@@ -1,335 +1,517 @@
-import 'dart:convert';
+import 'dart:convert' hide json;
+import 'package:equatable/equatable.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 
-class PurchaseOrderModel {
+class PurchaseOrderModel extends Equatable {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final PurchaseOrderCreatedBy? createdBy;
   final String? updatedBy;
-  final BranchId companyId;
-  final SupplierId supplierId;
-  final DateTime orderDate;
-  final String orderNo;
+  final IdNameModel? companyId;
+  final PurchaseOrderSupplier? supplierId;
+  final DateTime? orderDate;
+  final String? orderNo;
   final String? placeOfSupply;
-  final Address? billingAddress;
-  final DateTime shippingDate;
+  final PurchaseOrderAddress? billingAddress;
+  final DateTime? shippingDate;
   final String? shippingNote;
-  final String taxType;
-  final List<Item> items;
-  final List<TermsAndConditionId> termsAndConditionIds;
+  final String? taxType;
+  final List<PurchaseOrderItem> items;
+  final List<PurchaseOrderTerms> termsAndConditionIds;
   final String? notes;
   final String? totalQty;
   final String? totalTax;
   final String? total;
-  final Summary summary;
-  final String status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final BranchId branchId;
+  final PurchaseOrderSummary? summary;
+  final String? status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final IdNameModel? branchId;
   final String? gstIn;
 
-  PurchaseOrderModel({
+  const PurchaseOrderModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     this.updatedBy,
-    required this.companyId,
-    required this.supplierId,
-    required this.orderDate,
-    required this.orderNo,
+    this.companyId,
+    this.supplierId,
+    this.orderDate,
+    this.orderNo,
     this.placeOfSupply,
     this.billingAddress,
-    required this.shippingDate,
+    this.shippingDate,
     this.shippingNote,
-    required this.taxType,
+    this.taxType,
     required this.items,
     required this.termsAndConditionIds,
     this.notes,
     this.totalQty,
     this.totalTax,
     this.total,
-    required this.summary,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.branchId,
+    this.summary,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.branchId,
     this.gstIn,
   });
 
-  factory PurchaseOrderModel.fromRawJson(String str) =>
-      PurchaseOrderModel.fromJson(json.decode(str));
+  PurchaseOrderModel copyWith({
+    String? id,
+    bool? isDeleted,
+    bool? isActive,
+    PurchaseOrderCreatedBy? createdBy,
+    String? updatedBy,
+    IdNameModel? companyId,
+    PurchaseOrderSupplier? supplierId,
+    DateTime? orderDate,
+    String? orderNo,
+    String? placeOfSupply,
+    PurchaseOrderAddress? billingAddress,
+    DateTime? shippingDate,
+    String? shippingNote,
+    String? taxType,
+    List<PurchaseOrderItem>? items,
+    List<PurchaseOrderTerms>? termsAndConditionIds,
+    String? notes,
+    String? totalQty,
+    String? totalTax,
+    String? total,
+    PurchaseOrderSummary? summary,
+    String? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    IdNameModel? branchId,
+    String? gstIn,
+  }) {
+    return PurchaseOrderModel(
+      id: id ?? this.id,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      supplierId: supplierId ?? this.supplierId,
+      orderDate: orderDate ?? this.orderDate,
+      orderNo: orderNo ?? this.orderNo,
+      placeOfSupply: placeOfSupply ?? this.placeOfSupply,
+      billingAddress: billingAddress ?? this.billingAddress,
+      shippingDate: shippingDate ?? this.shippingDate,
+      shippingNote: shippingNote ?? this.shippingNote,
+      taxType: taxType ?? this.taxType,
+      items: items ?? this.items,
+      termsAndConditionIds: termsAndConditionIds ?? this.termsAndConditionIds,
+      notes: notes ?? this.notes,
+      totalQty: totalQty ?? this.totalQty,
+      totalTax: totalTax ?? this.totalTax,
+      total: total ?? this.total,
+      summary: summary ?? this.summary,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      branchId: branchId ?? this.branchId,
+      gstIn: gstIn ?? this.gstIn,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory PurchaseOrderModel.fromJson(String json) =>
+      PurchaseOrderModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
+  String toJson() => jsonEncode(toMap());
+
+  factory PurchaseOrderModel.fromMap(Map<String, dynamic> map) =>
       PurchaseOrderModel(
-        id: json["_id"] ?? "",
-        isDeleted: json["isDeleted"] ?? false,
-        isActive: json["isActive"] ?? false,
-        createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
-        updatedBy: json["updatedBy"]?.toString(),
-        companyId: BranchId.fromJson(json["companyId"] ?? {}),
-        supplierId: SupplierId.fromJson(json["supplierId"] ?? {}),
-        orderDate: json["orderDate"] == null
-            ? DateTime.now()
-            : DateTime.parse(json["orderDate"]),
-        orderNo: json["orderNo"] ?? "",
-        placeOfSupply: json["placeOfSupply"]?.toString(),
-        billingAddress: json["billingAddress"] == null
+        id: map["_id"]?.toString() ?? "",
+        isDeleted: map["isDeleted"] as bool? ?? false,
+        isActive: map["isActive"] as bool? ?? true,
+        createdBy: map["createdBy"] == null
             ? null
-            : Address.fromJson(json["billingAddress"]),
-        shippingDate: json["shippingDate"] == null
-            ? DateTime.now()
-            : DateTime.parse(json["shippingDate"]),
-        shippingNote: json["shippingNote"],
-        taxType: json["taxType"]?.toString() ?? "",
-        items: json["items"] == null
-            ? []
-            : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        termsAndConditionIds: json["termsAndConditionIds"] == null
-            ? []
-            : List<TermsAndConditionId>.from(json["termsAndConditionIds"]
-                .map((x) => TermsAndConditionId.fromJson(x))),
-        notes: json["notes"]?.toString(),
-        totalQty: json["totalQty"]?.toString(),
-        totalTax: json["totalTax"]?.toString(),
-        total: json["total"]?.toString(),
-        summary: Summary.fromJson(json["summary"] ?? {}),
-        status: json["status"]?.toString() ?? "",
-        createdAt: json["createdAt"] == null
-            ? DateTime.now()
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? DateTime.now()
-            : DateTime.parse(json["updatedAt"]),
-        branchId: BranchId.fromJson(json["branchId"] ?? {}),
-        gstIn: json["gstIn"],
+            : PurchaseOrderCreatedBy.fromMap(
+                map["createdBy"] as Map<String, dynamic>),
+        updatedBy: map["updatedBy"]?.toString(),
+        companyId:
+            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
+        supplierId: map["supplierId"] == null
+            ? null
+            : PurchaseOrderSupplier.fromMap(
+                map["supplierId"] as Map<String, dynamic>),
+        orderDate: map["orderDate"] != null
+            ? DateTime.parse(map["orderDate"].toString())
+            : null,
+        orderNo: map["orderNo"]?.toString(),
+        placeOfSupply: map["placeOfSupply"]?.toString(),
+        billingAddress: map["billingAddress"] == null
+            ? null
+            : PurchaseOrderAddress.fromMap(
+                map["billingAddress"] as Map<String, dynamic>),
+        shippingDate: map["shippingDate"] != null
+            ? DateTime.parse(map["shippingDate"].toString())
+            : null,
+        shippingNote: map["shippingNote"]?.toString(),
+        taxType: map["taxType"]?.toString(),
+        items: List<PurchaseOrderItem>.from(
+          (map["items"] as List<dynamic>?)?.map(
+                (x) => PurchaseOrderItem.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        termsAndConditionIds: List<PurchaseOrderTerms>.from(
+          (map["termsAndConditionIds"] as List<dynamic>?)?.map(
+                (x) => PurchaseOrderTerms.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        notes: map["notes"]?.toString(),
+        totalQty: map["totalQty"]?.toString(),
+        totalTax: map["totalTax"]?.toString(),
+        total: map["total"]?.toString(),
+        summary: map["summary"] == null
+            ? null
+            : PurchaseOrderSummary.fromMap(map["summary"] as Map<String, dynamic>),
+        status: map["status"]?.toString(),
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : null,
+        updatedAt: map["updatedAt"] != null
+            ? DateTime.parse(map["updatedAt"].toString())
+            : null,
+        branchId:
+            map["branchId"] == null ? null : IdNameModel.fromMap(map["branchId"]),
+        gstIn: map["gstIn"]?.toString(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "_id": id,
         "isDeleted": isDeleted,
         "isActive": isActive,
-        "createdBy": createdBy.toJson(),
+        "createdBy": createdBy?.toMap(),
         "updatedBy": updatedBy,
-        "companyId": companyId.toJson(),
-        "supplierId": supplierId.toJson(),
-        "orderDate": orderDate.toIso8601String(),
+        "companyId": companyId?.toMap(),
+        "supplierId": supplierId?.toMap(),
+        "orderDate": orderDate?.toIso8601String(),
         "orderNo": orderNo,
         "placeOfSupply": placeOfSupply,
-        "billingAddress": billingAddress?.toJson(),
-        "shippingDate": shippingDate.toIso8601String(),
+        "billingAddress": billingAddress?.toMap(),
+        "shippingDate": shippingDate?.toIso8601String(),
         "shippingNote": shippingNote,
         "taxType": taxType,
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
-        "termsAndConditionIds":
-            List<dynamic>.from(termsAndConditionIds.map((x) => x.toJson())),
+        "items": items.map((x) => x.toMap()).toList(),
+        "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
         "notes": notes,
         "totalQty": totalQty,
         "totalTax": totalTax,
         "total": total,
-        "summary": summary.toJson(),
+        "summary": summary?.toMap(),
         "status": status,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "branchId": branchId.toJson(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "branchId": branchId?.toMap(),
         "gstIn": gstIn,
       };
+
+  @override
+  List<Object?> get props => [
+        id,
+        isDeleted,
+        isActive,
+        createdBy,
+        updatedBy,
+        companyId,
+        supplierId,
+        orderDate,
+        orderNo,
+        placeOfSupply,
+        billingAddress,
+        shippingDate,
+        shippingNote,
+        taxType,
+        items,
+        termsAndConditionIds,
+        notes,
+        totalQty,
+        totalTax,
+        total,
+        summary,
+        status,
+        createdAt,
+        updatedAt,
+        branchId,
+        gstIn,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class Address {
+class PurchaseOrderAddress extends Equatable {
   final String addressLine1;
-  final String addressLine2;
-  final BranchId country;
-  final BranchId state;
-  final BranchId city;
+  final String? addressLine2;
+  final IdNameModel? country;
+  final IdNameModel? state;
+  final IdNameModel? city;
   final int? pinCode;
   final String id;
 
-  Address({
+  const PurchaseOrderAddress({
     required this.addressLine1,
-    required this.addressLine2,
-    required this.country,
-    required this.state,
-    required this.city,
-    required this.pinCode,
+    this.addressLine2,
+    this.country,
+    this.state,
+    this.city,
+    this.pinCode,
     required this.id,
   });
 
-  factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
+  PurchaseOrderAddress copyWith({
+    String? addressLine1,
+    String? addressLine2,
+    IdNameModel? country,
+    IdNameModel? state,
+    IdNameModel? city,
+    int? pinCode,
+    String? id,
+  }) {
+    return PurchaseOrderAddress(
+      addressLine1: addressLine1 ?? this.addressLine1,
+      addressLine2: addressLine2 ?? this.addressLine2,
+      country: country ?? this.country,
+      state: state ?? this.state,
+      city: city ?? this.city,
+      pinCode: pinCode ?? this.pinCode,
+      id: id ?? this.id,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory PurchaseOrderAddress.fromJson(String json) =>
+      PurchaseOrderAddress.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-        addressLine1: json["addressLine1"] ?? "",
-        addressLine2: json["addressLine2"] ?? "",
-        country: BranchId.fromJson(json["country"] ?? {}),
-        state: BranchId.fromJson(json["state"] ?? {}),
-        city: BranchId.fromJson(json["city"] ?? {}),
-        pinCode: json["pinCode"],
-        id: json["_id"] ?? "",
+  String toJson() => jsonEncode(toMap());
+
+  factory PurchaseOrderAddress.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderAddress(
+        addressLine1: map["addressLine1"]?.toString() ?? "",
+        addressLine2: map["addressLine2"]?.toString(),
+        country: map["country"] == null ? null : IdNameModel.fromMap(map["country"]),
+        state: map["state"] == null ? null : IdNameModel.fromMap(map["state"]),
+        city: map["city"] == null ? null : IdNameModel.fromMap(map["city"]),
+        pinCode: map["pinCode"] as int?,
+        id: map["_id"]?.toString() ?? "",
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "addressLine1": addressLine1,
         "addressLine2": addressLine2,
-        "country": country.toJson(),
-        "state": state.toJson(),
-        "city": city.toJson(),
+        "country": country?.toMap(),
+        "state": state?.toMap(),
+        "city": city?.toMap(),
         "pinCode": pinCode,
         "_id": id,
       };
+
+  @override
+  List<Object?> get props =>
+      [addressLine1, addressLine2, country, state, city, pinCode, id];
+
+  @override
+  bool get stringify => true;
 }
 
-class BranchId {
-  final String id;
-  final String name;
-
-  BranchId({
-    required this.id,
-    required this.name,
-  });
-
-  factory BranchId.fromRawJson(String str) =>
-      BranchId.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory BranchId.fromJson(Map<String, dynamic> json) => BranchId(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-      };
-}
-
-class CreatedBy {
+class PurchaseOrderCreatedBy extends Equatable {
   final String id;
   final String fullName;
   final String userType;
 
-  CreatedBy({
+  const PurchaseOrderCreatedBy({
     required this.id,
     required this.fullName,
     required this.userType,
   });
 
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
+  PurchaseOrderCreatedBy copyWith({
+    String? id,
+    String? fullName,
+    String? userType,
+  }) {
+    return PurchaseOrderCreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-        id: json["_id"]?.toString() ?? "",
-        fullName: json["fullName"]?.toString() ?? "",
-        userType: json["userType"]?.toString() ?? "",
+  factory PurchaseOrderCreatedBy.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderCreatedBy(
+        id: map["_id"]?.toString() ?? "",
+        fullName: map["fullName"]?.toString() ?? "",
+        userType: map["userType"]?.toString() ?? "",
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "_id": id,
         "fullName": fullName,
         "userType": userType,
       };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class Item {
-  final BranchId productId;
-  final int qty;
+class PurchaseOrderItem extends Equatable {
+  final IdNameModel? productId;
+  final double qty;
   final dynamic uomId;
   final String? unit;
-  final double? unitCost;
-  final TaxId? taxId;
-  final String tax;
-  final String landingCost;
-  final String margin;
+  final double unitCost;
+  final PurchaseOrderTax? taxId;
+  final String? tax;
+  final String? landingCost;
+  final String? margin;
   final double total;
 
-  Item({
-    required this.productId,
+  const PurchaseOrderItem({
+    this.productId,
     required this.qty,
-    required this.uomId,
+    this.uomId,
     this.unit,
-    this.unitCost,
+    required this.unitCost,
     this.taxId,
-    required this.tax,
-    required this.landingCost,
-    required this.margin,
+    this.tax,
+    this.landingCost,
+    this.margin,
     required this.total,
   });
 
-  factory Item.fromRawJson(String str) => Item.fromJson(json.decode(str));
+  PurchaseOrderItem copyWith({
+    IdNameModel? productId,
+    double? qty,
+    dynamic uomId,
+    String? unit,
+    double? unitCost,
+    PurchaseOrderTax? taxId,
+    String? tax,
+    String? landingCost,
+    String? margin,
+    double? total,
+  }) {
+    return PurchaseOrderItem(
+      productId: productId ?? this.productId,
+      qty: qty ?? this.qty,
+      uomId: uomId ?? this.uomId,
+      unit: unit ?? this.unit,
+      unitCost: unitCost ?? this.unitCost,
+      taxId: taxId ?? this.taxId,
+      tax: tax ?? this.tax,
+      landingCost: landingCost ?? this.landingCost,
+      margin: margin ?? this.margin,
+      total: total ?? this.total,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
-        productId: BranchId.fromJson(json["productId"] ?? {}),
-        qty: json["qty"] ?? 0,
-        uomId: json["uomId"],
-        unit: json["unit"]?.toString(),
-        unitCost: json["unitCost"]?.toDouble(),
-        taxId: json["taxId"] == null ? null : TaxId.fromJson(json["taxId"]),
-        tax: json["tax"]?.toString() ?? "",
-        landingCost: json["landingCost"]?.toString() ?? "",
-        margin: json["margin"]?.toString() ?? "",
-        total: json["total"]?.toDouble() ?? 0.0,
+  factory PurchaseOrderItem.fromMap(Map<String, dynamic> map) => PurchaseOrderItem(
+        productId:
+            map["productId"] == null ? null : IdNameModel.fromMap(map["productId"]),
+        qty: (map["qty"] as num? ?? 0).toDouble(),
+        uomId: map["uomId"],
+        unit: map["unit"]?.toString(),
+        unitCost: (map["unitCost"] as num? ?? 0).toDouble(),
+        taxId: map["taxId"] == null
+            ? null
+            : PurchaseOrderTax.fromMap(map["taxId"] as Map<String, dynamic>),
+        tax: map["tax"]?.toString(),
+        landingCost: map["landingCost"]?.toString(),
+        margin: map["margin"]?.toString(),
+        total: (map["total"] as num? ?? 0).toDouble(),
       );
 
-  Map<String, dynamic> toJson() => {
-        "productId": productId.toJson(),
+  Map<String, dynamic> toMap() => {
+        "productId": productId?.toMap(),
         "qty": qty,
         "uomId": uomId,
         "unit": unit,
         "unitCost": unitCost,
-        "taxId": taxId?.toJson(),
+        "taxId": taxId?.toMap(),
         "tax": tax,
         "landingCost": landingCost,
         "margin": margin,
         "total": total,
       };
+
+  @override
+  List<Object?> get props => [
+        productId,
+        qty,
+        uomId,
+        unit,
+        unitCost,
+        taxId,
+        tax,
+        landingCost,
+        margin,
+        total,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class TaxId {
+class PurchaseOrderTax extends Equatable {
   final String id;
   final String name;
-  final int percentage;
+  final double percentage;
 
-  TaxId({
+  const PurchaseOrderTax({
     required this.id,
     required this.name,
     required this.percentage,
   });
 
-  factory TaxId.fromRawJson(String str) => TaxId.fromJson(json.decode(str));
+  PurchaseOrderTax copyWith({
+    String? id,
+    String? name,
+    double? percentage,
+  }) {
+    return PurchaseOrderTax(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory TaxId.fromJson(Map<String, dynamic> json) => TaxId(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-        percentage: json["percentage"] ?? 0,
+  factory PurchaseOrderTax.fromMap(Map<String, dynamic> map) => PurchaseOrderTax(
+        id: map["_id"]?.toString() ?? "",
+        name: map["name"]?.toString() ?? "",
+        percentage: (map["percentage"] as num? ?? 0).toDouble(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "_id": id,
         "name": name,
         "percentage": percentage,
       };
+
+  @override
+  List<Object?> get props => [id, name, percentage];
+
+  @override
+  bool get stringify => true;
 }
 
-class Summary {
-  final int flatDiscount;
+class PurchaseOrderSummary extends Equatable {
+  final double flatDiscount;
   final double grossAmount;
-  final int discountAmount;
+  final double discountAmount;
   final double taxableAmount;
   final double taxAmount;
   final double roundOff;
   final double netAmount;
 
-  Summary({
+  const PurchaseOrderSummary({
     required this.flatDiscount,
     required this.grossAmount,
     required this.discountAmount,
@@ -339,21 +521,38 @@ class Summary {
     required this.netAmount,
   });
 
-  factory Summary.fromRawJson(String str) => Summary.fromJson(json.decode(str));
+  PurchaseOrderSummary copyWith({
+    double? flatDiscount,
+    double? grossAmount,
+    double? discountAmount,
+    double? taxableAmount,
+    double? taxAmount,
+    double? roundOff,
+    double? netAmount,
+  }) {
+    return PurchaseOrderSummary(
+      flatDiscount: flatDiscount ?? this.flatDiscount,
+      grossAmount: grossAmount ?? this.grossAmount,
+      discountAmount: discountAmount ?? this.discountAmount,
+      taxableAmount: taxableAmount ?? this.taxableAmount,
+      taxAmount: taxAmount ?? this.taxAmount,
+      roundOff: roundOff ?? this.roundOff,
+      netAmount: netAmount ?? this.netAmount,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Summary.fromJson(Map<String, dynamic> json) => Summary(
-        flatDiscount: json["flatDiscount"] ?? 0,
-        grossAmount: json["grossAmount"]?.toDouble() ?? 0.0,
-        discountAmount: json["discountAmount"] ?? 0,
-        taxableAmount: json["taxableAmount"]?.toDouble() ?? 0.0,
-        taxAmount: json["taxAmount"]?.toDouble() ?? 0.0,
-        roundOff: json["roundOff"]?.toDouble() ?? 0.0,
-        netAmount: json["netAmount"]?.toDouble() ?? 0.0,
+  factory PurchaseOrderSummary.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderSummary(
+        flatDiscount: (map["flatDiscount"] as num? ?? 0).toDouble(),
+        grossAmount: (map["grossAmount"] as num? ?? 0).toDouble(),
+        discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
+        taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
+        taxAmount: (map["taxAmount"] as num? ?? 0).toDouble(),
+        roundOff: (map["roundOff"] as num? ?? 0).toDouble(),
+        netAmount: (map["netAmount"] as num? ?? 0).toDouble(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "flatDiscount": flatDiscount,
         "grossAmount": grossAmount,
         "discountAmount": discountAmount,
@@ -362,102 +561,159 @@ class Summary {
         "roundOff": roundOff,
         "netAmount": netAmount,
       };
+
+  @override
+  List<Object?> get props => [
+        flatDiscount,
+        grossAmount,
+        discountAmount,
+        taxableAmount,
+        taxAmount,
+        roundOff,
+        netAmount,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class SupplierId {
+class PurchaseOrderSupplier extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
   final String companyName;
-  final String email;
-  final PhoneNo phoneNo;
-  final List<Address> address;
-  final String contactType;
+  final String? email;
+  final PurchaseOrderPhone? phoneNo;
+  final List<PurchaseOrderAddress> address;
+  final String? contactType;
 
-  SupplierId({
+  const PurchaseOrderSupplier({
     required this.id,
     required this.firstName,
     required this.lastName,
     required this.companyName,
-    required this.email,
-    required this.phoneNo,
+    this.email,
+    this.phoneNo,
     required this.address,
-    required this.contactType,
+    this.contactType,
   });
 
-  factory SupplierId.fromRawJson(String str) =>
-      SupplierId.fromJson(json.decode(str));
+  PurchaseOrderSupplier copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? companyName,
+    String? email,
+    PurchaseOrderPhone? phoneNo,
+    List<PurchaseOrderAddress>? address,
+    String? contactType,
+  }) {
+    return PurchaseOrderSupplier(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      companyName: companyName ?? this.companyName,
+      email: email ?? this.email,
+      phoneNo: phoneNo ?? this.phoneNo,
+      address: address ?? this.address,
+      contactType: contactType ?? this.contactType,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory SupplierId.fromJson(Map<String, dynamic> json) => SupplierId(
-        id: json["_id"]?.toString() ?? "",
-        firstName: json["firstName"]?.toString() ?? "",
-        lastName: json["lastName"]?.toString() ?? "",
-        companyName: json["companyName"]?.toString() ?? "",
-        email: json["email"]?.toString() ?? "",
-        phoneNo: PhoneNo.fromJson(json["phoneNo"] ?? {}),
-        address: json["address"] == null
-            ? []
-            : List<Address>.from(
-                json["address"].map((x) => Address.fromJson(x))),
-        contactType: json["contactType"]?.toString() ?? "",
+  factory PurchaseOrderSupplier.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderSupplier(
+        id: map["_id"]?.toString() ?? "",
+        firstName: map["firstName"]?.toString() ?? "",
+        lastName: map["lastName"]?.toString() ?? "",
+        companyName: map["companyName"]?.toString() ?? "",
+        email: map["email"]?.toString(),
+        phoneNo: map["phoneNo"] == null
+            ? null
+            : PurchaseOrderPhone.fromMap(map["phoneNo"] as Map<String, dynamic>),
+        address: List<PurchaseOrderAddress>.from(
+          (map["address"] as List<dynamic>?)?.map(
+                (x) => PurchaseOrderAddress.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        contactType: map["contactType"]?.toString(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "_id": id,
         "firstName": firstName,
         "lastName": lastName,
         "companyName": companyName,
         "email": email,
-        "phoneNo": phoneNo.toJson(),
-        "address": List<dynamic>.from(address.map((x) => x.toJson())),
+        "phoneNo": phoneNo?.toMap(),
+        "address": address.map((x) => x.toMap()).toList(),
         "contactType": contactType,
       };
+
+  @override
+  List<Object?> get props => [
+        id,
+        firstName,
+        lastName,
+        companyName,
+        email,
+        phoneNo,
+        address,
+        contactType,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class PhoneNo {
+class PurchaseOrderPhone extends Equatable {
   final String countryCode;
   final int phoneNo;
 
-  PhoneNo({
-    required this.countryCode,
-    required this.phoneNo,
-  });
+  const PurchaseOrderPhone({required this.countryCode, required this.phoneNo});
 
-  factory PhoneNo.fromRawJson(String str) => PhoneNo.fromJson(json.decode(str));
+  PurchaseOrderPhone copyWith({String? countryCode, int? phoneNo}) {
+    return PurchaseOrderPhone(
+      countryCode: countryCode ?? this.countryCode,
+      phoneNo: phoneNo ?? this.phoneNo,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory PhoneNo.fromJson(Map<String, dynamic> json) => PhoneNo(
-        countryCode: json["countryCode"]?.toString() ?? "",
-        phoneNo: json["phoneNo"] ?? 0,
+  factory PurchaseOrderPhone.fromMap(Map<String, dynamic> map) => PurchaseOrderPhone(
+        countryCode: map["countryCode"]?.toString() ?? "91",
+        phoneNo: (map["phoneNo"] as num? ?? 0).toInt(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "countryCode": countryCode,
         "phoneNo": phoneNo,
       };
+
+  @override
+  List<Object?> get props => [countryCode, phoneNo];
+
+  @override
+  bool get stringify => true;
 }
 
-class TermsAndConditionId {
+class PurchaseOrderTerms extends Equatable {
   final String id;
 
-  TermsAndConditionId({
-    required this.id,
-  });
+  const PurchaseOrderTerms({required this.id});
 
-  factory TermsAndConditionId.fromRawJson(String str) =>
-      TermsAndConditionId.fromJson(json.decode(str));
+  PurchaseOrderTerms copyWith({String? id}) {
+    return PurchaseOrderTerms(id: id ?? this.id);
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory TermsAndConditionId.fromJson(Map<String, dynamic> json) =>
-      TermsAndConditionId(
-        id: json["_id"]?.toString() ?? "",
+  factory PurchaseOrderTerms.fromMap(Map<String, dynamic> map) => PurchaseOrderTerms(
+        id: map["_id"]?.toString() ?? "",
       );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-      };
+  Map<String, dynamic> toMap() => {"_id": id};
+
+  @override
+  List<Object?> get props => [id];
+
+  @override
+  bool get stringify => true;
 }

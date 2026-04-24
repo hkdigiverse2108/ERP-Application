@@ -24,9 +24,9 @@ class TaxRepository {
 
     if (res.status == 200 && res.data != null) {
       final items = (res.data['tax_data'] as List)
-          .map((e) => TaxItemModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => TaxItemModel.fromMap(e as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to load taxes');
@@ -36,7 +36,7 @@ class TaxRepository {
     final ResModel response = await _api.get(ApiConstants.taxDropdown);
     if (response.status == 200) {
       return List<TaxDropdownModel>.from(
-        (response.data as List).map((x) => TaxDropdownModel.fromJson(x)),
+        (response.data as List).map((x) => TaxDropdownModel.fromMap(x)),
       );
     }
     throw Exception(response.message ?? "Failed to load taxes");

@@ -33,7 +33,7 @@ class OrderListRepository {
       final items = (res.data['posOrder_data'] as List)
           .map((e) => OrderListModel.fromJson(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     } else {
       throw Exception(res.message);
     }

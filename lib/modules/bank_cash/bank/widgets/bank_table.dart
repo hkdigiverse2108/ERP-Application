@@ -95,7 +95,7 @@ class BankTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),

@@ -51,9 +51,9 @@ class ReceiptDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Customer',
-                  value: payment.partyId.companyName?.isNotEmpty == true
-                      ? payment.partyId.companyName!
-                      : '${payment.partyId.firstName} ${payment.partyId.lastName}',
+                  value: payment.partyId?.companyName?.isNotEmpty == true
+                      ? payment.partyId!.companyName!
+                      : '${payment.partyId?.firstName ?? '-'} ${payment.partyId?.lastName ?? ''}'.trim(),
                 ),
                 DetailItem(
                   label: 'Payment Mode',
@@ -67,10 +67,10 @@ class ReceiptDetails extends StatelessWidget {
                   label: 'Payment Type',
                   value: payment.paymentType.toUpperCase(),
                 ),
-                if (payment.posOrderId.orderNo.isNotEmpty)
+                if (payment.posOrderId != null && payment.posOrderId!.orderNo.isNotEmpty)
                   DetailItem(
                     label: 'Order Reference',
-                    value: payment.posOrderId.orderNo,
+                    value: payment.posOrderId!.orderNo,
                   ),
               ],
             ),
@@ -111,7 +111,7 @@ class ReceiptDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Created By', value: payment.createdBy.fullName),
+                DetailItem(label: 'Created By', value: payment.createdBy?.fullName ?? '-'),
                 DetailItem(
                   label: 'Created At',
                   value: DateFormat('dd MMM yyyy, hh:mm a').format(payment.createdAt),

@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/selas/invoice_model.dart';
 import 'package:ai_setu/data/repositories/contact_repository.dart';
 import 'package:ai_setu/data/repositories/selas_repository.dart';
@@ -92,7 +91,7 @@ class InvoiceController extends GetxController {
 
     try {
       isLodding.value = true;
-      final ResModel res = await _repository.getInvoice(
+      final pagination = await _repository.getInvoice(
         page: currentPage.value,
         limit: limit.value,
         fromDate: _formatDate(selectedDateRange.value.start),
@@ -103,20 +102,12 @@ class InvoiceController extends GetxController {
         activeFilter: filters['activeFilter'],
       );
 
-      if (res.status == 200 && res.data != null) {
-        final List? dataList = res.data["invoice_data"];
-        final items = dataList != null
-            ? dataList
-                  .map((e) => InvoiceModel.fromJson(e as Map<String, dynamic>))
-                  .toList()
-            : <InvoiceModel>[];
+      _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());
 
-        _cache[key] = (items: items, fetchedAt: DateTime.now());
-
-        invoices.value = items;
-        totalPages.value = res.data["state"]?["totalPages"] ?? 1;
-        totalItems.value = res.data["totalData"] ?? 0;
-      }
+      invoices.value = pagination.items;
+      totalPages.value = pagination.totalPages;
+      totalItems.value = pagination.totalItems;
+      currentPage.value = pagination.currentPage;
     } catch (e) {
       Log.e("Sales Module Error (Invoice)", e);
     } finally {

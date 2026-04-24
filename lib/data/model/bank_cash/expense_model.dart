@@ -1,183 +1,261 @@
+import 'dart:convert' hide json;
+import 'package:equatable/equatable.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
 
-class ExpenseModel {
+class ExpenseModel extends Equatable {
   final String id;
   final bool isDeleted;
   final bool isActive;
-  final CreatedBy createdBy;
+  final ExpenseCreatedBy? createdBy;
   final String updatedBy;
-  final CompanyId companyId;
-  final int amount;
+  final IdNameModel? companyId;
+  final double amount;
   final String? image;
   final String? description;
   final bool isSalary;
-  final PartyId partyId;
-  final String type; // ✅ FIXED
+  final ExpenseParty? partyId;
+  final String type;
   final DateTime fromDate;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final BranchId branchId;
-  final int? incentive;
+  final IdNameModel? branchId;
+  final double? incentive;
   final DateTime? toDate;
-  final int? total;
+  final double? total;
 
-  ExpenseModel({
+  const ExpenseModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
+    this.createdBy,
     required this.updatedBy,
-    required this.companyId,
+    this.companyId,
     required this.amount,
     this.image,
     this.description,
     required this.isSalary,
-    required this.partyId,
+    this.partyId,
     required this.type,
     required this.fromDate,
     required this.createdAt,
     required this.updatedAt,
-    required this.branchId,
+    this.branchId,
     this.incentive,
     this.toDate,
     this.total,
   });
 
-  factory ExpenseModel.fromJson(Map<String, dynamic> json) {
+  ExpenseModel copyWith({
+    String? id,
+    bool? isDeleted,
+    bool? isActive,
+    ExpenseCreatedBy? createdBy,
+    String? updatedBy,
+    IdNameModel? companyId,
+    double? amount,
+    String? image,
+    String? description,
+    bool? isSalary,
+    ExpenseParty? partyId,
+    String? type,
+    DateTime? fromDate,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    IdNameModel? branchId,
+    double? incentive,
+    DateTime? toDate,
+    double? total,
+  }) {
     return ExpenseModel(
-      id: json["_id"] ?? "",
-      isDeleted: json["isDeleted"] ?? false,
-      isActive: json["isActive"] ?? false,
-
-      createdBy: json["createdBy"] != null
-          ? CreatedBy.fromJson(json["createdBy"])
-          : CreatedBy.empty(),
-
-      updatedBy: json["updatedBy"] ?? "",
-
-      companyId: json["companyId"] != null
-          ? CompanyId.fromJson(json["companyId"])
-          : CompanyId.empty(),
-
-      amount: (json["amount"] ?? 0).toInt(),
-
-      image: json["image"],
-      description: json["description"],
-
-      isSalary: json["isSalary"] ?? false,
-
-      partyId: json["partyId"] != null
-          ? PartyId.fromJson(json["partyId"])
-          : PartyId.empty(),
-
-      type: json["type"] ?? "",
-
-      fromDate: json["fromDate"] != null
-          ? DateTime.tryParse(json["fromDate"]) ?? DateTime.now()
-          : DateTime.now(),
-
-      createdAt: json["createdAt"] != null
-          ? DateTime.tryParse(json["createdAt"]) ?? DateTime.now()
-          : DateTime.now(),
-
-      updatedAt: json["updatedAt"] != null
-          ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
-          : DateTime.now(),
-
-      branchId: json["branchId"] is Map
-          ? BranchId.fromJson(json["branchId"])
-          : BranchId.empty(),
-
-      incentive: json["incentive"] != null ? (json["incentive"]).toInt() : null,
-
-      toDate: json["toDate"] != null ? DateTime.tryParse(json["toDate"]) : null,
-
-      total: json["total"] != null ? (json["total"]).toInt() : null,
+      id: id ?? this.id,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      amount: amount ?? this.amount,
+      image: image ?? this.image,
+      description: description ?? this.description,
+      isSalary: isSalary ?? this.isSalary,
+      partyId: partyId ?? this.partyId,
+      type: type ?? this.type,
+      fromDate: fromDate ?? this.fromDate,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      branchId: branchId ?? this.branchId,
+      incentive: incentive ?? this.incentive,
+      toDate: toDate ?? this.toDate,
+      total: total ?? this.total,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy.toJson(),
-    "updatedBy": updatedBy,
-    "companyId": companyId.toJson(),
-    "amount": amount,
-    "image": image,
-    "description": description,
-    "isSalary": isSalary,
-    "partyId": partyId.toJson(),
-    "type": type,
-    "fromDate": fromDate.toIso8601String(),
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId.toJson(),
-    "incentive": incentive,
-    "toDate": toDate?.toIso8601String(),
-    "total": total,
-  };
+  factory ExpenseModel.fromJson(String json) =>
+      ExpenseModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory ExpenseModel.fromMap(Map<String, dynamic> map) => ExpenseModel(
+        id: map["_id"]?.toString() ?? "",
+        isDeleted: map["isDeleted"] as bool? ?? false,
+        isActive: map["isActive"] as bool? ?? true,
+        createdBy: map["createdBy"] == null
+            ? null
+            : ExpenseCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
+        updatedBy: map["updatedBy"]?.toString() ?? "",
+        companyId: map["companyId"] == null
+            ? null
+            : IdNameModel.fromMap(map["companyId"]),
+        amount: (map["amount"] as num? ?? 0).toDouble(),
+        image: map["image"]?.toString(),
+        description: map["description"]?.toString(),
+        isSalary: map["isSalary"] as bool? ?? false,
+        partyId: map["partyId"] == null
+            ? null
+            : ExpenseParty.fromMap(map["partyId"] as Map<String, dynamic>),
+        type: map["type"]?.toString() ?? "",
+        fromDate: map["fromDate"] != null
+            ? DateTime.parse(map["fromDate"].toString())
+            : DateTime.now(),
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : DateTime.now(),
+        updatedAt: map["updatedAt"] != null
+            ? DateTime.parse(map["updatedAt"].toString())
+            : DateTime.now(),
+        branchId: map["branchId"] == null
+            ? null
+            : IdNameModel.fromMap(map["branchId"]),
+        incentive: (map["incentive"] as num?)?.toDouble(),
+        toDate: map["toDate"] != null
+            ? DateTime.parse(map["toDate"].toString())
+            : null,
+        total: (map["total"] as num?)?.toDouble(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "isDeleted": isDeleted,
+        "isActive": isActive,
+        "createdBy": createdBy?.toMap(),
+        "updatedBy": updatedBy,
+        "companyId": companyId?.toMap(),
+        "amount": amount,
+        "image": image,
+        "description": description,
+        "isSalary": isSalary,
+        "partyId": partyId?.toMap(),
+        "type": type,
+        "fromDate": fromDate.toIso8601String(),
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "branchId": branchId?.toMap(),
+        "incentive": incentive,
+        "toDate": toDate?.toIso8601String(),
+        "total": total,
+      };
+
+  @override
+  List<Object?> get props => [
+        id,
+        isDeleted,
+        isActive,
+        createdBy,
+        updatedBy,
+        companyId,
+        amount,
+        image,
+        description,
+        isSalary,
+        partyId,
+        type,
+        fromDate,
+        createdAt,
+        updatedAt,
+        branchId,
+        incentive,
+        toDate,
+        total,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class BranchId {
-  final String id;
-  final String name;
-
-  BranchId({required this.id, required this.name});
-
-  factory BranchId.fromJson(Map<String, dynamic> json) =>
-      BranchId(id: json["_id"] ?? "", name: json["name"] ?? "");
-
-  factory BranchId.empty() => BranchId(id: "", name: "");
-
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
-}
-
-class CompanyId {
-  final String id;
-  final String name;
-
-  CompanyId({required this.id, required this.name});
-
-  factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(id: json["_id"] ?? "", name: json["name"] ?? "");
-
-  factory CompanyId.empty() => CompanyId(id: "", name: "");
-
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
-}
-
-class CreatedBy {
+class ExpenseCreatedBy extends Equatable {
   final String id;
   final String fullName;
   final String userType;
 
-  CreatedBy({required this.id, required this.fullName, required this.userType});
+  const ExpenseCreatedBy({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+  });
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"] ?? "",
-    fullName: json["fullName"] ?? "",
-    userType: json["userType"] ?? "",
-  );
+  ExpenseCreatedBy copyWith({
+    String? id,
+    String? fullName,
+    String? userType,
+  }) {
+    return ExpenseCreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  factory CreatedBy.empty() => CreatedBy(id: "", fullName: "", userType: "");
+  factory ExpenseCreatedBy.fromJson(String json) =>
+      ExpenseCreatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  factory ExpenseCreatedBy.fromMap(Map<String, dynamic> map) => ExpenseCreatedBy(
+        id: map["_id"]?.toString() ?? "",
+        fullName: map["fullName"]?.toString() ?? "",
+        userType: map["userType"]?.toString() ?? "",
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "fullName": fullName,
+        "userType": userType,
+      };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class PartyId {
+class ExpenseParty extends Equatable {
   final String id;
   final String fullName;
 
-  PartyId({required this.id, required this.fullName});
+  const ExpenseParty({required this.id, required this.fullName});
 
-  factory PartyId.fromJson(Map<String, dynamic> json) =>
-      PartyId(id: json["_id"] ?? "", fullName: json["fullName"] ?? "");
+  ExpenseParty copyWith({String? id, String? fullName}) {
+    return ExpenseParty(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+    );
+  }
 
-  factory PartyId.empty() => PartyId(id: "", fullName: "");
+  factory ExpenseParty.fromJson(String json) =>
+      ExpenseParty.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {"_id": id, "fullName": fullName};
+  String toJson() => jsonEncode(toMap());
+
+  factory ExpenseParty.fromMap(Map<String, dynamic> map) => ExpenseParty(
+        id: map["_id"]?.toString() ?? "",
+        fullName: map["fullName"]?.toString() ?? "",
+      );
+
+  Map<String, dynamic> toMap() => {"_id": id, "fullName": fullName};
+
+  @override
+  List<Object?> get props => [id, fullName];
+
+  @override
+  bool get stringify => true;
 }

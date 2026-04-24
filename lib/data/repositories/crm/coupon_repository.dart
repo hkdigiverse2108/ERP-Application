@@ -30,7 +30,7 @@ class CouponRepository {
       final items = (res.data['coupon_data'] as List)
           .map((e) => CouponModel.fromJson(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
   }

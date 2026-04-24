@@ -26,14 +26,14 @@ class SplashController extends GetxController {
     await Future.delayed(const Duration(seconds: 2));
     final isLoggedIn =
         StorageService.instance.read<bool>(StorageKeys.isLoggedIn) ?? false;
-    
+
     if (isLoggedIn) {
       final userData = StorageService.instance.read<Map<String, dynamic>>(
         StorageKeys.userData,
       );
       if (userData != null) {
         try {
-          final user = UserModel.fromJson(userData);
+          final user = UserModel.fromMap(userData);
           await PermissionService.to.fetchPermissions(user.id);
           Get.offAllNamed(PermissionService.to.defaultRoute);
         } catch (e) {

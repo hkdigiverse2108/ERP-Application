@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_order_model.dart';
 import 'package:ai_setu/data/repositories/contact_repository.dart';
 import 'package:ai_setu/data/repositories/purchase_repository.dart';
@@ -90,7 +89,7 @@ class PurchaseOrderController extends GetxController {
 
     try {
       isLodding.value = true;
-      final ResModel res = await _repository.getAllPurchaseOrder(
+      final res = await _repository.getAllPurchaseOrder(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
@@ -101,23 +100,11 @@ class PurchaseOrderController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
       );
 
-      if (res.status == 200 && res.data != null) {
-        final List? dataList = res.data["purchaseOrder_data"];
-        final items = dataList != null
-            ? dataList
-                  .map(
-                    (e) =>
-                        PurchaseOrderModel.fromJson(e as Map<String, dynamic>),
-                  )
-                  .toList()
-            : <PurchaseOrderModel>[];
+      _cache[key] = (items: res.items, fetchedAt: DateTime.now());
 
-        _cache[key] = (items: items, fetchedAt: DateTime.now());
-
-        purchaseOrders.value = items;
-        totalPages.value = res.data["state"]?["totalPages"] ?? 1;
-        totalItems.value = res.data["totalData"] ?? 0;
-      }
+      purchaseOrders.value = res.items;
+      totalPages.value = res.totalPages;
+      totalItems.value = res.totalItems;
     } catch (e) {
       Log.e("Purchase Module Error (PurchaseOrder)", e);
     } finally {

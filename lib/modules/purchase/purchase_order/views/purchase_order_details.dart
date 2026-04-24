@@ -16,17 +16,17 @@ class PurchaseOrderDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PurchaseOrderModel order = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(order.orderDate);
-    final shippingDateStr = DateFormat(
+    final dateStr = order.orderDate != null ? DateFormat('dd MMM yyyy').format(order.orderDate!) : '-';
+    final shippingDateStr = order.shippingDate != null ? DateFormat(
       'dd MMM yyyy',
-    ).format(order.shippingDate);
+    ).format(order.shippingDate!) : '-';
 
     return DetailsView(
       title: 'Purchase Order #${order.orderNo}',
       subtitle: 'Date: $dateStr',
       heroIcon: PhosphorIconsFill.shoppingCart,
-      status: order.status,
-      statusColor: _getStatusColor(context, order.status),
+      status: order.status ?? 'Pending',
+      statusColor: _getStatusColor(context, order.status ?? 'Pending'),
       actions: [
         DetailAction(
           label: 'Print',
@@ -59,19 +59,20 @@ class PurchaseOrderDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Supplier',
-                  value:
-                      '${order.supplierId.firstName} ${order.supplierId.lastName}',
+                  value: order.supplierId != null
+                      ? '${order.supplierId?.firstName} ${order.supplierId?.lastName}'
+                      : '-',
                 ),
                 DetailItem(
                   label: 'Company',
-                  value: order.supplierId.companyName,
+                  value: order.supplierId?.companyName ?? '-',
                 ),
                 DetailItem(
                   label: 'Place of Supply',
                   value: order.placeOfSupply ?? '-',
                 ),
                 DetailItem(label: 'Shipping Date', value: shippingDateStr),
-                DetailItem(label: 'Tax Type', value: order.taxType),
+                DetailItem(label: 'Tax Type', value: order.taxType ?? '-'),
                 DetailItem(
                   label: 'Reverse Charge',
                   value: order.isActive
@@ -91,33 +92,33 @@ class PurchaseOrderDetails extends StatelessWidget {
           children: [
             _buildSummaryRow(
               'Gross Amount',
-              order.summary.grossAmount,
+              order.summary?.grossAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Discount',
-              -order.summary.discountAmount.toDouble(),
+              -(order.summary?.discountAmount ?? 0),
               context: context,
             ),
             _buildSummaryRow(
               'Taxable Amount',
-              order.summary.taxableAmount,
+              order.summary?.taxableAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Tax Amount',
-              order.summary.taxAmount,
+              order.summary?.taxAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Round Off',
-              order.summary.roundOff,
+              order.summary?.roundOff ?? 0,
               context: context,
             ),
             const Divider(height: 32),
             _buildSummaryRow(
               'Net Amount',
-              order.summary.netAmount,
+              order.summary?.netAmount ?? 0,
               isTotal: true,
               context: context,
             ),
@@ -159,7 +160,7 @@ class PurchaseOrderDetails extends StatelessWidget {
     }
   }
 
-  Widget _buildItemsTable(BuildContext context, List<Item> items) {
+  Widget _buildItemsTable(BuildContext context, List<PurchaseOrderItem> items) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -176,7 +177,7 @@ class PurchaseOrderDetails extends StatelessWidget {
         rows: items.map((item) {
           return DataRow(
             cells: [
-              DataCell(Text(item.productId.name, style: TextHelper.bodySmall)),
+              DataCell(Text(item.productId?.name ?? '-', style: TextHelper.bodySmall)),
               DataCell(
                 Text(
                   '${item.qty} ${item.unit ?? ""}',
@@ -184,7 +185,7 @@ class PurchaseOrderDetails extends StatelessWidget {
                 ),
               ),
               DataCell(
-                Text('₹${item.unitCost ?? 0}', style: TextHelper.bodySmall),
+                Text('₹${item.unitCost}', style: TextHelper.bodySmall),
               ),
               DataCell(
                 Text(
@@ -246,15 +247,15 @@ class PurchaseOrderDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Address addr) {
+  Widget _buildAddressText(PurchaseOrderAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(addr.addressLine1, style: TextHelper.bodySmall),
-        if (addr.addressLine2.isNotEmpty)
-          Text(addr.addressLine2, style: TextHelper.bodySmall),
+        if (addr.addressLine2 != null && addr.addressLine2!.isNotEmpty)
+          Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
-          '${addr.city.name}, ${addr.state.name}, ${addr.country.name} - ${addr.pinCode ?? ""}',
+          '${addr.city?.name ?? ""}, ${addr.state?.name ?? ""}, ${addr.country?.name ?? ""} - ${addr.pinCode ?? ""}',
           style: TextHelper.bodySmall,
         ),
       ],

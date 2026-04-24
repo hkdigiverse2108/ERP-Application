@@ -27,10 +27,10 @@ class UserRepository {
     );
     if (res.status == 200) {
       final items = (res.data['user_data'] as List)
-          .map((e) => UserModel.fromJson(e))
+          .map((e) => UserModel.fromMap(e as Map<String, dynamic>))
           .toList();
 
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
   }
@@ -52,7 +52,7 @@ class UserRepository {
     );
     if (res.status == 200) {
       final items = (res.data as List)
-          .map((e) => UserDropDownModel.fromJson(e))
+          .map((e) => UserDropDownModel.fromMap(e as Map<String, dynamic>))
           .toList();
       return items;
     }
@@ -63,9 +63,9 @@ class UserRepository {
     final ResModel res = await _api.get(ApiConstants.getUserById(id));
     if (res.status == 200) {
       if (res.data is Map && res.data['user_data'] != null) {
-        return UserModel.fromJson(res.data['user_data']);
+        return UserModel.fromMap(res.data['user_data'] as Map<String, dynamic>);
       } else {
-        return UserModel.fromJson(res.data);
+        return UserModel.fromMap(res.data as Map<String, dynamic>);
       }
     }
     throw Exception(res.message ?? "Something went wrong");

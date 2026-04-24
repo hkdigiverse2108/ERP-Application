@@ -20,7 +20,7 @@ class SalaryDetails extends StatelessWidget {
     final toDateStr = DateFormat('dd MMM yyyy').format(salary.toDate);
 
     return DetailsView(
-      title: 'Salary: ${salary.partyId.fullName}',
+      title: 'Salary: ${salary.partyId?.fullName ?? '-'}',
       subtitle: 'Period: $fromDateStr - $toDateStr',
       heroIcon: PhosphorIconsFill.identificationCard,
       status: salary.isActive ? 'Active' : 'Inactive',
@@ -52,8 +52,8 @@ class SalaryDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Employee Name',
-                  value: salary.partyId.fullName.isNotEmpty
-                      ? salary.partyId.fullName
+                  value: (salary.partyId?.fullName ?? '').isNotEmpty
+                      ? salary.partyId!.fullName
                       : '-',
                   icon: PhosphorIconsLight.user,
                 ),
@@ -99,7 +99,7 @@ class SalaryDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Processed By',
-                  value: salary.createdBy.fullName,
+                  value: salary.createdBy?.fullName ?? '-',
                 ),
                 DetailItem(
                   label: 'Record Date',

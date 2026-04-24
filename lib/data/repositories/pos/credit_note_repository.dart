@@ -32,7 +32,7 @@ class CreditNoteRepository {
       final items = (res.data['posCreditNote_data'] as List)
           .map((e) => CreditNoteModel.fromJson(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     } else {
       throw Exception(res.message);
     }

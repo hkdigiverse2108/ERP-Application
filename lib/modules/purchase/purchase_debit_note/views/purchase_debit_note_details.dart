@@ -16,17 +16,17 @@ class PurchaseDebitNoteDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PurchaseDebitNoteModel note = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(note.debitNoteDate);
+    final dateStr = DateFormat('dd MMM yyyy').format(note.debitNoteDate ?? DateTime.now());
     final dueDateStr = note.dueDate != null
         ? DateFormat('dd MMM yyyy').format(note.dueDate!)
         : '-';
 
     return DetailsView(
-      title: 'Debit Note #${note.debitNoteNo}',
+      title: 'Debit Note #${note.debitNoteNo ?? "-"}',
       subtitle: 'Date: $dateStr',
       heroIcon: PhosphorIconsFill.arrowCounterClockwise,
-      status: note.status,
-      statusColor: _getStatusColor(context, note.status),
+      status: note.status ?? '-',
+      statusColor: _getStatusColor(context, note.status ?? ''),
       actions: [
         DetailAction(
           label: 'Print',
@@ -87,43 +87,43 @@ class PurchaseDebitNoteDetails extends StatelessWidget {
           children: [
             _buildSummaryRow(
               'Gross Amount',
-              note.summary.grossAmount,
+              note.summary?.grossAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Discount',
-              -note.summary.discountAmount,
+              -(note.summary?.discountAmount ?? 0),
               context: context,
             ),
             _buildSummaryRow(
               'Taxable Amount',
-              note.summary.taxableAmount,
+              note.summary?.taxableAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Tax Amount',
-              note.summary.taxAmount,
+              note.summary?.taxAmount ?? 0,
               context: context,
             ),
             _buildSummaryRow(
               'Round Off',
-              note.summary.roundOff,
+              note.summary?.roundOff ?? 0,
               context: context,
             ),
             const Divider(height: 32),
             _buildSummaryRow(
               'Net Amount',
-              note.summary.netAmount,
+              note.summary?.netAmount ?? 0,
               isTotal: true,
               context: context,
             ),
           ],
         ),
-        if (note.billingAddress != null && note.billingAddress is Map)
+        if (note.billingAddress != null)
           DetailSection(
             title: 'Billing Address',
             children: [
-              _buildAddressText(note.billingAddress as Map<String, dynamic>),
+              _buildAddressText(note.billingAddress!),
             ],
           ),
         if (note.notes != null && note.notes!.isNotEmpty)
@@ -236,16 +236,15 @@ class PurchaseDebitNoteDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(Map<String, dynamic> addr) {
+  Widget _buildAddressText(PurchaseDebitNoteAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(addr['addressLine1'] ?? '', style: TextHelper.bodySmall),
-        if (addr['addressLine2'] != null &&
-            addr['addressLine2'].toString().isNotEmpty)
-          Text(addr['addressLine2'].toString(), style: TextHelper.bodySmall),
+        Text(addr.addressLine1, style: TextHelper.bodySmall),
+        if (addr.addressLine2 != null && addr.addressLine2!.isNotEmpty)
+          Text(addr.addressLine2!, style: TextHelper.bodySmall),
         Text(
-          '${addr['city']?['name'] ?? ''}, ${addr['state']?['name'] ?? ''}, ${addr['country']?['name'] ?? ''} - ${addr['pinCode'] ?? ''}',
+          '${addr.city?.name ?? ""}, ${addr.state?.name ?? ""}, ${addr.country?.name ?? ""} - ${addr.pinCode ?? ""}',
           style: TextHelper.bodySmall,
         ),
       ],

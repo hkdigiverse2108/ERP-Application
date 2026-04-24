@@ -26,9 +26,9 @@ class StockVerificationRepository {
 
     if (response.status == 200) {
       final items = (response.data['stockVerification_data'] as List)
-          .map((x) => StockVerificationModel.fromJson(x))
+          .map((x) => StockVerificationModel.fromMap(x as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
 
     throw Exception(response.message ?? 'Failed to load stock verification');
@@ -40,7 +40,7 @@ class StockVerificationRepository {
     );
 
     if (response.status == 200 && response.data != null) {
-      return StockVerificationModel.fromJson(
+      return StockVerificationModel.fromMap(
         response.data as Map<String, dynamic>,
       );
     }

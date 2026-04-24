@@ -1,8 +1,8 @@
 import 'dart:convert';
-
+import 'package:equatable/equatable.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 
-class UserModel {
+class UserModel extends Equatable {
   final String id;
   final String fullName;
   final String email;
@@ -30,23 +30,23 @@ class UserModel {
   final String? profileImage;
   final String? token;
 
-  UserModel({
+  const UserModel({
     required this.id,
     required this.fullName,
     required this.email,
     required this.phoneNo,
-    required this.role,
+    this.role,
     required this.username,
     required this.isDeleted,
     required this.isActive,
     this.createdBy,
     this.updatedBy,
     required this.companyId,
-    required this.branchId,
+    this.branchId,
     required this.createdAt,
     required this.updatedAt,
     required this.address,
-    required this.bankDetails,
+    this.bankDetails,
     this.commission,
     this.designation,
     this.extraWages,
@@ -59,83 +59,180 @@ class UserModel {
     this.token,
   });
 
-  factory UserModel.fromRawJson(String str) =>
-      UserModel.fromJson(json.decode(str));
+  UserModel copyWith({
+    String? id,
+    String? fullName,
+    String? email,
+    PhoneNo? phoneNo,
+    IdName? role,
+    String? username,
+    bool? isDeleted,
+    bool? isActive,
+    CreatedBy? createdBy,
+    CreatedBy? updatedBy,
+    IdName? companyId,
+    IdName? branchId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Address? address,
+    BankDetails? bankDetails,
+    int? commission,
+    String? designation,
+    int? extraWages,
+    String? panNumber,
+    int? target,
+    int? wages,
+    String? showPassword,
+    String? userType,
+    String? profileImage,
+    String? token,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNo: phoneNo ?? this.phoneNo,
+      role: role ?? this.role,
+      username: username ?? this.username,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      branchId: branchId ?? this.branchId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      address: address ?? this.address,
+      bankDetails: bankDetails ?? this.bankDetails,
+      commission: commission ?? this.commission,
+      designation: designation ?? this.designation,
+      extraWages: extraWages ?? this.extraWages,
+      panNumber: panNumber ?? this.panNumber,
+      target: target ?? this.target,
+      wages: wages ?? this.wages,
+      showPassword: showPassword ?? this.showPassword,
+      userType: userType ?? this.userType,
+      profileImage: profileImage ?? this.profileImage,
+      token: token ?? this.token,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory UserModel.fromJson(String json) =>
+      UserModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    id: json["_id"],
-    fullName: json["fullName"],
-    email: json["email"],
-    phoneNo: PhoneNo.fromJson(json["phoneNo"]),
-    role: json["role"] != null ? IdName.fromJson(json["role"]) : null,
-    username: json["username"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: json["createdBy"] != null
-        ? CreatedBy.fromJson(json["createdBy"])
-        : null,
-    updatedBy: json["updatedBy"] != null
-        ? CreatedBy.fromJson(json["updatedBy"])
-        : null,
-    companyId: json["companyId"] != null
-        ? IdName.fromJson(json["companyId"])
-        : IdName(id: '', name: ''),
-    branchId: json["branchId"] != null
-        ? IdName.fromJson(json["branchId"])
-        : null,
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    address: json["address"] != null
-        ? Address.fromJson(json["address"])
-        : Address.empty(),
-    bankDetails: json["bankDetails"] != null
-        ? BankDetails.fromJson(json["bankDetails"])
-        : BankDetails.empty(),
-    commission: json["commission"],
-    designation: json["designation"],
-    extraWages: json["extraWages"],
-    panNumber: json["panNumber"],
-    target: json["target"],
-    wages: json["wages"],
-    showPassword: json["showPassword"],
-    userType: json["userType"],
-    profileImage: json["profileImage"],
-    token: json["token"] ?? '',
-  );
+  factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
+        id: map['_id'] as String? ?? '',
+        fullName: map['fullName'] as String? ?? '',
+        email: map['email'] as String? ?? '',
+        phoneNo: PhoneNo.fromMap(map['phoneNo'] as Map<String, dynamic>),
+        role: map['role'] != null
+            ? IdName.fromMap(map['role'])
+            : null,
+        username: map['username'] as String? ?? '',
+        isDeleted: map['isDeleted'] as bool? ?? false,
+        isActive: map['isActive'] as bool? ?? false,
+        createdBy: map['createdBy'] != null
+            ? CreatedBy.fromMap(map['createdBy'])
+            : null,
+        updatedBy: map['updatedBy'] != null
+            ? CreatedBy.fromMap(map['updatedBy'])
+            : null,
+        companyId: map['companyId'] != null
+            ? IdName.fromMap(map['companyId'])
+            : const IdName(id: '', name: ''),
+        branchId: map['branchId'] != null
+            ? IdName.fromMap(map['branchId'])
+            : null,
+        createdAt: map['createdAt'] != null
+            ? DateTime.parse(map['createdAt'] as String)
+            : DateTime.now(),
+        updatedAt: map['updatedAt'] != null
+            ? DateTime.parse(map['updatedAt'] as String)
+            : DateTime.now(),
+        address: map['address'] != null
+            ? Address.fromMap(map['address'] as Map<String, dynamic>)
+            : Address.empty(),
+        bankDetails: map['bankDetails'] != null
+            ? BankDetails.fromMap(map['bankDetails'] as Map<String, dynamic>)
+            : null,
+        commission: map['commission'] as int?,
+        designation: map['designation'] as String?,
+        extraWages: map['extraWages'] as int?,
+        panNumber: map['panNumber'] as String?,
+        target: map['target'] as int?,
+        wages: map['wages'] as int?,
+        showPassword: map['showPassword'] as String?,
+        userType: map['userType'] as String? ?? '',
+        profileImage: map['profileImage'] as String?,
+        token: map['token'] as String? ?? '',
+      );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "email": email,
-    "phoneNo": phoneNo.toJson(),
-    "role": role?.toJson(),
-    "username": username,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy?.toJson(),
-    "updatedBy": updatedBy?.toJson(),
-    "companyId": companyId.toJson(),
-    "branchId": branchId?.toJson(),
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "address": address.toJson(),
-    "bankDetails": bankDetails?.toJson(),
-    "commission": commission,
-    "designation": designation,
-    "extraWages": extraWages,
-    "panNumber": panNumber,
-    "target": target,
-    "wages": wages,
-    "showPassword": showPassword,
-    "userType": userType,
-    "profileImage": profileImage,
-    "token": token,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'fullName': fullName,
+        'email': email,
+        'phoneNo': phoneNo.toMap(),
+        'role': role?.toMap(),
+        'username': username,
+        'isDeleted': isDeleted,
+        'isActive': isActive,
+        'createdBy': createdBy?.toMap(),
+        'updatedBy': updatedBy?.toMap(),
+        'companyId': companyId.toMap(),
+        'branchId': branchId?.toMap(),
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+        'address': address.toMap(),
+        'bankDetails': bankDetails?.toMap(),
+        'commission': commission,
+        'designation': designation,
+        'extraWages': extraWages,
+        'panNumber': panNumber,
+        'target': target,
+        'wages': wages,
+        'showPassword': showPassword,
+        'userType': userType,
+        'profileImage': profileImage,
+        'token': token,
+      };
+
+  @override
+  List<Object?> get props => [
+        id,
+        fullName,
+        email,
+        phoneNo,
+        role,
+        username,
+        isDeleted,
+        isActive,
+        createdBy,
+        updatedBy,
+        companyId,
+        branchId,
+        createdAt,
+        updatedAt,
+        address,
+        bankDetails,
+        commission,
+        designation,
+        extraWages,
+        panNumber,
+        target,
+        wages,
+        showPassword,
+        userType,
+        profileImage,
+        token,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class Address {
+class Address extends Equatable {
   final String address;
   final String country;
   final String countryId;
@@ -145,7 +242,7 @@ class Address {
   final String cityId;
   final int pinCode;
 
-  Address({
+  const Address({
     required this.address,
     required this.country,
     required this.countryId,
@@ -156,51 +253,89 @@ class Address {
     required this.pinCode,
   });
 
-  factory Address.empty() => Address(
-    address: '',
-    country: '',
-    countryId: '',
-    state: '',
-    stateId: '',
-    city: '',
-    cityId: '',
-    pinCode: 0,
-  );
+  factory Address.empty() => const Address(
+        address: '',
+        country: '',
+        countryId: '',
+        state: '',
+        stateId: '',
+        city: '',
+        cityId: '',
+        pinCode: 0,
+      );
 
-  factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
+  Address copyWith({
+    String? address,
+    String? country,
+    String? countryId,
+    String? state,
+    String? stateId,
+    String? city,
+    String? cityId,
+    int? pinCode,
+  }) {
+    return Address(
+      address: address ?? this.address,
+      country: country ?? this.country,
+      countryId: countryId ?? this.countryId,
+      state: state ?? this.state,
+      stateId: stateId ?? this.stateId,
+      city: city ?? this.city,
+      cityId: cityId ?? this.cityId,
+      pinCode: pinCode ?? this.pinCode,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory Address.fromJson(String json) =>
+      Address.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-    address: json["address"] ?? '',
-    country: json["country"] is Map ? json["country"]["name"] ?? '' : '',
-    countryId: json["country"] is Map
-        ? json["country"]["_id"] ?? json["country"]["id"] ?? ''
-        : json["country"] ?? '',
-    state: json["state"] is Map ? json["state"]["name"] ?? '' : '',
-    stateId: json["state"] is Map
-        ? json["state"]["_id"] ?? json["state"]["id"] ?? ''
-        : json["state"] ?? '',
-    city: json["city"] is Map ? json["city"]["name"] ?? '' : '',
-    cityId: json["city"] is Map
-        ? json["city"]["_id"] ?? json["city"]["id"] ?? ''
-        : json["city"] ?? '',
-    pinCode: int.tryParse(json["pinCode"]?.toString() ?? '') ?? 0,
-  );
+  factory Address.fromMap(Map<String, dynamic> map) => Address(
+        address: map['address'] as String? ?? '',
+        country: map['country'] is Map ? map['country']['name'] ?? '' : '',
+        countryId: map['country'] is Map
+            ? map['country']['_id'] ?? map['country']['id'] ?? ''
+            : map['country'] ?? '',
+        state: map['state'] is Map ? map['state']['name'] ?? '' : '',
+        stateId: map['state'] is Map
+            ? map['state']['_id'] ?? map['state']['id'] ?? ''
+            : map['state'] ?? '',
+        city: map['city'] is Map ? map['city']['name'] ?? '' : '',
+        cityId: map['city'] is Map
+            ? map['city']['_id'] ?? map['city']['id'] ?? ''
+            : map['city'] ?? '',
+        pinCode: int.tryParse(map['pinCode']?.toString() ?? '') ?? 0,
+      );
 
-  Map<String, dynamic> toJson() => {
-    "address": address,
-    "country": country,
-    "countryId": countryId,
-    "state": state,
-    "stateId": stateId,
-    "city": city,
-    "cityId": cityId,
-    "pinCode": pinCode,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        'address': address,
+        'country': country,
+        'countryId': countryId,
+        'state': state,
+        'stateId': stateId,
+        'city': city,
+        'cityId': cityId,
+        'pinCode': pinCode,
+      };
+
+  @override
+  List<Object?> get props => [
+        address,
+        country,
+        countryId,
+        state,
+        stateId,
+        city,
+        cityId,
+        pinCode,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class BankDetails {
+class BankDetails extends Equatable {
   final String name;
   final String branchName;
   final String accountNumber;
@@ -208,7 +343,7 @@ class BankDetails {
   final String swiftCode;
   final String ifscCode;
 
-  BankDetails({
+  const BankDetails({
     required this.name,
     required this.branchName,
     required this.accountNumber,
@@ -217,140 +352,258 @@ class BankDetails {
     required this.ifscCode,
   });
 
-  factory BankDetails.empty() => BankDetails(
-    name: '',
-    branchName: '',
-    accountNumber: '',
-    bankHolderName: '',
-    swiftCode: '',
-    ifscCode: '',
-  );
+  factory BankDetails.empty() => const BankDetails(
+        name: '',
+        branchName: '',
+        accountNumber: '',
+        bankHolderName: '',
+        swiftCode: '',
+        ifscCode: '',
+      );
 
-  factory BankDetails.fromRawJson(String str) =>
-      BankDetails.fromJson(json.decode(str));
+  BankDetails copyWith({
+    String? name,
+    String? branchName,
+    String? accountNumber,
+    String? bankHolderName,
+    String? swiftCode,
+    String? ifscCode,
+  }) {
+    return BankDetails(
+      name: name ?? this.name,
+      branchName: branchName ?? this.branchName,
+      accountNumber: accountNumber ?? this.accountNumber,
+      bankHolderName: bankHolderName ?? this.bankHolderName,
+      swiftCode: swiftCode ?? this.swiftCode,
+      ifscCode: ifscCode ?? this.ifscCode,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory BankDetails.fromJson(String json) =>
+      BankDetails.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory BankDetails.fromJson(Map<String, dynamic> json) => BankDetails(
-    name: json["name"],
-    branchName: json["branchName"],
-    accountNumber: json["accountNumber"],
-    bankHolderName: json["bankHolderName"],
-    swiftCode: json["swiftCode"],
-    ifscCode: json["IFSCCode"],
-  );
+  factory BankDetails.fromMap(Map<String, dynamic> map) => BankDetails(
+        name: map['name'] as String? ?? '',
+        branchName: map['branchName'] as String? ?? '',
+        accountNumber: map['accountNumber'] as String? ?? '',
+        bankHolderName: map['bankHolderName'] as String? ?? '',
+        swiftCode: map['swiftCode'] as String? ?? '',
+        ifscCode: map['IFSCCode'] as String? ?? '',
+      );
 
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "branchName": branchName,
-    "accountNumber": accountNumber,
-    "bankHolderName": bankHolderName,
-    "swiftCode": swiftCode,
-    "IFSCCode": ifscCode,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'branchName': branchName,
+        'accountNumber': accountNumber,
+        'bankHolderName': bankHolderName,
+        'swiftCode': swiftCode,
+        'IFSCCode': ifscCode,
+      };
+
+  @override
+  List<Object?> get props => [
+        name,
+        branchName,
+        accountNumber,
+        bankHolderName,
+        swiftCode,
+        ifscCode,
+      ];
+
+  @override
+  bool get stringify => true;
 }
 
-class IdName {
+class IdName extends Equatable {
   final String id;
   final String name;
   final bool? isHeadBranch;
 
-  IdName({required this.id, required this.name, this.isHeadBranch});
+  const IdName({required this.id, required this.name, this.isHeadBranch});
 
-  factory IdName.fromJson(dynamic json) {
-    // ✅ If API returns only ID string
+  IdName copyWith({
+    String? id,
+    String? name,
+    bool? isHeadBranch,
+  }) {
+    return IdName(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      isHeadBranch: isHeadBranch ?? this.isHeadBranch,
+    );
+  }
+
+  factory IdName.fromJson(String json) =>
+      IdName.fromMap(jsonDecode(json));
+
+  factory IdName.fromMap(dynamic json) {
     if (json is String) {
       return IdName(id: json, name: '');
     }
 
-    // ✅ If API returns object
     return IdName(
-      id: json["_id"] ?? '',
-      name: json["name"] ?? '',
-      isHeadBranch: json["isHeadBranch"] ?? false,
+      id: json['_id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      isHeadBranch: json['isHeadBranch'] as bool? ?? false,
     );
   }
-  // add to json
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    if (isHeadBranch != null) "isHeadBranch": isHeadBranch,
-  };
+
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'name': name,
+        if (isHeadBranch != null) 'isHeadBranch': isHeadBranch,
+      };
+
+  @override
+  List<Object?> get props => [id, name, isHeadBranch];
+
+  @override
+  bool get stringify => true;
 }
 
-class PhoneNo {
+class PhoneNo extends Equatable {
   final String countryCode;
   final int phoneNo;
 
-  PhoneNo({required this.countryCode, required this.phoneNo});
+  const PhoneNo({required this.countryCode, required this.phoneNo});
 
-  factory PhoneNo.fromRawJson(String str) => PhoneNo.fromJson(json.decode(str));
+  PhoneNo copyWith({
+    String? countryCode,
+    int? phoneNo,
+  }) {
+    return PhoneNo(
+      countryCode: countryCode ?? this.countryCode,
+      phoneNo: phoneNo ?? this.phoneNo,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory PhoneNo.fromJson(String json) =>
+      PhoneNo.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory PhoneNo.fromJson(Map<String, dynamic> json) =>
-      PhoneNo(countryCode: json["countryCode"], phoneNo: json["phoneNo"]);
+  factory PhoneNo.fromMap(Map<String, dynamic> map) => PhoneNo(
+        countryCode: map['countryCode'] as String? ?? '',
+        phoneNo: (map['phoneNo'] as num? ?? 0).toInt(),
+      );
 
-  Map<String, dynamic> toJson() => {
-    "countryCode": countryCode,
-    "phoneNo": phoneNo,
-  };
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        'countryCode': countryCode,
+        'phoneNo': phoneNo,
+      };
+
+  @override
+  List<Object?> get props => [countryCode, phoneNo];
+
+  @override
+  bool get stringify => true;
 }
 
-class CreatedBy {
+class CreatedBy extends Equatable {
   final String id;
   final String? fullName;
   final String? userType;
 
-  CreatedBy({required this.id, this.fullName, this.userType});
+  const CreatedBy({required this.id, this.fullName, this.userType});
 
-  factory CreatedBy.fromJson(dynamic json) {
-    // ✅ Case 1: If it's already a String (just ID)
+  CreatedBy copyWith({
+    String? id,
+    String? fullName,
+    String? userType,
+  }) {
+    return CreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
+
+  factory CreatedBy.fromJson(String json) =>
+      CreatedBy.fromMap(jsonDecode(json));
+
+  factory CreatedBy.fromMap(dynamic json) {
     if (json is String) {
       return CreatedBy(id: json);
     }
 
-    // ✅ Case 2: If it's a Map
     return CreatedBy(
-      id: json["_id"] ?? '',
-      fullName: json["fullName"],
-      userType: json["userType"],
+      id: json['_id'] as String? ?? '',
+      fullName: json['fullName'] as String?,
+      userType: json['userType'] as String?,
     );
   }
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-  };
+
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'fullName': fullName,
+        'userType': userType,
+      };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class UserDropDownModel {
+class UserDropDownModel extends Equatable {
   final String id;
   final String fullName;
   final CommonDropdownModel? role;
   final String userType;
 
-  UserDropDownModel({
+  const UserDropDownModel({
     required this.id,
     required this.fullName,
     required this.userType,
-    required this.role,
+    this.role,
   });
 
-  factory UserDropDownModel.fromJson(Map<String, dynamic> json) =>
+  UserDropDownModel copyWith({
+    String? id,
+    String? fullName,
+    CommonDropdownModel? role,
+    String? userType,
+  }) {
+    return UserDropDownModel(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      role: role ?? this.role,
+      userType: userType ?? this.userType,
+    );
+  }
+
+  factory UserDropDownModel.fromJson(String json) =>
+      UserDropDownModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  factory UserDropDownModel.fromMap(Map<String, dynamic> map) =>
       UserDropDownModel(
-        id: json["_id"],
-        fullName: json["fullName"],
-        userType: json["userType"],
-        role: json["role"] != null
-            ? CommonDropdownModel.fromJson(json["role"])
+        id: map['_id'] as String? ?? '',
+        fullName: map['fullName'] as String? ?? '',
+        userType: map['userType'] as String? ?? '',
+        role: map['role'] != null
+            ? CommonDropdownModel.fromMap(map['role'] as Map<String, dynamic>)
             : null,
       );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
-    "role": role?.toJson(),
-  };
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'fullName': fullName,
+        'userType': userType,
+        'role': role?.toMap(),
+      };
+
+  @override
+  List<Object?> get props => [id, fullName, role, userType];
+
+  @override
+  bool get stringify => true;
 }

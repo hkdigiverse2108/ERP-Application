@@ -52,7 +52,7 @@ class BankTransactionDetails extends StatelessWidget {
                 DetailItem(label: 'Type', value: transaction.transactionType),
                 DetailItem(
                   label: 'From Account',
-                  value: transaction.fromAccount.name,
+                  value: transaction.fromAccount?.name ?? '-',
                 ),
                 DetailItem(
                   label: 'To Account',
@@ -84,7 +84,7 @@ class BankTransactionDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Created By',
-                  value: transaction.createdBy.fullName,
+                  value: transaction.createdBy?.fullName ?? '-',
                 ),
                 DetailItem(
                   label: 'Created At',

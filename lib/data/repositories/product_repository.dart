@@ -35,9 +35,9 @@ class ProductRepository {
 
     if (res.status == 200 && res.data != null) {
       final items = (res.data['product_data'] as List)
-          .map((e) => ProductItemModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ProductItemModel.fromMap(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to load products');
@@ -47,7 +47,7 @@ class ProductRepository {
     final ResModel res = await _api.get(ApiConstants.getProductById(id));
 
     if (res.status == 200 && res.data != null) {
-      return ProductModel.fromJson(res.data as Map<String, dynamic>);
+      return ProductModel.fromMap(res.data);
     }
 
     throw Exception(res.message ?? 'Failed to load product');
@@ -81,7 +81,7 @@ class ProductRepository {
 
     if (res.status == 200 && res.data != null) {
       return (res.data as List)
-          .map((e) => CommonDropdownModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => CommonDropdownModel.fromMap(e))
           .toList();
     }
 

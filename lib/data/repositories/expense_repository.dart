@@ -36,10 +36,10 @@ class ExpenseRepository {
       final List? dataList = res.data['expense_data'];
       final items = dataList != null
           ? dataList
-                .map((e) => ExpenseModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => ExpenseModel.fromMap(e as Map<String, dynamic>))
                 .toList()
           : <ExpenseModel>[];
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
 
     throw Exception(res.message ?? 'Failed to fetch expenses');

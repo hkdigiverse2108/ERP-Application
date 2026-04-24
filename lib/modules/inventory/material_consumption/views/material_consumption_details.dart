@@ -108,7 +108,7 @@ class MaterialConsumptionDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildItemRow(Item item, BuildContext context) {
+  Widget _buildItemRow(MaterialConsumptionItem item, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),

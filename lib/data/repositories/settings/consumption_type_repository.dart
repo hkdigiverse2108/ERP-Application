@@ -26,7 +26,7 @@ class ConsumptionTypeRepository {
           .map((e) => ConsumptionTypeModel.fromJson(e))
           .toList();
 
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
   }

@@ -6,6 +6,6 @@ class LoginResponseModel {
   LoginResponseModel({required this.user});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    return LoginResponseModel(user: UserModel.fromJson(json));
+    return LoginResponseModel(user: UserModel.fromMap(json));
   }
 }

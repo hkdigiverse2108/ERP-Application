@@ -164,7 +164,7 @@ class ContactDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressItem(Address addr) {
+  Widget _buildAddressItem(ContactAddress addr) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Column(

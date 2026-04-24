@@ -46,3 +46,7 @@ app.*.map.json
 .omni
 log.txt
 omnitype.txt
+
+# Antigravity temporary files
+.antigravity/
+.gemini/

@@ -84,7 +84,7 @@ class BankDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Created By', value: bank.createdBy.fullName),
+                DetailItem(label: 'Created By', value: bank.createdBy?.fullName ?? '-'),
                 DetailItem(
                   label: 'Created At',
                   value: DateFormat(

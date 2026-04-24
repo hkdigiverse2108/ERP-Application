@@ -19,12 +19,13 @@ class UserRolesTable extends StatelessWidget {
     final controller = UserRolesController.instance;
 
     // Get current user role for authorization
-    final userData =
-        StorageService.instance.read<Map<String, dynamic>>(StorageKeys.userData);
+    final userData = StorageService.instance.read<Map<String, dynamic>>(
+      StorageKeys.userData,
+    );
     final currentUserType = userData?['userType'] ?? 'admin';
 
     bool isAuthorized(RoleModel item) {
-      if (item.createdBy.userType == 'super-admin') {
+      if (item.createdBy?.userType == 'super-admin') {
         return currentUserType == 'super-admin';
       }
       return true;
@@ -91,9 +92,9 @@ class UserRolesTable extends StatelessWidget {
                 title: "Created By",
                 width: 180,
                 cellBuilder: (context, item, index) => Text(
-                  (item.createdBy.userType == 'super-admin')
+                  (item.createdBy?.userType == 'super-admin')
                       ? 'System Generated'
-                      : item.createdBy.fullName,
+                      : item.createdBy?.fullName ?? 'Unknown',
                   style: TextHelper.bodySmall,
                 ),
               ),

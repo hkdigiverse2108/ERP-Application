@@ -14,7 +14,7 @@ class RoleRepository {
     if (res.status == 200) {
       return res.data
           .map<CommonDropdownModel>(
-            (json) => CommonDropdownModel.fromJson(json),
+            (json) => CommonDropdownModel.fromMap(json as Map<String, dynamic>),
           )
           .toList();
     }

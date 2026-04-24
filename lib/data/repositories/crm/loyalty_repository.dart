@@ -30,7 +30,7 @@ class LoyaltyRepository {
       final items = (res.data['loyalty_data'] as List)
           .map((e) => LoyaltyModel.fromJson(e))
           .toList();
-      return PaginationModel.fromJson(res.data, items);
+      return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
   }

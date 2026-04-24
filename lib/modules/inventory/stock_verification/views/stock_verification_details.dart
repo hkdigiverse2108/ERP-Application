@@ -108,7 +108,7 @@ class StockVerificationDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildItemCard(Item item, BuildContext context) {
+  Widget _buildItemCard(StockVerificationItem item, BuildContext context) {
     final bool isNegative = item.differenceQty < 0;
 
     return Container(

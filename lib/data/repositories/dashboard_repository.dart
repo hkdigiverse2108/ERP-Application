@@ -45,7 +45,7 @@ class DashboardRepository {
     final String url = ApiConstants.buildUrl(ApiConstants.topCustomers, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
-      'branchFilter': branchId ?? 'all',
+      // 'branchFilter': branchId ?? 'all',
     });
     final ResModel res = await _api.get(url);
 
@@ -102,12 +102,14 @@ class DashboardRepository {
     DateTime? endDate,
     String? branchId,
   }) async {
-    final String url =
-        ApiConstants.buildUrl(ApiConstants.categoryWiseCustomers, {
-          if (startDate != null) 'startDate': startDate.toIso8601String(),
-          if (endDate != null) 'endDate': endDate.toIso8601String(),
-          'branchFilter': branchId ?? 'all',
-        });
+    final String url = ApiConstants.buildUrl(
+      ApiConstants.categoryWiseCustomers,
+      {
+        if (startDate != null) 'startDate': startDate.toIso8601String(),
+        if (endDate != null) 'endDate': endDate.toIso8601String(),
+        // 'branchFilter': branchId ?? 'all',
+      },
+    );
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {

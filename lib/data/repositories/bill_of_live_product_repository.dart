@@ -24,9 +24,9 @@ class BillOfLiveProductRepository {
 
     if (response.status == 200) {
       final items = (response.data['billOfLiveProduct_data'] as List)
-          .map((x) => BillOfLiveProductModel.fromJson(x))
+          .map((x) => BillOfLiveProductModel.fromMap(x as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
 
     throw Exception(response.message ?? 'Failed to load bill of live products');
@@ -36,7 +36,7 @@ class BillOfLiveProductRepository {
     final ResModel response = await _api.get(ApiConstants.getBillOfLiveProductById(id));
 
     if (response.status == 200 && response.data != null) {
-      return BillOfLiveProductModel.fromJson(response.data as Map<String, dynamic>);
+      return BillOfLiveProductModel.fromMap(response.data as Map<String, dynamic>);
     }
 
     throw Exception(response.message ?? 'Failed to load bill of live product detail');

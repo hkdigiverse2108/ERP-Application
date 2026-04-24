@@ -27,9 +27,9 @@ class ContactRepository {
     );
     if (response.status == 200) {
       final items = (response.data['contact_data'] as List)
-          .map((e) => ContactModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ContactModel.fromMap(e as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
     throw Exception(response.message ?? 'Failed to load contacts');
   }
@@ -46,7 +46,7 @@ class ContactRepository {
     );
     if (response.status == 200) {
       final items = (response.data as List)
-          .map((e) => ContactDropdownModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ContactDropdownModel.fromMap(e as Map<String, dynamic>))
           .toList();
       return items;
     }

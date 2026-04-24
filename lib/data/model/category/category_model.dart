@@ -1,20 +1,54 @@
 import 'dart:convert';
+import 'package:equatable/equatable.dart';
 
-class CategoryModel {}
+class CategoryModel extends Equatable {
+  const CategoryModel();
 
-class CategoryDropdownModel {
+  @override
+  List<Object?> get props => [];
+
+  @override
+  bool get stringify => true;
+}
+
+class CategoryDropdownModel extends Equatable {
   final String id;
   final String name;
 
-  CategoryDropdownModel({required this.id, required this.name});
+  const CategoryDropdownModel({
+    required this.id,
+    required this.name,
+  });
 
-  factory CategoryDropdownModel.fromRawJson(String str) =>
-      CategoryDropdownModel.fromJson(json.decode(str));
+  CategoryDropdownModel copyWith({
+    String? id,
+    String? name,
+  }) {
+    return CategoryDropdownModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory CategoryDropdownModel.fromJson(String json) =>
+      CategoryDropdownModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory CategoryDropdownModel.fromJson(Map<String, dynamic> json) =>
-      CategoryDropdownModel(id: json["_id"], name: json["name"]);
+  factory CategoryDropdownModel.fromMap(Map<String, dynamic> map) =>
+      CategoryDropdownModel(
+        id: map['_id'] as String? ?? '',
+        name: map['name'] as String? ?? '',
+      );
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'name': name,
+      };
+
+  @override
+  List<Object?> get props => [id, name];
+
+  @override
+  bool get stringify => true;
 }

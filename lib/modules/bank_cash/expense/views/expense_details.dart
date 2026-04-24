@@ -59,9 +59,7 @@ class ExpenseDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Party/Payee',
-                  value: expense.partyId.fullName.isNotEmpty
-                      ? expense.partyId.fullName
-                      : '-',
+                  value: expense.partyId?.fullName ?? '-',
                 ),
                 DetailItem(
                   label: 'Category',
@@ -118,7 +116,7 @@ class ExpenseDetails extends StatelessWidget {
                   ),
                 DetailItem(
                   label: 'Registered By',
-                  value: expense.createdBy.fullName,
+                  value: expense.createdBy?.fullName ?? '-',
                 ),
                 DetailItem(
                   label: 'Log Date',

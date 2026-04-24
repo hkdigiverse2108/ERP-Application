@@ -218,7 +218,7 @@ class HomeController extends GetxController {
       final response = await _repo.getCategoryWiseCustomers(
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
-        branchId: BranchController.to.selectedBranch.value?.id,
+        // branchId: BranchController.to.selectedBranch.value?.id,
       );
       categoryWiseCustomers.value = response;
     } catch (e) {

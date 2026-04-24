@@ -50,7 +50,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                     title: 'Debit Note No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.debitNoteNo,
+                      item.debitNoteNo ?? '-',
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -77,7 +77,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.debitNoteDate),
+                      DateFormat('dd MMM yyyy').format(item.debitNoteDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -86,7 +86,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.summary.netAmount.toStringAsFixed(2)}',
+                      '₹${(item.summary?.netAmount ?? 0).toStringAsFixed(2)}',
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -104,7 +104,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        item.status.isNotEmpty ? item.status : "Pending",
+                        (item.status?.isNotEmpty == true) ? item.status! : "Pending",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.w600,
@@ -117,7 +117,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),

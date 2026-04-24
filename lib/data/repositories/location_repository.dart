@@ -11,7 +11,7 @@ class LocationRepository {
 
     if (res.status == 200) {
       return res.data
-          .map<LocationDropdown>((json) => LocationDropdown.fromJson(json))
+          .map<LocationDropdown>((json) => LocationDropdown.fromMap(json as Map<String, dynamic>))
           .toList();
     }
 
@@ -23,7 +23,7 @@ class LocationRepository {
 
     if (res.status == 200) {
       return res.data
-          .map<LocationDropdown>((json) => LocationDropdown.fromJson(json))
+          .map<LocationDropdown>((json) => LocationDropdown.fromMap(json as Map<String, dynamic>))
           .toList();
     }
 
@@ -34,7 +34,7 @@ class LocationRepository {
     final ResModel res = await _api.get(ApiConstants.getCity(id: stateId));
     if (res.status == 200) {
       return res.data
-          .map<LocationDropdown>((json) => LocationDropdown.fromJson(json))
+          .map<LocationDropdown>((json) => LocationDropdown.fromMap(json as Map<String, dynamic>))
           .toList();
     }
 

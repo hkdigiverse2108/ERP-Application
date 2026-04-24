@@ -376,7 +376,7 @@ class ProductAddEditController extends GetxController {
         "shortDescription": shortDescriptionController.text,
         "netWeight": double.tryParse(netWeightController.text),
         "masterQty": int.tryParse(masterQtyController.text),
-        "nutrition": nutritionList.map((e) => e.toJson()).toList(),
+        "nutrition": nutritionList.map((e) => e.toMap()).toList(),
         "productImages": imageList,
       };
 

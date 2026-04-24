@@ -1,9 +1,9 @@
-import 'dart:convert';
-
+import 'dart:convert' hide json;
+import 'package:equatable/equatable.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 
-class ProductModel {
+class ProductModel extends Equatable {
   final String id;
   final bool isDeleted;
   final bool isActive;
@@ -61,7 +61,7 @@ class ProductModel {
   final int? netWeight;
   final String? additionalInfo;
 
-  ProductModel({
+  const ProductModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
@@ -120,108 +120,230 @@ class ProductModel {
     this.additionalInfo,
   });
 
-  factory ProductModel.fromRawJson(String str) =>
-      ProductModel.fromJson(json.decode(str));
+  ProductModel copyWith({
+    String? id,
+    bool? isDeleted,
+    bool? isActive,
+    CreatedBy? createdBy,
+    String? updatedBy,
+    String? companyId,
+    List<String>? images,
+    ProductType? productType,
+    String? name,
+    String? printName,
+    int? cessPercentage,
+    bool? manageMultipleBatch,
+    bool? isExpiryProductSaleable,
+    bool? hasExpiry,
+    List<dynamic>? ingredients,
+    int? masterQty,
+    List<String>? stockIds,
+    int? purchasePrice,
+    double? landingCost,
+    int? mrp,
+    int? sellingPrice,
+    int? sellingDiscount,
+    double? sellingMargin,
+    int? retailerDiscount,
+    int? retailerPrice,
+    int? retailerMargin,
+    int? wholesalerDiscount,
+    int? wholesalerPrice,
+    int? wholesalerMargin,
+    int? minimumQty,
+    int? openingQty,
+    int? onlinePrice,
+    List<Nutrition>? nutrition,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    IdNameModel? branchId,
+    TaxId? purchaseTaxId,
+    TaxId? salesTaxId,
+    bool? isPurchaseTaxIncluding,
+    bool? isSalesTaxIncluding,
+    double? qty,
+    UomId? uomId,
+    IdNameModel? categoryId,
+    IdNameModel? brandId,
+    String? sku,
+    int? expiryDays,
+    String? calculateExpiryOn,
+    DateTime? expiryReferenceDate,
+    IdNameModel? productTypeId,
+    IdNameModel? subCategoryId,
+    IdNameModel? subBrandId,
+    String? hsnCode,
+    String? description,
+    String? shortDescription,
+    int? netWeight,
+    String? additionalInfo,
+  }) {
+    return ProductModel(
+      id: id ?? this.id,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      companyId: companyId ?? this.companyId,
+      images: images ?? this.images,
+      productType: productType ?? this.productType,
+      name: name ?? this.name,
+      printName: printName ?? this.printName,
+      cessPercentage: cessPercentage ?? this.cessPercentage,
+      manageMultipleBatch: manageMultipleBatch ?? this.manageMultipleBatch,
+      isExpiryProductSaleable:
+          isExpiryProductSaleable ?? this.isExpiryProductSaleable,
+      hasExpiry: hasExpiry ?? this.hasExpiry,
+      ingredients: ingredients ?? this.ingredients,
+      masterQty: masterQty ?? this.masterQty,
+      stockIds: stockIds ?? this.stockIds,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      landingCost: landingCost ?? this.landingCost,
+      mrp: mrp ?? this.mrp,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      sellingDiscount: sellingDiscount ?? this.sellingDiscount,
+      sellingMargin: sellingMargin ?? this.sellingMargin,
+      retailerDiscount: retailerDiscount ?? this.retailerDiscount,
+      retailerPrice: retailerPrice ?? this.retailerPrice,
+      retailerMargin: retailerMargin ?? this.retailerMargin,
+      wholesalerDiscount: wholesalerDiscount ?? this.wholesalerDiscount,
+      wholesalerPrice: wholesalerPrice ?? this.wholesalerPrice,
+      wholesalerMargin: wholesalerMargin ?? this.wholesalerMargin,
+      minimumQty: minimumQty ?? this.minimumQty,
+      openingQty: openingQty ?? this.openingQty,
+      onlinePrice: onlinePrice ?? this.onlinePrice,
+      nutrition: nutrition ?? this.nutrition,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      branchId: branchId ?? this.branchId,
+      purchaseTaxId: purchaseTaxId ?? this.purchaseTaxId,
+      salesTaxId: salesTaxId ?? this.salesTaxId,
+      isPurchaseTaxIncluding:
+          isPurchaseTaxIncluding ?? this.isPurchaseTaxIncluding,
+      isSalesTaxIncluding: isSalesTaxIncluding ?? this.isSalesTaxIncluding,
+      qty: qty ?? this.qty,
+      uomId: uomId ?? this.uomId,
+      categoryId: categoryId ?? this.categoryId,
+      brandId: brandId ?? this.brandId,
+      sku: sku ?? this.sku,
+      expiryDays: expiryDays ?? this.expiryDays,
+      calculateExpiryOn: calculateExpiryOn ?? this.calculateExpiryOn,
+      expiryReferenceDate: expiryReferenceDate ?? this.expiryReferenceDate,
+      productTypeId: productTypeId ?? this.productTypeId,
+      subCategoryId: subCategoryId ?? this.subCategoryId,
+      subBrandId: subBrandId ?? this.subBrandId,
+      hsnCode: hsnCode ?? this.hsnCode,
+      description: description ?? this.description,
+      shortDescription: shortDescription ?? this.shortDescription,
+      netWeight: netWeight ?? this.netWeight,
+      additionalInfo: additionalInfo ?? this.additionalInfo,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory ProductModel.fromJson(String json) =>
+      ProductModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    id: json["_id"] ?? '',
-    isDeleted: json["isDeleted"] ?? false,
-    isActive: json["isActive"] ?? false,
-    createdBy: json["createdBy"] == null
+  String toJson() => jsonEncode(toMap());
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) => ProductModel(
+    id: map["_id"] ?? '',
+    isDeleted: map["isDeleted"] ?? false,
+    isActive: map["isActive"] ?? false,
+    createdBy: map["createdBy"] == null
         ? null
-        : CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"] ?? '',
-    companyId: json["companyId"],
-    images: json["images"] != null
-        ? List<String>.from(json["images"].map((x) => x))
+        : CreatedBy.fromMap(map["createdBy"]),
+    updatedBy: map["updatedBy"] ?? '',
+    companyId: map["companyId"],
+    images: map["images"] != null
+        ? List<String>.from(map["images"].map((x) => x))
         : [],
     productType:
-        productTypeValues.map[json["productType"]] ?? ProductType.finished,
-    name: json["name"] ?? '',
-    printName: json["printName"] ?? '',
-    cessPercentage: json["cessPercentage"],
-    manageMultipleBatch: json["manageMultipleBatch"] ?? false,
-    isExpiryProductSaleable: json["isExpiryProductSaleable"] ?? false,
-    hasExpiry: json["hasExpiry"] ?? false,
-    ingredients: json["ingredients"] != null
-        ? List<dynamic>.from(json["ingredients"].map((x) => x))
+        productTypeValues.map[map["productType"]] ?? ProductType.finished,
+    name: map["name"] ?? '',
+    printName: map["printName"] ?? '',
+    cessPercentage: map["cessPercentage"],
+    manageMultipleBatch: map["manageMultipleBatch"] ?? false,
+    isExpiryProductSaleable: map["isExpiryProductSaleable"] ?? false,
+    hasExpiry: map["hasExpiry"] ?? false,
+    ingredients: map["ingredients"] != null
+        ? List<dynamic>.from(map["ingredients"].map((x) => x))
         : [],
-    masterQty: json["masterQty"],
-    stockIds: json["stockIds"] == null
+    masterQty: map["masterQty"],
+    stockIds: map["stockIds"] == null
         ? []
-        : List<String>.from(json["stockIds"]!.map((x) => x)),
-    purchasePrice: json["purchasePrice"] ?? 0,
-    landingCost: json["landingCost"]?.toDouble() ?? 0,
-    mrp: json["mrp"] ?? 0,
-    sellingPrice: json["sellingPrice"] ?? 0,
-    sellingDiscount: json["sellingDiscount"] ?? 0,
-    sellingMargin: json["sellingMargin"]?.toDouble() ?? 0,
-    retailerDiscount: json["retailerDiscount"],
-    retailerPrice: json["retailerPrice"],
-    retailerMargin: json["retailerMargin"],
-    wholesalerDiscount: json["wholesalerDiscount"],
-    wholesalerPrice: json["wholesalerPrice"],
-    wholesalerMargin: json["wholesalerMargin"],
-    minimumQty: json["minimumQty"],
-    openingQty: json["openingQty"],
-    onlinePrice: json["onlinePrice"],
-    nutrition: json["nutrition"] != null
+        : List<String>.from(map["stockIds"]!.map((x) => x)),
+    purchasePrice: map["purchasePrice"] ?? 0,
+    landingCost: map["landingCost"]?.toDouble() ?? 0,
+    mrp: map["mrp"] ?? 0,
+    sellingPrice: map["sellingPrice"] ?? 0,
+    sellingDiscount: map["sellingDiscount"] ?? 0,
+    sellingMargin: map["sellingMargin"]?.toDouble() ?? 0,
+    retailerDiscount: map["retailerDiscount"],
+    retailerPrice: map["retailerPrice"],
+    retailerMargin: map["retailerMargin"],
+    wholesalerDiscount: map["wholesalerDiscount"],
+    wholesalerPrice: map["wholesalerPrice"],
+    wholesalerMargin: map["wholesalerMargin"],
+    minimumQty: map["minimumQty"],
+    openingQty: map["openingQty"],
+    onlinePrice: map["onlinePrice"],
+    nutrition: map["nutrition"] != null
         ? List<Nutrition>.from(
-            json["nutrition"].map((x) => Nutrition.fromJson(x)),
+            map["nutrition"].map((x) => Nutrition.fromMap(x)),
           )
         : [],
-    createdAt: json["createdAt"] != null
-        ? DateTime.parse(json["createdAt"])
+    createdAt: map["createdAt"] != null
+        ? DateTime.parse(map["createdAt"])
         : DateTime.now(),
-    updatedAt: json["updatedAt"] != null
-        ? DateTime.parse(json["updatedAt"])
+    updatedAt: map["updatedAt"] != null
+        ? DateTime.parse(map["updatedAt"])
         : DateTime.now(),
-    branchId: IdNameModel.fromJson(json["branchId"]),
-    purchaseTaxId: json["purchaseTaxId"] == null
+    branchId: map["branchId"] != null
+        ? IdNameModel.fromMap(map["branchId"])
+        : null,
+    purchaseTaxId: map["purchaseTaxId"] == null
         ? null
-        : TaxId.fromJson(json["purchaseTaxId"]),
-    salesTaxId: json["salesTaxId"] == null
+        : TaxId.fromMap(map["purchaseTaxId"]),
+    salesTaxId: map["salesTaxId"] == null
         ? null
-        : TaxId.fromJson(json["salesTaxId"]),
-    isPurchaseTaxIncluding: json["isPurchaseTaxIncluding"] ?? false,
-    isSalesTaxIncluding: json["isSalesTaxIncluding"] ?? false,
-    qty: json["qty"]?.toDouble() ?? 0,
-    uomId: json["uomId"] == null ? null : UomId.fromJson(json["uomId"]),
-    categoryId: json["categoryId"] == null
+        : TaxId.fromMap(map["salesTaxId"]),
+    isPurchaseTaxIncluding: map["isPurchaseTaxIncluding"] ?? false,
+    isSalesTaxIncluding: map["isSalesTaxIncluding"] ?? false,
+    qty: map["qty"]?.toDouble() ?? 0,
+    uomId: map["uomId"] == null ? null : UomId.fromMap(map["uomId"]),
+    categoryId: map["categoryId"] == null
         ? null
-        : IdNameModel.fromJson(json["categoryId"]),
-    brandId: json["brandId"] == null
+        : IdNameModel.fromMap(map["categoryId"]),
+    brandId: map["brandId"] == null
         ? null
-        : IdNameModel.fromJson(json["brandId"]),
-    sku: json["sku"],
-    expiryDays: json["expiryDays"],
-    calculateExpiryOn: json["calculateExpiryOn"],
-    expiryReferenceDate: json["expiryReferenceDate"] == null
+        : IdNameModel.fromMap(map["brandId"]),
+    sku: map["sku"],
+    expiryDays: map["expiryDays"],
+    calculateExpiryOn: map["calculateExpiryOn"],
+    expiryReferenceDate: map["expiryReferenceDate"] == null
         ? null
-        : DateTime.parse(json["expiryReferenceDate"]),
-    productTypeId: json["productTypeId"] == null
+        : DateTime.parse(map["expiryReferenceDate"]),
+    productTypeId: map["productTypeId"] == null
         ? null
-        : IdNameModel.fromJson(json["productTypeId"]),
-    subCategoryId: json["subCategoryId"] == null
+        : IdNameModel.fromMap(map["productTypeId"]),
+    subCategoryId: map["subCategoryId"] == null
         ? null
-        : IdNameModel.fromJson(json["subCategoryId"]),
-    subBrandId: json["subBrandId"] == null
+        : IdNameModel.fromMap(map["subCategoryId"]),
+    subBrandId: map["subBrandId"] == null
         ? null
-        : IdNameModel.fromJson(json["subBrandId"]),
-    hsnCode: json["hsnCode"],
-    description: json["description"],
-    shortDescription: json["shortDescription"],
-    netWeight: json["netWeight"],
-    additionalInfo: json["additionalInfo"],
+        : IdNameModel.fromMap(map["subBrandId"]),
+    hsnCode: map["hsnCode"],
+    description: map["description"],
+    shortDescription: map["shortDescription"],
+    netWeight: map["netWeight"],
+    additionalInfo: map["additionalInfo"],
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "isDeleted": isDeleted,
     "isActive": isActive,
-    "createdBy": createdBy?.toJson(),
+    "createdBy": createdBy?.toMap(),
     "updatedBy": updatedBy,
     "companyId": companyId,
     "images": List<dynamic>.from(images.map((x) => x)),
@@ -252,56 +374,137 @@ class ProductModel {
     "minimumQty": minimumQty,
     "openingQty": openingQty,
     "onlinePrice": onlinePrice,
-    "nutrition": List<dynamic>.from(nutrition.map((x) => x.toJson())),
+    "nutrition": List<dynamic>.from(nutrition.map((x) => x.toMap())),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
-    "branchId": branchId?.toJson(),
-    "purchaseTaxId": purchaseTaxId?.toJson(),
-    "salesTaxId": salesTaxId?.toJson(),
+    "branchId": branchId?.toMap(),
+    "purchaseTaxId": purchaseTaxId?.toMap(),
+    "salesTaxId": salesTaxId?.toMap(),
     "isPurchaseTaxIncluding": isPurchaseTaxIncluding,
     "isSalesTaxIncluding": isSalesTaxIncluding,
     "qty": qty,
-    "uomId": uomId?.toJson(),
-    "categoryId": categoryId?.toJson(),
-    "brandId": brandId?.toJson(),
+    "uomId": uomId?.toMap(),
+    "categoryId": categoryId?.toMap(),
+    "brandId": brandId?.toMap(),
     "sku": sku,
     "expiryDays": expiryDays,
     "calculateExpiryOn": calculateExpiryOn,
     "expiryReferenceDate": expiryReferenceDate?.toIso8601String(),
-    "productTypeId": productTypeId?.toJson(),
-    "subCategoryId": subCategoryId?.toJson(),
-    "subBrandId": subBrandId?.toJson(),
+    "productTypeId": productTypeId?.toMap(),
+    "subCategoryId": subCategoryId?.toMap(),
+    "subBrandId": subBrandId?.toMap(),
     "hsnCode": hsnCode,
     "description": description,
     "shortDescription": shortDescription,
     "netWeight": netWeight,
     "additionalInfo": additionalInfo,
   };
+
+  @override
+  List<Object?> get props => [
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    images,
+    productType,
+    name,
+    printName,
+    cessPercentage,
+    manageMultipleBatch,
+    isExpiryProductSaleable,
+    hasExpiry,
+    ingredients,
+    masterQty,
+    stockIds,
+    purchasePrice,
+    landingCost,
+    mrp,
+    sellingPrice,
+    sellingDiscount,
+    sellingMargin,
+    retailerDiscount,
+    retailerPrice,
+    retailerMargin,
+    wholesalerDiscount,
+    wholesalerPrice,
+    wholesalerMargin,
+    minimumQty,
+    openingQty,
+    onlinePrice,
+    nutrition,
+    createdAt,
+    updatedAt,
+    branchId,
+    purchaseTaxId,
+    salesTaxId,
+    isPurchaseTaxIncluding,
+    isSalesTaxIncluding,
+    qty,
+    uomId,
+    categoryId,
+    brandId,
+    sku,
+    expiryDays,
+    calculateExpiryOn,
+    expiryReferenceDate,
+    productTypeId,
+    subCategoryId,
+    subBrandId,
+    hsnCode,
+    description,
+    shortDescription,
+    netWeight,
+    additionalInfo,
+  ];
+
+  @override
+  bool get stringify => true;
 }
 
-class CreatedBy {
+class CreatedBy extends Equatable {
   final String id;
   final String fullName;
   final UserType userType;
 
-  CreatedBy({required this.id, required this.fullName, required this.userType});
+  const CreatedBy({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+  });
 
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
+  CreatedBy copyWith({String? id, String? fullName, UserType? userType}) {
+    return CreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory CreatedBy.fromJson(String json) =>
+      CreatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"]?.toString() ?? '',
-    fullName: json["fullName"]?.toString() ?? '',
-    userType: userTypeValues.map[json["userType"]] ?? UserType.admin,
+  String toJson() => jsonEncode(toMap());
+
+  factory CreatedBy.fromMap(Map<String, dynamic> map) => CreatedBy(
+    id: map["_id"]?.toString() ?? '',
+    fullName: map["fullName"]?.toString() ?? '',
+    userType: userTypeValues.map[map["userType"]] ?? UserType.admin,
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "fullName": fullName,
     "userType": userTypeValues.reverse[userType],
   };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
 final userTypeValues = EnumValues({
@@ -309,75 +512,121 @@ final userTypeValues = EnumValues({
   "super-admin": UserType.superAdmin,
 });
 
-class Nutrition {
+class Nutrition extends Equatable {
   final String name;
   final String value;
   final String? id;
 
-  Nutrition({required this.name, required this.value, this.id});
+  const Nutrition({required this.name, required this.value, this.id});
 
-  factory Nutrition.fromRawJson(String str) =>
-      Nutrition.fromJson(json.decode(str));
+  Nutrition copyWith({String? name, String? value, String? id}) {
+    return Nutrition(
+      name: name ?? this.name,
+      value: value ?? this.value,
+      id: id ?? this.id,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory Nutrition.fromJson(String json) =>
+      Nutrition.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory Nutrition.fromJson(Map<String, dynamic> json) => Nutrition(
-    name: json["name"] ?? '',
-    value: json["value"] ?? '',
-    id: json["_id"] ?? '',
+  String toJson() => jsonEncode(toMap());
+
+  factory Nutrition.fromMap(Map<String, dynamic> map) => Nutrition(
+    name: map["name"] ?? '',
+    value: map["value"] ?? '',
+    id: map["_id"] ?? '',
   );
 
-  Map<String, dynamic> toJson() => {"name": name, "value": value, "_id": id};
+  Map<String, dynamic> toMap() => {"name": name, "value": value, "_id": id};
+
+  @override
+  List<Object?> get props => [name, value, id];
+
+  @override
+  bool get stringify => true;
 }
 
 final productTypeValues = EnumValues({
   "finished": ProductType.finished,
   "raw_material": ProductType.raw_material,
   "semi_finished": ProductType.semi_finished,
+  "non_inventory": ProductType.non_inventory,
+  "service": ProductType.service,
 });
 
-class TaxId {
+class TaxId extends Equatable {
   final String id;
   final String name;
   final int percentage;
 
-  TaxId({required this.id, required this.name, required this.percentage});
+  const TaxId({required this.id, required this.name, required this.percentage});
 
-  factory TaxId.fromRawJson(String str) => TaxId.fromJson(json.decode(str));
+  TaxId copyWith({String? id, String? name, int? percentage}) {
+    return TaxId(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory TaxId.fromJson(String json) =>
+      TaxId.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory TaxId.fromJson(Map<String, dynamic> json) => TaxId(
-    id: json["_id"] ?? '',
-    name: json["name"] ?? '',
-    percentage: json["percentage"] ?? 0,
+  String toJson() => jsonEncode(toMap());
+
+  factory TaxId.fromMap(Map<String, dynamic> map) => TaxId(
+    id: map["_id"] ?? '',
+    name: map["name"] ?? '',
+    percentage: map["percentage"] ?? 0,
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "name": name,
     "percentage": percentage,
   };
+
+  @override
+  List<Object?> get props => [id, name, percentage];
+
+  @override
+  bool get stringify => true;
 }
 
-class UomId {
+class UomId extends Equatable {
   final String id;
   final String name;
   final String code;
 
-  UomId({required this.id, required this.name, required this.code});
+  const UomId({required this.id, required this.name, required this.code});
 
-  factory UomId.fromRawJson(String str) => UomId.fromJson(json.decode(str));
+  UomId copyWith({String? id, String? name, String? code}) {
+    return UomId(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      code: code ?? this.code,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory UomId.fromJson(String json) =>
+      UomId.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory UomId.fromJson(Map<String, dynamic> json) => UomId(
-    id: json["_id"] ?? '',
-    name: json["name"] ?? '',
-    code: json["code"] ?? '',
+  String toJson() => jsonEncode(toMap());
+
+  factory UomId.fromMap(Map<String, dynamic> map) => UomId(
+    id: map["_id"] ?? '',
+    name: map["name"] ?? '',
+    code: map["code"] ?? '',
   );
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name, "code": code};
+  Map<String, dynamic> toMap() => {"_id": id, "name": name, "code": code};
+
+  @override
+  List<Object?> get props => [id, name, code];
+
+  @override
+  bool get stringify => true;
 }
 
 class EnumValues<T> {
@@ -392,7 +641,7 @@ class EnumValues<T> {
   }
 }
 
-class ProductItemModel {
+class ProductItemModel extends Equatable {
   final String id;
   final String name;
   final String printName;
@@ -406,7 +655,7 @@ class ProductItemModel {
   final double qty;
   final CreatedBy? createdBy;
 
-  ProductItemModel({
+  const ProductItemModel({
     required this.id,
     required this.name,
     required this.printName,
@@ -421,49 +670,219 @@ class ProductItemModel {
     this.createdBy,
   });
 
-  factory ProductItemModel.fromRawJson(String str) =>
-      ProductItemModel.fromJson(json.decode(str));
+  ProductItemModel copyWith({
+    String? id,
+    String? name,
+    String? printName,
+    IdNameModel? categoryId,
+    IdNameModel? brandId,
+    TaxId? purchaseTaxId,
+    TaxId? salesTaxId,
+    int? purchasePrice,
+    int? mrp,
+    int? sellingPrice,
+    double? qty,
+    CreatedBy? createdBy,
+  }) {
+    return ProductItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      printName: printName ?? this.printName,
+      categoryId: categoryId ?? this.categoryId,
+      brandId: brandId ?? this.brandId,
+      purchaseTaxId: purchaseTaxId ?? this.purchaseTaxId,
+      salesTaxId: salesTaxId ?? this.salesTaxId,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      mrp: mrp ?? this.mrp,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      qty: qty ?? this.qty,
+      createdBy: createdBy ?? this.createdBy,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory ProductItemModel.fromJson(String json) =>
+      ProductItemModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory ProductItemModel.fromJson(Map<String, dynamic> json) =>
+  String toJson() => jsonEncode(toMap());
+
+  factory ProductItemModel.fromMap(Map<String, dynamic> map) =>
       ProductItemModel(
-        id: json["_id"] ?? '',
-        name: json["name"] ?? '',
-        printName: json["printName"] ?? '',
-        categoryId: json["categoryId"] == null
+        id: map["_id"] ?? '',
+        name: map["name"] ?? '',
+        printName: map["printName"] ?? '',
+        categoryId: map["categoryId"] == null
             ? null
-            : IdNameModel.fromJson(json["categoryId"]),
-        brandId: json["brandId"] == null
+            : IdNameModel.fromMap(map["categoryId"]),
+        brandId: map["brandId"] == null
             ? null
-            : IdNameModel.fromJson(json["brandId"]),
-        purchaseTaxId: json["purchaseTaxId"] == null
+            : IdNameModel.fromMap(map["brandId"]),
+        purchaseTaxId: map["purchaseTaxId"] == null
             ? null
-            : TaxId.fromJson(json["purchaseTaxId"]),
-        salesTaxId: json["salesTaxId"] == null
+            : TaxId.fromMap(map["purchaseTaxId"]),
+        salesTaxId: map["salesTaxId"] == null
             ? null
-            : TaxId.fromJson(json["salesTaxId"]),
-        purchasePrice: json["purchasePrice"] ?? 0,
-        mrp: json["mrp"] ?? 0,
-        sellingPrice: json["sellingPrice"] ?? 0,
-        qty: json["qty"]?.toDouble() ?? 0.0,
-        createdBy: json["createdBy"] == null
+            : TaxId.fromMap(map["salesTaxId"]),
+        purchasePrice: map["purchasePrice"] ?? 0,
+        mrp: map["mrp"] ?? 0,
+        sellingPrice: map["sellingPrice"] ?? 0,
+        qty: map["qty"]?.toDouble() ?? 0.0,
+        createdBy: map["createdBy"] == null
             ? null
-            : CreatedBy.fromJson(json["createdBy"]),
+            : CreatedBy.fromMap(map["createdBy"]),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "name": name,
     "printName": printName,
-    "categoryId": categoryId?.toJson(),
-    "brandId": brandId?.toJson(),
-    "purchaseTaxId": purchaseTaxId?.toJson(),
-    "salesTaxId": salesTaxId?.toJson(),
+    "categoryId": categoryId?.toMap(),
+    "brandId": brandId?.toMap(),
+    "purchaseTaxId": purchaseTaxId?.toMap(),
+    "salesTaxId": salesTaxId?.toMap(),
     "purchasePrice": purchasePrice,
     "mrp": mrp,
     "sellingPrice": sellingPrice,
     "qty": qty,
-    "createdBy": createdBy?.toJson(),
+    "createdBy": createdBy?.toMap(),
   };
+
+  @override
+  List<Object?> get props => [
+    id,
+    name,
+    printName,
+    categoryId,
+    brandId,
+    purchaseTaxId,
+    salesTaxId,
+    purchasePrice,
+    mrp,
+    sellingPrice,
+    qty,
+    createdBy,
+  ];
+
+  @override
+  bool get stringify => true;
+}
+
+class ProductDropdownModel extends Equatable {
+  final String id;
+  final String name;
+  final ProductType productType;
+  final double qty;
+  final double purchasePrice;
+  final double landingCost;
+  final double mrp;
+  final double sellingPrice;
+  final double sellingDiscount;
+  final double sellingMargin;
+  final TaxId? purchaseTaxId;
+  final TaxId? salesTaxId;
+
+  const ProductDropdownModel({
+    required this.id,
+    required this.name,
+    required this.productType,
+    required this.qty,
+    required this.purchasePrice,
+    required this.landingCost,
+    required this.mrp,
+    required this.sellingPrice,
+    required this.sellingDiscount,
+    required this.sellingMargin,
+    this.purchaseTaxId,
+    this.salesTaxId,
+  });
+
+  ProductDropdownModel copyWith({
+    String? id,
+    String? name,
+    ProductType? productType,
+    double? qty,
+    double? purchasePrice,
+    double? landingCost,
+    double? mrp,
+    double? sellingPrice,
+    double? sellingDiscount,
+    double? sellingMargin,
+    TaxId? purchaseTaxId,
+    TaxId? salesTaxId,
+  }) {
+    return ProductDropdownModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      productType: productType ?? this.productType,
+      qty: qty ?? this.qty,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      landingCost: landingCost ?? this.landingCost,
+      mrp: mrp ?? this.mrp,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      sellingDiscount: sellingDiscount ?? this.sellingDiscount,
+      sellingMargin: sellingMargin ?? this.sellingMargin,
+      purchaseTaxId: purchaseTaxId ?? this.purchaseTaxId,
+      salesTaxId: salesTaxId ?? this.salesTaxId,
+    );
+  }
+
+  factory ProductDropdownModel.fromJson(String json) =>
+      ProductDropdownModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory ProductDropdownModel.fromMap(Map<String, dynamic> map) =>
+      ProductDropdownModel(
+        id: map["_id"] ?? '',
+        name: map["name"] ?? '',
+        productType:
+            productTypeValues.map[map["productType"] ?? ''] ??
+            ProductType.finished,
+        qty: map["qty"]?.toDouble() ?? 0.0,
+        purchasePrice: map["purchasePrice"]?.toDouble() ?? 0.0,
+        landingCost: map["landingCost"]?.toDouble() ?? 0.0,
+        mrp: map["mrp"]?.toDouble() ?? 0.0,
+        sellingPrice: map["sellingPrice"]?.toDouble() ?? 0.0,
+        sellingDiscount: map["sellingDiscount"]?.toDouble() ?? 0.0,
+        sellingMargin: map["sellingMargin"]?.toDouble() ?? 0.0,
+        purchaseTaxId: map["purchaseTaxId"] == null
+            ? null
+            : TaxId.fromMap(map["purchaseTaxId"]),
+        salesTaxId: map["salesTaxId"] == null
+            ? null
+            : TaxId.fromMap(map["salesTaxId"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+    "_id": id,
+    "name": name,
+    "productType": productTypeValues.reverse[productType],
+    "qty": qty,
+    "purchasePrice": purchasePrice,
+    "landingCost": landingCost,
+    "mrp": mrp,
+    "sellingPrice": sellingPrice,
+    "sellingDiscount": sellingDiscount,
+    "sellingMargin": sellingMargin,
+    "purchaseTaxId": purchaseTaxId?.toMap(),
+    "salesTaxId": salesTaxId?.toMap(),
+  };
+
+  @override
+  List<Object?> get props => [
+    id,
+    name,
+    productType,
+    qty,
+    purchasePrice,
+    landingCost,
+    mrp,
+    sellingPrice,
+    sellingDiscount,
+    sellingMargin,
+    purchaseTaxId,
+    salesTaxId,
+  ];
+
+  @override
+  bool get stringify => true;
 }

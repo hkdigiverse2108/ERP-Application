@@ -258,7 +258,7 @@ class PdfMappers {
     return DetailPdfData(
       title: 'Purchase Order #${order.orderNo}',
       subtitle:
-          'Date: ${dateFormat.format(order.orderDate)}\nShipping Date: ${dateFormat.format(order.shippingDate)}',
+          'Date: ${order.orderDate != null ? dateFormat.format(order.orderDate!) : "-"}\nShipping Date: ${order.shippingDate != null ? dateFormat.format(order.shippingDate!) : "-"}',
       status: order.status,
       filename: 'PurchaseOrder_${order.orderNo}.pdf',
       sections: [
@@ -268,14 +268,14 @@ class PdfMappers {
             PdfItemData(
               label: 'Supplier',
               value:
-                  '${order.supplierId.firstName} ${order.supplierId.lastName}',
+                  '${order.supplierId?.firstName ?? ""} ${order.supplierId?.lastName ?? ""}',
             ),
-            PdfItemData(label: 'Company', value: order.supplierId.companyName),
+            PdfItemData(label: 'Company', value: order.supplierId?.companyName ?? '-'),
             PdfItemData(
               label: 'Place of Supply',
               value: order.placeOfSupply ?? '-',
             ),
-            PdfItemData(label: 'Tax Type', value: order.taxType),
+            PdfItemData(label: 'Tax Type', value: order.taxType ?? '-'),
           ],
         ),
         PdfSectionData(
@@ -285,9 +285,9 @@ class PdfMappers {
             rows: order.items
                 .map(
                   (item) => [
-                    item.productId.name,
+                    item.productId?.name ?? '-',
                     '${item.qty} ${item.unit ?? ""}',
-                    '₹${item.unitCost ?? 0}',
+                    '₹${item.unitCost}',
                     '${item.taxId?.percentage ?? 0}%',
                     '₹${item.total}',
                   ],
@@ -300,23 +300,23 @@ class PdfMappers {
           items: [
             PdfItemData(
               label: 'Gross Amount',
-              value: '₹${order.summary.grossAmount}',
+              value: '₹${order.summary?.grossAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Discount',
-              value: '₹${order.summary.discountAmount}',
+              value: '₹${order.summary?.discountAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Taxable Amount',
-              value: '₹${order.summary.taxableAmount}',
+              value: '₹${order.summary?.taxableAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Tax Amount',
-              value: '₹${order.summary.taxAmount}',
+              value: '₹${order.summary?.taxAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Net Amount',
-              value: '₹${order.summary.netAmount}',
+              value: '₹${order.summary?.netAmount ?? 0}',
             ),
           ],
         ),
@@ -441,7 +441,7 @@ class PdfMappers {
 
     return DetailPdfData(
       title: 'Supplier Bill #${bill.supplierBillNo}',
-      subtitle: 'Date: ${dateFormat.format(bill.supplierBillDate)}',
+      subtitle: 'Date: ${bill.supplierBillDate != null ? dateFormat.format(bill.supplierBillDate!) : "-"}',
       status: bill.paymentStatus,
       filename: 'SupplierBill_${bill.supplierBillNo}.pdf',
       sections: [
@@ -450,10 +450,10 @@ class PdfMappers {
           items: [
             PdfItemData(
               label: 'Supplier',
-              value: '${bill.supplierId.firstName} ${bill.supplierId.lastName}',
+              value: '${bill.supplierId?.firstName ?? ""} ${bill.supplierId?.lastName ?? ""}',
             ),
-            PdfItemData(label: 'Reference No', value: bill.referenceBillNo),
-            PdfItemData(label: 'Tax Type', value: bill.taxType),
+            PdfItemData(label: 'Reference No', value: bill.referenceBillNo ?? '-'),
+            PdfItemData(label: 'Tax Type', value: bill.taxType ?? '-'),
           ],
         ),
         PdfSectionData(
@@ -461,15 +461,15 @@ class PdfMappers {
           items: [
             PdfItemData(
               label: 'Gross Amount',
-              value: '₹${bill.summary.grossAmount}',
+              value: '₹${bill.summary?.grossAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Tax Amount',
-              value: '₹${bill.summary.taxAmount}',
+              value: '₹${bill.summary?.taxAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Net Amount',
-              value: '₹${bill.summary.netAmount}',
+              value: '₹${bill.summary?.netAmount ?? 0}',
             ),
             PdfItemData(label: 'Paid Amount', value: '₹${bill.paidAmount}'),
             PdfItemData(label: 'Balance', value: '₹${bill.balanceAmount}'),
@@ -527,7 +527,7 @@ class PdfMappers {
 
     return DetailPdfData(
       title: 'Purchase Debit Note #${note.debitNoteNo}',
-      subtitle: 'Date: ${dateFormat.format(note.debitNoteDate)}',
+      subtitle: 'Date: ${note.debitNoteDate != null ? dateFormat.format(note.debitNoteDate!) : "-"}',
       status: note.status,
       filename: 'PurchaseDebitNote_${note.debitNoteNo}.pdf',
       sections: [
@@ -548,15 +548,15 @@ class PdfMappers {
           items: [
             PdfItemData(
               label: 'Gross Amount',
-              value: '₹${note.summary.grossAmount}',
+              value: '₹${note.summary?.grossAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Tax Amount',
-              value: '₹${note.summary.taxAmount}',
+              value: '₹${note.summary?.taxAmount ?? 0}',
             ),
             PdfItemData(
               label: 'Net Amount',
-              value: '₹${note.summary.netAmount}',
+              value: '₹${note.summary?.netAmount ?? 0}',
             ),
           ],
         ),
@@ -632,9 +632,9 @@ class PdfMappers {
           items: [
             PdfItemData(
               label: isReceipt ? 'Customer' : 'Supplier',
-              value: payment.partyId.companyName?.isNotEmpty == true
-                  ? payment.partyId.companyName!
-                  : '${payment.partyId.firstName} ${payment.partyId.lastName}',
+              value: payment.partyId?.companyName?.isNotEmpty == true
+                  ? payment.partyId?.companyName ?? '-'
+                  : '${payment.partyId?.firstName ?? ''} ${payment.partyId?.lastName ?? ''}',
             ),
             PdfItemData(
               label: 'Payment Mode',
@@ -644,10 +644,10 @@ class PdfMappers {
               label: 'Voucher Type',
               value: payment.voucherType.toUpperCase(),
             ),
-            if (payment.posOrderId.orderNo.isNotEmpty)
+            if (payment.posOrderId?.orderNo.isNotEmpty ?? false)
               PdfItemData(
                 label: 'Reference Order',
-                value: payment.posOrderId.orderNo,
+                value: payment.posOrderId?.orderNo ?? '-',
               ),
           ],
         ),
@@ -690,7 +690,10 @@ class PdfMappers {
           title: 'Expense Details',
           items: [
             PdfItemData(label: 'Category', value: expense.type.toUpperCase()),
-            PdfItemData(label: 'Payee', value: expense.partyId.fullName),
+            PdfItemData(
+              label: 'Payee',
+              value: expense.partyId?.fullName ?? '-',
+            ),
             PdfItemData(
               label: 'Description',
               value: expense.description ?? '-',
@@ -729,7 +732,7 @@ class PdfMappers {
             PdfItemData(label: 'Type', value: transaction.transactionType),
             PdfItemData(
               label: 'From Account',
-              value: transaction.fromAccount.name,
+              value: transaction.fromAccount?.name ?? '-',
             ),
             PdfItemData(
               label: 'To Account',
@@ -826,10 +829,7 @@ class PdfMappers {
           title: 'Overview',
           items: [
             PdfItemData(label: 'Voucher No', value: consumption.number),
-            PdfItemData(
-              label: 'Type',
-              value: consumption.displayType,
-            ),
+            PdfItemData(label: 'Type', value: consumption.displayType),
             PdfItemData(
               label: 'Total Qty',
               value: consumption.totalQty.toString(),
@@ -975,16 +975,16 @@ class PdfMappers {
   static DetailPdfData mapSalary(sal.SalaryModel salary) {
     final dateFormat = DateFormat('dd MMM yyyy');
     return DetailPdfData(
-      title: 'Payslip: ${salary.partyId.fullName}',
+      title: 'Payslip: ${salary.partyId?.fullName ?? "-"}',
       subtitle:
           'Period: ${dateFormat.format(salary.fromDate)} - ${dateFormat.format(salary.toDate)}',
       status: salary.isActive ? 'Active' : 'Inactive',
-      filename: 'Payslip_${salary.partyId.fullName}.pdf',
+      filename: 'Payslip_${salary.partyId?.fullName ?? "unknown"}.pdf',
       sections: [
         PdfSectionData(
           title: 'Employee Details',
           items: [
-            PdfItemData(label: 'Name', value: salary.partyId.fullName),
+            PdfItemData(label: 'Name', value: salary.partyId?.fullName ?? "-"),
             if (salary.description != null && salary.description!.isNotEmpty)
               PdfItemData(label: 'Description', value: salary.description!),
           ],

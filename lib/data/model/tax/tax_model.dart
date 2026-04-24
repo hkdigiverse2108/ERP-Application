@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'package:equatable/equatable.dart';
 
-class TaxItemModel {
+class TaxItemModel extends Equatable {
   final String id;
   final bool isDeleted;
   final bool isActive;
@@ -11,120 +12,208 @@ class TaxItemModel {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  TaxItemModel({
+  const TaxItemModel({
     required this.id,
     required this.isDeleted,
     required this.isActive,
-    required this.createdBy,
-    required this.updatedBy,
+    this.createdBy,
+    this.updatedBy,
     required this.name,
     required this.percentage,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory TaxItemModel.fromRawJson(String str) =>
-      TaxItemModel.fromJson(json.decode(str));
+  TaxItemModel copyWith({
+    String? id,
+    bool? isDeleted,
+    bool? isActive,
+    CreatedBy? createdBy,
+    UpdatedBy? updatedBy,
+    String? name,
+    int? percentage,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return TaxItemModel(
+      id: id ?? this.id,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory TaxItemModel.fromJson(String json) =>
+      TaxItemModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory TaxItemModel.fromJson(Map<String, dynamic> json) => TaxItemModel(
-    id: json["_id"],
-    isDeleted: json["isDeleted"],
-    isActive: json["isActive"],
-    createdBy: json["createdBy"] == null
+  factory TaxItemModel.fromMap(Map<String, dynamic> map) => TaxItemModel(
+    id: map['_id'] as String? ?? '',
+    isDeleted: map['isDeleted'] as bool? ?? false,
+    isActive: map['isActive'] as bool? ?? false,
+    createdBy: map['createdBy'] == null
         ? null
-        : CreatedBy.fromJson(json["createdBy"]),
-    updatedBy: json["updatedBy"] == null
+        : CreatedBy.fromMap(map['createdBy'] as Map<String, dynamic>),
+    updatedBy: map['updatedBy'] == null
         ? null
-        : UpdatedBy.fromJson(json["updatedBy"]),
-    name: json["name"],
-    percentage: json["percentage"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+        : UpdatedBy.fromMap(map['updatedBy'] as Map<String, dynamic>),
+    name: map['name'] as String? ?? '',
+    percentage: (map['percentage'] as num? ?? 0).toInt(),
+    createdAt: map['createdAt'] != null
+        ? DateTime.parse(map['createdAt'] as String)
+        : DateTime.now(),
+    updatedAt: map['updatedAt'] != null
+        ? DateTime.parse(map['updatedAt'] as String)
+        : DateTime.now(),
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "isDeleted": isDeleted,
-    "isActive": isActive,
-    "createdBy": createdBy?.toJson(),
-    "updatedBy": updatedBy?.toJson(),
-    "name": name,
-    "percentage": percentage,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+    '_id': id,
+    'isDeleted': isDeleted,
+    'isActive': isActive,
+    'createdBy': createdBy?.toMap(),
+    'updatedBy': updatedBy?.toMap(),
+    'name': name,
+    'percentage': percentage,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
   };
+
+  @override
+  List<Object?> get props => [
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    name,
+    percentage,
+    createdAt,
+    updatedAt,
+  ];
+
+  @override
+  bool get stringify => true;
 }
 
-class CreatedBy {
+class CreatedBy extends Equatable {
   final String id;
   final String fullName;
   final String userType;
 
-  CreatedBy({required this.id, required this.fullName, required this.userType});
+  const CreatedBy({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+  });
 
-  factory CreatedBy.fromRawJson(String str) =>
-      CreatedBy.fromJson(json.decode(str));
+  CreatedBy copyWith({String? id, String? fullName, String? userType}) {
+    return CreatedBy(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      userType: userType ?? this.userType,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory CreatedBy.fromJson(String json) =>
+      CreatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
+  factory CreatedBy.fromMap(Map<String, dynamic> map) => CreatedBy(
+    id: map['_id'] as String? ?? '',
+    fullName: map['fullName'] as String? ?? '',
+    userType: map['userType'] as String? ?? '',
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "userType": userType,
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+    '_id': id,
+    'fullName': fullName,
+    'userType': userType,
   };
+
+  @override
+  List<Object?> get props => [id, fullName, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class UpdatedBy {
+class UpdatedBy extends Equatable {
   final String id;
   final String userType;
 
-  UpdatedBy({required this.id, required this.userType});
+  const UpdatedBy({required this.id, required this.userType});
 
-  factory UpdatedBy.fromRawJson(String str) =>
-      UpdatedBy.fromJson(json.decode(str));
+  UpdatedBy copyWith({String? id, String? userType}) {
+    return UpdatedBy(id: id ?? this.id, userType: userType ?? this.userType);
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory UpdatedBy.fromJson(String json) =>
+      UpdatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory UpdatedBy.fromJson(Map<String, dynamic> json) =>
-      UpdatedBy(id: json["_id"], userType: json["userType"]);
+  factory UpdatedBy.fromMap(Map<String, dynamic> map) => UpdatedBy(
+    id: map['_id'] as String? ?? '',
+    userType: map['userType'] as String? ?? '',
+  );
 
-  Map<String, dynamic> toJson() => {"_id": id, "userType": userType};
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {'_id': id, 'userType': userType};
+
+  @override
+  List<Object?> get props => [id, userType];
+
+  @override
+  bool get stringify => true;
 }
 
-class TaxDropdownModel {
+class TaxDropdownModel extends Equatable {
   final String id;
   final String name;
-  final dynamic percentage;
+  final num percentage;
 
-  TaxDropdownModel({
+  const TaxDropdownModel({
     required this.id,
     required this.name,
     required this.percentage,
   });
 
-  factory TaxDropdownModel.fromRawJson(String str) =>
-      TaxDropdownModel.fromJson(json.decode(str));
+  TaxDropdownModel copyWith({String? id, String? name, num? percentage}) {
+    return TaxDropdownModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
+  factory TaxDropdownModel.fromJson(String json) =>
+      TaxDropdownModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
-  factory TaxDropdownModel.fromJson(Map<String, dynamic> json) =>
+  factory TaxDropdownModel.fromMap(Map<String, dynamic> map) =>
       TaxDropdownModel(
-        id: json["_id"] ?? '',
-        name: json["name"] ?? '',
-        percentage: json["percentage"] ?? 0,
+        id: map['_id'] as String? ?? '',
+        name: map['name'] as String? ?? '',
+        percentage: map['percentage'] as num? ?? 0,
       );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "percentage": percentage,
+  String toJson() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {
+    '_id': id,
+    'name': name,
+    'percentage': percentage,
   };
+
+  @override
+  List<Object?> get props => [id, name, percentage];
+
+  @override
+  bool get stringify => true;
 }

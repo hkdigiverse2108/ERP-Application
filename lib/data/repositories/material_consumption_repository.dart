@@ -26,9 +26,9 @@ class MaterialConsumptionRepository {
 
     if (response.status == 200) {
       final items = (response.data['material_consumption_data'] as List)
-          .map((x) => MaterialConsumptionModel.fromJson(x))
+          .map((x) => MaterialConsumptionModel.fromMap(x as Map<String, dynamic>))
           .toList();
-      return PaginationModel.fromJson(response.data, items);
+      return PaginationModel.fromMap(response.data, items);
     }
 
     throw Exception(response.message ?? 'Failed to load material consumptions');
@@ -40,7 +40,7 @@ class MaterialConsumptionRepository {
     );
 
     if (response.status == 200 && response.data != null) {
-      return MaterialConsumptionModel.fromJson(
+      return MaterialConsumptionModel.fromMap(
         response.data as Map<String, dynamic>,
       );
     }

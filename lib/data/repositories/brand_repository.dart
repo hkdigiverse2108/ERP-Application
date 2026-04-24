@@ -18,7 +18,7 @@ class BrandRepository {
     );
     if (response.status == 200) {
       return List<BrandDropdownModel>.from(
-        (response.data as List).map((x) => BrandDropdownModel.fromJson(x)),
+        (response.data as List).map((x) => BrandDropdownModel.fromMap(x)),
       );
     }
 

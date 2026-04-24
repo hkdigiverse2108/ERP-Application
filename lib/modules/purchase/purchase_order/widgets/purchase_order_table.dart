@@ -47,7 +47,7 @@ class PurchaseOrderTable extends StatelessWidget {
                     title: 'Order No',
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
-                      item.orderNo,
+                      item.orderNo ?? '-',
                       style: TextHelper.bodySmall.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -60,7 +60,7 @@ class PurchaseOrderTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.orderDate),
+                      DateFormat('dd MMM yyyy').format(item.orderDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -68,9 +68,9 @@ class PurchaseOrderTable extends StatelessWidget {
                     title: 'Supplier',
                     width: 180,
                     cellBuilder: (context, item, index) => Text(
-                      item.supplierId.companyName.isNotEmpty
-                          ? item.supplierId.companyName
-                          : "${item.supplierId.firstName} ${item.supplierId.lastName}",
+                      (item.supplierId?.companyName.isNotEmpty == true)
+                          ? item.supplierId!.companyName
+                          : "${item.supplierId?.firstName ?? ''} ${item.supplierId?.lastName ?? ''}",
                       style: TextHelper.bodySmall,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -81,7 +81,7 @@ class PurchaseOrderTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      '₹${item.summary.netAmount.toStringAsFixed(2)}',
+                      '₹${(item.summary?.netAmount ?? 0).toStringAsFixed(2)}',
                       style: TextHelper.bodySmall.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class PurchaseOrderTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        item.status.isNotEmpty ? item.status : "Pending",
+                        (item.status?.isNotEmpty == true) ? item.status! : "Pending",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.w600,
@@ -115,7 +115,7 @@ class PurchaseOrderTable extends StatelessWidget {
                     width: 150,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.createdBy.fullName,
+                      item.createdBy?.fullName ?? '-',
                       style: TextHelper.bodySmall,
                     ),
                   ),
