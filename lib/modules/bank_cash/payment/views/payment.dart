@@ -1,3 +1,5 @@
+import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/bank_cash/payment/controllers/payment_controller.dart';
 import 'package:ai_setu/modules/bank_cash/payment/widgets/payment_table.dart';
@@ -29,7 +31,6 @@ class PaymentPage extends StatelessWidget {
               _buildSectionTitle('Payment List', controller),
               PaymentTable(controller: controller),
             ],
-
           ),
         ),
       ),
@@ -46,6 +47,10 @@ class PaymentPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(
+            Routes.addUpdatePayment,
+            arguments: {'voucherType': VoucherType.purchase},
+          ),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

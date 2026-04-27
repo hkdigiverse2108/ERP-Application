@@ -17,6 +17,8 @@ class EditTextField extends StatelessWidget {
   final String? hintText;
   final ValueChanged<String>? onChanged;
 
+  final String? initialValue;
+
   const EditTextField({
     super.key,
     required this.label,
@@ -30,12 +32,14 @@ class EditTextField extends StatelessWidget {
     this.maxLines = 1,
     this.hintText,
     this.onChanged,
+    this.initialValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue,
       obscureText: obscureText,
       keyboardType: keyboardType,
       readOnly: readOnly,

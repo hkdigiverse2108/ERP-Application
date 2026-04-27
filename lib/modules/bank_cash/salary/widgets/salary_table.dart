@@ -30,11 +30,11 @@ class SalaryTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              RangedDatePicker(
-                initialDateRange: controller.selectedDateRange.value,
-                onChanged: (range) => controller.updateDateRange(range),
-              ),
-              Gap(Sizes.defHorizontalSpace),
+              // RangedDatePicker(
+              //   initialDateRange: controller.selectedDateRange.value,
+              //   onChanged: (range) => controller.updateDateRange(range),
+              // ),
+              // Gap(Sizes.defHorizontalSpace),
               CommonTable<SalaryModel>(
                 onRowTap: (item) =>
                     Get.toNamed(Routes.salaryDetails, arguments: item),
@@ -114,6 +114,13 @@ class SalaryTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateSalary,
+                    arguments: {'isSalary': true, 'salary': item},
+                  );
+                  if (res == true) controller.getSalaryData();
+                },
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

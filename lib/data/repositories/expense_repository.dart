@@ -44,4 +44,20 @@ class ExpenseRepository {
 
     throw Exception(res.message ?? 'Failed to fetch expenses');
   }
+
+  Future<ResModel> addExpense(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addExpense, body: data);
+  }
+
+  Future<ResModel> updateExpense(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updateExpense, body: data);
+  }
+
+  Future<ExpenseModel> getExpenseById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getExpenseById(id));
+    if (res.status == 200 && res.data != null) {
+      return ExpenseModel.fromMap(res.data);
+    }
+    throw Exception(res.message ?? 'Failed to fetch expense');
+  }
 }

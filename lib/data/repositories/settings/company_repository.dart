@@ -11,9 +11,9 @@ class CompanyRepository {
     if (res.status == 200) {
       if (res.data is Map && res.data['user_data'] != null) {
         // Some APIs wrap in user_data even for company, check logic
-        return CompanyModel.fromJson(res.data['user_data']);
+        return CompanyModel.fromMap(res.data['user_data']);
       }
-      return CompanyModel.fromJson(res.data);
+      return CompanyModel.fromMap(res.data);
     }
     throw Exception(
       res.message ?? "Something went wrong while fetching company details",

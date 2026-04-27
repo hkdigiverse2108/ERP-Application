@@ -14,6 +14,7 @@ class SalaryRepository {
     String? toDate,
     String? search,
     String? activeFilter,
+    String? branchId,
   }) async {
     final ResModel res = await _api.get(
       ApiConstants.getAllSalary(
@@ -23,6 +24,7 @@ class SalaryRepository {
         toDate: toDate,
         search: search,
         activeFilter: activeFilter,
+        branchId: branchId,
       ),
     );
 
@@ -36,6 +38,22 @@ class SalaryRepository {
       return PaginationModel.fromMap(res.data, items);
     }
 
+    throw Exception(res.message ?? 'Failed to fetch salary');
+  }
+
+  Future<ResModel> addSalary(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addSalary, body: data);
+  }
+
+  Future<ResModel> updateSalary(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updateSalary, body: data);
+  }
+
+  Future<SalaryModel> getSalaryById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getSalaryById(id));
+    if (res.status == 200 && res.data != null) {
+      return SalaryModel.fromMap(res.data);
+    }
     throw Exception(res.message ?? 'Failed to fetch salary');
   }
 }

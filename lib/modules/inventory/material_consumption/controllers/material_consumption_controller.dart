@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/data/repositories/branch_repository.dart';
 import 'package:ai_setu/data/repositories/material_consumption_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MaterialConsumptionController extends GetxController {
   static MaterialConsumptionController get instance => Get.find();
@@ -39,6 +41,22 @@ class MaterialConsumptionController extends GetxController {
   final RxBool isLoading = false.obs;
 
   @override
+  void onInit() {
+    super.onInit();
+    // Listen to date range changes
+    ever(selectedDateRange, (_) {
+      _clearCache();
+      getMaterialConsumptionData();
+    });
+
+    // Listen to global branch changes
+    ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getMaterialConsumptionData();
+    });
+  }
+
+  @override
   void onReady() {
     super.onReady();
     getMaterialConsumptionData();
@@ -54,8 +72,10 @@ class MaterialConsumptionController extends GetxController {
     }
   }
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}';
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${selectedDateRange.value.start}_${selectedDateRange.value.end}_$branchId';
+  }
 
   Future<void> getMaterialConsumptionData() async {
     final key = _getCacheKey(currentPage.value);
@@ -69,11 +89,31 @@ class MaterialConsumptionController extends GetxController {
 
     try {
       isLoading.value = true;
+
+      // Combine local filters with global branch and date range
+      final Map<String, dynamic> combinedFilters = Map.from(filters);
+
+      // Global branch filter
+      if (!combinedFilters.containsKey('branchFilter')) {
+        final globalBranchId = BranchController.to.selectedBranch.value?.id;
+        if (globalBranchId != null) {
+          combinedFilters['branchFilter'] = globalBranchId;
+        }
+      }
+
+      // Date range filters
+      combinedFilters['startDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.start);
+      combinedFilters['endDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.end);
+
       final res = await _repo.getMaterialConsumptionList(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        filter: filters.isEmpty ? null : filters,
+        filter: combinedFilters,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());

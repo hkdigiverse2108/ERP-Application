@@ -1,6 +1,5 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
-import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
@@ -76,12 +75,16 @@ class ProductRepository {
     throw Exception(res.message ?? 'Failed to update product');
   }
 
-  Future<List<CommonDropdownModel>> getProductDropdown() async {
-    final ResModel res = await _api.get(ApiConstants.productDropdownNew);
+  Future<List<ProductDropdownModel>> getProductDropdown({
+    bool? isNewProduct,
+  }) async {
+    final ResModel res = await _api.get(
+      ApiConstants.productDropdownNew(isNewProduct: isNewProduct),
+    );
 
     if (res.status == 200 && res.data != null) {
       return (res.data as List)
-          .map((e) => CommonDropdownModel.fromMap(e))
+          .map((e) => ProductDropdownModel.fromMap(e))
           .toList();
     }
 

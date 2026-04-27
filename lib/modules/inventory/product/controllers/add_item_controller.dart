@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
+import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/product_repository.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
@@ -40,7 +41,7 @@ class AddItemController extends GetxController {
   final sellingPriceController = TextEditingController(text: "0.00");
   final sellingMarginController = TextEditingController(text: "0.00");
 
-  final products = <CommonDropdownModel>[].obs;
+  final products = <ProductDropdownModel>[].obs;
   final taxes = <TaxDropdownModel>[].obs;
   final uoms = <CommonDropdownModel>[].obs;
 
@@ -81,7 +82,7 @@ class AddItemController extends GetxController {
 
   Future<void> _fetchProducts() async {
     try {
-      final res = await _productRepo.getProductDropdown();
+      final res = await _productRepo.getProductDropdown(isNewProduct: true);
       products.assignAll(res);
     } catch (e) {
       Log.e("Inventory Module Error (AddItem) - Fetching products", e);

@@ -1,3 +1,5 @@
+import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/controllers/receipt_controller.dart';
 import 'package:ai_setu/modules/bank_cash/payment/widgets/payment_table.dart';
@@ -41,6 +43,10 @@ class ReceiptPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: 'Receipt',
+          onAdd: () => Get.toNamed(
+            Routes.addUpdateReceipt,
+            arguments: {'voucherType': VoucherType.sales},
+          ),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

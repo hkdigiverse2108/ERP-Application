@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart' show Routes;
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/modules/inventory/material_consumption/controllers/material_consumption_controller.dart';
@@ -45,7 +46,10 @@ class MaterialConsumption extends StatelessWidget {
       ),
       child: Obx(
         () => FilterSection(
-          title: 'Material Consumption List',
+          title: 'Material Consumption',
+          onAdd: () {
+            Get.toNamed(Routes.addUpdateMaterialConsumption);
+          },
           filters: [
             FilterOption(
               label: 'Branch',

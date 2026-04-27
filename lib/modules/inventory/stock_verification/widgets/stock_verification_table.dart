@@ -37,7 +37,19 @@ class StockVerificationTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<StockVerificationModel>(
-                onRowTap: (item) => Get.toNamed(Routes.stockVerificationDetails, arguments: item),
+                onRowTap: (item) => Get.toNamed(
+                  Routes.stockVerificationDetails,
+                  arguments: item,
+                ),
+                onEditItem: (item) async {
+                  final result = await Get.toNamed(
+                    Routes.addUpdateStockVerification,
+                    arguments: item,
+                  );
+                  if (result == true) {
+                    controller.refreshData();
+                  }
+                },
                 isLoading: controller.isLoading.value,
                 items: controller.stockVerifications,
                 columns: [

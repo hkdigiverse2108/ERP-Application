@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
@@ -14,10 +15,10 @@ class ExpenseController extends GetxController {
   final _repository = ExpenseRepository();
 
   final expenses = <ExpenseModel>[].obs;
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 30)),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = FinancialYearController.to.selectedRange.obs;
+
+  late Worker _fyWorker;
+  late Worker _branchWorker;
 
   // Search & Filter
   final searchQuery = ''.obs;
@@ -39,8 +40,19 @@ class ExpenseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Listen to branch changes
-    ever(BranchController.to.selectedBranch, (_) {
+    _setupGlobalFilters();
+  }
+
+  void _setupGlobalFilters() {
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+        _clearCache();
+        getExpensesData();
+      }
+    });
+
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
       _clearCache();
       getExpensesData();
     });
@@ -54,8 +66,10 @@ class ExpenseController extends GetxController {
 
   String _formatDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}';
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}_$branchId';
+  }
 
   Future<void> getExpensesData() async {
     final key = _getCacheKey(currentPage.value);
@@ -129,6 +143,8 @@ class ExpenseController extends GetxController {
   @override
   void onClose() {
     _debounceTimer?.cancel();
+    _fyWorker.dispose();
+    _branchWorker.dispose();
     super.onClose();
   }
 }

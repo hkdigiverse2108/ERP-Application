@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/controllers/bill_of_live_product_controller.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/widgets/bill_of_live_product_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BillOfLive extends StatelessWidget {
   const BillOfLive({super.key});
@@ -41,11 +43,20 @@ class BillOfLive extends StatelessWidget {
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: FilterSection(
-        title: 'Bill of Live Product List',
-        filters: const [],
-        onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+      child: Obx(
+        () => FilterSection(
+          title: 'Bill of Live Product List',
+          filters: [
+            FilterOption(
+              filterKey: 'branchFilter',
+              label: 'Branch',
+              options: {for (var e in controller.branches) e.name: e.id},
+            ),
+          ],
+          onSearchChanged: (query) => controller.onSearch(query),
+          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+          onAdd: () => Get.toNamed(Routes.addUpdateBillOfLiveProduct),
+        ),
       ),
     );
   }

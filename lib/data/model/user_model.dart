@@ -120,6 +120,8 @@ class UserModel extends Equatable {
   factory UserModel.fromJson(String json) =>
       UserModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
 
+  String toJson() => jsonEncode(toMap());
+
   factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
         id: map['_id'] as String? ?? '',
         fullName: map['fullName'] as String? ?? '',
@@ -167,7 +169,6 @@ class UserModel extends Equatable {
         token: map['token'] as String? ?? '',
       );
 
-  String toJson() => jsonEncode(toMap());
 
   Map<String, dynamic> toMap() => {
         '_id': id,

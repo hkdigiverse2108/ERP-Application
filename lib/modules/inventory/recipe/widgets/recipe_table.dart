@@ -62,10 +62,8 @@ class RecipeTable extends StatelessWidget {
                   TableColumn(
                     title: 'Recipe Name',
                     width: 150,
-                    cellBuilder: (context, item, index) => Text(
-                      item.name,
-                      style: TextHelper.bodySmall,
-                    ),
+                    cellBuilder: (context, item, index) =>
+                        Text(item.name, style: TextHelper.bodySmall),
                   ),
                   TableColumn(
                     title: 'Type',
@@ -114,7 +112,10 @@ class RecipeTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
-                onRowTap: (item) => Get.toNamed(Routes.recipeDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.recipeDetails, arguments: item),
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.addUpdateRecipe, arguments: item),
                 pageSize: controller.limit.value,
                 onPageChanged: (page) => controller.goToPage(page),
               ),

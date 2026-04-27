@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/bank_cash/salary/controllers/salary_controller.dart';
 import 'package:ai_setu/modules/bank_cash/salary/widgets/salary_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SalaryPage extends StatelessWidget {
   const SalaryPage({super.key});
@@ -45,6 +47,13 @@ class SalaryPage extends StatelessWidget {
         title: title,
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () async {
+          final res = await Get.toNamed(
+            Routes.addUpdateSalary,
+            arguments: {'isSalary': true},
+          );
+          if (res == true) controller.getSalaryData();
+        },
         filters: [
           FilterOption(
             label: 'Active Status',

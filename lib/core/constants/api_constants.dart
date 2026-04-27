@@ -137,8 +137,8 @@ class ApiConstants {
     "productTypeIdFilter": productTypeIdFilter,
   });
   static String getProductById(String id) => "/product/$id";
-  static const String productDropdownNew =
-      "/product/dropdown?isNewProduct=true";
+  static String productDropdownNew({bool? isNewProduct}) =>
+      buildUrl("/product/dropdown", {"isNewProduct": isNewProduct});
 
   // Product Category
   static String getAllProductCategory({
@@ -240,12 +240,16 @@ class ApiConstants {
     String? search,
     String? branchId,
     String? activeFilter,
+    String? startDate,
+    String? endDate,
   }) => buildUrl("/bill-of-live-product/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "branchFilter": branchId,
     "activeFilter": activeFilter,
+    "startDate": startDate,
+    "endDate": endDate,
   });
   static const String addBillOfLiveProduct = "/bill-of-live-product/add";
   static const String updateBillOfLiveProduct = "/bill-of-live-product/edit";
@@ -267,6 +271,8 @@ class ApiConstants {
     String? branchId,
     String? activeFilter,
     String? statusFilter,
+    String? startDate,
+    String? endDate,
   }) => buildUrl("/stock-verification/all", {
     "page": page,
     "limit": limit,
@@ -274,6 +280,8 @@ class ApiConstants {
     "branchFilter": branchId,
     "activeFilter": activeFilter,
     "statusFilter": statusFilter,
+    "startDate": startDate,
+    "endDate": endDate,
   });
   static const String addStockVerification = "/stock-verification/add";
   static const String updateStockVerification = "/stock-verification/edit";
@@ -319,8 +327,8 @@ class ApiConstants {
     "limit": limit,
     "search": search,
     "branchFilter": branchId,
-    "fromDate": fromDate,
-    "toDate": toDate,
+    "startDate": fromDate,
+    "endDate": toDate,
     "activeFilter": activeFilter,
     "partyFilter": partyFilter,
     "paymentTypeFilter": paymentTypeFilter,
@@ -418,11 +426,15 @@ class ApiConstants {
     String? search,
     String? branchId,
     String? activeFilter,
+    String? startDate,
+    String? endDate,
   }) => buildUrl("/material-consumption/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "branchFilter": branchId,
+    "startDate": startDate,
+    "endDate": endDate,
     "activeFilter": activeFilter,
   });
   static const String addMaterialConsumption = "/material-consumption/add";

@@ -37,7 +37,8 @@ class BillLiveProductTable extends StatelessWidget {
               ),
               Gap(Sizes.defHorizontalSpace),
               CommonTable<BillOfLiveProductModel>(
-                onRowTap: (item) => Get.toNamed(Routes.bomDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.bomDetails, arguments: item),
                 isLoading: controller.isLoading.value,
                 items: controller.billOfLiveProducts,
                 columns: [
@@ -89,6 +90,10 @@ class BillLiveProductTable extends StatelessWidget {
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
+                onEditItem: (item) => Get.toNamed(
+                  Routes.addUpdateBillOfLiveProduct,
+                  arguments: item,
+                ),
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

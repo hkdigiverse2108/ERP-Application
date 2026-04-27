@@ -43,6 +43,8 @@ class PaymentTable extends StatelessWidget {
                     Get.toNamed(Routes.paymentDetails, arguments: item);
                   }
                 },
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.addUpdatePayment, arguments: item),
                 isLoading: controller.isLodding.value,
                 items: controller.payments,
                 columns: [
@@ -65,7 +67,9 @@ class PaymentTable extends StatelessWidget {
                     cellBuilder: (context, item, index) {
                       final party = item.partyId;
                       return Text(
-                        party != null ? "${party.firstName} ${party.lastName}" : "-",
+                        party != null
+                            ? "${party.firstName} ${party.lastName}"
+                            : "-",
                         style: TextHelper.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -92,8 +96,10 @@ class PaymentTable extends StatelessWidget {
                     title: 'Type',
                     width: 120,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.paymentType, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.paymentType.capitalizeFirst ?? item.paymentType,
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'Amount',
@@ -111,8 +117,10 @@ class PaymentTable extends StatelessWidget {
                     title: 'Status',
                     width: 100,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.status, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.status.capitalizeFirst ?? item.status,
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                 ],
                 currentPage: controller.currentPage.value,

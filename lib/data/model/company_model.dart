@@ -81,23 +81,23 @@ class CompanyModel {
     this.updatedAt,
   });
 
-  factory CompanyModel.fromRawJson(String str) =>
-      CompanyModel.fromJson(json.decode(str));
+  factory CompanyModel.fromJson(String str) =>
+      CompanyModel.fromMap(json.decode(str));
 
-  String toRawJson() => json.encode(toJson());
+  String toJson() => json.encode(toMap());
 
-  factory CompanyModel.fromJson(Map<String, dynamic> json) => CompanyModel(
+  factory CompanyModel.fromMap(Map<String, dynamic> json) => CompanyModel(
     id: json["_id"],
     accountingType: json["accountingType"] ?? '',
     name: json["name"] ?? '',
     displayName: json["displayName"] ?? '',
     contactName: json["contactName"] ?? '',
-    ownerNo: CompanyPhone.fromJson(json["ownerNo"] ?? {}),
+    ownerNo: CompanyPhone.fromMap(json["ownerNo"] ?? {}),
     supportEmail: json["supportEmail"] ?? '',
     email: json["email"] ?? '',
-    phoneNo: CompanyPhone.fromJson(json["phoneNo"] ?? {}),
+    phoneNo: CompanyPhone.fromMap(json["phoneNo"] ?? {}),
     customerCareNumber: json["customerCareNumber"] ?? '',
-    address: CompanyAddress.fromJson(json["address"] ?? {}),
+    address: CompanyAddress.fromMap(json["address"] ?? {}),
     userName: json["userName"] ?? '',
     enableFeedbackModule: json["enableFeedbackModule"]?.toString() ?? 'false',
     allowRoundOff: json["allowRoundOff"]?.toString() ?? 'false',
@@ -122,8 +122,8 @@ class CompanyModel {
     reportFormatLogo: json["reportFormatLogo"],
     authorizedSignature: json["authorizedSignature"],
     bankId: json["bankId"] != null
-        ? BankInfo.fromJson(json["bankId"])
-        : (json["bankName"] != null ? BankInfo.fromFlatJson(json) : null),
+        ? BankInfo.fromMap(json["bankId"])
+        : (json["bankName"] != null ? BankInfo.fromFlatMap(json) : null),
     isActive: json["isActive"],
     isDeleted: json["isDeleted"],
     createdAt: (json["createdAt"] ?? json["created_at"]) != null
@@ -134,18 +134,18 @@ class CompanyModel {
         : null,
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "accountingType": accountingType,
     "name": name,
     "displayName": displayName,
     "contactName": contactName,
-    "ownerNo": ownerNo.toJson(),
+    "ownerNo": ownerNo.toMap(),
     "supportEmail": supportEmail,
     "email": email,
-    "phoneNo": phoneNo.toJson(),
+    "phoneNo": phoneNo.toMap(),
     "customerCareNumber": customerCareNumber,
-    "address": address.toJson(),
+    "address": address.toMap(),
     "userName": userName,
     "enableFeedbackModule": enableFeedbackModule,
     "allowRoundOff": allowRoundOff,
@@ -169,7 +169,7 @@ class CompanyModel {
     "decimalPoint": decimalPoint,
     "reportFormatLogo": reportFormatLogo,
     "authorizedSignature": authorizedSignature,
-    "bankId": bankId?.toJson(),
+    "bankId": bankId?.toMap(),
     "isActive": isActive,
     "isDeleted": isDeleted,
     "createdAt": createdAt?.toIso8601String(),
@@ -183,12 +183,12 @@ class CompanyPhone {
 
   CompanyPhone({required this.countryCode, required this.phoneNo});
 
-  factory CompanyPhone.fromJson(Map<String, dynamic> json) => CompanyPhone(
+  factory CompanyPhone.fromMap(Map<String, dynamic> json) => CompanyPhone(
     countryCode: json["countryCode"]?.toString() ?? '',
     phoneNo: json["phoneNo"],
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "countryCode": countryCode,
     "phoneNo": phoneNo,
   };
@@ -212,19 +212,19 @@ class CompanyAddress {
     required this.pinCode,
   });
 
-  factory CompanyAddress.fromJson(Map<String, dynamic> json) => CompanyAddress(
+  factory CompanyAddress.fromMap(Map<String, dynamic> json) => CompanyAddress(
     address: json["address"] ?? '',
-    city: LocationInfo.fromJson(json["city"] ?? {}),
-    state: LocationInfo.fromJson(json["state"] ?? {}),
-    country: LocationInfo.fromJson(json["country"] ?? {}),
+    city: LocationInfo.fromMap(json["city"] ?? {}),
+    state: LocationInfo.fromMap(json["state"] ?? {}),
+    country: LocationInfo.fromMap(json["country"] ?? {}),
     pinCode: json["pinCode"],
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "address": address,
-    "city": city.toJson(),
-    "state": state.toJson(),
-    "country": country.toJson(),
+    "city": city.toMap(),
+    "state": state.toMap(),
+    "country": country.toMap(),
     "pinCode": pinCode,
   };
 }
@@ -236,13 +236,13 @@ class LocationInfo {
 
   LocationInfo({required this.id, required this.name, this.code});
 
-  factory LocationInfo.fromJson(Map<String, dynamic> json) => LocationInfo(
+  factory LocationInfo.fromMap(Map<String, dynamic> json) => LocationInfo(
     id: json["_id"] ?? json["id"] ?? '',
     name: json["name"] ?? '',
     code: json["code"],
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "name": name,
     if (code != null) "code": code,
@@ -270,7 +270,7 @@ class BankInfo {
     this.upiId,
   });
 
-  factory BankInfo.fromJson(Map<String, dynamic> json) => BankInfo(
+  factory BankInfo.fromMap(Map<String, dynamic> json) => BankInfo(
     id: json["_id"] ?? '',
     name: json["name"] ?? '',
     ifscCode: json["ifscCode"] ?? '',
@@ -281,7 +281,7 @@ class BankInfo {
     upiId: json["upiId"],
   );
 
-  factory BankInfo.fromFlatJson(Map<String, dynamic> json) => BankInfo(
+  factory BankInfo.fromFlatMap(Map<String, dynamic> json) => BankInfo(
     id: '',
     name: json["bankName"] ?? '',
     ifscCode: json["bankIFSC"] ?? '',
@@ -291,7 +291,7 @@ class BankInfo {
     upiId: json["upiId"],
   );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "name": name,
     "ifscCode": ifscCode,

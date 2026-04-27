@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 
 class StorageService {
@@ -24,8 +25,31 @@ class StorageService {
 
   /// Read Data
   T? read<T>(String key) {
-    return _box.read<T>(key);
+    final value = _box.read(key);
+
+    // Robust handling for type-mismatches in legacy data
+    if (value is String && _isMapType<T>()) {
+      try {
+        return jsonDecode(value) as T;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    try {
+      return value as T?;
+    } catch (_) {
+      return null;
+    }
   }
+
+  bool _isMapType<T>() {
+    final mapType = _typeOf<Map<String, dynamic>>();
+    final nullableMapType = _typeOf<Map<String, dynamic>?>();
+    return T == mapType || T == nullableMapType;
+  }
+
+  Type _typeOf<X>() => X;
 
   /// Remove Data
   Future<void> remove(String key) async {

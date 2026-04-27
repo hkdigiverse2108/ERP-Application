@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/bank_cash/bank/controllers/bank_controller.dart';
 import 'package:ai_setu/modules/bank_cash/bank/widgets/bank_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BankPage extends StatelessWidget {
   const BankPage({super.key});
@@ -43,6 +45,9 @@ class BankPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        onAdd: () {
+          Get.toNamed(Routes.addUpdateBank);
+        },
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
         filters: [

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/user_model.dart';
@@ -28,9 +30,21 @@ class SplashController extends GetxController {
         StorageService.instance.read<bool>(StorageKeys.isLoggedIn) ?? false;
 
     if (isLoggedIn) {
-      final userData = StorageService.instance.read<Map<String, dynamic>>(
-        StorageKeys.userData,
-      );
+      final rawData = StorageService.instance.read(StorageKeys.userData);
+      Map<String, dynamic>? userData;
+
+      if (rawData is Map<String, dynamic>) {
+        userData = rawData;
+      } else if (rawData is String) {
+        try {
+          userData = Map<String, dynamic>.from(
+            jsonDecode(rawData) as Map,
+          );
+        } catch (e) {
+          Log.e("Failed to decode userData string", e);
+        }
+      }
+
       if (userData != null) {
         try {
           final user = UserModel.fromMap(userData);

@@ -72,7 +72,7 @@ class CommonTable<T> extends StatelessWidget {
   });
 
   static const double _colSerial = 40;
-  static const double _colActions = 40;
+  static const double _colActions = 90;
 
   double get _totalTableWidth {
     double width = Sizes.paddingS * 2;
@@ -252,7 +252,7 @@ class CommonTable<T> extends StatelessWidget {
                 _headerCell(col.title, width: col.width, align: col.alignment),
           ),
           if (onRemoveItem != null || onEditItem != null)
-            const SizedBox(width: _colActions),
+            _headerCell('Actions', width: _colActions, align: TextAlign.center),
         ],
       ),
     );
@@ -344,46 +344,25 @@ class CommonTable<T> extends StatelessWidget {
 
                   return SizedBox(
                     width: _colActions,
-                    child: PopupMenuButton<String>(
-                      padding: EdgeInsets.zero,
-                      iconSize: 18,
-                      icon: const Icon(
-                        PhosphorIconsBold.dotsThreeVertical,
-                        size: 16,
-                      ),
-                      onSelected: (value) {
-                        if (value == 'edit') onEditItem?.call(item);
-                        if (value == 'delete') onRemoveItem?.call(item);
-                      },
-                      itemBuilder: (context) => [
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         if (showEdit)
-                          const PopupMenuItem(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(PhosphorIconsBold.pencilSimple, size: 16),
-                                SizedBox(width: 8),
-                                Text('Edit'),
-                              ],
-                            ),
+                          _buildActionIcon(
+                            context,
+                            icon: PhosphorIconsBold.pencilSimple,
+                            color: context.appColors.primary,
+                            onTap: () => onEditItem?.call(item),
+                            tooltip: 'Edit',
                           ),
+                        if (showEdit && showDelete) const SizedBox(width: 8),
                         if (showDelete)
-                          PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                Icon(
-                                  PhosphorIconsBold.trash,
-                                  size: 16,
-                                  color: AppColors.error,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Delete',
-                                  style: TextStyle(color: AppColors.error),
-                                ),
-                              ],
-                            ),
+                          _buildActionIcon(
+                            context,
+                            icon: PhosphorIconsBold.trash,
+                            color: AppColors.error,
+                            onTap: () => onRemoveItem?.call(item),
+                            tooltip: 'Delete',
                           ),
                       ],
                     ),
@@ -431,6 +410,30 @@ class CommonTable<T> extends StatelessWidget {
             const SizedBox(height: 8),
             Text('No items added yet', style: TextHelper.label),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionIcon(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+    required String tooltip,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+          ),
+          child: Icon(icon, size: 16, color: color),
         ),
       ),
     );

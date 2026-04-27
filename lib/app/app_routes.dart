@@ -17,7 +17,11 @@ abstract class Routes {
   static const billOfLive = '/bill-of-materials';
   static const stockVerification = '/stock-verification';
   static const recipe = '/recipe';
+  static const addUpdateRecipe = '/add-update-recipe';
   static const materialConsumption = '/material-consumption';
+  static const addUpdateMaterialConsumption = '/add-update-material-consumption';
+  static const addUpdateStockVerification = '/add-update-stock-verification';
+  static const addUpdateBillOfLiveProduct = '/add-update-bill-of-live-product';
 
   // accounting
   static const debit = '/debit-note'; // Accounting Debit Note
@@ -26,11 +30,17 @@ abstract class Routes {
 
   // bank
   static const bank = '/bank';
+  static const addUpdateBank = '/add-update-bank';
   static const bankTransaction = '/bank-transaction';
+  static const addUpdateBankTransaction = '/add-update-bank-transaction';
   static const posPayment = '/payment';
+  static const addUpdatePayment = '/add-update-payment';
   static const receipt = '/receipt';
+  static const addUpdateReceipt = '/add-update-receipt';
   static const expense = '/expense';
+  static const addUpdateExpense = '/add-update-expense';
   static const salary = '/salary';
+  static const addUpdateSalary = '/add-update-salary';
 
   // sales
   static const estimate = '/estimate';

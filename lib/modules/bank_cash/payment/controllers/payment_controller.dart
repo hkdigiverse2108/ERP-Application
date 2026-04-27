@@ -1,3 +1,5 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/constants/enums.dart';
@@ -20,10 +22,10 @@ class PaymentController extends GetxController {
   PaymentController({this.voucherType = VoucherType.purchase});
 
   final payments = <PosPaymentModel>[].obs;
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 30)),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = FinancialYearController.to.selectedRange.obs;
+
+  late Worker _fyWorker;
+  late Worker _branchWorker;
 
   // Search & Filter
   final searchQuery = ''.obs;
@@ -45,6 +47,27 @@ class PaymentController extends GetxController {
   final isLodding = false.obs;
 
   @override
+  void onInit() {
+    super.onInit();
+    _setupGlobalFilters();
+  }
+
+  void _setupGlobalFilters() {
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+        _clearCache();
+        getPaymentsData();
+      }
+    });
+
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getPaymentsData();
+    });
+  }
+
+  @override
   void onReady() {
     super.onReady();
     getCustomers();
@@ -64,8 +87,10 @@ class PaymentController extends GetxController {
 
   String _formatDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}';
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}_$branchId';
+  }
 
   Future<void> getPaymentsData() async {
     final key = _getCacheKey(currentPage.value);
@@ -89,6 +114,7 @@ class PaymentController extends GetxController {
         partyFilter: filters['partyFilter'],
         paymentTypeFilter: filters['paymentTypeFilter'],
         activeFilter: filters['activeFilter'],
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
 
       _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());
@@ -139,6 +165,8 @@ class PaymentController extends GetxController {
   @override
   void onClose() {
     _debounceTimer?.cancel();
+    _fyWorker.dispose();
+    _branchWorker.dispose();
     super.onClose();
   }
 }

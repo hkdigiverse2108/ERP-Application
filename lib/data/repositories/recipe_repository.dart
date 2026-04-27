@@ -41,4 +41,14 @@ class RecipeRepository {
 
     throw Exception(response.message ?? 'Failed to load recipe detail');
   }
+
+  Future<bool> addRecipe(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(ApiConstants.addRecipe,body: data);
+    return response.status == 200;
+  }
+
+  Future<bool> updateRecipe(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(ApiConstants.updateRecipe, body: data);
+    return response.status == 200;
+  }
 }

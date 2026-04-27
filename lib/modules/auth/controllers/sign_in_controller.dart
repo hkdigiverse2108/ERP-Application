@@ -40,7 +40,7 @@ class SignInController extends GetxController {
       await StorageService.instance.write(StorageKeys.isLoggedIn, true);
       await StorageService.instance.write(
         StorageKeys.userData,
-        result.user.toJson(),
+        result.user.toMap(),
       );
 
       // Fetch permissions
@@ -53,7 +53,7 @@ class SignInController extends GetxController {
         );
         await StorageService.instance.write(
           StorageKeys.companyInfo,
-          company.toJson(),
+          company.toMap(),
         );
         // Also keep financialYear for legacy/convenience if needed,
         // though we'll primarily use companyInfo now.

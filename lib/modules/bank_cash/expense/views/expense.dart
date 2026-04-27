@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/bank_cash/expense/controllers/expense_controller.dart';
 import 'package:ai_setu/modules/bank_cash/expense/widgets/expense_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ExpensePage extends StatelessWidget {
   const ExpensePage({super.key});
@@ -45,6 +47,13 @@ class ExpensePage extends StatelessWidget {
         title: title,
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () async {
+          final res = await Get.toNamed(
+            Routes.addUpdateExpense,
+            arguments: {'isSalary': false},
+          );
+          if (res == true) controller.getExpensesData();
+        },
         filters: [
           FilterOption(
             label: 'Type',

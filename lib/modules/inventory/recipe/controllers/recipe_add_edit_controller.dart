@@ -1,5 +1,8 @@
 import 'package:ai_setu/core/constants/enums.dart';
+import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
+import 'package:ai_setu/data/model/invetory/recipe_model.dart';
 import 'package:ai_setu/data/repositories/product_repository.dart';
 import 'package:ai_setu/data/repositories/recipe_repository.dart';
 import 'package:flutter/material.dart';
@@ -10,54 +13,226 @@ class RecipeAddEditController extends GetxController {
   final ProductRepository _productRepo = ProductRepository();
 
   final formKey = GlobalKey<FormState>();
+  RecipeModel? recipe;
   RxBool isEdit = false.obs;
   RxBool isLoading = false.obs;
   RxBool isSaving = false.obs;
   RxBool isActive = true.obs;
+
+  // General Information
+  final nameController = TextEditingController();
+  final numberController = TextEditingController();
+  final recipeDate = Rxn<DateTime>();
   Rx<RecipeType> recipeType = RecipeType.assemble.obs;
 
-  final List<ProductDropdownModel> products = <ProductDropdownModel>[].obs;
+  // Final Product
+  final finalProductId = "".obs;
+  final finalProductName = "".obs;
+  final finalProductQtyController = TextEditingController(text: "0");
+  final finalProductMrpController = TextEditingController(text: "0");
 
-  // Form Controllers
-  final recipeNameController = TextEditingController();
-  final recipeDate = Rxn<DateTime>();
+  // Raw Materials (Ingredients)
+  final rawProducts = <RawProductItem>[].obs;
 
-  final ingredients = Rxn<List<RowProductModel>>();
-  final product = Rxn<RowProductModel>();
+  // Selection/Search temporary state
+  final products = <ProductDropdownModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    ingredients.value = [];
-    product.value = RowProductModel();
+    recipeDate.value = DateTime.now();
+    _loadProducts();
+
+    if (Get.arguments is RecipeModel) {
+      recipe = Get.arguments as RecipeModel;
+      isEdit.value = true;
+      _populateFields(recipe!);
+    } else if (Get.arguments is String &&
+        (Get.arguments as String).isNotEmpty) {
+      isEdit.value = true;
+      _fetchRecipeDetails(Get.arguments as String);
+    } else {
+      isEdit.value = false;
+    }
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final res = await _productRepo.getProductDropdown(isNewProduct: false);
+      products.assignAll(res);
+    } catch (e) {
+      Log.e("RecipeAddEditController - Error loading products", e);
+    }
+  }
+
+  Future<void> _fetchRecipeDetails(String id) async {
+    isLoading.value = true;
+    try {
+      recipe = await _recipeRepo.getRecipeById(id);
+      _populateFields(recipe!);
+    } catch (e) {
+      AppSnackbar.error("Failed to load recipe details");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void _populateFields(RecipeModel r) {
+    nameController.text = r.name;
+    numberController.text = r.number;
+    recipeDate.value = r.date;
+    recipeType.value = r.type == "assemble"
+        ? RecipeType.assemble
+        : RecipeType.unassemble;
+    isActive.value = r.isActive;
+
+    if (r.finalProducts.productId != null) {
+      finalProductId.value = r.finalProducts.productId!.id;
+      finalProductName.value = r.finalProducts.productId!.name;
+      finalProductQtyController.text = r.finalProducts.qtyGenerate.toString();
+      finalProductMrpController.text = r.finalProducts.mrp.toString();
+    }
+
+    rawProducts.assignAll(
+      r.rawProducts
+          .map(
+            (rp) => RawProductItem(
+              id: rp.id,
+              productId: rp.productId?.id ?? "",
+              productName: rp.productId?.name ?? "",
+              qty: rp.useQty,
+              mrp: rp.mrp,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  void addIngredient(ProductDropdownModel product) {
+    if (rawProducts.any((e) => e.productId == product.id)) {
+      AppSnackbar.warning("${product.name} is already added");
+      return;
+    }
+    rawProducts.add(
+      RawProductItem(
+        productId: product.id,
+        productName: product.name,
+        qty: 1,
+        mrp: product.mrp,
+      ),
+    );
+  }
+
+  void removeIngredient(int index) {
+    rawProducts.removeAt(index);
+  }
+
+  void updateIngredientQty(int index, String val) {
+    final qty = double.tryParse(val) ?? 0;
+    rawProducts[index] = rawProducts[index].copyWith(qty: qty);
+  }
+
+  void setFinalProduct(ProductDropdownModel product) {
+    finalProductId.value = product.id;
+    finalProductName.value = product.name;
+    finalProductMrpController.text = "0"; // MRP not available
+  }
+
+  Future<void> saveRecipe() async {
+    if (!(formKey.currentState?.validate() ?? false)) return;
+
+    if (finalProductId.value.isEmpty) {
+      AppSnackbar.error("Please select a final product");
+      return;
+    }
+
+    if (rawProducts.isEmpty) {
+      AppSnackbar.error("Please add at least one ingredient");
+      return;
+    }
+
+    try {
+      isSaving.value = true;
+      final Map<String, dynamic> data = {
+        "name": nameController.text,
+        "date": recipeDate.value?.toIso8601String(),
+        "type": recipeType.value.name,
+        "isActive": isActive.value,
+        "finalProducts": {
+          "productId": finalProductId.value,
+          "qtyGenerate": double.tryParse(finalProductQtyController.text) ?? 0,
+          "mrp": double.tryParse(finalProductMrpController.text) ?? 0,
+        },
+        "rawProducts": rawProducts
+            .map(
+              (e) => {"productId": e.productId, "useQty": e.qty, "mrp": e.mrp},
+            )
+            .toList(),
+      };
+
+      if (isEdit.value && recipe != null) {
+        data["recipeId"] = recipe!.id;
+        final res = await _recipeRepo.updateRecipe(data);
+        if (res) {
+          AppSnackbar.success("Recipe updated successfully");
+          Get.back(result: true);
+        } else {
+          AppSnackbar.error("Failed to update recipe");
+        }
+      } else {
+        final res = await _recipeRepo.addRecipe(data);
+        if (res) {
+          AppSnackbar.success("Recipe added successfully");
+          Get.back(result: true);
+        } else {
+          AppSnackbar.error("Failed to add recipe");
+        }
+      }
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    } finally {
+      isSaving.value = false;
+    }
+  }
+
+  @override
+  void onClose() {
+    nameController.dispose();
+    numberController.dispose();
+    finalProductQtyController.dispose();
+    finalProductMrpController.dispose();
+    super.onClose();
   }
 }
 
-class RowProductModel {
-  String? id;
-  String? name;
-  double? qty;
-  double? amount;
+class RawProductItem {
+  final String id;
+  final String productId;
+  final String productName;
+  final double qty;
+  final double mrp;
 
-  RowProductModel({this.id, this.name, this.qty, this.amount});
+  RawProductItem({
+    this.id = "",
+    required this.productId,
+    required this.productName,
+    required this.qty,
+    required this.mrp,
+  });
 
-  factory RowProductModel.fromJson(Map<String, dynamic> json) =>
-      RowProductModel(
-        id: json['id'],
-        name: json['name'],
-        qty: json['qty'],
-        amount: json['amount'],
-      );
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'qty': qty,
-    'amount': amount,
-  };
-
-  @override
-  String toString() {
-    return 'RowProductModel(id: $id, name: $name, qty: $qty, amount: $amount)';
+  RawProductItem copyWith({
+    String? id,
+    String? productId,
+    String? productName,
+    double? qty,
+    double? mrp,
+  }) {
+    return RawProductItem(
+      id: id ?? this.id,
+      productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
+      qty: qty ?? this.qty,
+      mrp: mrp ?? this.mrp,
+    );
   }
 }

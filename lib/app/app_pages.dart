@@ -11,20 +11,32 @@ import 'package:ai_setu/modules/auth/views/forgot_password.dart';
 import 'package:ai_setu/modules/auth/views/set_new_password.dart';
 import 'package:ai_setu/modules/auth/views/sign_in.dart';
 import 'package:ai_setu/modules/auth/views/verification.dart';
+import 'package:ai_setu/modules/bank_cash/bank/bindings/bank_add_edit_binding.dart';
 import 'package:ai_setu/modules/bank_cash/bank/bindings/bank_binding.dart';
 import 'package:ai_setu/modules/bank_cash/bank/views/bank.dart';
+import 'package:ai_setu/modules/bank_cash/bank/views/bank_add_edit_view.dart';
+import 'package:ai_setu/modules/bank_cash/bank_transaction/bindings/bank_transaction_add_edit_binding.dart';
 import 'package:ai_setu/modules/bank_cash/bank_transaction/bindings/bank_transaction_binding.dart';
 import 'package:ai_setu/modules/bank_cash/bank_transaction/views/bank_transaction.dart';
+import 'package:ai_setu/modules/bank_cash/bank_transaction/views/bank_transaction_add_edit_view.dart';
+import 'package:ai_setu/modules/bank_cash/expense/bindings/expense_add_edit_binding.dart';
 import 'package:ai_setu/modules/bank_cash/expense/bindings/expense_binding.dart';
+import 'package:ai_setu/modules/bank_cash/expense/views/expense_add_edit_view.dart';
 import 'package:ai_setu/modules/bank_cash/expense/views/expense.dart';
+import 'package:ai_setu/modules/bank_cash/payment/bindings/payment_add_edit_binding.dart';
 import 'package:ai_setu/modules/bank_cash/payment/bindings/payment_binding.dart';
+import 'package:ai_setu/modules/bank_cash/payment/views/payment_add_edit_view.dart';
 import 'package:ai_setu/modules/bank_cash/payment/views/payment.dart';
 import 'package:ai_setu/modules/bank_cash/salary/bindings/salary_binding.dart';
 import 'package:ai_setu/modules/bank_cash/salary/views/salary.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/bindings/receipt_binding.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/views/receipt.dart';
+import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bill_of_live_product_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/product/views/add_item.dart';
 import 'package:ai_setu/modules/inventory/product/views/product_add_edit_view.dart';
+import 'package:ai_setu/modules/inventory/recipe/views/recipe_add_edit_view.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/views/material_consumption_add_edit_view.dart';
+import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification_add_edit_view.dart';
 import 'package:ai_setu/modules/sales/estimate/bindings/estimate_binding.dart';
 
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
@@ -199,10 +211,20 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateStockVerification,
+      page: () => const StockVerificationAddEditView(),
+      binding: StockVerificationBinding(),
+    ),
+    GetPage(
       name: Routes.recipe,
       page: () => const Recipe(),
       binding: RecipeBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateRecipe,
+      page: () => const RecipeAddEditView(),
+      binding: RecipeBinding(),
     ),
     GetPage(
       name: Routes.billOfLive,
@@ -211,10 +233,20 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateBillOfLiveProduct,
+      page: () => const BillOfLiveProductAddEditView(),
+      binding: BillOfLiveProductBinding(),
+    ),
+    GetPage(
       name: Routes.materialConsumption,
       page: () => const MaterialConsumption(),
       binding: MaterialConsumptionBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateMaterialConsumption,
+      page: () => const MaterialConsumptionAddEditView(),
+      binding: MaterialConsumptionBinding(),
     ),
     GetPage(
       name: Routes.debit,
@@ -248,12 +280,16 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
 
-    // bank
     GetPage(
       name: Routes.bank,
       page: () => const BankPage(),
       binding: BankBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateBank,
+      page: () => const BankAddEditView(),
+      binding: BankAddEditBinding(),
     ),
     GetPage(
       name: Routes.bankTransaction,
@@ -262,10 +298,20 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateBankTransaction,
+      page: () => const BankTransactionAddEditView(),
+      binding: BankTransactionAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.posPayment,
       page: () => const PaymentPage(),
       binding: PaymentBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdatePayment,
+      page: () => const PaymentAddEditView(),
+      binding: PaymentAddEditBinding(),
     ),
     GetPage(
       name: Routes.receipt,
@@ -274,16 +320,31 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateReceipt,
+      page: () => const PaymentAddEditView(),
+      binding: PaymentAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.expense,
       page: () => const ExpensePage(),
       binding: ExpenseBinding(),
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateExpense,
+      page: () => const ExpenseAddEditView(),
+      binding: ExpenseAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.salary,
       page: () => const SalaryPage(),
       binding: SalaryBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateSalary,
+      page: () => const ExpenseAddEditView(),
+      binding: ExpenseAddEditBinding(),
     ),
     // sales
     GetPage(

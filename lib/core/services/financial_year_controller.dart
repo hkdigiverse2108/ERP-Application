@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/company_model.dart';
@@ -26,15 +27,26 @@ class FinancialYearController extends GetxService {
 
   void generateYears() {
     Log.d("FinancialYearController: generateYears() triggered");
-    final companyJson = _storage.read<Map<String, dynamic>>(
-      StorageKeys.companyInfo,
-    );
+    final rawData = _storage.read(StorageKeys.companyInfo);
+    Map<String, dynamic>? companyJson;
+
+    if (rawData is Map<String, dynamic>) {
+      companyJson = rawData;
+    } else if (rawData is String) {
+      try {
+        companyJson = Map<String, dynamic>.from(
+          jsonDecode(rawData) as Map,
+        );
+      } catch (e) {
+        Log.e("FinancialYearController: Failed to decode companyInfo string", e);
+      }
+    }
     DateTime? startDate;
     int? parsedStartYear;
 
     if (companyJson != null) {
     Log.d("FinancialYearController: Found companyInfo in storage: ${companyJson.keys.toList()}");
-      final company = CompanyModel.fromJson(companyJson);
+      final company = CompanyModel.fromMap(companyJson);
 
       // 1. Detection from createdAt
       startDate = company.createdAt ?? DateTime.now();

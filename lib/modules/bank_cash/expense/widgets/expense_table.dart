@@ -30,11 +30,11 @@ class ExpenseTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              RangedDatePicker(
-                initialDateRange: controller.selectedDateRange.value,
-                onChanged: (range) => controller.updateDateRange(range),
-              ),
-              Gap(Sizes.defHorizontalSpace),
+              // RangedDatePicker(
+              //   initialDateRange: controller.selectedDateRange.value,
+              //   onChanged: (range) => controller.updateDateRange(range),
+              // ),
+              // Gap(Sizes.defHorizontalSpace),
               CommonTable<ExpenseModel>(
                 onRowTap: (item) =>
                     Get.toNamed(Routes.expenseDetails, arguments: item),
@@ -109,6 +109,13 @@ class ExpenseTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateExpense,
+                    arguments: {'isSalary': false, 'expense': item},
+                  );
+                  if (res == true) controller.getExpensesData();
+                },
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

@@ -110,99 +110,114 @@ class BankModel extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory BankModel.fromMap(Map<String, dynamic> map) => BankModel(
-        id: map["_id"]?.toString() ?? "",
-        name: map["name"]?.toString() ?? "",
-        ifscCode: map["ifscCode"]?.toString() ?? "",
-        branchName: map["branchName"]?.toString() ?? "",
-        accountHolderName: map["accountHolderName"]?.toString() ?? "",
-        bankAccountNumber: map["bankAccountNumber"]?.toString() ?? "",
-        swiftCode: map["swiftCode"]?.toString() ?? "",
-        openingBalance: map["openingBalance"] != null
-            ? BankOpeningBalance.fromMap(
-                map["openingBalance"] as Map<String, dynamic>)
-            : const BankOpeningBalance(creditBalance: "0", debitBalance: "0"),
-        upiId: map["upiId"]?.toString() ?? "",
-        addressLine1: map["addressLine1"]?.toString() ?? "",
-        addressLine2: map["addressLine2"]?.toString() ?? "",
-        country: map["country"]?.toString() ?? "",
-        state: map["state"]?.toString() ?? "",
-        city: map["city"]?.toString() ?? "",
-        zipCode: map["zipCode"]?.toString() ?? "",
-        branchIds: List<IdNameModel>.from(
-          (map["branchIds"] as List<dynamic>?)?.map(
-                (x) => IdNameModel.fromMap(x),
-              ) ??
-              [],
-        ),
-        isDeleted: map["isDeleted"] as bool? ?? false,
-        isActive: map["isActive"] as bool? ?? true,
-        createdBy: map["createdBy"] == null
-            ? null
-            : BankCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
-        updatedBy: map["updatedBy"]?.toString() ?? "",
-        companyId:
-            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
-        createdAt: map["createdAt"] != null
-            ? DateTime.parse(map["createdAt"].toString())
-            : DateTime.now(),
-        updatedAt: map["updatedAt"] != null
-            ? DateTime.parse(map["updatedAt"].toString())
-            : DateTime.now(),
-      );
+  factory BankModel.fromMap(Map<String, dynamic> map) {
+    final addressMap = map["address"] as Map<String, dynamic>?;
+
+    String extractId(dynamic field) {
+      if (field is Map) {
+        return field["_id"]?.toString() ?? "";
+      }
+      return field?.toString() ?? "";
+    }
+
+    return BankModel(
+      id: map["_id"]?.toString() ?? "",
+      name: map["name"]?.toString() ?? "",
+      ifscCode: map["ifscCode"]?.toString() ?? "",
+      branchName: map["branchName"]?.toString() ?? "",
+      accountHolderName: map["accountHolderName"]?.toString() ?? "",
+      bankAccountNumber: map["bankAccountNumber"]?.toString() ?? "",
+      swiftCode: map["swiftCode"]?.toString() ?? "",
+      openingBalance: map["openingBalance"] != null
+          ? BankOpeningBalance.fromMap(
+              map["openingBalance"] as Map<String, dynamic>,
+            )
+          : const BankOpeningBalance(creditBalance: "0", debitBalance: "0"),
+      upiId: map["upiId"]?.toString() ?? "",
+      addressLine1: addressMap?["addressLine1"]?.toString() ?? "",
+      addressLine2: addressMap?["addressLine2"]?.toString() ?? "",
+      country: extractId(addressMap?["country"]),
+      state: extractId(addressMap?["state"]),
+      city: extractId(addressMap?["city"]),
+      zipCode: addressMap?["pinCode"]?.toString() ?? "",
+      branchIds: List<IdNameModel>.from(
+        (map["branchIds"] as List<dynamic>?)?.map(
+              (x) => IdNameModel.fromMap(x as Map<String, dynamic>),
+            ) ??
+            [],
+      ),
+      isDeleted: map["isDeleted"] as bool? ?? false,
+      isActive: map["isActive"] as bool? ?? true,
+      createdBy: map["createdBy"] == null
+          ? null
+          : BankCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
+      updatedBy: map["updatedBy"]?.toString() ?? "",
+      companyId: map["companyId"] == null
+          ? null
+          : IdNameModel.fromMap(map["companyId"] as Map<String, dynamic>),
+      createdAt: map["createdAt"] != null
+          ? DateTime.parse(map["createdAt"].toString())
+          : DateTime.now(),
+      updatedAt: map["updatedAt"] != null
+          ? DateTime.parse(map["updatedAt"].toString())
+          : DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "name": name,
-        "ifscCode": ifscCode,
-        "branchName": branchName,
-        "accountHolderName": accountHolderName,
-        "bankAccountNumber": bankAccountNumber,
-        "swiftCode": swiftCode,
-        "openingBalance": openingBalance.toMap(),
-        "upiId": upiId,
-        "addressLine1": addressLine1,
-        "addressLine2": addressLine2,
-        "country": country,
-        "state": state,
-        "city": city,
-        "zipCode": zipCode,
-        "branchIds": branchIds.map((e) => e.toMap()).toList(),
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "name": name,
+    "ifscCode": ifscCode,
+    "branchName": branchName,
+    "accountHolderName": accountHolderName,
+    "bankAccountNumber": bankAccountNumber,
+    "swiftCode": swiftCode,
+    "openingBalance": openingBalance.toMap(),
+    "upiId": upiId,
+    "address": {
+      "addressLine1": addressLine1,
+      "addressLine2": addressLine2,
+      "country": country,
+      "state": state,
+      "city": city,
+      "pinCode": int.tryParse(zipCode) ?? 0,
+    },
+    "branchIds": branchIds.map((e) => e.toMap()).toList(),
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        ifscCode,
-        branchName,
-        accountHolderName,
-        bankAccountNumber,
-        swiftCode,
-        openingBalance,
-        upiId,
-        addressLine1,
-        addressLine2,
-        country,
-        state,
-        city,
-        zipCode,
-        branchIds,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    name,
+    ifscCode,
+    branchName,
+    accountHolderName,
+    bankAccountNumber,
+    swiftCode,
+    openingBalance,
+    upiId,
+    addressLine1,
+    addressLine2,
+    country,
+    state,
+    city,
+    zipCode,
+    branchIds,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -219,11 +234,7 @@ class BankCreatedBy extends Equatable {
     required this.userType,
   });
 
-  BankCreatedBy copyWith({
-    String? id,
-    String? fullName,
-    String? userType,
-  }) {
+  BankCreatedBy copyWith({String? id, String? fullName, String? userType}) {
     return BankCreatedBy(
       id: id ?? this.id,
       fullName: fullName ?? this.fullName,
@@ -237,16 +248,16 @@ class BankCreatedBy extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory BankCreatedBy.fromMap(Map<String, dynamic> map) => BankCreatedBy(
-        id: map["_id"]?.toString() ?? "",
-        fullName: map["fullName"]?.toString() ?? "",
-        userType: map["userType"]?.toString() ?? "",
-      );
+    id: map["_id"]?.toString() ?? "",
+    fullName: map["fullName"]?.toString() ?? "",
+    userType: map["userType"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -283,9 +294,9 @@ class BankOpeningBalance extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "creditBalance": creditBalance,
-        "debitBalance": debitBalance,
-      };
+    "creditBalance": creditBalance,
+    "debitBalance": debitBalance,
+  };
 
   @override
   List<Object?> get props => [creditBalance, debitBalance];

@@ -21,12 +21,16 @@ class MaterialConsumptionRepository {
         search: search,
         activeFilter: activeFilter,
         branchId: filter?['branchFilter'],
+        startDate: filter?['startDate'],
+        endDate: filter?['endDate'],
       ),
     );
 
     if (response.status == 200) {
       final items = (response.data['material_consumption_data'] as List)
-          .map((x) => MaterialConsumptionModel.fromMap(x as Map<String, dynamic>))
+          .map(
+            (x) => MaterialConsumptionModel.fromMap(x as Map<String, dynamic>),
+          )
           .toList();
       return PaginationModel.fromMap(response.data, items);
     }
@@ -36,7 +40,7 @@ class MaterialConsumptionRepository {
 
   Future<MaterialConsumptionModel> getMaterialConsumptionById(String id) async {
     final ResModel response = await _api.get(
-      ApiConstants.getMaterialConsumptionById,
+      "${ApiConstants.getMaterialConsumptionById}?id=$id",
     );
 
     if (response.status == 200 && response.data != null) {
@@ -48,5 +52,21 @@ class MaterialConsumptionRepository {
     throw Exception(
       response.message ?? 'Failed to load material consumption detail',
     );
+  }
+
+  Future<bool> addMaterialConsumption(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.addMaterialConsumption,
+      body: data,
+    );
+    return response.status == 200 || response.status == 201;
+  }
+
+  Future<bool> updateMaterialConsumption(Map<String, dynamic> data) async {
+    final ResModel response = await _api.put(
+      ApiConstants.updateMaterialConsumption,
+      body: data,
+    );
+    return response.status == 200;
   }
 }

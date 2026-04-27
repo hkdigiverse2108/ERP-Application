@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -8,6 +9,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StockVerification extends StatelessWidget {
   const StockVerification({super.key});
@@ -43,19 +45,34 @@ class StockVerification extends StatelessWidget {
         right: Sizes.paddingM,
         top: Sizes.paddingM,
       ),
-      child: FilterSection(
-        title: 'Stock Verification List',
-        filters: [
-          FilterOption(
-            label: 'Status',
-            filterKey: 'statusFilter',
-            options: StockVerificationStatus.values.asMap().map(
-              (key, value) => MapEntry(value.name.formatEnum(), value.name),
+      child: Obx(
+        () => FilterSection(
+          title: 'Stock Verification List',
+          onAdd: () async {
+            final result = await Get.toNamed(Routes.addUpdateStockVerification);
+            if (result == true) {
+              controller.refreshData();
+            }
+          },
+          filters: [
+            FilterOption(
+              label: 'Branch',
+              filterKey: 'branchFilter',
+              options: {
+                for (var e in controller.branches) e.name.formatEnum(): e.id,
+              },
             ),
-          ),
-        ],
-        onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+            FilterOption(
+              label: 'Status',
+              filterKey: 'statusFilter',
+              options: StockVerificationStatus.values.asMap().map(
+                (key, value) => MapEntry(value.name.formatEnum(), value.name),
+              ),
+            ),
+          ],
+          onSearchChanged: (query) => controller.onSearch(query),
+          onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        ),
       ),
     );
   }

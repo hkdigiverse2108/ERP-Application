@@ -115,98 +115,98 @@ class PosPaymentModel extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory PosPaymentModel.fromMap(Map<String, dynamic> map) => PosPaymentModel(
-        id: map["_id"]?.toString() ?? "",
-        paymentNo: map["paymentNo"]?.toString() ?? "",
-        voucherType: map["voucherType"]?.toString() ?? "",
-        paymentType: map["paymentType"]?.toString() ?? "",
-        partyId: map["partyId"] == null
-            ? null
-            : PosPaymentParty.fromMap(map["partyId"] as Map<String, dynamic>),
-        posOrderId: map["posOrderId"] == null
-            ? null
-            : PosPaymentOrder.fromMap(map["posOrderId"] as Map<String, dynamic>),
-        posCashRegisterId: map["posCashRegisterId"]?.toString() ?? "",
-        paymentMode: map["paymentMode"]?.toString() ?? "",
-        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
-        paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
-        pendingAmount: (map["pendingAmount"] as num? ?? 0).toDouble(),
-        kasar: (map["kasar"] as num? ?? 0).toDouble(),
-        expenseType: map["expenseType"]?.toString() ?? "",
-        discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
-        amount: (map["amount"] as num? ?? 0).toDouble(),
-        isNonGst: map["isNonGST"] as bool? ?? map["isNonGst"] as bool? ?? false,
-        status: map["status"]?.toString() ?? "",
-        isDeleted: map["isDeleted"] as bool? ?? false,
-        isActive: map["isActive"] as bool? ?? true,
-        createdBy: map["createdBy"] == null
-            ? null
-            : PosPaymentCreatedBy.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
-        updatedBy: map["updatedBy"]?.toString() ?? "",
-        companyId:
-            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
-        createdAt: map["createdAt"] != null
-            ? DateTime.parse(map["createdAt"].toString())
-            : DateTime.now(),
-        updatedAt: map["updatedAt"] != null
-            ? DateTime.parse(map["updatedAt"].toString())
-            : DateTime.now(),
-      );
+    id: map["_id"]?.toString() ?? "",
+    paymentNo: map["paymentNo"]?.toString() ?? "",
+    voucherType: map["voucherType"]?.toString() ?? "",
+    paymentType: map["paymentType"]?.toString() ?? "",
+    partyId: map["partyId"] == null
+        ? null
+        : PosPaymentParty.fromMap(map["partyId"] as Map<String, dynamic>),
+    posOrderId: map["posOrderId"] == null
+        ? null
+        : PosPaymentOrder.fromMap(map["posOrderId"] as Map<String, dynamic>),
+    posCashRegisterId: map["posCashRegisterId"]?.toString() ?? "",
+    paymentMode: map["paymentMode"]?.toString() ?? "",
+    totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+    paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
+    pendingAmount: (map["pendingAmount"] as num? ?? 0).toDouble(),
+    kasar: (map["kasar"] as num? ?? 0).toDouble(),
+    expenseType: map["expenseType"]?.toString() ?? "",
+    discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
+    amount: (map["amount"] as num? ?? 0).toDouble(),
+    isNonGst: map["isNonGST"] as bool? ?? map["isNonGst"] as bool? ?? false,
+    status: map["status"]?.toString() ?? "",
+    isDeleted: map["isDeleted"] as bool? ?? false,
+    isActive: map["isActive"] as bool? ?? true,
+    createdBy: map["createdBy"] == null
+        ? null
+        : PosPaymentCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
+    updatedBy: map["updatedBy"]?.toString() ?? "",
+    companyId: map["companyId"] == null
+        ? null
+        : IdNameModel.fromMap(map["companyId"]),
+    createdAt: map["createdAt"] != null
+        ? DateTime.parse(map["createdAt"].toString())
+        : DateTime.now(),
+    updatedAt: map["updatedAt"] != null
+        ? DateTime.parse(map["updatedAt"].toString())
+        : DateTime.now(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "paymentNo": paymentNo,
-        "voucherType": voucherType,
-        "paymentType": paymentType,
-        "partyId": partyId?.toMap(),
-        "posOrderId": posOrderId?.toMap(),
-        "posCashRegisterId": posCashRegisterId,
-        "paymentMode": paymentMode,
-        "totalAmount": totalAmount,
-        "paidAmount": paidAmount,
-        "pendingAmount": pendingAmount,
-        "kasar": kasar,
-        "expenseType": expenseType,
-        "discountAmount": discountAmount,
-        "amount": amount,
-        "isNonGST": isNonGst,
-        "status": status,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "paymentNo": paymentNo,
+    "voucherType": voucherType,
+    "paymentType": paymentType,
+    "partyId": partyId?.toMap(),
+    "posOrderId": posOrderId?.toMap(),
+    "posCashRegisterId": posCashRegisterId,
+    "paymentMode": paymentMode,
+    "totalAmount": totalAmount,
+    "paidAmount": paidAmount,
+    "pendingAmount": pendingAmount,
+    "kasar": kasar,
+    "expenseType": expenseType,
+    "discountAmount": discountAmount,
+    "amount": amount,
+    "isNonGST": isNonGst,
+    "status": status,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        paymentNo,
-        voucherType,
-        paymentType,
-        partyId,
-        posOrderId,
-        posCashRegisterId,
-        paymentMode,
-        totalAmount,
-        paidAmount,
-        pendingAmount,
-        kasar,
-        expenseType,
-        discountAmount,
-        amount,
-        isNonGst,
-        status,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    paymentNo,
+    voucherType,
+    paymentType,
+    partyId,
+    posOrderId,
+    posCashRegisterId,
+    paymentMode,
+    totalAmount,
+    paidAmount,
+    pendingAmount,
+    kasar,
+    expenseType,
+    discountAmount,
+    amount,
+    isNonGst,
+    status,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -248,10 +248,10 @@ class PosPaymentCreatedBy extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -293,18 +293,18 @@ class PosPaymentParty extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory PosPaymentParty.fromMap(Map<String, dynamic> map) => PosPaymentParty(
-        id: map["_id"]?.toString() ?? "",
-        firstName: map["firstName"]?.toString() ?? "",
-        lastName: map["lastName"]?.toString() ?? "",
-        companyName: map["companyName"]?.toString(),
-      );
+    id: map["_id"]?.toString() ?? "",
+    firstName: map["firstName"]?.toString() ?? "",
+    lastName: map["lastName"]?.toString() ?? "",
+    companyName: map["companyName"]?.toString(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "companyName": companyName,
-      };
+    "_id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "companyName": companyName,
+  };
 
   @override
   List<Object?> get props => [id, firstName, lastName, companyName];
@@ -350,22 +350,22 @@ class PosPaymentOrder extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory PosPaymentOrder.fromMap(Map<String, dynamic> map) => PosPaymentOrder(
-        id: map["_id"]?.toString() ?? "",
-        orderNo: map["orderNo"]?.toString() ?? "",
-        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
-        paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
-        createdAt: map["createdAt"] != null
-            ? DateTime.parse(map["createdAt"].toString())
-            : DateTime.now(),
-      );
+    id: map["_id"]?.toString() ?? "",
+    orderNo: map["orderNo"]?.toString() ?? "",
+    totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+    paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
+    createdAt: map["createdAt"] != null
+        ? DateTime.parse(map["createdAt"].toString())
+        : DateTime.now(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "orderNo": orderNo,
-        "totalAmount": totalAmount,
-        "paidAmount": paidAmount,
-        "createdAt": createdAt.toIso8601String(),
-      };
+    "_id": id,
+    "orderNo": orderNo,
+    "totalAmount": totalAmount,
+    "paidAmount": paidAmount,
+    "createdAt": createdAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [id, orderNo, totalAmount, paidAmount, createdAt];

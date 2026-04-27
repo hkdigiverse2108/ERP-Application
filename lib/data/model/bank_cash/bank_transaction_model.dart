@@ -82,82 +82,81 @@ class BankTransactionModel extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory BankTransactionModel.fromMap(Map<String, dynamic> map) =>
-      BankTransactionModel(
-        id: map["_id"]?.toString() ?? "",
-        isDeleted: map["isDeleted"] as bool? ?? false,
-        isActive: map["isActive"] as bool? ?? true,
-        createdBy: map["createdBy"] == null
-            ? null
-            : BankTransactionUser.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
-        updatedBy: map["updatedBy"] == null
-            ? null
-            : BankTransactionUser.fromMap(
-                map["updatedBy"] as Map<String, dynamic>),
-        companyId: map["companyId"] == null
-            ? null
-            : IdNameModel.fromMap(map["companyId"]),
-        branchId: map["branchId"],
-        voucherNo: map["voucherNo"]?.toString() ?? "",
-        transactionDate: map["transactionDate"] != null
-            ? DateTime.parse(map["transactionDate"].toString())
-            : DateTime.now(),
-        transactionType: map["transactionType"]?.toString() ?? "",
-        fromAccount: map["fromAccount"] == null
-            ? null
-            : IdNameModel.fromMap(map["fromAccount"]),
-        toAccount: map["toAccount"] == null
-            ? null
-            : IdNameModel.fromMap(map["toAccount"]),
-        amount: (map["amount"] as num? ?? 0).toDouble(),
-        description: map["description"]?.toString() ?? "",
-        createdAt: map["createdAt"] != null
-            ? DateTime.parse(map["createdAt"].toString())
-            : DateTime.now(),
-        updatedAt: map["updatedAt"] != null
-            ? DateTime.parse(map["updatedAt"].toString())
-            : DateTime.now(),
-      );
+  factory BankTransactionModel.fromMap(
+    Map<String, dynamic> map,
+  ) => BankTransactionModel(
+    id: map["_id"]?.toString() ?? "",
+    isDeleted: map["isDeleted"] as bool? ?? false,
+    isActive: map["isActive"] as bool? ?? true,
+    createdBy: map["createdBy"] == null
+        ? null
+        : BankTransactionUser.fromMap(map["createdBy"] as Map<String, dynamic>),
+    updatedBy: map["updatedBy"] == null
+        ? null
+        : BankTransactionUser.fromMap(map["updatedBy"] as Map<String, dynamic>),
+    companyId: map["companyId"] == null
+        ? null
+        : IdNameModel.fromMap(map["companyId"]),
+    branchId: map["branchId"],
+    voucherNo: map["voucherNo"]?.toString() ?? "",
+    transactionDate: map["transactionDate"] != null
+        ? DateTime.parse(map["transactionDate"].toString())
+        : DateTime.now(),
+    transactionType: map["transactionType"]?.toString() ?? "",
+    fromAccount: map["fromAccount"] == null
+        ? null
+        : IdNameModel.fromMap(map["fromAccount"]),
+    toAccount: map["toAccount"] == null
+        ? null
+        : IdNameModel.fromMap(map["toAccount"]),
+    amount: (map["amount"] as num? ?? 0).toDouble(),
+    description: map["description"]?.toString() ?? "",
+    createdAt: map["createdAt"] != null
+        ? DateTime.parse(map["createdAt"].toString())
+        : DateTime.now(),
+    updatedAt: map["updatedAt"] != null
+        ? DateTime.parse(map["updatedAt"].toString())
+        : DateTime.now(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy?.toMap(),
-        "companyId": companyId?.toMap(),
-        "branchId": branchId,
-        "voucherNo": voucherNo,
-        "transactionDate": transactionDate.toIso8601String(),
-        "transactionType": transactionType,
-        "fromAccount": fromAccount?.toMap(),
-        "toAccount": toAccount?.toMap(),
-        "amount": amount,
-        "description": description,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy?.toMap(),
+    "companyId": companyId?.toMap(),
+    "branchId": branchId,
+    "voucherNo": voucherNo,
+    "transactionDate": transactionDate.toIso8601String(),
+    "transactionType": transactionType,
+    "fromAccount": fromAccount?.toMap(),
+    "toAccount": toAccount?.toMap(),
+    "amount": amount,
+    "description": description,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        branchId,
-        voucherNo,
-        transactionDate,
-        transactionType,
-        fromAccount,
-        toAccount,
-        amount,
-        description,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    branchId,
+    voucherNo,
+    transactionDate,
+    transactionType,
+    fromAccount,
+    toAccount,
+    amount,
+    description,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -199,10 +198,10 @@ class BankTransactionUser extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];

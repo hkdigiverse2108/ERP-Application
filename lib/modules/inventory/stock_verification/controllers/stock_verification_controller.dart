@@ -1,20 +1,23 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
+import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
+import 'package:ai_setu/data/repositories/branch_repository.dart';
 import 'package:ai_setu/data/repositories/stock_verification_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class StockVerificationController extends GetxController {
   static StockVerificationController get instance => Get.find();
 
   final _repo = StockVerificationRepository();
+  final _branchRepo = BranchRepository();
   final stockVerifications = <StockVerificationModel>[].obs;
+  final branches = <BranchDropdownModel>[].obs;
 
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 30)),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = FinancialYearController.to.selectedRange.obs;
 
   // Search & Filter
   final searchQuery = ''.obs;
@@ -33,15 +36,51 @@ class StockVerificationController extends GetxController {
   final totalItems = 0.obs;
 
   final RxBool isLoading = false.obs;
+  Worker? _fyWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Listen to date range changes
+    ever(selectedDateRange, (_) {
+      _clearCache();
+      getStockVerificationData();
+    });
+
+    // Listen to global branch changes
+    ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getStockVerificationData();
+    });
+
+    // Listen to global financial year changes
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+      }
+    });
+  }
 
   @override
   void onReady() {
     super.onReady();
     getStockVerificationData();
+    getBranchesDropdown();
   }
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}';
+  Future<void> getBranchesDropdown() async {
+    try {
+      final res = await _branchRepo.getBranchesDropdown();
+      branches.value = res;
+    } catch (e) {
+      Log.e("Inventory Module Error (StockVerification)", e);
+    }
+  }
+
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${selectedDateRange.value.start}_${selectedDateRange.value.end}_$branchId';
+  }
 
   Future<void> getStockVerificationData() async {
     final key = _getCacheKey(currentPage.value);
@@ -55,11 +94,31 @@ class StockVerificationController extends GetxController {
 
     try {
       isLoading.value = true;
+
+      // Combine local filters with global branch and date range
+      final Map<String, dynamic> combinedFilters = Map.from(filters);
+
+      // Global branch filter
+      if (!combinedFilters.containsKey('branchFilter')) {
+        final globalBranchId = BranchController.to.selectedBranch.value?.id;
+        if (globalBranchId != null) {
+          combinedFilters['branchFilter'] = globalBranchId;
+        }
+      }
+
+      // Date range filters
+      combinedFilters['startDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.start);
+      combinedFilters['endDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.end);
+
       final res = await _repo.getStockVerificationList(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        filter: filters.isEmpty ? null : filters,
+        filter: combinedFilters,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
@@ -92,6 +151,7 @@ class StockVerificationController extends GetxController {
   @override
   void onClose() {
     _debounceTimer?.cancel();
+    _fyWorker?.dispose();
     super.onClose();
   }
 
@@ -106,5 +166,10 @@ class StockVerificationController extends GetxController {
       currentPage.value = page;
       await getStockVerificationData();
     }
+  }
+
+  void refreshData() {
+    _clearCache();
+    getStockVerificationData();
   }
 }

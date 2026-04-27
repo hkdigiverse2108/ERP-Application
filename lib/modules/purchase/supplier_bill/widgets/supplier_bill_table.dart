@@ -96,7 +96,9 @@ class SupplierBillTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.supplierBillDate ?? DateTime.now()),
+                      DateFormat(
+                        'dd MMM yyyy',
+                      ).format(item.supplierBillDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),

@@ -23,7 +23,8 @@ class BankTransactionDetails extends StatelessWidget {
       title: 'Transaction #${transaction.voucherNo}',
       subtitle: 'Date: $dateStr',
       heroIcon: PhosphorIconsFill.bank,
-      status: transaction.transactionType,
+      status: transaction.transactionType.capitalizeFirst ??
+          transaction.transactionType,
       statusColor: _getTypeColor(transaction.transactionType),
       actions: [
         DetailAction(
@@ -49,7 +50,11 @@ class BankTransactionDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                DetailItem(label: 'Type', value: transaction.transactionType),
+                DetailItem(
+                  label: 'Type',
+                  value: transaction.transactionType.capitalizeFirst ??
+                      transaction.transactionType,
+                ),
                 DetailItem(
                   label: 'From Account',
                   value: transaction.fromAccount?.name ?? '-',

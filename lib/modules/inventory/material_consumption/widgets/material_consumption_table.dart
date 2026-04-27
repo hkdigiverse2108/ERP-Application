@@ -26,7 +26,10 @@ class MaterialConsumptionTable extends StatelessWidget {
             controller.materialConsumptions.isEmpty) {
           return const TableShimmer();
         }
-        ThemeService().isDarkMode;
+
+        // Accessing isDarkMode to ensure Obx tracks theme changes
+        context.isDarkMode;
+
         return BorderContainer(
           child: Column(
             children: [
@@ -39,6 +42,10 @@ class MaterialConsumptionTable extends StatelessWidget {
               CommonTable<MaterialConsumptionModel>(
                 onRowTap: (item) => Get.toNamed(
                   Routes.materialConsumptionDetails,
+                  arguments: item,
+                ),
+                onEditItem: (item) => Get.toNamed(
+                  Routes.addUpdateMaterialConsumption,
                   arguments: item,
                 ),
                 isLoading: controller.isLoading.value,
@@ -57,18 +64,45 @@ class MaterialConsumptionTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
+                    title: 'Date',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      DateFormat('dd MMM yyyy').format(item.date),
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
                     title: 'Branch',
                     width: 150,
                     cellBuilder: (context, item, index) => Text(
                       item.branchId?.name ?? '-',
                       style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TableColumn(
                     title: 'Type',
                     width: 120,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.displayType, style: TextHelper.bodySmall),
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: context.appColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        item.displayType,
+                        style: TextHelper.bodySmall.copyWith(
+                          color: context.appColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
                   TableColumn(
                     title: 'Total Qty',
@@ -81,31 +115,26 @@ class MaterialConsumptionTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
-                    title: 'Total Amount',
+                    title: 'Amount',
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      item.totalAmount.toString(),
-                      textAlign: TextAlign.center,
+                      '₹${item.totalAmount.toStringAsFixed(2)}',
                       style: TextHelper.bodySmall.copyWith(
-                        fontWeight: FontWeight.w600,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  TableColumn(
-                    title: 'Date',
-                    width: 110,
-                    cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd-MM-yyyy').format(item.date),
-                      style: TextHelper.bodySmall,
                     ),
                   ),
                   TableColumn(
                     title: 'Created By',
                     width: 150,
+                    alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
                       item.createdBy?.fullName ?? "-",
                       style: TextHelper.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TableColumn(
@@ -114,7 +143,7 @@ class MaterialConsumptionTable extends StatelessWidget {
                     cellBuilder: (context, item, index) => Text(
                       item.remark ?? '-',
                       style: TextHelper.bodySmall,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

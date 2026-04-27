@@ -21,6 +21,9 @@ class StockVerificationRepository {
         search: search,
         activeFilter: activeFilter,
         statusFilter: filter?['statusFilter'],
+        branchId: filter?['branchFilter'],
+        startDate: filter?['startDate'],
+        endDate: filter?['endDate'],
       ),
     );
 
@@ -48,5 +51,31 @@ class StockVerificationRepository {
     throw Exception(
       response.message ?? 'Failed to load stock verification detail',
     );
+  }
+
+  Future<bool> addStockVerification(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.addStockVerification,
+      body: data,
+    );
+
+    if (response.status == 200) {
+      return true;
+    }
+
+    throw Exception(response.message ?? 'Failed to add stock verification');
+  }
+
+  Future<bool> updateStockVerification(Map<String, dynamic> data) async {
+    final ResModel response = await _api.put(
+      ApiConstants.updateStockVerification,
+      body: data,
+    );
+
+    if (response.status == 200) {
+      return true;
+    }
+
+    throw Exception(response.message ?? 'Failed to update stock verification');
   }
 }

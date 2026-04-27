@@ -1,25 +1,28 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
+import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
+import 'package:ai_setu/data/repositories/branch_repository.dart';
 import 'package:ai_setu/data/repositories/bill_of_live_product_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class BillOfLiveProductController extends GetxController {
   static BillOfLiveProductController get instance => Get.find();
 
   final _repo = BillOfLiveProductRepository();
+  final _branchRepo = BranchRepository();
   final billOfLiveProducts = <BillOfLiveProductModel>[].obs;
 
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 30)),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = FinancialYearController.to.selectedRange.obs;
 
   // Search & Filter
   final searchQuery = ''.obs;
   final activeFilters = <String, dynamic>{}.obs;
   Timer? _debounceTimer;
+  final branches = <BranchDropdownModel>[].obs;
 
   // Caching
   final _cache =
@@ -34,14 +37,52 @@ class BillOfLiveProductController extends GetxController {
 
   final RxBool isLoading = false.obs;
 
+  Worker? _fyWorker;
+  Worker? _branchWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Listen to date range changes
+    ever(selectedDateRange, (_) {
+      _clearCache();
+      getBillOfLiveProductData();
+    });
+
+    // Listen to global financial year changes
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+      }
+    });
+
+    // Listen to global branch changes
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getBillOfLiveProductData();
+    });
+  }
+
   @override
   void onReady() {
     super.onReady();
     getBillOfLiveProductData();
+    getBranchesDropdown();
   }
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${activeFilters.toString()}';
+  Future<void> getBranchesDropdown() async {
+    try {
+      final res = await _branchRepo.getBranchesDropdown();
+      branches.value = res;
+    } catch (e) {
+      Log.e("Inventory Module Error (BillOfLiveProduct Branches)", e);
+    }
+  }
+
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${activeFilters.toString()}_${selectedDateRange.value.start}_${selectedDateRange.value.end}_$branchId';
+  }
 
   Future<void> getBillOfLiveProductData() async {
     final key = _getCacheKey(currentPage.value);
@@ -55,11 +96,29 @@ class BillOfLiveProductController extends GetxController {
 
     try {
       isLoading.value = true;
+
+      // Combine local filters with global branch and date range
+      final Map<String, dynamic> combinedFilters = Map.from(activeFilters);
+
+      // Global branch filter
+      if (!combinedFilters.containsKey('branchFilter')) {
+        final globalBranchId = BranchController.to.selectedBranch.value?.id;
+        if (globalBranchId != null) {
+          combinedFilters['branchFilter'] = globalBranchId;
+        }
+      }
+
+      // Date range filters
+      combinedFilters['startDate'] =
+          DateFormat('yyyy-MM-dd').format(selectedDateRange.value.start);
+      combinedFilters['endDate'] =
+          DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end);
+
       final res = await _repo.getBillOfLiveProductList(
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
-        activeFilter: activeFilters.isEmpty ? null : activeFilters.toString(),
+        filter: combinedFilters,
       );
 
       _cache[key] = (items: res.items, fetchedAt: DateTime.now());
@@ -92,6 +151,8 @@ class BillOfLiveProductController extends GetxController {
   @override
   void onClose() {
     _debounceTimer?.cancel();
+    _fyWorker?.dispose();
+    _branchWorker?.dispose();
     super.onClose();
   }
 

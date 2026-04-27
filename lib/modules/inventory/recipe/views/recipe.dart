@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/inventory/recipe/controllers/recipe_controller.dart';
 import 'package:ai_setu/modules/inventory/recipe/widgets/recipe_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Recipe extends StatelessWidget {
   const Recipe({super.key});
@@ -44,7 +46,9 @@ class Recipe extends StatelessWidget {
       child: FilterSection(
         title: 'Recipe List',
         filters: const [],
-        onAdd: () {},
+        onAdd: () {
+          Get.toNamed(Routes.addUpdateRecipe);
+        },
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
       ),

@@ -64,8 +64,11 @@ class BankTransactionTable extends StatelessWidget {
                     title: 'Type',
                     width: 100,
                     alignment: TextAlign.center,
-                    cellBuilder: (context, item, index) =>
-                        Text(item.transactionType, style: TextHelper.bodySmall),
+                    cellBuilder: (context, item, index) => Text(
+                      item.transactionType.capitalizeFirst ??
+                          item.transactionType,
+                      style: TextHelper.bodySmall,
+                    ),
                   ),
                   TableColumn(
                     title: 'From Account',
@@ -116,6 +119,15 @@ class BankTransactionTable extends StatelessWidget {
                 totalItems: controller.totalItems.value,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.bankTransactionDetails, arguments: item),
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateBankTransaction,
+                    arguments: item,
+                  );
+                  if (res == true) {
+                    controller.getTransactionsData();
+                  }
+                },
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

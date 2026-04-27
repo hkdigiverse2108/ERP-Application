@@ -1,3 +1,4 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
@@ -51,6 +52,12 @@ class EstimateController extends GetxController {
         updateDateRange(year.dateRange);
       }
     });
+
+    // Listen to global branch changes
+    ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getEstimatesData();
+    });
   }
 
   @override
@@ -73,8 +80,10 @@ class EstimateController extends GetxController {
 
   String _formatDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}';
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}_$branchId';
+  }
 
   Future<void> getEstimatesData() async {
     final key = _getCacheKey(currentPage.value);
@@ -97,6 +106,8 @@ class EstimateController extends GetxController {
         customerFilter: filters['customerFilter'],
         statusFilter: filters['statusFilter'],
         activeFilter: filters['activeFilter'],
+        branchId: filters['branchFilter'] ??
+            BranchController.to.selectedBranch.value?.id,
       );
 
       _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());

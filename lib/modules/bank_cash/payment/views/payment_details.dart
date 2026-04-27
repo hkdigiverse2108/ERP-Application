@@ -49,11 +49,12 @@ class PaymentDetails extends StatelessWidget {
           children: [
             DataGrid(
               items: [
-                 DetailItem(
+                DetailItem(
                   label: 'Party/Supplier',
                   value: payment.partyId?.companyName?.isNotEmpty == true
                       ? payment.partyId!.companyName!
-                      : '${payment.partyId?.firstName ?? '-'} ${payment.partyId?.lastName ?? ''}'.trim(),
+                      : '${payment.partyId?.firstName ?? '-'} ${payment.partyId?.lastName ?? ''}'
+                            .trim(),
                 ),
                 DetailItem(
                   label: 'Payment Mode',
@@ -65,7 +66,8 @@ class PaymentDetails extends StatelessWidget {
                       ? payment.expenseType
                       : '-',
                 ),
-                if (payment.posOrderId != null && payment.posOrderId!.orderNo.isNotEmpty)
+                if (payment.posOrderId != null &&
+                    payment.posOrderId!.orderNo.isNotEmpty)
                   DetailItem(
                     label: 'Reference No.',
                     value: payment.posOrderId!.orderNo,

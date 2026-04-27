@@ -1,3 +1,5 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
@@ -13,10 +15,10 @@ class SalaryController extends GetxController {
   final _repository = SalaryRepository();
 
   final salaries = <SalaryModel>[].obs;
-  final selectedDateRange = DateTimeRange(
-    start: DateTime.now().subtract(const Duration(days: 30)),
-    end: DateTime.now(),
-  ).obs;
+  final selectedDateRange = FinancialYearController.to.selectedRange.obs;
+
+  late Worker _fyWorker;
+  late Worker _branchWorker;
 
   // Search & Filter
   final searchQuery = ''.obs;
@@ -36,6 +38,27 @@ class SalaryController extends GetxController {
   final isLodding = false.obs;
 
   @override
+  void onInit() {
+    super.onInit();
+    _setupGlobalFilters();
+  }
+
+  void _setupGlobalFilters() {
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        selectedDateRange.value = year.dateRange;
+        _clearCache();
+        getSalaryData();
+      }
+    });
+
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getSalaryData();
+    });
+  }
+
+  @override
   void onReady() {
     super.onReady();
     getSalaryData();
@@ -43,8 +66,10 @@ class SalaryController extends GetxController {
 
   String _formatDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
-  String _getCacheKey(int page) =>
-      '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}';
+  String _getCacheKey(int page) {
+    final branchId = BranchController.to.selectedBranch.value?.id;
+    return '${page}_${searchQuery.value}_${filters.toString()}_${_formatDate(selectedDateRange.value.start)}_${_formatDate(selectedDateRange.value.end)}_$branchId';
+  }
 
   Future<void> getSalaryData() async {
     final key = _getCacheKey(currentPage.value);
@@ -64,6 +89,7 @@ class SalaryController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
         activeFilter: filters['activeFilter'],
+        branchId: BranchController.to.selectedBranch.value?.id,
       );
 
       _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());
@@ -114,6 +140,8 @@ class SalaryController extends GetxController {
   @override
   void onClose() {
     _debounceTimer?.cancel();
+    _fyWorker.dispose();
+    _branchWorker.dispose();
     super.onClose();
   }
 }

@@ -11,14 +11,17 @@ class BillOfLiveProductRepository {
     int? page,
     int? limit,
     String? search,
-    String? activeFilter,
+    Map<String, dynamic>? filter,
   }) async {
     final ResModel response = await _api.get(
       ApiConstants.getAllBillOfLiveProduct(
         page: page,
         limit: limit,
         search: search,
-        activeFilter: activeFilter,
+        branchId: filter?['branchFilter'],
+        startDate: filter?['startDate'],
+        endDate: filter?['endDate'],
+        activeFilter: filter?['statusFilter'],
       ),
     );
 
@@ -30,6 +33,14 @@ class BillOfLiveProductRepository {
     }
 
     throw Exception(response.message ?? 'Failed to load bill of live products');
+  }
+
+  Future<ResModel> addBillOfLiveProduct(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addBillOfLiveProduct,body: data);
+  }
+
+  Future<ResModel> updateBillOfLiveProduct(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updateBillOfLiveProduct, body: data);
   }
 
   Future<BillOfLiveProductModel> getBillOfLiveProductById(String id) async {
