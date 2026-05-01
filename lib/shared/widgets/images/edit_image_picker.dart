@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -34,32 +36,50 @@ class EditImagePicker extends StatelessWidget {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  border: Border.all(color: Colors.grey.shade300),
+                  color: context.appColors.background,
+                  border: Border.all(color: context.appColors.border),
                   borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
                 ),
                 child: imagePath == null
                     ? Icon(
                         PhosphorIconsLight.plus,
                         size: 32,
-                        color: Colors.grey,
+                        color: context.appColors.textSecondary,
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(
                           Sizes.borderRadiusM,
                         ),
-                        child: GetPlatform.isWeb
-                            ? Image.network(imagePath!, fit: BoxFit.cover)
-                            : Image.file(File(imagePath!), fit: BoxFit.cover),
+                        child: Hero(
+                          tag: imagePath!,
+                          child: imagePath!.startsWith('http')
+                              ? Image.network(imagePath!, fit: BoxFit.cover)
+                              : Image.file(File(imagePath!), fit: BoxFit.cover),
+                        ),
                       ),
               ),
             ),
             const Gap(Sizes.defHorizontalSpace),
-            if (imagePath != null)
+            if (imagePath != null) ...[
+              IconButton(
+                onPressed: () => Get.to(
+                  () => ImageViewerPage(
+                    imageUrl: imagePath!,
+                    title: label ?? "Preview",
+                  ),
+                ),
+                icon: Icon(
+                  PhosphorIconsLight.eye,
+                  color: context.appColors.primary,
+                ),
+                tooltip: "Preview Image",
+              ),
               IconButton(
                 onPressed: onRemoveImage,
-                icon: Icon(PhosphorIconsLight.trash, color: Colors.red),
+                icon: const Icon(PhosphorIconsLight.trash, color: Colors.red),
+                tooltip: "Remove Image",
               ),
+            ],
           ],
         ),
         const Gap(Sizes.paddingS),
@@ -67,7 +87,9 @@ class EditImagePicker extends StatelessWidget {
           imagePath == null
               ? (label ?? "Tap to select an image")
               : "Tap to change image",
-          style: TextHelper.bodySmall,
+          style: TextHelper.bodySmallStyle(
+            context,
+          ).copyWith(color: context.appColors.textSecondary),
         ),
       ],
     );

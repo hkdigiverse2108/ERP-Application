@@ -266,7 +266,9 @@ class ProductModel extends Equatable {
     isExpiryProductSaleable: map["isExpiryProductSaleable"] ?? false,
     hasExpiry: map["hasExpiry"] ?? false,
     ingredients: map["ingredients"] != null
-        ? List<dynamic>.from(map["ingredients"].map((x) => x))
+        ? (map["ingredients"] is List
+            ? List<dynamic>.from(map["ingredients"].map((x) => x))
+            : [map["ingredients"]])
         : [],
     masterQty: map["masterQty"],
     stockIds: map["stockIds"] == null
@@ -653,6 +655,7 @@ class ProductItemModel extends Equatable {
   final int mrp;
   final int sellingPrice;
   final double qty;
+  final List<String> images;
   final CreatedBy? createdBy;
 
   const ProductItemModel({
@@ -667,6 +670,7 @@ class ProductItemModel extends Equatable {
     required this.mrp,
     required this.sellingPrice,
     required this.qty,
+    required this.images,
     this.createdBy,
   });
 
@@ -696,6 +700,7 @@ class ProductItemModel extends Equatable {
       mrp: mrp ?? this.mrp,
       sellingPrice: sellingPrice ?? this.sellingPrice,
       qty: qty ?? this.qty,
+      images: images,
       createdBy: createdBy ?? this.createdBy,
     );
   }
@@ -726,6 +731,9 @@ class ProductItemModel extends Equatable {
         mrp: map["mrp"] ?? 0,
         sellingPrice: map["sellingPrice"] ?? 0,
         qty: map["qty"]?.toDouble() ?? 0.0,
+        images: map["images"] != null
+            ? List<String>.from(map["images"].map((x) => x))
+            : [],
         createdBy: map["createdBy"] == null
             ? null
             : CreatedBy.fromMap(map["createdBy"]),
@@ -743,6 +751,7 @@ class ProductItemModel extends Equatable {
     "mrp": mrp,
     "sellingPrice": sellingPrice,
     "qty": qty,
+    "images": List<dynamic>.from(images.map((x) => x)),
     "createdBy": createdBy?.toMap(),
   };
 
@@ -759,6 +768,7 @@ class ProductItemModel extends Equatable {
     mrp,
     sellingPrice,
     qty,
+    images,
     createdBy,
   ];
 

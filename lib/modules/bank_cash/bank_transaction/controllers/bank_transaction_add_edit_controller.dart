@@ -2,7 +2,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/bank_transaction_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
-import 'package:ai_setu/data/repositories/bank_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/bank_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -151,3 +151,4 @@ class BankTransactionAddEditController extends GetxController {
     super.onClose();
   }
 }
+

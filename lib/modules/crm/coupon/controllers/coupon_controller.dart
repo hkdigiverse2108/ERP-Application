@@ -1,5 +1,7 @@
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/data/model/crm/coupon_model.dart';
 import 'package:ai_setu/data/repositories/crm/coupon_repository.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,23 @@ class CouponController extends GetxController {
   final totalItems = 0.obs;
 
   final isLoading = false.obs;
+  Worker? _fyWorker;
+  Worker? _branchWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    selectedDateRange.value = FinancialYearController.to.selectedRange;
+    _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
+      if (year != null) {
+        updateDateRange(year.dateRange);
+      }
+    });
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getCouponData();
+    });
+  }
 
   @override
   void onReady() {
@@ -64,6 +83,7 @@ class CouponController extends GetxController {
         toDate: _formatDate(selectedDateRange.value.end),
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
         activeFilter: filters['activeFilter'],
+        // branchId: BranchController.to.selectedBranchId,
       );
 
       _cache[key] = (items: pagination.items, fetchedAt: DateTime.now());
@@ -113,6 +133,8 @@ class CouponController extends GetxController {
 
   @override
   void onClose() {
+    _fyWorker?.dispose();
+    _branchWorker?.dispose();
     _debounceTimer?.cancel();
     super.onClose();
   }

@@ -2,7 +2,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/debit_note_model.dart';
-import 'package:ai_setu/data/repositories/accounting_repository.dart';
+import 'package:ai_setu/data/repositories/accounting/accounting_repository.dart';
 import 'package:get/get.dart';
 
 class DebitController extends GetxController {
@@ -108,3 +108,4 @@ class DebitController extends GetxController {
     super.onClose();
   }
 }
+

@@ -1,11 +1,13 @@
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
+// import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/purchase/supplier_bill_model.dart';
-import 'package:ai_setu/data/repositories/contact_repository.dart';
-import 'package:ai_setu/data/repositories/purchase_repository.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
+import 'package:ai_setu/data/repositories/purchase/purchase_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -41,15 +43,22 @@ class SupplierBillController extends GetxController {
 
   final isLodding = false.obs;
   Worker? _fyWorker;
+  Worker? _branchWorker;
 
   @override
   void onInit() {
     super.onInit();
     selectedDateRange.value = FinancialYearController.to.selectedRange;
+
     _fyWorker = ever(FinancialYearController.to.selectedYear, (year) {
       if (year != null) {
         updateDateRange(year.dateRange);
       }
+    });
+
+    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+      _clearCache();
+      getSupplierBillsData();
     });
   }
 
@@ -91,6 +100,7 @@ class SupplierBillController extends GetxController {
         page: currentPage.value,
         limit: limit.value,
         search: searchQuery.value.isEmpty ? null : searchQuery.value,
+        // branchFilter: BranchController.to.selectedBranch.value?.id,
         supplierFilter: filters['supplierFilter'],
         paymentStatus: filters['paymentStatus'],
         activeFilter: filters['activeFilter'],
@@ -146,6 +156,7 @@ class SupplierBillController extends GetxController {
   @override
   void onClose() {
     _fyWorker?.dispose();
+    _branchWorker?.dispose();
     _debounceTimer?.cancel();
     super.onClose();
   }

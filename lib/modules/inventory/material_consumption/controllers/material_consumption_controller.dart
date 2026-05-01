@@ -3,8 +3,8 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/material_consumption_model.dart';
-import 'package:ai_setu/data/repositories/branch_repository.dart';
-import 'package:ai_setu/data/repositories/material_consumption_repository.dart';
+import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/material_consumption_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -162,3 +162,4 @@ class MaterialConsumptionController extends GetxController {
     }
   }
 }
+

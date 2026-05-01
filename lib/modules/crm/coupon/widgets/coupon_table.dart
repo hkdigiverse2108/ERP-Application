@@ -26,37 +26,37 @@ class CouponTable extends StatelessWidget {
           return const TableShimmer();
         }
 
-        final items = controller.couponList;
-        if (items.isEmpty && !controller.isLoading.value) {
-          return BorderContainer(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.all(Sizes.paddingL),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.confirmation_number_outlined,
-                      size: 64,
-                      color: Colors.grey.withValues(alpha: 0.5),
-                    ),
-                    const Gap(12),
-                    Text(
-                      "No Coupons Found",
-                      style: TextHelper.bodyMedium.copyWith(color: Colors.grey),
-                    ),
-                    const Gap(16),
-                    TextButton.icon(
-                      onPressed: () => controller.getCouponData(),
-                      icon: const Icon(Icons.refresh),
-                      label: const Text("Retry"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
+        // final items = controller.couponList;
+        // if (items.isEmpty && !controller.isLoading.value) {
+        //   return BorderContainer(
+        //     child: Center(
+        //       child: Padding(
+        //         padding: EdgeInsets.all(Sizes.paddingL),
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             Icon(
+        //               Icons.confirmation_number_outlined,
+        //               size: 64,
+        //               color: Colors.grey.withValues(alpha: 0.5),
+        //             ),
+        //             const Gap(12),
+        //             Text(
+        //               "No Coupons Found",
+        //               style: TextHelper.bodyMedium.copyWith(color: Colors.grey),
+        //             ),
+        //             const Gap(16),
+        //             TextButton.icon(
+        //               onPressed: () => controller.getCouponData(),
+        //               icon: const Icon(Icons.refresh),
+        //               label: const Text("Retry"),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   );
+        // }
 
         return BorderContainer(
           child: Column(
@@ -102,15 +102,24 @@ class CouponTable extends StatelessWidget {
                     title: 'Status',
                     width: 110,
                     cellBuilder: (context, item, index) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: (item.status == 'active' ? Colors.green : Colors.red).withValues(alpha: 0.1),
+                        color:
+                            (item.status == 'active'
+                                    ? Colors.green
+                                    : Colors.red)
+                                .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         item.status.toUpperCase(),
                         style: TextHelper.bodySmall.copyWith(
-                          color: item.status == 'active' ? Colors.green : Colors.red,
+                          color: item.status == 'active'
+                              ? Colors.green
+                              : Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -138,7 +147,15 @@ class CouponTable extends StatelessWidget {
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
                 onPageChanged: (page) => controller.goToPage(page),
-                onRowTap: (item) => Get.toNamed(Routes.couponDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.couponDetails, arguments: item),
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateCoupon,
+                    arguments: item,
+                  );
+                  if (res == true) controller.getCouponData();
+                },
               ),
             ],
           ),

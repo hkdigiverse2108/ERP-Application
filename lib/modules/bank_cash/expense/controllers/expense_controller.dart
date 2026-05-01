@@ -4,7 +4,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 
-import 'package:ai_setu/data/repositories/expense_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/expense_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -148,3 +148,4 @@ class ExpenseController extends GetxController {
     super.onClose();
   }
 }
+

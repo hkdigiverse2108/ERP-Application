@@ -30,3 +30,15 @@ enum ContactType { customer, supplier, transporter }
 enum BillStatus { paid, unpaid }
 
 enum RecipeType { assemble, unassemble }
+
+enum ReverseChange { yes, no }
+
+enum TaxType {
+  exclusive("Tax Exclusive"),
+  inclusive("Tax Inclusive"),
+  defaultType("Default"),
+  outOfScope("Out of Scope");
+
+  final String label;
+  const TaxType(this.label);
+}

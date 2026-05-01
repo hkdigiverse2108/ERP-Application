@@ -3,9 +3,9 @@ import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/bank_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
-import 'package:ai_setu/data/repositories/bank_repository.dart';
-import 'package:ai_setu/data/repositories/branch_repository.dart';
-import 'package:ai_setu/data/repositories/location_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/bank_repository.dart';
+import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/location_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -309,3 +309,4 @@ class BankAddEditController extends GetxController {
     super.onClose();
   }
 }
+

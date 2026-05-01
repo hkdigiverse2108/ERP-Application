@@ -41,6 +41,7 @@ class DiscountModel {
   final int? usageLimitTotal;
   final DateTime? endDateTime;
   final String? branchId;
+  final ProductAtFixAmount? productAtFixAmount;
 
   DiscountModel({
     required this.id,
@@ -82,6 +83,7 @@ class DiscountModel {
     this.usageLimitTotal,
     this.endDateTime,
     this.branchId,
+    this.productAtFixAmount,
   });
 
   factory DiscountModel.fromJson(Map<String, dynamic> json) {
@@ -165,10 +167,13 @@ class DiscountModel {
           ? DateTime.parse(json["endDateTime"])
           : null,
       branchId: json["branchId"],
+      productAtFixAmount: json["productAtFixAmount"] != null
+          ? ProductAtFixAmount.fromJson(json["productAtFixAmount"])
+          : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       "_id": id,
       "title": title,
@@ -192,23 +197,24 @@ class DiscountModel {
       "startDateTime": startDateTime.toIso8601String(),
       "createdAt": createdAt.toIso8601String(),
       "updatedAt": updatedAt.toIso8601String(),
-      "rangeWiseRules": rangeWiseRules.map((e) => e.toJson()).toList(),
-      "categoryIds": categoryIds.map((e) => e.toJson()).toList(),
-      "subcategoryIds": subcategoryIds.map((e) => e.toJson()).toList(),
-      "brandIds": brandIds.map((e) => e.toJson()).toList(),
-      "productIds": productIds.map((e) => e.toJson()).toList(),
-      "excludedProductIds": excludedProductIds.map((e) => e.toJson()).toList(),
-      "branchIds": branchIds.map((e) => e.toJson()).toList(),
-      "createdBy": createdBy?.toJson(),
-      "updatedBy": updatedBy?.toJson(),
-      "companyId": companyId?.toJson(),
-      "buyXGetY": buyXGetY?.toJson(),
+      "rangeWiseRules": rangeWiseRules.map((e) => e.toMap()).toList(),
+      "categoryIds": categoryIds.map((e) => e.toMap()).toList(),
+      "subcategoryIds": subcategoryIds.map((e) => e.toMap()).toList(),
+      "brandIds": brandIds.map((e) => e.toMap()).toList(),
+      "productIds": productIds.map((e) => e.toMap()).toList(),
+      "excludedProductIds": excludedProductIds.map((e) => e.toMap()).toList(),
+      "branchIds": branchIds.map((e) => e.toMap()).toList(),
+      "createdBy": createdBy?.toMap(),
+      "updatedBy": updatedBy?.toMap(),
+      "companyId": companyId?.toMap(),
+      "buyXGetY": buyXGetY?.toMap(),
       "appliesTo": appliesTo,
       "minimumPurchaseAmount": minimumPurchaseAmount,
       "minimumQuantity": minimumQuantity,
       "usageLimitTotal": usageLimitTotal,
       "endDateTime": endDateTime?.toIso8601String(),
       "branchId": branchId,
+      "productAtFixAmount": productAtFixAmount?.toMap(),
     };
   }
 }
@@ -234,7 +240,7 @@ class DiscountUser {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "_id": id,
     "fullName": fullName,
     "userType": userType,
@@ -253,7 +259,7 @@ class DiscountIdName {
     return DiscountIdName(id: json["_id"] ?? '', name: json["name"] ?? '');
   }
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  Map<String, dynamic> toMap() => {"_id": id, "name": name};
 }
 
 // ---------------------------------------------------
@@ -287,12 +293,12 @@ class BuyXGetY {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "buyQty": buyQty,
     "getQty": getQty,
     "getDiscountType": getDiscountType,
     "getDiscountValue": getDiscountValue,
-    "getProductIds": getProductIds.map((e) => e.toJson()).toList(),
+    "getProductIds": getProductIds.map((e) => e.toMap()).toList(),
   };
 }
 
@@ -320,10 +326,45 @@ class RangeWiseRule {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "minQty": minQty,
     "maxQty": maxQty,
     "discountType": discountType,
     "discountValue": discountValue,
+  };
+
+  RangeWiseRule copyWith({
+    int? minQty,
+    int? maxQty,
+    String? discountType,
+    double? discountValue,
+  }) {
+    return RangeWiseRule(
+      minQty: minQty ?? this.minQty,
+      maxQty: maxQty ?? this.maxQty,
+      discountType: discountType ?? this.discountType,
+      discountValue: discountValue ?? this.discountValue,
+    );
+  }
+}
+
+// ---------------------------------------------------
+
+class ProductAtFixAmount {
+  final double fixAmount;
+  final List<String> productId;
+
+  ProductAtFixAmount({required this.fixAmount, required this.productId});
+
+  factory ProductAtFixAmount.fromJson(Map<String, dynamic> json) {
+    return ProductAtFixAmount(
+      fixAmount: (json["fixAmount"] ?? 0).toDouble(),
+      productId: List<String>.from(json["productId"] ?? []),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+    "fixAmount": fixAmount,
+    "productId": productId,
   };
 }

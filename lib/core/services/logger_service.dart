@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 /// A centralized logging utility to replace scattered print/debugPrint statements.
 /// It uses the 'logger' package for formatted output and automatically handles
 /// production/debug mode differences.
-class Log {
+class LoggerService {
   static final Logger _logger = Logger(
     printer: PrettyPrinter(
       methodCount: 2, // Number of method calls to be displayed
@@ -41,6 +41,10 @@ class Log {
     }
   }
 
+  /// Alias for [e] for convenience
+  static void error(dynamic message, [dynamic error, StackTrace? stackTrace]) =>
+      e(message, error, stackTrace);
+
   /// Log a message at level [Level.fatal]
   static void f(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     try {
@@ -52,3 +56,6 @@ class Log {
     }
   }
 }
+
+/// Alias for backward compatibility
+typedef Log = LoggerService;

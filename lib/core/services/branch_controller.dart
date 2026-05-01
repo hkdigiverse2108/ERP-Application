@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
-import 'package:ai_setu/data/repositories/branch_repository.dart';
+import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
 
@@ -76,3 +76,4 @@ class BranchController extends GetxController {
     // This could be a callback or a global event
   }
 }
+

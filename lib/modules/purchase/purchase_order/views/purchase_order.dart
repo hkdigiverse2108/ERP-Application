@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/controllers/purchase_order_controller.dart';
@@ -46,6 +47,7 @@ class PurchaseOrderPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(Routes.purchaseOrderAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

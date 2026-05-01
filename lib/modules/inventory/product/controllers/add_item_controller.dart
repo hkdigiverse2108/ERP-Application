@@ -2,9 +2,9 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
-import 'package:ai_setu/data/repositories/product_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
-import 'package:ai_setu/data/repositories/uom_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/uom_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -111,3 +111,4 @@ class AddItemController extends GetxController {
     super.onClose();
   }
 }
+

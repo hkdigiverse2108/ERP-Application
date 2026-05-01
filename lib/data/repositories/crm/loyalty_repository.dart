@@ -34,4 +34,26 @@ class LoyaltyRepository {
     }
     throw Exception(res.message ?? "Something went wrong");
   }
+
+  Future<LoyaltyModel> getLoyaltyById(String id) async {
+    final res = await _api.get("/loyalty/$id");
+    if (res.status == 200 && res.data != null) {
+      return LoyaltyModel.fromJson(res.data);
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<void> addLoyalty(Map<String, dynamic> data) async {
+    final res = await _api.post(ApiConstants.loyaltyAdd, body: data);
+    if (res.status != 200) {
+      throw Exception(res.message ?? "Something went wrong");
+    }
+  }
+
+  Future<void> updateLoyalty(Map<String, dynamic> data) async {
+    final res = await _api.put(ApiConstants.loyaltyEdit, body: data);
+    if (res.status != 200) {
+      throw Exception(res.message ?? "Something went wrong");
+    }
+  }
 }

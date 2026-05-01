@@ -1,7 +1,11 @@
 import 'package:ai_setu/modules/contact/bindings/contact_binding.dart';
+import 'package:ai_setu/modules/accounting/credit/bindings/credit_add_edit_binding.dart';
 import 'package:ai_setu/modules/accounting/credit/bindings/credit_binding.dart';
+import 'package:ai_setu/modules/accounting/credit/views/credit_add_edit_view.dart';
 import 'package:ai_setu/modules/accounting/credit/views/credit.dart';
+import 'package:ai_setu/modules/accounting/debit/bindings/debit_add_edit_binding.dart';
 import 'package:ai_setu/modules/accounting/debit/bindings/debit_binding.dart';
+import 'package:ai_setu/modules/accounting/debit/views/debit_add_edit_view.dart';
 import 'package:ai_setu/modules/accounting/debit/views/debit.dart';
 import 'package:ai_setu/modules/auth/bindings/forgot_password_bindings.dart';
 import 'package:ai_setu/modules/auth/bindings/set_new_password_bindings.dart';
@@ -31,25 +35,32 @@ import 'package:ai_setu/modules/bank_cash/salary/bindings/salary_binding.dart';
 import 'package:ai_setu/modules/bank_cash/salary/views/salary.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/bindings/receipt_binding.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/views/receipt.dart';
+import 'package:ai_setu/modules/crm/coupon/bindings/coupon_binding.dart';
+import 'package:ai_setu/modules/crm/loyalty/bindings/loyalty_binding.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bill_of_live_product_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/product/views/add_item.dart';
 import 'package:ai_setu/modules/inventory/product/views/product_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/recipe/views/recipe_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/material_consumption/views/material_consumption_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification_add_edit_view.dart';
+import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill_add_edit_view.dart';
 import 'package:ai_setu/modules/sales/estimate/bindings/estimate_binding.dart';
 
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
 import 'package:ai_setu/modules/home/views/home.dart';
-import 'package:ai_setu/modules/crm/coupon/bindings/coupon_binding.dart';
+import 'package:ai_setu/modules/crm/coupon/bindings/coupon_add_edit_binding.dart';
 import 'package:ai_setu/modules/crm/coupon/views/coupon.dart';
+import 'package:ai_setu/modules/crm/coupon/views/coupon_add_edit_view.dart';
 import 'package:ai_setu/modules/crm/coupon/views/coupon_details.dart';
+import 'package:ai_setu/modules/crm/discount/bindings/discount_add_edit_binding.dart';
 import 'package:ai_setu/modules/crm/discount/bindings/discount_binding.dart';
 import 'package:ai_setu/modules/crm/discount/views/discount.dart';
+import 'package:ai_setu/modules/crm/discount/views/discount_add_edit_view.dart';
 import 'package:ai_setu/modules/crm/discount/views/discount_details.dart';
-import 'package:ai_setu/modules/crm/loyalty/bindings/loyalty_binding.dart';
+import 'package:ai_setu/modules/crm/loyalty/bindings/loyalty_add_edit_binding.dart';
 import 'package:ai_setu/modules/crm/loyalty/views/loyalty.dart';
+import 'package:ai_setu/modules/crm/loyalty/views/loyalty_add_edit_view.dart';
 import 'package:ai_setu/modules/crm/loyalty/views/loyalty_details.dart';
 import 'package:ai_setu/modules/inventory/product/bindings/product_binding.dart';
 import 'package:ai_setu/modules/inventory/recipe/bindings/recipe_binding.dart';
@@ -98,9 +109,12 @@ import 'package:ai_setu/modules/splash/bindings/splash_bindings.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/bindings/purchase_debit_note_binding.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/views/purchase_debit_note.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/views/purchase_debit_note_details.dart';
+import 'package:ai_setu/modules/purchase/purchase_debit_note/views/purchase_debit_note_add_edit_view.dart';
+import 'package:ai_setu/modules/purchase/purchase_debit_note/bindings/purchase_debit_note_add_edit_binding.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/bindings/purchase_order_binding.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order.dart';
 import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order_details.dart';
+import 'package:ai_setu/modules/purchase/purchase_order/views/purchase_order_add_edit_view.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/bindings/supplier_bill_binding.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill_details.dart';
@@ -255,10 +269,20 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateDebit,
+      page: () => const DebitAddEditView(),
+      binding: DebitAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.credit,
       page: () => const CreditPage(),
       binding: CreditBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateCredit,
+      page: () => const CreditAddEditView(),
+      binding: CreditAddEditBinding(),
     ),
     GetPage(
       name: Routes.contact,
@@ -384,16 +408,31 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.purchaseOrderAddEdit,
+      page: () => const PurchaseOrderAddEditView(),
+      binding: PurchaseOrderBinding(),
+    ),
+    GetPage(
       name: Routes.supplierBill,
       page: () => const SupplierBillPage(),
       binding: SupplierBillBinding(),
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.supplierBillAddEdit,
+      page: () => const SupplierBillAddEditView(),
+      binding: SupplierBillBinding(),
+    ),
+    GetPage(
       name: Routes.purchaseReturn,
       page: () => const PurchaseDebitNotePage(),
       binding: PurchaseDebitNoteBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.purchaseDebitNoteAddEdit,
+      page: () => const PurchaseDebitNoteAddEditView(),
+      binding: PurchaseDebitNoteAddEditBinding(),
     ),
     // pos
     GetPage(
@@ -422,16 +461,31 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateCoupon,
+      page: () => const CouponAddEditView(),
+      binding: CouponAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.discount,
       page: () => const DiscountPage(),
       binding: DiscountBinding(),
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.addUpdateDiscount,
+      page: () => const DiscountAddEditView(),
+      binding: DiscountAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.loyalty,
       page: () => const LoyaltyPage(),
       binding: LoyaltyBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateLoyalty,
+      page: () => const LoyaltyAddEditView(),
+      binding: LoyaltyAddEditBinding(),
     ),
     // settings
     GetPage(

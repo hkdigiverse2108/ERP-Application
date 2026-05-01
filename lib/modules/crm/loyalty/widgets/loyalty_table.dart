@@ -97,7 +97,7 @@ class LoyaltyTable extends StatelessWidget {
                     title: 'Value',
                     width: 110,
                     cellBuilder: (context, item, index) => Text(
-                      "${item.discountValue} (${item.type})",
+                      "${item.discountValue} (${item.typeDisplayName})",
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -150,6 +150,13 @@ class LoyaltyTable extends StatelessWidget {
                 pageSize: controller.limit.value,
                 onPageChanged: (page) => controller.goToPage(page),
                 onRowTap: (item) => Get.toNamed(Routes.loyaltyDetails, arguments: item),
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateLoyalty,
+                    arguments: item,
+                  );
+                  if (res == true) controller.getLoyaltyData();
+                },
               ),
             ],
           ),

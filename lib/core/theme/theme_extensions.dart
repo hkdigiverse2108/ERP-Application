@@ -12,6 +12,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color background;
   final Color textPrimary;
   final Color textSecondary;
+  final Color error;
+  final Color success;
+  final Color warning;
+  final Color info;
 
   /// Alias for textPrimary to resolve compilation errors in some views.
   Color get text => textPrimary;
@@ -27,6 +31,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.background,
     required this.textPrimary,
     required this.textSecondary,
+    required this.error,
+    required this.success,
+    required this.warning,
+    required this.info,
   });
 
   @override
@@ -41,6 +49,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? background,
     Color? textPrimary,
     Color? textSecondary,
+    Color? error,
+    Color? success,
+    Color? warning,
+    Color? info,
   }) {
     return AppColorsExtension(
       primary: primary ?? this.primary,
@@ -53,6 +65,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       background: background ?? this.background,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
+      error: error ?? this.error,
+      success: success ?? this.success,
+      warning: warning ?? this.warning,
+      info: info ?? this.info,
     );
   }
 
@@ -79,6 +95,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       background: Color.lerp(background, other.background, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
+      error: Color.lerp(error, other.error, t)!,
+      success: Color.lerp(success, other.success, t)!,
+      warning: Color.lerp(warning, other.warning, t)!,
+      info: Color.lerp(info, other.info, t)!,
     );
   }
 
@@ -93,6 +113,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     background: AppColors.lightBackground,
     textPrimary: AppColors.lightTextPrimary,
     textSecondary: AppColors.lightTextSecondary,
+    error: AppColors.error,
+    success: AppColors.success,
+    warning: AppColors.warning,
+    info: AppColors.info,
   );
 
   static const dark = AppColorsExtension(
@@ -106,5 +130,9 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     background: AppColors.darkBackground,
     textPrimary: AppColors.darkTextPrimary,
     textSecondary: AppColors.darkTextSecondary,
+    error: AppColors.error,
+    success: AppColors.success,
+    warning: AppColors.warning,
+    info: AppColors.info,
   );
 }

@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
-import 'package:ai_setu/data/model/crm/dicount_model.dart';
+import 'package:ai_setu/data/model/crm/discount_model.dart';
 import 'package:ai_setu/data/repositories/crm/discount_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

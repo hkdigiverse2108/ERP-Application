@@ -7,7 +7,7 @@ import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
-import 'package:ai_setu/data/repositories/auth_repository.dart';
+import 'package:ai_setu/data/repositories/auth/auth_repository.dart';
 import 'package:ai_setu/data/repositories/settings/company_repository.dart';
 
 class SignInController extends GetxController {
@@ -88,3 +88,4 @@ class SignInController extends GetxController {
     super.onClose();
   }
 }
+

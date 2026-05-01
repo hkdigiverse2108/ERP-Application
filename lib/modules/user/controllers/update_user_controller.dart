@@ -4,9 +4,10 @@ import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/user_model.dart';
-import 'package:ai_setu/data/repositories/location_repository.dart';
-import 'package:ai_setu/data/repositories/role_repository.dart';
-import 'package:ai_setu/data/repositories/user_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/location_repository.dart';
+import 'package:ai_setu/data/repositories/user/role_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
+import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -79,17 +80,21 @@ class UpdateUserController extends GetxController {
   final cityList = <LocationDropdown>[].obs;
   final roleList = <CommonDropdownModel>[].obs;
 
-  /// Pick image from gallery
+  /// Pick image using MediaPickerDialog
   Future<void> pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
+    await MediaPickerDialog.show(
+      onMediaSelected: (selected) {
+        if (selected.isNotEmpty) {
+          // We can't directly set XFile from a URL, but we can store the URL
+          // I'll update the controller to handle both local XFile and network URL
+          selectedImageUrl.value = selected.first.url;
+          selectedImage.value = null; // Clear local image if any
+        }
+      },
     );
-
-    if (image != null) {
-      selectedImage.value = image;
-    }
   }
+
+  final RxString selectedImageUrl = "".obs;
 
   /// Pick image from camera
   Future<void> pickImageFromCamera() async {
@@ -106,6 +111,7 @@ class UpdateUserController extends GetxController {
   /// Remove image
   void removeImage() {
     selectedImage.value = null;
+    selectedImageUrl.value = "";
   }
 
   /// =========================
@@ -305,6 +311,9 @@ class UpdateUserController extends GetxController {
         "target": int.tryParse(targetController.text),
         "password": passwordController.text,
         "role": roleId.value,
+        "profileImage": selectedImageUrl.value.isNotEmpty
+            ? selectedImageUrl.value
+            : (selectedImage.value?.path ?? user!.profileImage),
       };
 
       final ResModel res = await _repo.updateUser(userData);
@@ -367,6 +376,7 @@ class UpdateUserController extends GetxController {
 
     /// Image
     selectedImage.value = null;
+    selectedImageUrl.value = "";
   }
 
   /// =========================
@@ -404,3 +414,4 @@ class UpdateUserController extends GetxController {
     super.onClose();
   }
 }
+

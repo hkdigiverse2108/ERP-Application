@@ -17,6 +17,7 @@ class DebitNoteModel {
   final PhoneNo phoneNo;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? image;
 
   DebitNoteModel({
     required this.id,
@@ -35,6 +36,7 @@ class DebitNoteModel {
     required this.phoneNo,
     required this.createdAt,
     required this.updatedAt,
+    this.image,
   });
 
   factory DebitNoteModel.fromRawJson(String str) =>
@@ -85,6 +87,7 @@ class DebitNoteModel {
       updatedAt: json["updatedAt"] != null
           ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
           : DateTime.now(),
+      image: json["image"],
     );
   }
 
@@ -105,6 +108,7 @@ class DebitNoteModel {
     "phoneNo": phoneNo.toJson(),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
+    "image": image,
   };
 }
 

@@ -19,13 +19,16 @@ abstract class Routes {
   static const recipe = '/recipe';
   static const addUpdateRecipe = '/add-update-recipe';
   static const materialConsumption = '/material-consumption';
-  static const addUpdateMaterialConsumption = '/add-update-material-consumption';
+  static const addUpdateMaterialConsumption =
+      '/add-update-material-consumption';
   static const addUpdateStockVerification = '/add-update-stock-verification';
   static const addUpdateBillOfLiveProduct = '/add-update-bill-of-live-product';
 
   // accounting
   static const debit = '/debit-note'; // Accounting Debit Note
+  static const addUpdateDebit = '/add-update-debit';
   static const credit = '/credit-note'; // Accounting Credit Note
+  static const addUpdateCredit = '/add-update-credit';
   static const contact = '/contact';
 
   // bank
@@ -52,8 +55,11 @@ abstract class Routes {
 
   // purchase
   static const purchaseOrder = '/purchase-order';
+  static const purchaseOrderAddEdit = '/purchase-order-add-edit';
   static const supplierBill = '/supplier-bill';
+  static const supplierBillAddEdit = '/supplier-bill-add-edit';
   static const purchaseReturn = '/purchase-debit-note'; // Purchase Debit Note
+  static const purchaseDebitNoteAddEdit = '/purchase-debit-note-add-edit';
 
   // pos
   static const posSalesRegister = '/sales-register';
@@ -62,8 +68,11 @@ abstract class Routes {
 
   // CRM
   static const coupon = '/coupon';
+  static const addUpdateCoupon = '/add-update-coupon';
   static const discount = '/discount';
   static const loyalty = '/loyalty';
+  static const addUpdateLoyalty = '/add-update-loyalty';
+  static const addUpdateDiscount = '/add-update-discount';
 
   // Settings
   static const settings = '/setting/general';

@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/controllers/purchase_debit_note_controller.dart';
 import 'package:ai_setu/modules/purchase/purchase_debit_note/widgets/purchase_debit_note_table.dart';
@@ -48,6 +49,7 @@ class PurchaseDebitNotePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(Routes.purchaseDebitNoteAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

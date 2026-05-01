@@ -3,7 +3,7 @@ import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/user_model.dart';
-import 'package:ai_setu/data/repositories/user_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:get/get.dart';
 
 class UserProfileController extends GetxController {
@@ -92,3 +92,4 @@ class UserProfileController extends GetxController {
     }
   }
 }
+

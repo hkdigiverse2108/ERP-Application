@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/accounting/debit/controllers/debit_controller.dart';
 import 'package:ai_setu/modules/accounting/debit/widgets/debit_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DebitPage extends StatelessWidget {
   const DebitPage({super.key});
@@ -43,6 +45,7 @@ class DebitPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        onAdd: () => Get.toNamed(Routes.addUpdateDebit),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
         filters: [

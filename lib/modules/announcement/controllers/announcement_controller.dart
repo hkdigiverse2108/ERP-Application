@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/announcement/announcement_model.dart';
-import 'package:ai_setu/data/repositories/announcement_repository.dart';
+import 'package:ai_setu/data/repositories/announcement/announcement_repository.dart';
 import 'package:get/get.dart';
 
 class AnnouncementController extends GetxController {
@@ -35,3 +35,4 @@ class AnnouncementController extends GetxController {
 
   void refreshAnnouncements() => fetchAnnouncements();
 }
+

@@ -17,6 +17,7 @@ class CreditNoteModel {
   final PhoneNo phoneNo;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? image;
 
   CreditNoteModel({
     required this.id,
@@ -35,6 +36,7 @@ class CreditNoteModel {
     required this.phoneNo,
     required this.createdAt,
     required this.updatedAt,
+    this.image,
   });
 
   factory CreditNoteModel.fromRawJson(String str) =>
@@ -87,6 +89,7 @@ class CreditNoteModel {
       updatedAt: json["updatedAt"] != null
           ? DateTime.tryParse(json["updatedAt"]) ?? DateTime.now()
           : DateTime.now(),
+      image: json["image"],
     );
   }
 
@@ -107,6 +110,7 @@ class CreditNoteModel {
     "phoneNo": phoneNo.toJson(),
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
+    "image": image,
   };
 }
 

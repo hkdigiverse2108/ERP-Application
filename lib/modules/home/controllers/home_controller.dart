@@ -15,7 +15,7 @@ import 'package:ai_setu/data/model/dashboard/top_customer_model.dart';
 import 'package:ai_setu/data/model/dashboard/top_expenses_model.dart';
 import 'package:ai_setu/data/model/dashboard/transaction_graph_model.dart';
 import 'package:ai_setu/data/model/dashboard/transactions_model.dart';
-import 'package:ai_setu/data/repositories/dashboard_repository.dart';
+import 'package:ai_setu/data/repositories/home/dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -400,3 +400,4 @@ class HomeController extends GetxController {
     super.onClose();
   }
 }
+

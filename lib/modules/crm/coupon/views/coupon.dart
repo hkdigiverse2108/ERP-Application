@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/crm/coupon/controllers/coupon_controller.dart';
 import 'package:ai_setu/modules/crm/coupon/widgets/coupon_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CouponPage extends StatelessWidget {
   const CouponPage({super.key});
@@ -43,6 +45,10 @@ class CouponPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Coupon List',
+        onAdd: () async {
+          final res = await Get.toNamed(Routes.addUpdateCoupon);
+          if (res == true) controller.getCouponData();
+        },
         filters: [
           FilterOption(
             label: 'Active Status',

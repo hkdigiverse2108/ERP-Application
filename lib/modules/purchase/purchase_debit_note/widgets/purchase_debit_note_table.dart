@@ -77,7 +77,9 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                     width: 120,
                     alignment: TextAlign.center,
                     cellBuilder: (context, item, index) => Text(
-                      DateFormat('dd MMM yyyy').format(item.debitNoteDate ?? DateTime.now()),
+                      DateFormat(
+                        'dd MMM yyyy',
+                      ).format(item.debitNoteDate ?? DateTime.now()),
                       style: TextHelper.bodySmall,
                     ),
                   ),
@@ -104,7 +106,9 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        (item.status?.isNotEmpty == true) ? item.status! : "Pending",
+                        (item.status?.isNotEmpty == true)
+                            ? item.status!
+                            : "Pending",
                         style: TextHelper.bodySmall.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.w600,
@@ -125,6 +129,10 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                onEditItem: (item) => Get.toNamed(
+                  Routes.purchaseDebitNoteAddEdit,
+                  arguments: item,
+                ),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

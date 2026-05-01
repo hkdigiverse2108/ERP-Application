@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/colors.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
@@ -9,6 +10,7 @@ import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/services/pdf_service.dart';
 import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 
 class ExpenseDetails extends StatelessWidget {
   const ExpenseDetails({super.key});
@@ -128,6 +130,42 @@ class ExpenseDetails extends StatelessWidget {
             ),
           ],
         ),
+        if (expense.image != null && expense.image!.isNotEmpty)
+          DetailSection(
+            title: 'Receipt / Image',
+            children: [
+              GestureDetector(
+                onTap: () => Get.to(
+                  () => ImageViewerPage(
+                    imageUrl: expense.image!,
+                    title: "Receipt: ${expense.type.toUpperCase()}",
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusL),
+                  child: Hero(
+                    tag: expense.image!,
+                    child: Image.network(
+                      expense.image!,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 100,
+                        color: context.appColors.background,
+                        child: Center(
+                          child: Icon(
+                            PhosphorIconsLight.warning,
+                            color: context.appColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

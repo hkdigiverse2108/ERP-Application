@@ -3,7 +3,7 @@ import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/core/services/showcase_service.dart';
-import 'package:ai_setu/data/repositories/permission_repository.dart';
+import 'package:ai_setu/data/repositories/user/permission_repository.dart';
 import 'package:ai_setu/data/repositories/settings/settings_repository.dart';
 import 'package:ai_setu/modules/announcement/controllers/announcement_controller.dart';
 import 'package:ai_setu/modules/settings/controllers/settings_controller.dart';
@@ -29,3 +29,4 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => SettingsController(), fenix: true);
   }
 }
+

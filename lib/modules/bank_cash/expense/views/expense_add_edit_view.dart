@@ -1,7 +1,6 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/modules/bank_cash/expense/controllers/expense_add_edit_controller.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -9,6 +8,7 @@ import 'package:ai_setu/shared/widgets/containers/edit_section.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
+import 'package:ai_setu/shared/widgets/images/edit_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -266,42 +266,13 @@ class ExpenseAddEditView extends GetView<ExpenseAddEditController> {
       title: "Image",
       icon: PhosphorIconsLight.image,
       child: Center(
-        child: Column(
-          children: [
-            Container(
-              height: 120,
-              width: 120,
-              decoration: BoxDecoration(
-                color: context.appColors.background,
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                border: Border.all(color: context.appColors.border),
-              ),
-              child: controller.selectedImageUrl.value != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                      child: Image.network(
-                        controller.selectedImageUrl.value!,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Icon(
-                      PhosphorIconsLight.imageSquare,
-                      size: 40,
-                      color: context.appColors.textSecondary.withValues(
-                        alpha: 0.5,
-                      ),
-                    ),
-            ),
-            const Gap(Sizes.paddingS),
-            TextButton.icon(
-              onPressed: () {
-                // Image picker logic would go here
-                AppSnackbar.info("Image picker not implemented yet");
-              },
-              icon: const Icon(PhosphorIconsLight.uploadSimple),
-              label: const Text("Upload Image"),
-            ),
-          ],
+        child: Obx(
+          () => EditImagePicker(
+            imagePath: controller.selectedImageUrl.value,
+            onPickImage: controller.pickImage,
+            onRemoveImage: controller.removeImage,
+            label: "Tap to select receipt image",
+          ),
         ),
       ),
     );

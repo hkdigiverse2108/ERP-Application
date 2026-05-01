@@ -53,4 +53,36 @@ class AccountingRepository {
       throw Exception(res.message);
     }
   }
+
+  Future<ResModel> addCreditNote(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(
+      ApiConstants.addCreditNote,
+      body: data,
+    );
+    return res;
+  }
+
+  Future<ResModel> updateCreditNote(Map<String, dynamic> data) async {
+    final ResModel res = await _api.put(
+      ApiConstants.updateCreditNote,
+      body: data,
+    );
+    return res;
+  }
+
+  Future<ResModel> addDebitNote(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(
+      ApiConstants.addDebitNote,
+      body: data,
+    );
+    return res;
+  }
+
+  Future<ResModel> updateDebitNote(Map<String, dynamic> data) async {
+    final ResModel res = await _api.put(
+      ApiConstants.updateDebitNote,
+      body: data,
+    );
+    return res;
+  }
 }

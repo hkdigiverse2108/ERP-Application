@@ -3,7 +3,7 @@ import 'package:ai_setu/core/constants/images.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
-import 'package:ai_setu/data/repositories/auth_repository.dart';
+import 'package:ai_setu/data/repositories/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -51,7 +51,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Gap(32),
-                
+
                 // ── Official Logo ──
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -61,34 +61,34 @@ class LogoutConfirmationDialog extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
-                
+
                 const Gap(24),
-                
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       Text(
                         'Logout',
-                        style: TextHelper.h3Style(context).copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextHelper.h3Style(
+                          context,
+                        ).copyWith(fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                       const Gap(12),
                       Text(
                         'Are you sure you want to log out?',
-                        style: TextHelper.bodyMediumStyle(context).copyWith(
-                          color: colors.textSecondary,
-                        ),
+                        style: TextHelper.bodyMediumStyle(
+                          context,
+                        ).copyWith(color: colors.textSecondary),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
-                
+
                 const Gap(32),
-                
+
                 // ── Action Buttons ──
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -104,7 +104,9 @@ class LogoutConfirmationDialog extends StatelessWidget {
                             side: BorderSide(color: colors.border),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                              borderRadius: BorderRadius.circular(
+                                Sizes.borderRadiusM,
+                              ),
                             ),
                           ),
                           child: Text(
@@ -130,7 +132,9 @@ class LogoutConfirmationDialog extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                              borderRadius: BorderRadius.circular(
+                                Sizes.borderRadiusM,
+                              ),
                             ),
                           ),
                           child: Text(
@@ -153,3 +157,4 @@ class LogoutConfirmationDialog extends StatelessWidget {
     );
   }
 }
+

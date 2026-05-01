@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
-import 'package:ai_setu/data/repositories/recipe_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/recipe_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -107,3 +107,4 @@ class RecipeController extends GetxController {
     }
   }
 }
+

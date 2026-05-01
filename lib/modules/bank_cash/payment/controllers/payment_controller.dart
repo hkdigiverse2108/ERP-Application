@@ -6,8 +6,8 @@ import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
 
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/repositories/contact_repository.dart';
-import 'package:ai_setu/data/repositories/payment_repository.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/payment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -170,3 +170,4 @@ class PaymentController extends GetxController {
     super.onClose();
   }
 }
+

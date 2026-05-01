@@ -211,11 +211,18 @@ class ApiService extends GetxService {
     var url = Uri.parse('$baseUrl$endpoint');
     var request = http.MultipartRequest('POST', url);
 
-    // ADD HEADERS HERE (you forgot this)
-    request.headers.addAll(headers); // <-- FIX
+    request.headers.addAll(headers);
 
     if (fields != null) request.fields.addAll(fields);
     if (files != null) request.files.addAll(files);
+
+    log("Multipart Request: $url");
+    log("Headers: ${request.headers}");
+    if (files != null) {
+      for (var f in files) {
+        log("File key: ${f.field}, filename: ${f.filename}, length: ${f.length}");
+      }
+    }
 
     final http.Response response;
     try {

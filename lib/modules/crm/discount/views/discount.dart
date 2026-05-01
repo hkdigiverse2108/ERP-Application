@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/crm/discount/controllers/discount_controller.dart';
 import 'package:ai_setu/modules/crm/discount/widgets/discount_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DiscountPage extends StatelessWidget {
   const DiscountPage({super.key});
@@ -43,6 +45,10 @@ class DiscountPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Discount List',
+        onAdd: () async {
+          final res = await Get.toNamed(Routes.addUpdateDiscount);
+          if (res == true) controller.getDiscountData();
+        },
         filters: [
           FilterOption(
             label: 'Active Status',

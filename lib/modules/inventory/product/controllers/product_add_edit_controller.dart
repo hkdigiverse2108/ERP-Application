@@ -7,15 +7,15 @@ import 'package:ai_setu/data/model/common/common_dropdown_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
-import 'package:ai_setu/data/repositories/brand_repository.dart';
-import 'package:ai_setu/data/repositories/category_repository.dart';
-import 'package:ai_setu/data/repositories/product_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/brand_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/category_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
-import 'package:ai_setu/data/repositories/uom_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/uom_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
 
 class ProductAddEditController extends GetxController {
   final ProductRepository _productRepo = ProductRepository();
@@ -258,19 +258,15 @@ class ProductAddEditController extends GetxController {
   }
 
   // Images
-  bool _isPickingImage = false;
   Future<void> pickImage() async {
-    if (_isPickingImage) return;
-    _isPickingImage = true;
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        imageList.add(image.path);
-      }
-    } finally {
-      _isPickingImage = false;
-    }
+    await MediaPickerDialog.show(
+      allowMultiple: true,
+      onMediaSelected: (selected) {
+        if (selected.isNotEmpty) {
+          imageList.addAll(selected.map((e) => e.url));
+        }
+      },
+    );
   }
 
   void removeImage(int index) {
@@ -432,3 +428,4 @@ class ProductAddEditController extends GetxController {
     super.onClose();
   }
 }
+

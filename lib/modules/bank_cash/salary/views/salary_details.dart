@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/constants/colors.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
@@ -9,6 +10,7 @@ import 'package:ai_setu/core/services/pdf_service.dart';
 import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 
 class SalaryDetails extends StatelessWidget {
   const SalaryDetails({super.key});
@@ -117,6 +119,43 @@ class SalaryDetails extends StatelessWidget {
             ),
           ],
         ),
+        if (salary.image != null && salary.image!.isNotEmpty)
+          DetailSection(
+            title: 'Attached Document / Image',
+            children: [
+              GestureDetector(
+                onTap: () => Get.to(
+                  () => ImageViewerPage(
+                    imageUrl: salary.image!,
+                    title:
+                        "Salary Document: ${salary.partyId?.fullName ?? '-'}",
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusL),
+                  child: Hero(
+                    tag: salary.image!,
+                    child: Image.network(
+                      salary.image!,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 100,
+                        color: context.appColors.background,
+                        child: Center(
+                          child: Icon(
+                            PhosphorIconsLight.warning,
+                            color: context.appColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

@@ -18,6 +18,7 @@ class EditTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   final String? initialValue;
+  final Widget? prefixIcon;
 
   const EditTextField({
     super.key,
@@ -25,6 +26,7 @@ class EditTextField extends StatelessWidget {
     this.controller,
     this.obscureText = false,
     this.suffixIcon,
+    this.prefixIcon,
     this.keyboardType,
     this.readOnly = false,
     this.onTap,
@@ -51,6 +53,7 @@ class EditTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         labelStyle: TextHelper.bodySmall,
         contentPadding: const EdgeInsets.symmetric(

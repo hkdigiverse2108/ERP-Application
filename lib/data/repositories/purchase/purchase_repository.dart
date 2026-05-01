@@ -36,7 +36,9 @@ class PurchaseRepository {
       final List? dataList = res.data["purchaseOrder_data"];
       final items = dataList != null
           ? dataList
-                .map((e) => PurchaseOrderModel.fromMap(e as Map<String, dynamic>))
+                .map(
+                  (e) => PurchaseOrderModel.fromMap(e as Map<String, dynamic>),
+                )
                 .toList()
           : <PurchaseOrderModel>[];
       return PaginationModel<PurchaseOrderModel>.fromMap(
@@ -48,6 +50,24 @@ class PurchaseRepository {
     }
   }
 
+  Future<ResModel> addPurchaseOrder(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addPurchaseOrder, body: data);
+  }
+
+  Future<ResModel> updatePurchaseOrder(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updatePurchaseOrder, body: data);
+  }
+
+  Future<PurchaseOrderModel> getPurchaseOrderById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getPurchaseOrderById(id));
+    if (res.status == 200 && res.data != null) {
+      return PurchaseOrderModel.fromMap(res.data as Map<String, dynamic>);
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  // Supplier Bill
   Future<PaginationModel<SupplierBillModel>> getAllSupplierBill({
     int? page,
     int? limit,
@@ -76,13 +96,32 @@ class PurchaseRepository {
           res.data["supplierBill_data"] ?? res.data["supplier_bill_data"];
       final items = dataList != null
           ? dataList
-                .map((e) => SupplierBillModel.fromMap(e as Map<String, dynamic>))
+                .map(
+                  (e) => SupplierBillModel.fromMap(e as Map<String, dynamic>),
+                )
                 .toList()
           : <SupplierBillModel>[];
       return PaginationModel<SupplierBillModel>.fromMap(
         res.data as Map<String, dynamic>,
         items,
       );
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<ResModel> addSupplierBill(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addSupplierBill, body: data);
+  }
+
+  Future<ResModel> updateSupplierBill(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updateSupplierBill, body: data);
+  }
+
+  Future<SupplierBillModel> getSupplierBillById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getSupplierBillById(id));
+    if (res.status == 200 && res.data != null) {
+      return SupplierBillModel.fromMap(res.data as Map<String, dynamic>);
     } else {
       throw Exception(res.message);
     }
@@ -118,7 +157,8 @@ class PurchaseRepository {
       final items = dataList != null
           ? dataList
                 .map(
-                  (e) => PurchaseDebitNoteModel.fromMap(e as Map<String, dynamic>),
+                  (e) =>
+                      PurchaseDebitNoteModel.fromMap(e as Map<String, dynamic>),
                 )
                 .toList()
           : <PurchaseDebitNoteModel>[];
@@ -126,6 +166,24 @@ class PurchaseRepository {
         res.data as Map<String, dynamic>,
         items,
       );
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<ResModel> addPurchaseDebitNote(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.addPurchaseDebitNote, body: data);
+  }
+
+  Future<ResModel> updatePurchaseDebitNote(Map<String, dynamic> data) async {
+    return await _api.put(ApiConstants.updatePurchaseDebitNote, body: data);
+  }
+
+  Future<PurchaseDebitNoteModel> getPurchaseDebitNoteById(String id) async {
+    final ResModel res =
+        await _api.get(ApiConstants.getPurchaseDebitNoteById(id));
+    if (res.status == 200 && res.data != null) {
+      return PurchaseDebitNoteModel.fromMap(res.data as Map<String, dynamic>);
     } else {
       throw Exception(res.message);
     }

@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
@@ -7,6 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:ai_setu/core/services/pdf_service.dart';
 import 'package:ai_setu/core/utils/pdf_mappers.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
 
 class CreditNoteDetails extends StatelessWidget {
   const CreditNoteDetails({super.key});
@@ -23,6 +27,11 @@ class CreditNoteDetails extends StatelessWidget {
       status: note.isActive ? 'Active' : 'Inactive',
       statusColor: note.isActive ? Colors.green : Colors.grey,
       actions: [
+        DetailAction(
+          label: 'Edit',
+          icon: PhosphorIconsFill.pencilSimple,
+          onTap: () => Get.toNamed(Routes.addUpdateCredit, arguments: note),
+        ),
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
@@ -94,6 +103,42 @@ class CreditNoteDetails extends StatelessWidget {
             ),
           ],
         ),
+        if (note.image != null && note.image!.isNotEmpty)
+          DetailSection(
+            title: 'Attachment / Image',
+            children: [
+              GestureDetector(
+                onTap: () => Get.to(
+                  () => ImageViewerPage(
+                    imageUrl: note.image!,
+                    title: "Attachment: ${note.voucherNumber}",
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusL),
+                  child: Hero(
+                    tag: note.image!,
+                    child: Image.network(
+                      note.image!,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 100,
+                        color: context.appColors.background,
+                        child: Center(
+                          child: Icon(
+                            PhosphorIconsLight.warning,
+                            color: context.appColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

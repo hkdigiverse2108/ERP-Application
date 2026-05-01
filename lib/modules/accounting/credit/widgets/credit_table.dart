@@ -36,7 +36,9 @@ class CreditTable extends StatelessWidget {
                     width: 140,
                     cellBuilder: (context, item, index) => Text(
                       item.voucherNumber,
-                      style: TextHelper.bodySmall.copyWith(fontWeight: FontWeight.w600),
+                      style: TextHelper.bodySmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -97,7 +99,10 @@ class CreditTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
-                onRowTap: (item) => Get.toNamed(Routes.creditDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.creditDetails, arguments: item),
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.addUpdateCredit, arguments: item),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

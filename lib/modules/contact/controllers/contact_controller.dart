@@ -2,7 +2,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
-import 'package:ai_setu/data/repositories/contact_repository.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -120,3 +120,4 @@ class ContactController extends GetxController {
     fetchContacts();
   }
 }
+

@@ -99,7 +99,10 @@ class DebitTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
-                onRowTap: (item) => Get.toNamed(Routes.debitDetails, arguments: item),
+                onRowTap: (item) =>
+                    Get.toNamed(Routes.debitDetails, arguments: item),
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.addUpdateDebit, arguments: item),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

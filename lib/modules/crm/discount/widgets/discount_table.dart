@@ -1,7 +1,7 @@
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
-import 'package:ai_setu/data/model/crm/dicount_model.dart';
+import 'package:ai_setu/data/model/crm/discount_model.dart';
 import 'package:ai_setu/modules/crm/discount/controllers/discount_controller.dart';
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/date_section.dart';
@@ -26,37 +26,37 @@ class DiscountTable extends StatelessWidget {
           return const TableShimmer();
         }
 
-        final items = controller.discountList;
-        if (items.isEmpty && !controller.isLoading.value) {
-          return BorderContainer(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.all(Sizes.paddingL),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.discount_outlined,
-                      size: 64,
-                      color: Colors.grey.withValues(alpha: 0.5),
-                    ),
-                    const Gap(12),
-                    Text(
-                      "No Discounts Found",
-                      style: TextHelper.bodyMedium.copyWith(color: Colors.grey),
-                    ),
-                    const Gap(16),
-                    TextButton.icon(
-                      onPressed: () => controller.getDiscountData(),
-                      icon: const Icon(Icons.refresh),
-                      label: const Text("Retry"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
+        // final items = controller.discountList;
+        // if (items.isEmpty && !controller.isLoading.value) {
+        //   return BorderContainer(
+        //     child: Center(
+        //       child: Padding(
+        //         padding: EdgeInsets.all(Sizes.paddingL),
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             Icon(
+        //               Icons.discount_outlined,
+        //               size: 64,
+        //               color: Colors.grey.withValues(alpha: 0.5),
+        //             ),
+        //             const Gap(12),
+        //             Text(
+        //               "No Discounts Found",
+        //               style: TextHelper.bodyMedium.copyWith(color: Colors.grey),
+        //             ),
+        //             const Gap(16),
+        //             TextButton.icon(
+        //               onPressed: () => controller.getDiscountData(),
+        //               icon: const Icon(Icons.refresh),
+        //               label: const Text("Retry"),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   );
+        // }
 
         return BorderContainer(
           child: Column(
@@ -155,6 +155,13 @@ class DiscountTable extends StatelessWidget {
                 onPageChanged: (page) => controller.goToPage(page),
                 onRowTap: (item) =>
                     Get.toNamed(Routes.discountDetails, arguments: item),
+                onEditItem: (item) async {
+                  final res = await Get.toNamed(
+                    Routes.addUpdateDiscount,
+                    arguments: item,
+                  );
+                  if (res == true) controller.getDiscountData();
+                },
               ),
             ],
           ),

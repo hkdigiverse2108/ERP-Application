@@ -4,8 +4,8 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
-import 'package:ai_setu/data/repositories/branch_repository.dart';
-import 'package:ai_setu/data/repositories/stock_verification_repository.dart';
+import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/stock_verification_repository.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -173,3 +173,4 @@ class StockVerificationController extends GetxController {
     getStockVerificationData();
   }
 }
+

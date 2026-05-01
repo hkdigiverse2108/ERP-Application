@@ -3,8 +3,8 @@ import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
-import 'package:ai_setu/data/repositories/product_repository.dart';
-import 'package:ai_setu/data/repositories/stock_verification_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/stock_verification_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -169,3 +169,4 @@ class StockVerificationAddEditController extends GetxController {
     }
   }
 }
+

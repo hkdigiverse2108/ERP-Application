@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
@@ -12,6 +11,7 @@ import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_quill_editor.dart';
 import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_tag_input.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -637,81 +637,116 @@ class ProductAddEditView extends GetView<ProductAddEditController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 100,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: controller.imageList.length + 1,
-                                separatorBuilder: (context, index) =>
-                                    const Gap(12),
-                                itemBuilder: (context, index) {
-                                  if (index == controller.imageList.length) {
-                                    return InkWell(
-                                      borderRadius: BorderRadius.circular(12),
-                                      onTap: () => controller.pickImage(),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
+                              height: 120,
+                              child: Obx(
+                                () => ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.imageList.length + 1,
+                                  separatorBuilder: (context, index) =>
+                                      const Gap(12),
+                                  itemBuilder: (context, index) {
+                                    if (index == controller.imageList.length) {
+                                      return InkWell(
+                                        borderRadius: BorderRadius.circular(
+                                          Sizes.borderRadiusM,
+                                        ),
+                                        onTap: () => controller.pickImage(),
                                         child: Container(
                                           width: 100,
+                                          height: 100,
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surfaceContainerHighest,
+                                            color: context.appColors.surface,
+                                            border: Border.all(
+                                              color: context.appColors.border,
+                                            ),
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              Sizes.borderRadiusM,
                                             ),
                                           ),
-                                          child: const Icon(
-                                            Icons.add_a_photo_outlined,
+                                          child: Icon(
+                                            PhosphorIconsLight.plus,
+                                            color:
+                                                context.appColors.textSecondary,
+                                            size: 32,
                                           ),
                                         ),
+                                      );
+                                    }
+                                    return GestureDetector(
+                                      onTap: () => Get.to(
+                                        () => ImageViewerPage(
+                                          imageUrl: controller.imageList[index],
+                                          title:
+                                              controller
+                                                  .nameController
+                                                  .text
+                                                  .isEmpty
+                                              ? "Product Image"
+                                              : controller.nameController.text,
+                                        ),
                                       ),
-                                    );
-                                  }
-                                  return Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child:
-                                            controller.imageList[index]
-                                                .startsWith('http')
-                                            ? Image.network(
+                                      child: Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              Sizes.borderRadiusM,
+                                            ),
+                                            child: Hero(
+                                              tag: controller.imageList[index],
+                                              child: Image.network(
                                                 controller.imageList[index],
                                                 width: 100,
                                                 height: 100,
                                                 fit: BoxFit.cover,
-                                              )
-                                            : Image.file(
-                                                File(
-                                                  controller.imageList[index],
-                                                ),
-                                                width: 100,
-                                                height: 100,
-                                                fit: BoxFit.cover,
+                                                errorBuilder:
+                                                    (
+                                                      context,
+                                                      error,
+                                                      stackTrace,
+                                                    ) => Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      color: context
+                                                          .appColors
+                                                          .background,
+                                                      child: Icon(
+                                                        PhosphorIconsLight
+                                                            .warning,
+                                                        color: context
+                                                            .appColors
+                                                            .textSecondary,
+                                                      ),
+                                                    ),
                                               ),
-                                      ),
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: InkWell(
-                                          onTap: () =>
-                                              controller.removeImage(index),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.black54,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(
-                                              Icons.close,
-                                              size: 16,
-                                              color: Colors.white,
                                             ),
                                           ),
-                                        ),
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: InkWell(
+                                              onTap: () =>
+                                                  controller.removeImage(index),
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  4,
+                                                ),
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black54,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 14,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ],

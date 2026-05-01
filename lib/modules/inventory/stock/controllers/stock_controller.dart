@@ -4,9 +4,9 @@ import 'dart:async';
 import 'package:ai_setu/data/model/brand/brand_model.dart';
 import 'package:ai_setu/data/model/category/category_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_model.dart';
-import 'package:ai_setu/data/repositories/brand_repository.dart';
-import 'package:ai_setu/data/repositories/category_repository.dart';
-import 'package:ai_setu/data/repositories/stock_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/brand_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/category_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/stock_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -215,3 +215,4 @@ class StockController extends GetxController {
     }
   }
 }
+

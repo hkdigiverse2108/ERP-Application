@@ -15,6 +15,7 @@ class SupplierBillModel extends Equatable {
   final DateTime? supplierBillDate;
   final String? gstIn;
   final SupplierBillAddress? billingAddress;
+  final SupplierBillAddress? shippingAddress;
   final SupplierBillPaymentTerms? paymentTermsId;
   final DateTime? dueDate;
   final bool reverseCharge;
@@ -50,6 +51,7 @@ class SupplierBillModel extends Equatable {
     this.supplierBillDate,
     this.gstIn,
     this.billingAddress,
+    this.shippingAddress,
     this.paymentTermsId,
     this.dueDate,
     required this.reverseCharge,
@@ -86,6 +88,7 @@ class SupplierBillModel extends Equatable {
     DateTime? supplierBillDate,
     String? gstIn,
     SupplierBillAddress? billingAddress,
+    SupplierBillAddress? shippingAddress,
     SupplierBillPaymentTerms? paymentTermsId,
     DateTime? dueDate,
     bool? reverseCharge,
@@ -121,6 +124,7 @@ class SupplierBillModel extends Equatable {
       supplierBillDate: supplierBillDate ?? this.supplierBillDate,
       gstIn: gstIn ?? this.gstIn,
       billingAddress: billingAddress ?? this.billingAddress,
+      shippingAddress: shippingAddress ?? this.shippingAddress,
       paymentTermsId: paymentTermsId ?? this.paymentTermsId,
       dueDate: dueDate ?? this.dueDate,
       reverseCharge: reverseCharge ?? this.reverseCharge,
@@ -178,6 +182,10 @@ class SupplierBillModel extends Equatable {
             ? null
             : SupplierBillAddress.fromMap(
                 map["billingAddress"] as Map<String, dynamic>),
+        shippingAddress: map["shippingAddress"] == null
+            ? null
+            : SupplierBillAddress.fromMap(
+                map["shippingAddress"] as Map<String, dynamic>),
         paymentTermsId: map["paymentTermsId"] == null
             ? null
             : SupplierBillPaymentTerms.fromMap(
@@ -234,6 +242,7 @@ class SupplierBillModel extends Equatable {
         "supplierBillDate": supplierBillDate?.toIso8601String(),
         "gstIn": gstIn,
         "billingAddress": billingAddress?.toMap(),
+        "shippingAddress": shippingAddress?.toMap(),
         "paymentTermsId": paymentTermsId?.toMap(),
         "dueDate": dueDate?.toIso8601String(),
         "reverseCharge": reverseCharge,
@@ -271,6 +280,7 @@ class SupplierBillModel extends Equatable {
         supplierBillDate,
         gstIn,
         billingAddress,
+        shippingAddress,
         paymentTermsId,
         dueDate,
         reverseCharge,

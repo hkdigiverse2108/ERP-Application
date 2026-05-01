@@ -2,7 +2,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
-import 'package:ai_setu/data/repositories/accounting_repository.dart';
+import 'package:ai_setu/data/repositories/accounting/accounting_repository.dart';
 import 'package:get/get.dart';
 
 class CreditController extends GetxController {
@@ -18,7 +18,8 @@ class CreditController extends GetxController {
   Timer? _debounceTimer;
 
   // Caching
-  final _cache = <String, ({List<CreditNoteModel> items, DateTime fetchedAt})>{};
+  final _cache =
+      <String, ({List<CreditNoteModel> items, DateTime fetchedAt})>{};
   final _cacheExpiry = const Duration(minutes: 5);
 
   // pagination
@@ -61,9 +62,13 @@ class CreditController extends GetxController {
             res.data["creditNote_data"] ??
             res.data["purchaseCreditNote_data"] ??
             res.data["data"];
-            
+
         final items = dataList != null
-            ? dataList.map((e) => CreditNoteModel.fromJson(e as Map<String, dynamic>)).toList()
+            ? dataList
+                  .map(
+                    (e) => CreditNoteModel.fromJson(e as Map<String, dynamic>),
+                  )
+                  .toList()
             : <CreditNoteModel>[];
 
         _cache[key] = (items: items, fetchedAt: DateTime.now());
@@ -106,9 +111,15 @@ class CreditController extends GetxController {
     }
   }
 
+  void refreshData() {
+    _clearCache();
+    getCreditNotesData();
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();
     super.onClose();
   }
 }
+

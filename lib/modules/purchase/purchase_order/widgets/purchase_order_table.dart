@@ -42,6 +42,8 @@ class PurchaseOrderTable extends StatelessWidget {
                 items: controller.purchaseOrders,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.purchaseOrderDetails, arguments: item),
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.purchaseOrderAddEdit, arguments: item),
                 columns: [
                   TableColumn(
                     title: 'Order No',

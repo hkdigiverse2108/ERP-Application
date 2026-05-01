@@ -3,6 +3,10 @@ import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});
@@ -127,6 +131,56 @@ class ProductDetails extends StatelessWidget {
             ),
           ],
         ),
+        if (product.images.isNotEmpty)
+          DetailSection(
+            title: 'Product Images',
+            children: [
+              SizedBox(
+                height: 120,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: product.images.length,
+                  separatorBuilder: (context, index) =>
+                      const Gap(Sizes.paddingM),
+                  itemBuilder: (context, index) {
+                    final imageUrl = product.images[index];
+                    return GestureDetector(
+                      onTap: () => Get.to(
+                        () => ImageViewerPage(
+                          imageUrl: imageUrl,
+                          title: product.name,
+                        ),
+                      ),
+                      child: Hero(
+                        tag: imageUrl,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            Sizes.borderRadiusM,
+                          ),
+                          child: Image.network(
+                            imageUrl,
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  width: 120,
+                                  height: 120,
+                                  color: context.appColors.background,
+                                  child: Icon(
+                                    PhosphorIconsLight.warning,
+                                    color: context.appColors.textSecondary,
+                                  ),
+                                ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

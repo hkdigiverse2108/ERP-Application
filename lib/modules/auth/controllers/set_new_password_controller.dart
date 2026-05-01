@@ -4,7 +4,7 @@ import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
-import 'package:ai_setu/data/repositories/auth_repository.dart';
+import 'package:ai_setu/data/repositories/auth/auth_repository.dart';
 import 'package:ai_setu/data/repositories/settings/company_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -99,3 +99,4 @@ class SetNewPasswordController extends GetxController {
     super.onClose();
   }
 }
+

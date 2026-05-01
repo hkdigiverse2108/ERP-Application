@@ -3,8 +3,8 @@ import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/contact_model/customer_pos_details_model.dart';
-import 'package:ai_setu/data/repositories/contact_repository.dart';
-import 'package:ai_setu/data/repositories/payment_repository.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/payment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -275,3 +275,4 @@ class PaymentItem {
     "kasarAmount": kasarAmount,
   };
 }
+

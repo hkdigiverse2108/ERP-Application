@@ -3,8 +3,8 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
-import 'package:ai_setu/data/repositories/product_repository.dart';
-import 'package:ai_setu/data/repositories/recipe_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/recipe_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -236,3 +236,4 @@ class RawProductItem {
     );
   }
 }
+

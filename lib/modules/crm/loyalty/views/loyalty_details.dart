@@ -48,7 +48,7 @@ class LoyaltyDetails extends StatelessWidget {
                 ),
                 DetailItem(
                   label: 'Discount Value',
-                  value: '${loyalty.discountValue} (${loyalty.type})',
+                  value: '${loyalty.discountValue} (${loyalty.typeDisplayName})',
                 ),
                 DetailItem(
                   label: 'Min Purchase',

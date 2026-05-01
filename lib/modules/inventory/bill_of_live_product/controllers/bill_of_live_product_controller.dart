@@ -4,8 +4,8 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
-import 'package:ai_setu/data/repositories/branch_repository.dart';
-import 'package:ai_setu/data/repositories/bill_of_live_product_repository.dart';
+import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/bill_of_live_product_repository.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -169,3 +169,4 @@ class BillOfLiveProductController extends GetxController {
     }
   }
 }
+

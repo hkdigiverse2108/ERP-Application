@@ -1,6 +1,6 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
-import 'package:ai_setu/data/model/crm/dicount_model.dart';
+import 'package:ai_setu/data/model/crm/discount_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 
@@ -33,5 +33,27 @@ class DiscountRepository {
       return PaginationModel.fromMap(res.data, items);
     }
     throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<DiscountModel> getDiscountById(String id) async {
+    final res = await _api.get(ApiConstants.getDiscountById(id));
+    if (res.status == 200 && res.data != null) {
+      return DiscountModel.fromJson(res.data);
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<void> addDiscount(Map<String, dynamic> data) async {
+    final res = await _api.post(ApiConstants.addDiscount, body: data);
+    if (res.status != 200) {
+      throw Exception(res.message ?? "Something went wrong");
+    }
+  }
+
+  Future<void> updateDiscount(Map<String, dynamic> data) async {
+    final res = await _api.put(ApiConstants.updateDiscount, body: data);
+    if (res.status != 200) {
+      throw Exception(res.message ?? "Something went wrong");
+    }
   }
 }

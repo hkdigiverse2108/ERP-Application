@@ -67,9 +67,9 @@ class ApiConstants {
   static String permissionAdmin(String id) => "/user/$id/permission";
 
   // Upload
-  static const String getUpload = "/upload/images";
+  static const String getImages = "/upload/images";
   static const String upload = "/upload";
-  static const String uploadPdf = "/upload/pdf";
+  static const String getPdfs = "/upload/pdf";
   static const String deleteUpload = "/upload";
 
   // Role
@@ -691,8 +691,8 @@ class ApiConstants {
     "limit": limit,
     "search": search,
     "branchFilter": branchId,
-    "fromDate": fromDate,
-    "toDate": toDate,
+    "startDate": fromDate,
+    "endDate": toDate,
     "supplierFilter": supplierFilter,
     "paymentStatus": paymentStatus,
     "activeFilter": activeFilter,
@@ -1003,20 +1003,19 @@ class ApiConstants {
     int? limit,
     String? search,
     String? branchId,
-  }) => buildUrl("/terms-and-condition/all", {
+    bool? all,
+  }) => buildUrl("/terms-condition/all", {
     "page": page,
     "limit": limit,
     "search": search,
+    "all": all,
     "branchFilter": branchId,
   });
-  static const String addTermsAndCondition = "/terms-and-condition/add";
-  static String getTermsAndConditionById(String id) =>
-      "/terms-and-condition/$id";
-  static const String updateTermsAndCondition = "/terms-and-condition/edit";
-  static String deleteTermsAndCondition(String id) =>
-      "/terms-and-condition/$id";
-  static const String termsAndConditionDropdown =
-      "/terms-and-condition/dropdown";
+  static const String addTermsAndCondition = "/terms-condition/add";
+  static String getTermsAndConditionById(String id) => "/terms-condition/$id";
+  static const String updateTermsAndCondition = "/terms-condition/edit";
+  static String deleteTermsAndCondition(String id) => "/terms-condition/$id";
+  static const String termsAndConditionDropdown = "/terms-condition/dropdown";
 
   // Purchase Debit Note
   static String getAllPurchaseDebitNote({

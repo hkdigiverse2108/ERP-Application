@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:ai_setu/core/helper/route_resolver.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/data/model/permission_model.dart';
-import 'package:ai_setu/data/repositories/permission_repository.dart';
+import 'package:ai_setu/data/repositories/user/permission_repository.dart';
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:get/get.dart';
 
@@ -188,3 +188,4 @@ class PermissionService extends GetxService {
     _storage.remove(StorageKeys.userPermissions);
   }
 }
+

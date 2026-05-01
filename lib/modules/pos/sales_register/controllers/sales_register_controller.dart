@@ -4,7 +4,7 @@ import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/data/model/pos/sales_register_model.dart';
 import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/pos/sales_register_repository.dart';
-import 'package:ai_setu/data/repositories/user_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -148,3 +148,4 @@ class SalesRegisterController extends GetxController {
     super.onClose();
   }
 }
+

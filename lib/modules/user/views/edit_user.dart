@@ -317,7 +317,10 @@ class EditUser extends GetView<UpdateUserController> {
                         icon: PhosphorIconsLight.image,
                         child: Obx(
                           () => EditImagePicker(
-                            imagePath: controller.selectedImage.value?.path,
+                            imagePath:
+                                controller.selectedImageUrl.value.isNotEmpty
+                                ? controller.selectedImageUrl.value
+                                : controller.selectedImage.value?.path,
                             onPickImage: controller.pickImageFromGallery,
                             onRemoveImage: controller.removeImage,
                           ),

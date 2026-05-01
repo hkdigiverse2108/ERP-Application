@@ -52,4 +52,12 @@ class ContactRepository {
     }
     throw Exception(response.message ?? 'Failed to load contacts');
   }
+
+  Future<ContactModel> getContactById(String id) async {
+    final ResModel response = await _apiService.get(ApiConstants.getContactById(id));
+    if (response.status == 200 && response.data != null) {
+      return ContactModel.fromMap(response.data);
+    }
+    throw Exception(response.message ?? 'Failed to load contact');
+  }
 }

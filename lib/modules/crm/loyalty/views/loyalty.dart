@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/crm/loyalty/controllers/loyalty_controller.dart';
 import 'package:ai_setu/modules/crm/loyalty/widgets/loyalty_table.dart';
@@ -6,6 +7,7 @@ import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/filter_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoyaltyPage extends StatelessWidget {
   const LoyaltyPage({super.key});
@@ -43,6 +45,10 @@ class LoyaltyPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Loyalty List',
+        onAdd: () async {
+          final res = await Get.toNamed(Routes.addUpdateLoyalty);
+          if (res == true) controller.getLoyaltyData();
+        },
         filters: [
           FilterOption(
             label: 'Active Status',

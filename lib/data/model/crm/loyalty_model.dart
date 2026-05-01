@@ -86,6 +86,17 @@ class LoyaltyModel {
     );
   }
 
+  String get typeDisplayName {
+    switch (type.toLowerCase()) {
+      case 'discount':
+        return 'Discount';
+      case 'free_product':
+        return 'Free Product';
+      default:
+        return type;
+    }
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "_id": id,
@@ -170,11 +181,7 @@ class CreatedBy {
   final String fullName;
   final String userType;
 
-  CreatedBy({
-    required this.id,
-    required this.fullName,
-    required this.userType,
-  });
+  CreatedBy({required this.id, required this.fullName, required this.userType});
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) {
     return CreatedBy(

@@ -3,11 +3,12 @@ import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
-import 'package:ai_setu/data/repositories/contact_repository.dart';
-import 'package:ai_setu/data/repositories/expense_repository.dart';
-import 'package:ai_setu/data/repositories/salary_repository.dart';
-import 'package:ai_setu/data/repositories/user_repository.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/expense_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/salary_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -140,7 +141,8 @@ class ExpenseAddEditController extends GetxController {
     try {
       isSaving.value = true;
       final data = {
-        if (isEdit.value) 'id': expenseId,
+        if (isEdit.value && isSalary.value == false) 'expenseId': expenseId,
+        if (isEdit.value && isSalary.value == true) 'salaryId': expenseId,
         'partyId': selectedPartyId.value,
         'type': selectedType.value,
         'fromDate': DateFormat('yyyy-MM-dd').format(fromDate.value),
@@ -155,7 +157,6 @@ class ExpenseAddEditController extends GetxController {
         data['toDate'] = DateFormat('yyyy-MM-dd').format(toDate.value);
         data['incentive'] = double.tryParse(incentiveController.text) ?? 0;
         data['total'] = double.tryParse(totalController.text) ?? 0;
-        // data['isSalary'] = true;
 
         if (isEdit.value) {
           await _salaryRepo.updateSalary(data);
@@ -163,7 +164,6 @@ class ExpenseAddEditController extends GetxController {
           await _salaryRepo.addSalary(data);
         }
       } else {
-        data['isSalary'] = false;
         if (isEdit.value) {
           await _expenseRepo.updateExpense(data);
         } else {
@@ -181,6 +181,20 @@ class ExpenseAddEditController extends GetxController {
     }
   }
 
+  Future<void> pickImage() async {
+    await MediaPickerDialog.show(
+      onMediaSelected: (selected) {
+        if (selected.isNotEmpty) {
+          selectedImageUrl.value = selected.first.url;
+        }
+      },
+    );
+  }
+
+  void removeImage() {
+    selectedImageUrl.value = null;
+  }
+
   @override
   void onClose() {
     amountController.dispose();
@@ -190,3 +204,4 @@ class ExpenseAddEditController extends GetxController {
     super.onClose();
   }
 }
+

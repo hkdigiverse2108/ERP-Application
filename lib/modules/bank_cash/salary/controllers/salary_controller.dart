@@ -4,7 +4,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/salary_model.dart';
 
-import 'package:ai_setu/data/repositories/salary_repository.dart';
+import 'package:ai_setu/data/repositories/bank_cash/salary_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -145,3 +145,4 @@ class SalaryController extends GetxController {
     super.onClose();
   }
 }
+

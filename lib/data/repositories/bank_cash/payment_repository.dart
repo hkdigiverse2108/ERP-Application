@@ -53,7 +53,7 @@ class PaymentRepository {
   }
 
   Future<ResModel> updatePosPayment(Map<String, dynamic> data) async {
-    return await _api.post(ApiConstants.updatePosPayment, body: data);
+    return await _api.put(ApiConstants.updatePosPayment, body: data);
   }
 
   Future<PosPaymentModel> getPosPaymentById(String id) async {

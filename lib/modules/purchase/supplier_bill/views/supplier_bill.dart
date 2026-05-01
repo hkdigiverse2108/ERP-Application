@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/controllers/supplier_bill_controller.dart';
@@ -38,7 +39,7 @@ class SupplierBillPage extends StatelessWidget {
 
   Widget _buildSectionTitle(String title, SupplierBillController controller) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: Sizes.paddingM,
         right: Sizes.paddingM,
         top: Sizes.paddingM,
@@ -46,6 +47,7 @@ class SupplierBillPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(Routes.supplierBillAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

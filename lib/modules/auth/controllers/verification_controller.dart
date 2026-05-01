@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
-import 'package:ai_setu/data/repositories/auth_repository.dart';
+import 'package:ai_setu/data/repositories/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,3 +56,4 @@ class VerificationController extends GetxController {
     super.onClose();
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:ai_setu/data/repositories/support_repository.dart';
+import 'package:ai_setu/data/repositories/support/support_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,3 +76,4 @@ class SupportController extends GetxController {
     super.onClose();
   }
 }
+

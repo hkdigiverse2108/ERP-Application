@@ -1,7 +1,7 @@
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/user_model.dart';
-import 'package:ai_setu/data/repositories/user_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -114,3 +114,4 @@ class UserController extends GetxController {
     super.onClose();
   }
 }
+

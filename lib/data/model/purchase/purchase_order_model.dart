@@ -14,6 +14,7 @@ class PurchaseOrderModel extends Equatable {
   final String? orderNo;
   final String? placeOfSupply;
   final PurchaseOrderAddress? billingAddress;
+  final PurchaseOrderAddress? shippingAddress;
   final DateTime? shippingDate;
   final String? shippingNote;
   final String? taxType;
@@ -42,6 +43,7 @@ class PurchaseOrderModel extends Equatable {
     this.orderNo,
     this.placeOfSupply,
     this.billingAddress,
+    this.shippingAddress,
     this.shippingDate,
     this.shippingNote,
     this.taxType,
@@ -71,6 +73,7 @@ class PurchaseOrderModel extends Equatable {
     String? orderNo,
     String? placeOfSupply,
     PurchaseOrderAddress? billingAddress,
+    PurchaseOrderAddress? shippingAddress,
     DateTime? shippingDate,
     String? shippingNote,
     String? taxType,
@@ -99,6 +102,7 @@ class PurchaseOrderModel extends Equatable {
       orderNo: orderNo ?? this.orderNo,
       placeOfSupply: placeOfSupply ?? this.placeOfSupply,
       billingAddress: billingAddress ?? this.billingAddress,
+      shippingAddress: shippingAddress ?? this.shippingAddress,
       shippingDate: shippingDate ?? this.shippingDate,
       shippingNote: shippingNote ?? this.shippingNote,
       taxType: taxType ?? this.taxType,
@@ -147,6 +151,10 @@ class PurchaseOrderModel extends Equatable {
             ? null
             : PurchaseOrderAddress.fromMap(
                 map["billingAddress"] as Map<String, dynamic>),
+        shippingAddress: map["shippingAddress"] == null
+            ? null
+            : PurchaseOrderAddress.fromMap(
+                map["shippingAddress"] as Map<String, dynamic>),
         shippingDate: map["shippingDate"] != null
             ? DateTime.parse(map["shippingDate"].toString())
             : null,
@@ -195,6 +203,7 @@ class PurchaseOrderModel extends Equatable {
         "orderNo": orderNo,
         "placeOfSupply": placeOfSupply,
         "billingAddress": billingAddress?.toMap(),
+        "shippingAddress": shippingAddress?.toMap(),
         "shippingDate": shippingDate?.toIso8601String(),
         "shippingNote": shippingNote,
         "taxType": taxType,
@@ -225,6 +234,7 @@ class PurchaseOrderModel extends Equatable {
         orderNo,
         placeOfSupply,
         billingAddress,
+        shippingAddress,
         shippingDate,
         shippingNote,
         taxType,
@@ -372,6 +382,8 @@ class PurchaseOrderItem extends Equatable {
   final String? tax;
   final String? landingCost;
   final String? margin;
+  final double? mrp;
+  final double? sellingPrice;
   final double total;
 
   const PurchaseOrderItem({
@@ -384,6 +396,8 @@ class PurchaseOrderItem extends Equatable {
     this.tax,
     this.landingCost,
     this.margin,
+    this.mrp,
+    this.sellingPrice,
     required this.total,
   });
 
@@ -397,6 +411,8 @@ class PurchaseOrderItem extends Equatable {
     String? tax,
     String? landingCost,
     String? margin,
+    double? mrp,
+    double? sellingPrice,
     double? total,
   }) {
     return PurchaseOrderItem(
@@ -409,6 +425,8 @@ class PurchaseOrderItem extends Equatable {
       tax: tax ?? this.tax,
       landingCost: landingCost ?? this.landingCost,
       margin: margin ?? this.margin,
+      mrp: mrp ?? this.mrp,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
       total: total ?? this.total,
     );
   }
@@ -426,6 +444,8 @@ class PurchaseOrderItem extends Equatable {
         tax: map["tax"]?.toString(),
         landingCost: map["landingCost"]?.toString(),
         margin: map["margin"]?.toString(),
+        mrp: (map["mrp"] as num? ?? 0).toDouble(),
+        sellingPrice: (map["sellingPrice"] as num? ?? 0).toDouble(),
         total: (map["total"] as num? ?? 0).toDouble(),
       );
 
@@ -439,6 +459,8 @@ class PurchaseOrderItem extends Equatable {
         "tax": tax,
         "landingCost": landingCost,
         "margin": margin,
+        "mrp": mrp,
+        "sellingPrice": sellingPrice,
         "total": total,
       };
 
@@ -453,6 +475,8 @@ class PurchaseOrderItem extends Equatable {
         tax,
         landingCost,
         margin,
+        mrp,
+        sellingPrice,
         total,
       ];
 
