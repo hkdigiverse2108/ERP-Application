@@ -30,6 +30,7 @@ abstract class Routes {
   static const credit = '/credit-note'; // Accounting Credit Note
   static const addUpdateCredit = '/add-update-credit';
   static const contact = '/contact';
+  static const addUpdateContact = '/add-update-contact';
 
   // bank
   static const bank = '/bank';
@@ -47,11 +48,16 @@ abstract class Routes {
 
   // sales
   static const estimate = '/estimate';
+  static const estimateAddEdit = '/estimate-add-edit';
   static const salesOrder = '/sales-order';
+  static const salesOrderAddEdit = '/sales-order-add-edit';
   static const invoice = '/invoice';
+  static const invoiceAddEdit = '/invoice-add-edit';
   static const deliveryChallan = '/delivery-challan';
+  static const deliveryChallanAddEdit = '/delivery-challan-add-edit';
   static const salesCreditNote =
       '/sales-credit-note'; // ← FIX: was '/credit-note' (duplicate of Routes.credit)
+  static const salesCreditNoteAddEdit = '/sales-credit-note-add-edit';
 
   // purchase
   static const purchaseOrder = '/purchase-order';

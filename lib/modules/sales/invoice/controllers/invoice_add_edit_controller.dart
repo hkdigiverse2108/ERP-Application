@@ -1,0 +1,791 @@
+import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dart';
+import 'package:ai_setu/data/model/common/id_name_model.dart';
+import 'package:ai_setu/data/model/invetory/product_model.dart';
+import 'package:ai_setu/data/model/user_model.dart';
+import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
+import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
+import 'package:ai_setu/data/repositories/user/user_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:ai_setu/data/model/contact_model/contact_model.dart';
+import 'package:ai_setu/data/model/selas/invoice_model.dart';
+import 'package:ai_setu/data/model/tax/tax_model.dart';
+import 'package:ai_setu/data/model/terms_and_condition/terms_and_condition_model.dart';
+import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
+import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
+import 'package:ai_setu/data/repositories/sales/sales_repository.dart';
+import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
+import 'package:ai_setu/data/model/payment_terms/payment_terms_model.dart';
+import 'package:ai_setu/data/repositories/settings/payment_terms_repository.dart';
+import 'package:ai_setu/core/constants/enums.dart';
+import 'package:ai_setu/core/services/branch_controller.dart';
+import 'package:ai_setu/data/model/pagination_model.dart';
+import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+
+class InvoiceAddEditController extends GetxController {
+  static InvoiceAddEditController get instance => Get.find();
+
+  final SalesRepository _salesRepository = SalesRepository();
+  final ContactRepository _contactRepository = ContactRepository();
+  final ProductRepository _productRepository = ProductRepository();
+  final TaxRepository _taxRepository = TaxRepository();
+  final AdditionalChargeRepository _additionalChargeRepository =
+      AdditionalChargeRepository();
+  final TermsAndConditionRepository _termsAndConditionRepository =
+      TermsAndConditionRepository();
+  final PaymentTermsRepository _paymentTermsRepository =
+      PaymentTermsRepository();
+  final UserRepository _userRepository = UserRepository();
+
+  final formKey = GlobalKey<FormState>();
+
+  // Reactive Variables
+  final isLoading = false.obs;
+  final isSaving = false.obs;
+  final isEdit = false.obs;
+  final isAddingTerm = false.obs;
+  final invoice = Rxn<InvoiceModel>();
+
+  // Dropdown Data
+  final customers = <ContactDropdownModel>[].obs;
+  final products = <ProductDropdownModel>[].obs;
+  final taxes = <TaxDropdownModel>[].obs;
+  final paymentTerms = <PaymentTermsModel>[].obs;
+  final termsAndConditions = <TermsAndConditionModel>[].obs;
+  final availableAdditionalCharges = <AdditionalChargeModel>[].obs;
+  final salesmen = <UserDropDownModel>[].obs;
+  final salesOrders = <IdNameModel>[].obs;
+  final deliveryChallans = <IdNameModel>[].obs;
+
+  // Form Fields
+  final selectedCustomer = Rxn<ContactDropdownModel>();
+  final selectedSalesman = Rxn<UserDropDownModel>();
+  final selectedSalesOrders = <IdNameModel>[].obs;
+  final selectedDeliveryChallans = <IdNameModel>[].obs;
+  final invoiceSource =
+      "direct".obs; // direct, estimate, salesOrder, deliveryChallan
+
+  final invoiceDate = DateTime.now().obs;
+  final dueDate = DateTime.now().obs;
+  final shippingDate = Rxn<DateTime>();
+  final selectedPaymentTerm = Rxn<PaymentTermsModel>();
+  final selectedTerms = <TermsAndConditionModel>[].obs;
+  final taxType = TaxType.defaultType.obs;
+  final placeOfSupply = "".obs;
+  final billingAddressLine = "".obs;
+  final selectedBillingAddress = Rxn<ContactAddress>();
+  final selectedShippingAddress = Rxn<ContactAddress>();
+  final invoiceNoController = TextEditingController();
+  final notesController = TextEditingController();
+  final flatDiscountController = TextEditingController(text: "0");
+  final roundOffController = TextEditingController(text: "0");
+
+  // Shipping Details Fields
+  final transporters = <ContactDropdownModel>[].obs;
+  final selectedTransporter = Rxn<ContactDropdownModel>();
+  final shippingType = "delivery".obs;
+  final transportDate = DateTime.now().obs;
+  final shippingReferenceNoController = TextEditingController();
+  final modeOfTransportController = TextEditingController();
+  final vehicleNoController = TextEditingController();
+  final shippingWeightController = TextEditingController(text: "0");
+
+  // Item Tables
+  final items = <InvoiceItemState>[].obs;
+  final additionalCharges = <InvoiceAdditionalChargeState>[].obs;
+
+  // Summary Totals
+  final grossAmount = 0.0.obs;
+  final totalDiscount = 0.0.obs;
+  final taxableAmount = 0.0.obs;
+  final totalTaxAmount = 0.0.obs;
+  final netAmount = 0.0.obs;
+  final flatDiscountValue = 0.0.obs;
+  final roundOffValue = 0.0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadInitialData();
+    final args = Get.arguments;
+    if (args is InvoiceModel) {
+      invoice.value = args;
+      isEdit.value = true;
+      _populateFields();
+    }
+
+    // Listener for customer change
+    ever(selectedCustomer, (customer) {
+      if (customer != null) {
+        _fetchCustomerDetails(customer.id);
+        _fetchDropdowns(customerId: customer.id);
+        if (customer.address.isNotEmpty) {
+          selectedBillingAddress.value = customer.address.first;
+          selectedShippingAddress.value = customer.address.first;
+        } else {
+          selectedBillingAddress.value = null;
+          selectedShippingAddress.value = null;
+        }
+      } else {
+        _fetchDropdowns();
+      }
+    });
+
+    // Listener for invoice source change
+    ever(invoiceSource, (source) {
+      selectedSalesOrders.clear();
+      selectedDeliveryChallans.clear();
+    });
+
+    // Summary updates
+    flatDiscountController.addListener(calculateTotals);
+    roundOffController.addListener(calculateTotals);
+
+    // Initial population for editing/auto-fill from salesman etc
+    ever(customers, (_) {
+      if (invoice.value?.customerId != null) {
+        selectedCustomer.value = customers.firstWhereOrNull(
+          (c) => c.id == invoice.value!.customerId?.id,
+        );
+      }
+    });
+
+    ever(salesmen, (_) {
+      if (invoice.value?.salesManId != null) {
+        selectedSalesman.value = salesmen.firstWhereOrNull(
+          (s) => s.id == invoice.value!.salesManId,
+        );
+      }
+    });
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      isLoading.value = true;
+      final results = await Future.wait([
+        _contactRepository.getContactDropdown(
+          typeFilter: ContactType.customer.name,
+        ),
+        _productRepository.getProductDropdown(),
+        _taxRepository.getTaxes(),
+        _paymentTermsRepository.getPaymentTerms(limit: 100),
+        _termsAndConditionRepository.getTermsAndCondition(),
+        _additionalChargeRepository.getAdditionalCharges(limit: 100),
+        _contactRepository.getContactDropdown(typeFilter: 'transporter'),
+        _userRepository.getUserDropDown(),
+        _salesRepository.getSalesOrderDropdown(statusFilter: 'pending'),
+        _salesRepository.getDeliveryChallanDropdown(statusFilter: 'pending'),
+      ]);
+
+      customers.value = results[0] as List<ContactDropdownModel>;
+      products.value = results[1] as List<ProductDropdownModel>;
+      taxes.value = results[2] as List<TaxDropdownModel>;
+      paymentTerms.value =
+          (results[3] as PaginationModel<PaymentTermsModel>).items;
+      termsAndConditions.value = results[4] as List<TermsAndConditionModel>;
+      final chargesRes = results[5] as PaginationModel<AdditionalChargeModel>;
+      availableAdditionalCharges.value = chargesRes.items;
+      transporters.value = results[6] as List<ContactDropdownModel>;
+      salesmen.value = results[7] as List<UserDropDownModel>;
+      salesOrders.value = results[8] as List<IdNameModel>;
+      deliveryChallans.value = results[9] as List<IdNameModel>;
+    } catch (e) {
+      debugPrint('Error loading initial data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void _populateFields() {
+    final inv = invoice.value!;
+    invoiceNoController.text = inv.invoiceNo ?? '';
+    invoiceDate.value = inv.date ?? DateTime.now();
+    dueDate.value = inv.dueDate ?? DateTime.now();
+    placeOfSupply.value = inv.placeOfSupply ?? '';
+    notesController.text = inv.notes ?? '';
+    taxType.value = inv.taxType == "exclusive"
+        ? TaxType.exclusive
+        : TaxType.defaultType;
+
+    // Items
+    items.value = inv.items.map((e) {
+      return InvoiceItemState(
+        productId: e.productId?.id ?? "",
+        productName: e.productId?.name ?? "Unknown",
+        qty: e.qty,
+        freeQty: e.freeQty,
+        price: e.price,
+        discount1: e.discount1,
+        taxId: e.taxId?.id,
+        taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
+        uomId: e.uomId?.id,
+        unit: e.unit,
+      );
+    }).toList();
+
+    // Additional Charges
+    additionalCharges.value = inv.additionalCharges.map((e) {
+      final charge = availableAdditionalCharges.firstWhereOrNull(
+        (c) => c.id == e.chargeId,
+      );
+      final tax = taxes.firstWhereOrNull((t) => t.id == e.taxId);
+      return InvoiceAdditionalChargeState(
+        id: e.chargeId ?? "",
+        name: charge?.name ?? "Charge",
+        amount: e.amount,
+        taxId: e.taxId,
+        taxPercent: tax?.percentage.toDouble() ?? 0.0,
+      );
+    }).toList();
+
+    // Terms
+    ever(termsAndConditions, (allTerms) {
+      if (allTerms.isNotEmpty && inv.termsAndConditionIds.isNotEmpty) {
+        final ids = inv.termsAndConditionIds.toSet();
+        selectedTerms.value = allTerms
+            .where((t) => ids.contains(t.id))
+            .toList();
+      }
+    });
+
+    // Shipping Details
+    if (inv.shippingDetails != null) {
+      final ship = inv.shippingDetails!;
+      shippingType.value = ship.shippingType;
+      shippingDate.value = ship.shippingDate;
+      transportDate.value = ship.transportDate ?? DateTime.now();
+      shippingReferenceNoController.text = ship.referenceNo ?? '';
+      modeOfTransportController.text = ship.modeOfTransport ?? '';
+      vehicleNoController.text = ship.vehicleNo ?? '';
+      shippingWeightController.text = ship.weight.toString();
+
+      ever(transporters, (allTrans) {
+        if (allTrans.isNotEmpty && ship.transporterId != null) {
+          selectedTransporter.value =
+              allTrans.firstWhereOrNull((t) => t.id == ship.transporterId);
+        }
+      });
+    }
+
+    // Source Selection
+    if (inv.createdFrom == "sales-order") {
+      invoiceSource.value = "salesOrder";
+      selectedSalesOrders.assignAll(inv.salesOrderIds);
+    } else if (inv.createdFrom == "delivery-challan") {
+      invoiceSource.value = "deliveryChallan";
+      selectedDeliveryChallans.assignAll(inv.deliveryChallanIds);
+    } else {
+      invoiceSource.value = "direct";
+    }
+
+    if (inv.transactionSummary != null) {
+      flatDiscountController.text =
+          inv.transactionSummary!.flatDiscount.toString();
+      roundOffController.text = inv.transactionSummary!.roundOff.toString();
+    }
+
+    calculateTotals();
+  }
+
+  Future<void> _fetchDropdowns({String? customerId}) async {
+    try {
+      final results = await Future.wait([
+        _salesRepository.getSalesOrderDropdown(
+          customerFilter: customerId,
+          statusFilter: 'pending',
+        ),
+        _salesRepository.getDeliveryChallanDropdown(
+          customerFilter: customerId,
+          statusFilter: 'pending',
+        ),
+      ]);
+      salesOrders.value = results[0];
+      deliveryChallans.value = results[1];
+    } catch (e) {
+      debugPrint('Error fetching dropdowns: $e');
+    }
+  }
+
+  Future<void> _fetchCustomerDetails(String customerId) async {
+    try {
+      final customer = await _contactRepository.getContactById(customerId);
+      if (customer.address.isNotEmpty) {
+        final addr = customer.address.first;
+        selectedBillingAddress.value = addr;
+        billingAddressLine.value = addr.addressLine1 ?? '';
+      }
+      placeOfSupply.value = customer.address.isNotEmpty
+          ? customer.address.first.state?.name ?? ''
+          : '';
+    } catch (e) {
+      debugPrint('Error fetching customer details: $e');
+    }
+  }
+
+  Future<void> addSalesOrder(IdNameModel order) async {
+    if (selectedSalesOrders.any((e) => e.id == order.id)) return;
+    selectedSalesOrders.add(order);
+    try {
+      isLoading.value = true;
+      final details = await _salesRepository.getSalesOrderById(order.id);
+      _mergeAutoFillData(
+        customerId: details.customerId?.id,
+        placeOfSupplyStr: details.placeOfSupply,
+        taxTypeStr: details.taxType,
+        notes: details.notes,
+        itemsList: details.items,
+        chargesList: details.additionalCharges,
+        termsIds: details.termsAndConditionIds,
+        shipping: details.shippingDetails,
+      );
+    } catch (e) {
+      debugPrint('Error fetching sales order details: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void removeSalesOrder(int index) {
+    selectedSalesOrders.removeAt(index);
+    // Optionally: could recalculate or remove items, but usually kept for user to decide
+  }
+
+  Future<void> addDeliveryChallan(IdNameModel challan) async {
+    if (selectedDeliveryChallans.any((e) => e.id == challan.id)) return;
+    selectedDeliveryChallans.add(challan);
+    try {
+      isLoading.value = true;
+      final details = await _salesRepository.getDeliveryChallanById(challan.id);
+      _mergeAutoFillData(
+        customerId: details.customerId?.id,
+        placeOfSupplyStr: details.placeOfSupply,
+        taxTypeStr: details.taxType,
+        notes: details.notes,
+        itemsList: details.items,
+        chargesList: details.additionalCharges,
+        termsIds: details.termsAndConditionIds,
+        shipping: details.shippingDetails,
+      );
+    } catch (e) {
+      debugPrint('Error fetching delivery challan details: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void removeDeliveryChallan(int index) {
+    selectedDeliveryChallans.removeAt(index);
+  }
+
+  void _mergeAutoFillData({
+    String? customerId,
+    String? placeOfSupplyStr,
+    String? taxTypeStr,
+    String? notes,
+    required List itemsList,
+    required List chargesList,
+    required List<String> termsIds,
+    dynamic shipping,
+  }) {
+    if (customerId != null && selectedCustomer.value == null) {
+      selectedCustomer.value = customers.firstWhereOrNull(
+        (c) => c.id == customerId,
+      );
+    }
+    if (placeOfSupply.value.isEmpty) {
+      placeOfSupply.value = placeOfSupplyStr ?? '';
+    }
+    if (taxTypeStr != null) {
+      taxType.value = taxTypeStr == "exclusive"
+          ? TaxType.exclusive
+          : TaxType.defaultType;
+    }
+    if (notes != null && notesController.text.isEmpty) {
+      notesController.text = notes;
+    }
+
+    // Append items
+    for (var e in itemsList) {
+      items.add(InvoiceItemState(
+        productId: e.productId?.id ?? "",
+        productName: e.productId?.name ?? "Unknown",
+        qty: e.qty,
+        freeQty: e.freeQty,
+        price: e.price,
+        discount1: e.discount1,
+        taxId: e.taxId?.id,
+        taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
+        uomId: e.uomId?.id,
+        unit: e.unit,
+      ));
+    }
+
+    // Append charges (avoid duplicates by charge ID if necessary, but here we just append)
+    for (var e in chargesList) {
+      final charge = availableAdditionalCharges.firstWhereOrNull(
+        (c) => c.id == e.chargeId,
+      );
+      final tax = taxes.firstWhereOrNull((t) => t.id == e.taxId);
+      additionalCharges.add(InvoiceAdditionalChargeState(
+        id: e.chargeId ?? "",
+        name: charge?.name ?? "Charge",
+        amount: e.amount,
+        taxId: e.taxId,
+        taxPercent: tax?.percentage.toDouble() ?? 0.0,
+      ));
+    }
+
+    // Merge terms
+    for (var id in termsIds) {
+      final term = termsAndConditions.firstWhereOrNull((t) => t.id == id);
+      if (term != null && !isTermSelected(term.id)) {
+        selectedTerms.add(term);
+      }
+    }
+
+    // Auto-fill shipping if empty
+    if (shipping != null && shippingReferenceNoController.text.isEmpty) {
+      shippingType.value = shipping.shippingType;
+      shippingDate.value = shipping.shippingDate;
+      transportDate.value = shipping.transportDate ?? DateTime.now();
+      shippingReferenceNoController.text = shipping.referenceNo ?? '';
+      modeOfTransportController.text = shipping.modeOfTransport ?? '';
+      vehicleNoController.text = shipping.vehicleNo ?? '';
+      shippingWeightController.text = shipping.weight.toString();
+      if (shipping.transporterId != null) {
+        selectedTransporter.value = transporters.firstWhereOrNull(
+          (t) => t.id == shipping.transporterId,
+        );
+      }
+    }
+    calculateTotals();
+  }
+
+  void addItem(ProductDropdownModel product) async {
+    try {
+      final productDetails = await _productRepository.getProductById(
+        product.id,
+      );
+      items.add(
+        InvoiceItemState(
+          productId: product.id,
+          productName: productDetails.name,
+          qty: 1.0,
+          freeQty: 0,
+          price: productDetails.sellingPrice.toDouble(),
+          discount1: 0,
+          taxId: productDetails.salesTaxId?.id,
+          taxPercent: productDetails.salesTaxId?.percentage.toDouble() ?? 0.0,
+          uomId: productDetails.uomId?.id,
+          unit: productDetails.uomId?.name,
+        ),
+      );
+      calculateTotals();
+    } catch (e) {
+      debugPrint('Error adding item: $e');
+    }
+  }
+
+  void removeItem(int index) {
+    items.removeAt(index);
+    calculateTotals();
+  }
+
+  void updateItemQty(int index, double qty) {
+    items[index] = items[index].copyWith(qty: qty);
+    calculateTotals();
+  }
+
+  void updateItemFreeQty(int index, double freeQty) {
+    items[index] = items[index].copyWith(freeQty: freeQty);
+    calculateTotals();
+  }
+
+  void updateItemPrice(int index, double price) {
+    items[index] = items[index].copyWith(price: price);
+    calculateTotals();
+  }
+
+  void updateItemDiscount(int index, double discount) {
+    items[index] = items[index].copyWith(discount1: discount);
+    calculateTotals();
+  }
+
+  void addAdditionalCharge() {
+    additionalCharges.add(
+      InvoiceAdditionalChargeState(id: '', name: '', amount: 0),
+    );
+    calculateTotals();
+  }
+
+  void removeAdditionalCharge(int index) {
+    additionalCharges.removeAt(index);
+    calculateTotals();
+  }
+
+  void updateAdditionalCharge(int index, InvoiceAdditionalChargeState charge) {
+    additionalCharges[index] = charge;
+    calculateTotals();
+  }
+
+  void calculateTotals() {
+    double gross = 0;
+    double itemsTax = 0;
+    double itemsDiscount = 0;
+    double chargesTotal = 0;
+    double chargesTax = 0;
+
+    for (var item in items) {
+      gross += item.qty * item.price;
+      itemsDiscount += item.discount1;
+      itemsTax += item.tax;
+    }
+
+    for (var charge in additionalCharges) {
+      chargesTotal += charge.amount;
+      chargesTax += (charge.amount * charge.taxPercent) / 100;
+    }
+
+    grossAmount.value = gross;
+    totalDiscount.value = itemsDiscount;
+    taxableAmount.value = (gross - itemsDiscount) + chargesTotal;
+    totalTaxAmount.value = itemsTax + chargesTax;
+
+    flatDiscountValue.value = double.tryParse(flatDiscountController.text) ?? 0;
+    roundOffValue.value = double.tryParse(roundOffController.text) ?? 0;
+
+    final rawNet =
+        (taxableAmount.value + totalTaxAmount.value) -
+        flatDiscountValue.value +
+        roundOffValue.value;
+
+    netAmount.value = rawNet < 0 ? 0 : rawNet;
+  }
+
+  Future<void> saveInvoice() async {
+    if (!formKey.currentState!.validate()) return;
+    if (selectedCustomer.value == null) {
+      AppSnackbar.error('Please select a customer');
+      return;
+    }
+    if (items.isEmpty) {
+      AppSnackbar.error('Please add at least one item');
+      return;
+    }
+
+    try {
+      isSaving.value = true;
+      final shippingDetails = {
+        "shippingType": shippingType.value,
+        "weight": shippingWeightController.text,
+        "referenceNo": shippingReferenceNoController.text,
+        "transportDate": transportDate.value.toIso8601String(),
+        "modeOfTransport": modeOfTransportController.text,
+        "transporterId": selectedTransporter.value?.id,
+        "vehicleNo": vehicleNoController.text,
+      };
+
+      if (shippingDate.value != null) {
+        shippingDetails["shippingDate"] = shippingDate.value!.toIso8601String();
+      }
+
+      final data = {
+        'customerId': selectedCustomer.value?.id,
+        'salesManId': selectedSalesman.value?.id,
+        'date': invoiceDate.value.toIso8601String(),
+        'dueDate': dueDate.value.toIso8601String(),
+        'paymentTermsId': selectedPaymentTerm.value?.id,
+        'billingAddress': selectedBillingAddress.value?.id,
+        'shippingAddress': selectedShippingAddress.value?.id,
+        'placeOfSupply': placeOfSupply.value,
+        'taxType': taxType.value == TaxType.exclusive ? "exclusive" : "default",
+        'reverseCharge': "false",
+        'items': items.map((e) => e.toMap()).toList(),
+        'additionalCharges': additionalCharges.map((e) => e.toMap()).toList(),
+        'shippingDetails': shippingDetails,
+        'transactionSummary': {
+          'flatDiscount': flatDiscountValue.value,
+          'grossAmount': grossAmount.value,
+          'discountAmount': totalDiscount.value + flatDiscountValue.value,
+          'taxableAmount': taxableAmount.value,
+          'taxAmount': totalTaxAmount.value,
+          'roundOff': roundOffValue.value,
+          'netAmount': netAmount.value,
+        },
+        'termsAndConditionIds': selectedTerms.map((e) => e.id).toList(),
+        'notes': notesController.text,
+        'branchId': BranchController.to.selectedBranch.value?.id,
+        'isActive': true,
+        'paymentStatus': "unpaid",
+        'paidAmount': 0,
+        'balanceAmount': netAmount.value,
+        'status': "invoiced",
+        'createdFrom': invoiceSource.value == "direct"
+            ? null
+            : invoiceSource.value.replaceAllMapped(
+                RegExp(r'([A-Z])'),
+                (match) => '-${match.group(1)!.toLowerCase()}',
+              ),
+        'salesOrderIds': selectedSalesOrders.map((e) => e.id).toList(),
+        'deliveryChallanIds': selectedDeliveryChallans.map((e) => e.id).toList(),
+      };
+
+      dynamic result;
+      if (invoice.value == null) {
+        result = await _salesRepository.addInvoice(data);
+      } else {
+        data['invoiceId'] = invoice.value!.id;
+        result = await _salesRepository.updateInvoice(data);
+      }
+
+      if (result != null) {
+        Get.back(result: true);
+        AppSnackbar.success('Invoice saved successfully');
+      }
+    } catch (e) {
+      debugPrint('Error saving invoice: $e');
+      AppSnackbar.error('Failed to save invoice');
+    } finally {
+      isSaving.value = false;
+    }
+  }
+
+  bool isTermSelected(String id) => selectedTerms.any((t) => t.id == id);
+  void toggleTerm(TermsAndConditionModel term) {
+    if (isTermSelected(term.id)) {
+      selectedTerms.removeWhere((t) => t.id == term.id);
+    } else {
+      selectedTerms.add(term);
+    }
+  }
+
+  Future<void> addNewTerm(String title, String content) async {
+    try {
+      isAddingTerm.value = true;
+      final res = await _termsAndConditionRepository.addTermsAndCondition({
+        'termsCondition': content,
+        'isActive': true,
+      });
+      if (res.status == 200 && res.data != null) {
+        final newTerm = TermsAndConditionModel.fromMap(
+          res.data as Map<String, dynamic>,
+        );
+        termsAndConditions.add(newTerm);
+        selectedTerms.add(newTerm);
+      }
+    } catch (e) {
+      debugPrint('Error adding new term: $e');
+    } finally {
+      isAddingTerm.value = false;
+    }
+  }
+}
+
+class InvoiceItemState {
+  final String productId;
+  final String productName;
+  final double qty;
+  final double freeQty;
+  final double price;
+  final double discount1;
+  final String? taxId;
+  final double taxPercent;
+  final String? uomId;
+  final String? unit;
+
+  InvoiceItemState({
+    required this.productId,
+    required this.productName,
+    required this.qty,
+    this.freeQty = 0,
+    required this.price,
+    this.discount1 = 0,
+    this.taxId,
+    this.taxPercent = 0,
+    this.uomId,
+    this.unit,
+  });
+
+  double get taxable => (qty * price) - discount1;
+  double get tax => taxable * (taxPercent / 100);
+  double get total => taxable + tax;
+
+  InvoiceItemState copyWith({
+    double? qty,
+    double? freeQty,
+    double? price,
+    double? discount1,
+    String? uomId,
+    String? unit,
+  }) {
+    return InvoiceItemState(
+      productId: productId,
+      productName: productName,
+      qty: qty ?? this.qty,
+      freeQty: freeQty ?? this.freeQty,
+      price: price ?? this.price,
+      discount1: discount1 ?? this.discount1,
+      taxId: taxId,
+      taxPercent: taxPercent,
+      uomId: uomId ?? this.uomId,
+      unit: unit ?? this.unit,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      'qty': qty,
+      'freeQty': freeQty,
+      'unit': unit,
+      'uomId': uomId,
+      'price': price,
+      'discount1': discount1,
+      'tax': tax,
+      'taxId': taxId ?? "",
+      'taxableAmount': taxable,
+      'totalAmount': total,
+    };
+  }
+}
+
+class InvoiceAdditionalChargeState {
+  final String id;
+  final String name;
+  final double amount;
+  final String? taxId;
+  final double taxPercent;
+
+  InvoiceAdditionalChargeState({
+    required this.id,
+    required this.name,
+    required this.amount,
+    this.taxId,
+    this.taxPercent = 0,
+  });
+
+  InvoiceAdditionalChargeState copyWith({
+    String? id,
+    String? name,
+    double? amount,
+    String? taxId,
+    double? taxPercent,
+  }) {
+    return InvoiceAdditionalChargeState(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      taxId: taxId ?? this.taxId,
+      taxPercent: taxPercent ?? this.taxPercent,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'chargeId': id,
+      'taxId': taxId ?? "",
+      'amount': amount,
+      'totalAmount': amount + (amount * taxPercent / 100),
+    };
+  }
+}

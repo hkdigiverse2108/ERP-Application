@@ -29,6 +29,7 @@ class IdNameModel extends Equatable {
                 json["supplierBillNo"] ??
                 json["debitNoteNo"] ??
                 json["creditNoteNo"] ??
+                json["estimateNo"] ??
                 '')
             .toString(),
       );

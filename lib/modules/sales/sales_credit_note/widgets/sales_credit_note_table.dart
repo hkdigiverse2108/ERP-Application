@@ -128,6 +128,9 @@ class SalesCreditNoteTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                onEditItem: (item) {
+                  Get.toNamed(Routes.salesCreditNoteAddEdit, arguments: item);
+                },
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

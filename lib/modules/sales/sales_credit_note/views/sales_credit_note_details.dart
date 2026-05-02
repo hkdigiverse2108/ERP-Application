@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/sales_credit_note_model.dart';
@@ -38,6 +39,11 @@ class SalesCreditNoteDetails extends StatelessWidget {
       statusColor: _getStatusColor(context, note.status),
       actions: [
         DetailAction(
+          label: 'Edit',
+          icon: PhosphorIconsFill.pencilSimple,
+          onTap: () => Get.toNamed(Routes.salesCreditNoteAddEdit, arguments: note),
+        ),
+        DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,
           onTap: () async {
@@ -76,16 +82,15 @@ class SalesCreditNoteDetails extends StatelessWidget {
                   label: 'Reverse Charge',
                   value: note.reverseCharge ? 'Yes' : 'No',
                 ),
+                DetailItem(label: 'SEZ', value: note.sez ?? '-'),
               ],
             ),
           ],
         ),
-        if (note.productDetails != null &&
-            note.productDetails is List &&
-            (note.productDetails as List).isNotEmpty)
+        if (note.productDetails.isNotEmpty)
           DetailSection(
             title: 'Items',
-            children: [_buildItemsTable(context, note.productDetails as List)],
+            children: [_buildItemsTable(context, note.productDetails)],
           ),
         DetailSection(
           title: 'Summary',
@@ -110,6 +115,15 @@ class SalesCreditNoteDetails extends StatelessWidget {
               note.summary?.taxAmount ?? 0,
               context: context,
             ),
+            if (note.additionalCharges.isNotEmpty)
+              _buildSummaryRow(
+                'Additional Charges',
+                note.additionalCharges.fold(
+                  0.0,
+                  (sum, item) => sum + item.totalAmount,
+                ),
+                context: context,
+              ),
             _buildSummaryRow(
               'Round Off',
               note.summary?.roundOff ?? 0,
@@ -160,7 +174,7 @@ class SalesCreditNoteDetails extends StatelessWidget {
                             ),
                           ),
                           const Gap(8),
-                          _buildAddressText(note.shippingAddress),
+                          _buildAddressText(note.shippingAddress!),
                         ],
                       ),
                     ),
@@ -199,7 +213,7 @@ class SalesCreditNoteDetails extends StatelessWidget {
     }
   }
 
-  Widget _buildItemsTable(BuildContext context, List items) {
+  Widget _buildItemsTable(BuildContext context, List<SalesCreditNoteItem> items) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -210,22 +224,22 @@ class SalesCreditNoteDetails extends StatelessWidget {
           DataColumn(label: Text('Item')),
           DataColumn(label: Text('Qty'), numeric: true),
           DataColumn(label: Text('Price'), numeric: true),
+          DataColumn(label: Text('Tax (%)'), numeric: true),
           DataColumn(label: Text('Total'), numeric: true),
         ],
         rows: items.map((item) {
-          // Handling dynamic productDetails items
-          final name = item['productId'] != null
-              ? (item['productId']['name'] ?? '-')
-              : '-';
-          final qty = item['qty'] ?? 0;
-          final price = item['price'] ?? 0;
-          final total = item['totalAmount'] ?? 0;
+          final name = item.productId?.name ?? '-';
+          final qty = item.qty;
+          final price = item.price;
+          final taxPercent = item.taxId?.percentage ?? 0;
+          final total = item.totalAmount;
 
           return DataRow(
             cells: [
-              DataCell(Text('$name', style: TextHelper.bodySmall)),
-              DataCell(Text('$qty', style: TextHelper.bodySmall)),
+              DataCell(Text(name, style: TextHelper.bodySmall)),
+              DataCell(Text('$qty ${item.unit ?? ""}', style: TextHelper.bodySmall)),
               DataCell(Text('₹$price', style: TextHelper.bodySmall)),
+              DataCell(Text('$taxPercent%', style: TextHelper.bodySmall)),
               DataCell(
                 Text(
                   '₹$total',
@@ -280,8 +294,7 @@ class SalesCreditNoteDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressText(SalesCreditNoteAddress? addr) {
-    if (addr == null) return const SizedBox.shrink();
+  Widget _buildAddressText(SalesCreditNoteAddress addr) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

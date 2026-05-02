@@ -2,6 +2,7 @@ import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/announcement/announcement_model.dart';
 import 'package:ai_setu/data/repositories/announcement/announcement_repository.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class AnnouncementController extends GetxController {
   final AnnouncementRepository _repository = AnnouncementRepository();
@@ -27,7 +28,7 @@ class AnnouncementController extends GetxController {
       announcements.assignAll(data.announcementData);
       announcementCount.value = data.totalData;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackbar.error(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -35,4 +36,3 @@ class AnnouncementController extends GetxController {
 
   void refreshAnnouncements() => fetchAnnouncements();
 }
-

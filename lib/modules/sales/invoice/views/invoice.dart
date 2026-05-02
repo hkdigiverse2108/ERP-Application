@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/sales/invoice/controllers/invoice_controller.dart';
 import 'package:ai_setu/modules/sales/invoice/widgets/invoice_table.dart';
@@ -45,6 +46,7 @@ class InvoicePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(Routes.invoiceAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

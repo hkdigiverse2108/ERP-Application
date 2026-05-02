@@ -16,6 +16,7 @@ import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class SupplierBillAddEditController extends GetxController {
   static SupplierBillAddEditController get instance => Get.find();
@@ -192,12 +193,9 @@ class SupplierBillAddEditController extends GetxController {
       debugPrint('Error loading $label: $e');
       // If it's a critical failure (Suppliers or Products), we notify the user more strongly
       if (label == "Suppliers" || label == "Products") {
-        Get.snackbar(
-          'Critical Data Error',
+        AppSnackbar.error(
           'Failed to load $label. You may not be able to save the bill.',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.redAccent.withValues(alpha: 0.1),
-          colorText: Colors.red,
+          position: SnackPosition.BOTTOM,
         );
       } else {
         // Non-critical failures just log and show a quiet notification
@@ -241,20 +239,23 @@ class SupplierBillAddEditController extends GetxController {
     roundOffController.text = bill.summary?.roundOff.toString() ?? "0";
 
     ever(suppliers, (allSuppliers) {
-      final supplier =
-          allSuppliers.firstWhereOrNull((s) => s.id == bill.supplierId?.id);
+      final supplier = allSuppliers.firstWhereOrNull(
+        (s) => s.id == bill.supplierId?.id,
+      );
       if (supplier != null) {
         selectedSupplier.value = supplier;
         final billingId = bill.billingAddress?.id;
         final shippingId = bill.shippingAddress?.id;
 
         if (billingId != null) {
-          selectedBillingAddress.value =
-              supplier.address.firstWhereOrNull((a) => a.id == billingId);
+          selectedBillingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == billingId,
+          );
         }
         if (shippingId != null) {
-          selectedShippingAddress.value =
-              supplier.address.firstWhereOrNull((a) => a.id == shippingId);
+          selectedShippingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == shippingId,
+          );
         }
       }
     });
@@ -480,7 +481,7 @@ class SupplierBillAddEditController extends GetxController {
 
       if (res.status == 200 || res.status == 201) {
         Get.back(); // close dialog
-        Get.snackbar('Success', 'Terms & Condition added successfully');
+        AppSnackbar.success('Terms & Condition added successfully');
         // reload terms
         final updatedTerms = await _termsAndConditionRepository
             .getTermsAndCondition();
@@ -496,10 +497,10 @@ class SupplierBillAddEditController extends GetxController {
           }
         }
       } else {
-        Get.snackbar('Error', res.message ?? 'Failed to add term');
+        AppSnackbar.error(res.message ?? 'Failed to add term');
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackbar.error(e.toString());
     } finally {
       isAddingTerm.value = false;
     }
@@ -720,10 +721,10 @@ class SupplierBillAddEditController extends GetxController {
 
       if (result != null) {
         Get.back(result: true);
-        Get.snackbar('Success', 'Supplier Bill saved successfully');
+        AppSnackbar.success('Supplier Bill saved successfully');
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackbar.error(e.toString());
     } finally {
       isSaving.value = false;
     }

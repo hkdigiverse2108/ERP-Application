@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/sales/sales_order/controllers/sales_order_controller.dart';
 import 'package:ai_setu/modules/sales/sales_order/widgets/sales_order_table.dart';
@@ -45,6 +46,12 @@ class SalesOrderPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () async {
+            final result = await Get.toNamed(Routes.salesOrderAddEdit);
+            if (result == true) {
+              controller.getSalesOrdersData();
+            }
+          },
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class SalesCreditNoteBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => SalesCreditNoteController());
+    Get.lazyPut<SalesCreditNoteController>(() => SalesCreditNoteController());
   }
 }

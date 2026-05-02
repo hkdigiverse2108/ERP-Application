@@ -106,7 +106,8 @@ class EstimateController extends GetxController {
         customerFilter: filters['customerFilter'],
         statusFilter: filters['statusFilter'],
         activeFilter: filters['activeFilter'],
-        branchId: filters['branchFilter'] ??
+        branchId:
+            filters['branchFilter'] ??
             BranchController.to.selectedBranch.value?.id,
       );
 
@@ -163,4 +164,3 @@ class EstimateController extends GetxController {
     super.onClose();
   }
 }
-

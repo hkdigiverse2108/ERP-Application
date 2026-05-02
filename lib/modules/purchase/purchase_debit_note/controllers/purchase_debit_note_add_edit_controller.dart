@@ -17,6 +17,7 @@ import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class PurchaseDebitNoteAddEditController extends GetxController {
   static PurchaseDebitNoteAddEditController get instance => Get.find();
@@ -432,11 +433,11 @@ class PurchaseDebitNoteAddEditController extends GetxController {
   Future<void> saveDebitNote() async {
     if (!formKey.currentState!.validate()) return;
     if (selectedSupplier.value == null) {
-      Get.snackbar('Error', 'Please select a supplier');
+      AppSnackbar.error('Please select a supplier');
       return;
     }
     if (items.isEmpty) {
-      Get.snackbar('Error', 'Please add at least one item');
+      AppSnackbar.error('Please add at least one item');
       return;
     }
 
@@ -502,11 +503,11 @@ class PurchaseDebitNoteAddEditController extends GetxController {
 
       if (result != null) {
         Get.back(result: true);
-        Get.snackbar('Success', 'Debit Note saved successfully');
+        AppSnackbar.success('Debit Note saved successfully');
       }
     } catch (e) {
       debugPrint('Error saving debit note: $e');
-      Get.snackbar('Error', 'Failed to save debit note');
+      AppSnackbar.error('Failed to save debit note');
     } finally {
       isSaving.value = false;
     }

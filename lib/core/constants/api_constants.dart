@@ -888,7 +888,13 @@ class ApiConstants {
   static const String getSalesOrderById = "/sales-order/getById";
   static const String updateSalesOrder = "/sales-order/edit";
   static String deleteSalesOrder(String id) => "/sales-order/$id";
-  static const String salesOrderDropdown = "/sales-order/dropdown";
+  static String salesOrderDropdown({
+    String? customerFilter,
+    String? statusFilter,
+  }) => buildUrl("/sales-order/dropdown", {
+    "customerFilter": customerFilter,
+    "statusFilter": statusFilter,
+  });
 
   // Purchase Request
   static String getAllPurchaseRequest({
@@ -1074,7 +1080,13 @@ class ApiConstants {
   static String getEstimateById(String id) => "/estimate/$id";
   static const String updateEstimate = "/estimate/edit";
   static String deleteEstimate(String id) => "/estimate/$id";
-  static const String estimateDropdown = "/estimate/dropdown";
+  static String estimateDropdown({
+    String? customerFilter,
+    String? statusFilter,
+  }) => buildUrl("/estimate/dropdown", {
+    "customerFilter": customerFilter,
+    "statusFilter": statusFilter,
+  });
 
   // Invoice
   static String getAllInvoice({
@@ -1102,7 +1114,20 @@ class ApiConstants {
   static String getInvoiceById(String id) => "/invoice/$id";
   static const String updateInvoice = "/invoice/edit";
   static String deleteInvoice(String id) => "/invoice/$id";
-  static const String invoiceDropdown = "/invoice/dropdown";
+  static String invoiceDropdown({
+    String? customerFilter,
+    String? statusFilter,
+  }) => buildUrl("/invoice/dropdown", {
+    "customerFilter": customerFilter,
+    "statusFilter": statusFilter,
+  });
+  static String deliveryChallanDropdown({
+    String? customerFilter,
+    String? statusFilter,
+  }) => buildUrl("/delivery-challan/dropdown", {
+    "customerFilter": customerFilter,
+    "statusFilter": statusFilter,
+  });
 
   // Delivery Challan
   static String getAllDeliveryChallan({

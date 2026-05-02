@@ -11,6 +11,8 @@ class CustomDropdown extends StatefulWidget {
   final bool searchable;
   final String searchHint;
   final bool isFilter;
+  final bool readOnly;
+  final bool isRequired;
 
   const CustomDropdown({
     super.key,
@@ -21,6 +23,8 @@ class CustomDropdown extends StatefulWidget {
     this.searchable = false,
     this.searchHint = "Search...",
     this.isFilter = false,
+    this.readOnly = false,
+    this.isRequired = false,
   });
 
   @override
@@ -40,6 +44,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   void _toggleDropdown() {
+    if (widget.readOnly) return;
     if (_overlayEntry == null) {
       _filteredItems = widget.items;
       _searchController.clear();
@@ -232,64 +237,78 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: GestureDetector(
-        onTap: _toggleDropdown,
-        child: SizedBox(
-          height: widget.isFilter ? 40 : null,
-          child: InputDecorator(
-            decoration: InputDecoration(
-              isDense: widget.isFilter,
-              labelText: widget.isFilter ? null : widget.label,
-              labelStyle: TextHelper.bodySmallStyle(context),
-              fillColor: widget.isFilter ? context.appColors.surface : null,
-              filled: widget.isFilter,
-              contentPadding: widget.isFilter
-                  ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
-                  : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                borderSide: BorderSide(color: context.appColors.border),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (!widget.isFilter) ...[
+          Row(
+            children: [
+              Text(
+                widget.label,
+                style: TextHelper.bodySmallStyle(
+                  context,
+                ).copyWith(color: context.appColors.textSecondary),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                borderSide: BorderSide(color: context.appColors.border),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                borderSide: BorderSide(
-                  color: context.appColors.primary,
-                  width: 1.5,
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.value ??
-                        (widget.isFilter ? "All" : "Select ${widget.label}"),
-                    style: TextHelper.bodyMediumStyle(context).copyWith(
-                      color: widget.value == null
-                          ? context.appColors.textSecondary
-                          : null,
-                      fontSize: widget.isFilter ? 13 : null,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+              if (widget.isRequired)
+                const Text(
+                  " *",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  size: widget.isFilter ? 20 : 24,
-                  color: context.appColors.textSecondary,
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
+        CompositedTransformTarget(
+          link: _layerLink,
+          child: GestureDetector(
+            onTap: _toggleDropdown,
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: widget.readOnly
+                    ? Colors.grey.shade100
+                    : context.appColors.surface,
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                border: Border.all(
+                  color: widget.readOnly
+                      ? Colors.grey.shade200
+                      : context.appColors.border,
                 ),
-              ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.value ??
+                          (widget.isFilter ? "All" : "Select ${widget.label}"),
+                      style: TextHelper.bodyMediumStyle(context).copyWith(
+                        color: widget.readOnly
+                            ? Colors.grey.shade600
+                            : widget.value == null
+                            ? context.appColors.textSecondary
+                            : context.appColors.textPrimary,
+                        fontSize: widget.isFilter ? 13 : null,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (!widget.readOnly)
+                    Icon(
+                      Icons.arrow_drop_down,
+                      size: widget.isFilter ? 20 : 24,
+                      color: context.appColors.textSecondary,
+                    ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

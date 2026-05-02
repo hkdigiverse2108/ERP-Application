@@ -104,6 +104,8 @@ class ContactTable extends StatelessWidget {
                 totalPages: contactController.totalPages.value,
                 totalItems: contactController.totalItems.value,
                 pageSize: contactController.limit.value,
+                onEditItem: (item) =>
+                    Get.toNamed(Routes.addUpdateContact, arguments: item),
                 onPageChanged: (page) => contactController.goToPage(page),
               ),
             ],

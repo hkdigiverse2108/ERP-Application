@@ -7,6 +7,7 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class PrefixTable extends StatelessWidget {
@@ -33,7 +34,7 @@ class PrefixTable extends StatelessWidget {
             totalItems: controller.totalItems.value,
             onPageChanged: (page) => controller.goToPage(page),
             onEditItem: (item) {
-              Get.snackbar("Edit", "Edit Prefix for ${item.prefixType}");
+              AppSnackbar.info("Edit Prefix for ${item.prefixType}");
             },
             columns: [
               TableColumn(

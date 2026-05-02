@@ -1,6 +1,7 @@
 import 'package:ai_setu/data/repositories/support/support_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class SupportController extends GetxController {
   static SupportController get instance => Get.find();
@@ -39,13 +40,7 @@ class SupportController extends GetxController {
       await _repository.submitCallRequest(payload);
       
       Get.back(); // Close the dialog
-      Get.snackbar(
-        'Success',
-        'Call back request submitted successfully',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackbar.success('Call back request submitted successfully');
 
       // Clear the form
       businessNameController.clear();
@@ -55,13 +50,7 @@ class SupportController extends GetxController {
       countryCode.value = '91';
 
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }

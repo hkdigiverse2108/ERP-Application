@@ -11,6 +11,7 @@ import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class TaxTable extends StatelessWidget {
@@ -59,10 +60,10 @@ class TaxTable extends StatelessWidget {
                 totalItems: controller.totalItems.value,
                 onPageChanged: (page) => controller.goToPage(page),
                 onEditItem: (item) {
-                  Get.snackbar("Edit", "Edit Tax: ${item.name}");
+                  AppSnackbar.info("Edit Tax: ${item.name}");
                 },
                 onRemoveItem: (item) {
-                  Get.snackbar("Delete", "Delete Tax: ${item.name}");
+                  AppSnackbar.warning("Delete Tax: ${item.name}");
                 },
                 canEdit: isAuthorized,
                 canDelete: isAuthorized,

@@ -125,6 +125,10 @@ class DeliveryChallanTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                onEditItem: (item) async {
+                  final result = await Get.toNamed(Routes.deliveryChallanAddEdit, arguments: item);
+                  if (result == true) controller.refreshData();
+                },
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

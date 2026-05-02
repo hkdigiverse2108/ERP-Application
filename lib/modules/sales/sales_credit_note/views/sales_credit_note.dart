@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/controllers/sales_credit_note_controller.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/widgets/sales_credit_note_table.dart';
@@ -48,6 +49,7 @@ class SalesCreditNotePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () => Get.toNamed(Routes.salesCreditNoteAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

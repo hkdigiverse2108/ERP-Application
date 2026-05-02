@@ -2,6 +2,7 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:flutter/material.dart';
@@ -445,15 +446,7 @@ class DetailItem extends StatelessWidget {
                         child: InkWell(
                           onTap: () {
                             // Copy to clipboard logic
-                            Get.snackbar(
-                              'Copied',
-                              '$label copied to clipboard',
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor: context.appColors.primary,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 1),
-                              margin: const EdgeInsets.all(16),
-                            );
+                            AppSnackbar.success('$label copied to clipboard');
                           },
                           borderRadius: BorderRadius.circular(4),
                           child: Padding(

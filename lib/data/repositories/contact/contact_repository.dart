@@ -54,10 +54,33 @@ class ContactRepository {
   }
 
   Future<ContactModel> getContactById(String id) async {
-    final ResModel response = await _apiService.get(ApiConstants.getContactById(id));
+    final ResModel response = await _apiService.get(
+      ApiConstants.getContactById(id),
+    );
     if (response.status == 200 && response.data != null) {
       return ContactModel.fromMap(response.data);
     }
     throw Exception(response.message ?? 'Failed to load contact');
+  }
+
+  Future<ResModel> addContact(Map<String, dynamic> body) async {
+    final response = await _apiService.post(
+      ApiConstants.addContact,
+      body: body,
+    );
+    return response;
+  }
+
+  Future<ResModel> updateContact(Map<String, dynamic> body) async {
+    final response = await _apiService.put(
+      ApiConstants.updateContact,
+      body: body,
+    );
+    return response;
+  }
+
+  Future<ResModel> deleteContact(String id) async {
+    final response = await _apiService.delete(ApiConstants.deleteContact(id));
+    return response;
   }
 }

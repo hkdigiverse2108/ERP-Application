@@ -21,8 +21,8 @@ class SalesCreditNoteModel extends Equatable {
   final String? sez;
   final bool paymentReminder;
   final String? productType;
-  final dynamic productDetails;
-  final dynamic additionalCharges;
+  final List<SalesCreditNoteItem> productDetails;
+  final List<SalesCreditNoteAdditionalCharge> additionalCharges;
   final List<SalesCreditNoteTerms> termsAndConditionIds;
   final String? notes;
   final SalesCreditNoteShipping? shippingDetails;
@@ -53,8 +53,8 @@ class SalesCreditNoteModel extends Equatable {
     this.sez,
     required this.paymentReminder,
     this.productType,
-    this.productDetails,
-    this.additionalCharges,
+    required this.productDetails,
+    required this.additionalCharges,
     required this.termsAndConditionIds,
     this.notes,
     this.shippingDetails,
@@ -86,8 +86,8 @@ class SalesCreditNoteModel extends Equatable {
     String? sez,
     bool? paymentReminder,
     String? productType,
-    dynamic productDetails,
-    dynamic additionalCharges,
+    List<SalesCreditNoteItem>? productDetails,
+    List<SalesCreditNoteAdditionalCharge>? additionalCharges,
     List<SalesCreditNoteTerms>? termsAndConditionIds,
     String? notes,
     SalesCreditNoteShipping? shippingDetails,
@@ -176,8 +176,19 @@ class SalesCreditNoteModel extends Equatable {
         sez: map["sez"]?.toString(),
         paymentReminder: map["paymentReminder"] as bool? ?? false,
         productType: map["productType"]?.toString(),
-        productDetails: map["productDetails"],
-        additionalCharges: map["additionalCharges"],
+        productDetails: List<SalesCreditNoteItem>.from(
+          (map["productDetails"] as List<dynamic>?)?.map(
+                (x) => SalesCreditNoteItem.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        additionalCharges: List<SalesCreditNoteAdditionalCharge>.from(
+          (map["additionalCharges"] as List<dynamic>?)?.map(
+                (x) => SalesCreditNoteAdditionalCharge.fromMap(
+                    x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
         termsAndConditionIds: List<SalesCreditNoteTerms>.from(
           (map["termsAndConditionIds"] as List<dynamic>?)?.map(
                 (x) => SalesCreditNoteTerms.fromMap(x as Map<String, dynamic>),
@@ -227,8 +238,8 @@ class SalesCreditNoteModel extends Equatable {
         "sez": sez,
         "paymentReminder": paymentReminder,
         "productType": productType,
-        "productDetails": productDetails,
-        "additionalCharges": additionalCharges,
+        "productDetails": productDetails.map((x) => x.toMap()).toList(),
+        "additionalCharges": additionalCharges.map((x) => x.toMap()).toList(),
         "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
         "notes": notes,
         "shippingDetails": shippingDetails?.toMap(),
@@ -515,24 +526,48 @@ class SalesCreditNotePhone extends Equatable {
 
 class SalesCreditNoteShipping extends Equatable {
   final String shippingType;
+  final DateTime? shippingDate;
+  final String? referenceNo;
+  final DateTime? transportDate;
+  final String? modeOfTransport;
+  final String? vehicleNo;
   final double weight;
-  final String? id;
+  final String id;
+  final String? transporterId;
 
   const SalesCreditNoteShipping({
     required this.shippingType,
+    this.shippingDate,
+    this.referenceNo,
+    this.transportDate,
+    this.modeOfTransport,
+    this.vehicleNo,
     required this.weight,
-    this.id,
+    required this.id,
+    this.transporterId,
   });
 
   SalesCreditNoteShipping copyWith({
     String? shippingType,
+    DateTime? shippingDate,
+    String? referenceNo,
+    DateTime? transportDate,
+    String? modeOfTransport,
+    String? vehicleNo,
     double? weight,
     String? id,
+    String? transporterId,
   }) {
     return SalesCreditNoteShipping(
       shippingType: shippingType ?? this.shippingType,
+      shippingDate: shippingDate ?? this.shippingDate,
+      referenceNo: referenceNo ?? this.referenceNo,
+      transportDate: transportDate ?? this.transportDate,
+      modeOfTransport: modeOfTransport ?? this.modeOfTransport,
+      vehicleNo: vehicleNo ?? this.vehicleNo,
       weight: weight ?? this.weight,
       id: id ?? this.id,
+      transporterId: transporterId ?? this.transporterId,
     );
   }
 
@@ -544,18 +579,44 @@ class SalesCreditNoteShipping extends Equatable {
   factory SalesCreditNoteShipping.fromMap(Map<String, dynamic> map) =>
       SalesCreditNoteShipping(
         shippingType: map["shippingType"]?.toString() ?? "delivery",
+        shippingDate: map["shippingDate"] != null
+            ? DateTime.parse(map["shippingDate"].toString())
+            : null,
+        referenceNo: map["referenceNo"]?.toString(),
+        transportDate: map["transportDate"] != null
+            ? DateTime.parse(map["transportDate"].toString())
+            : null,
+        modeOfTransport: map["modeOfTransport"]?.toString(),
+        vehicleNo: map["vehicleNo"]?.toString(),
         weight: (map["weight"] as num? ?? 0).toDouble(),
-        id: map["_id"]?.toString(),
+        id: map["_id"]?.toString() ?? "",
+        transporterId: map["transporterId"]?.toString(),
       );
 
   Map<String, dynamic> toMap() => {
         "shippingType": shippingType,
+        "shippingDate": shippingDate?.toIso8601String(),
+        "referenceNo": referenceNo,
+        "transportDate": transportDate?.toIso8601String(),
+        "modeOfTransport": modeOfTransport,
+        "vehicleNo": vehicleNo,
         "weight": weight,
         "_id": id,
+        "transporterId": transporterId,
       };
 
   @override
-  List<Object?> get props => [shippingType, weight, id];
+  List<Object?> get props => [
+        shippingType,
+        shippingDate,
+        referenceNo,
+        transportDate,
+        modeOfTransport,
+        vehicleNo,
+        weight,
+        id,
+        transporterId,
+      ];
 
   @override
   bool get stringify => true;
@@ -677,6 +738,233 @@ class SalesCreditNoteSummary extends Equatable {
         netAmount,
         id,
       ];
+
+  @override
+  bool get stringify => true;
+}
+
+class SalesCreditNoteItem extends Equatable {
+  final IdNameModel? productId;
+  final double qty;
+  final double freeQty;
+  final IdNameModel? uomId;
+  final double price;
+  final double discount1;
+  final SalesCreditNoteTax? taxId;
+  final double taxableAmount;
+  final double totalAmount;
+  final String id;
+  final String? unit;
+  final double? tax;
+
+  const SalesCreditNoteItem({
+    this.productId,
+    required this.qty,
+    required this.freeQty,
+    this.uomId,
+    required this.price,
+    required this.discount1,
+    this.taxId,
+    required this.taxableAmount,
+    required this.totalAmount,
+    required this.id,
+    this.unit,
+    this.tax,
+  });
+
+  SalesCreditNoteItem copyWith({
+    IdNameModel? productId,
+    double? qty,
+    double? freeQty,
+    IdNameModel? uomId,
+    double? price,
+    double? discount1,
+    SalesCreditNoteTax? taxId,
+    double? taxableAmount,
+    double? totalAmount,
+    String? id,
+    String? unit,
+    double? tax,
+  }) {
+    return SalesCreditNoteItem(
+      productId: productId ?? this.productId,
+      qty: qty ?? this.qty,
+      freeQty: freeQty ?? this.freeQty,
+      uomId: uomId ?? this.uomId,
+      price: price ?? this.price,
+      discount1: discount1 ?? this.discount1,
+      taxId: taxId ?? this.taxId,
+      taxableAmount: taxableAmount ?? this.taxableAmount,
+      totalAmount: totalAmount ?? this.totalAmount,
+      id: id ?? this.id,
+      unit: unit ?? this.unit,
+      tax: tax ?? this.tax,
+    );
+  }
+
+  factory SalesCreditNoteItem.fromJson(String json) =>
+      SalesCreditNoteItem.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory SalesCreditNoteItem.fromMap(Map<String, dynamic> map) => SalesCreditNoteItem(
+        productId: map["productId"] == null
+            ? null
+            : IdNameModel.fromMap(map["productId"]),
+        qty: (map["qty"] as num? ?? 0).toDouble(),
+        freeQty: (map["freeQty"] as num? ?? 0).toDouble(),
+        uomId: map["uomId"] == null ? null : IdNameModel.fromMap(map["uomId"]),
+        price: (map["price"] as num? ?? 0).toDouble(),
+        discount1: (map["discount1"] as num? ?? 0).toDouble(),
+        taxId: map["taxId"] == null
+            ? null
+            : SalesCreditNoteTax.fromMap(map["taxId"] as Map<String, dynamic>),
+        taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
+        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        id: map["_id"]?.toString() ?? "",
+        unit: map["unit"]?.toString(),
+        tax: (map["tax"] as num? ?? 0).toDouble(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "productId": productId?.toMap(),
+        "qty": qty,
+        "freeQty": freeQty,
+        "uomId": uomId?.toMap(),
+        "price": price,
+        "discount1": discount1,
+        "taxId": taxId?.toMap(),
+        "taxableAmount": taxableAmount,
+        "totalAmount": totalAmount,
+        "_id": id,
+        "unit": unit,
+        "tax": tax,
+      };
+
+  @override
+  List<Object?> get props => [
+        productId,
+        qty,
+        freeQty,
+        uomId,
+        price,
+        discount1,
+        taxId,
+        taxableAmount,
+        totalAmount,
+        id,
+        unit,
+        tax,
+      ];
+
+  @override
+  bool get stringify => true;
+}
+
+class SalesCreditNoteAdditionalCharge extends Equatable {
+  final String? chargeId;
+  final String? taxId;
+  final double amount;
+  final double totalAmount;
+  final String id;
+
+  const SalesCreditNoteAdditionalCharge({
+    this.chargeId,
+    this.taxId,
+    required this.amount,
+    required this.totalAmount,
+    required this.id,
+  });
+
+  SalesCreditNoteAdditionalCharge copyWith({
+    String? chargeId,
+    String? taxId,
+    double? amount,
+    double? totalAmount,
+    String? id,
+  }) {
+    return SalesCreditNoteAdditionalCharge(
+      chargeId: chargeId ?? this.chargeId,
+      taxId: taxId ?? this.taxId,
+      amount: amount ?? this.amount,
+      totalAmount: totalAmount ?? this.totalAmount,
+      id: id ?? this.id,
+    );
+  }
+
+  factory SalesCreditNoteAdditionalCharge.fromJson(String json) =>
+      SalesCreditNoteAdditionalCharge.fromMap(
+          jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory SalesCreditNoteAdditionalCharge.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteAdditionalCharge(
+        chargeId: map["chargeId"] is Map
+            ? map["chargeId"]["_id"]?.toString()
+            : map["chargeId"]?.toString(),
+        taxId: map["taxId"] is Map
+            ? map["taxId"]["_id"]?.toString()
+            : map["taxId"]?.toString(),
+        amount: (map["amount"] as num? ?? 0).toDouble(),
+        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        id: map["_id"]?.toString() ?? "",
+      );
+
+  Map<String, dynamic> toMap() => {
+        "chargeId": chargeId,
+        "taxId": taxId,
+        "amount": amount,
+        "totalAmount": totalAmount,
+        "_id": id,
+      };
+
+  @override
+  List<Object?> get props => [chargeId, taxId, amount, totalAmount, id];
+
+  @override
+  bool get stringify => true;
+}
+
+class SalesCreditNoteTax extends Equatable {
+  final String id;
+  final String name;
+  final double percentage;
+
+  const SalesCreditNoteTax({
+    required this.id,
+    required this.name,
+    required this.percentage,
+  });
+
+  SalesCreditNoteTax copyWith({String? id, String? name, double? percentage}) {
+    return SalesCreditNoteTax(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+    );
+  }
+
+  factory SalesCreditNoteTax.fromJson(String json) =>
+      SalesCreditNoteTax.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory SalesCreditNoteTax.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteTax(
+        id: map["_id"]?.toString() ?? "",
+        name: map["name"]?.toString() ?? "",
+        percentage: (map["percentage"] as num? ?? 0).toDouble(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "name": name,
+        "percentage": percentage,
+      };
+
+  @override
+  List<Object?> get props => [id, name, percentage];
 
   @override
   bool get stringify => true;

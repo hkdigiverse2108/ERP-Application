@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:ai_setu/shared/widgets/dialogs/logout_confirmation_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -423,11 +424,7 @@ class _SocialIcon extends StatelessWidget {
   Future<void> _launchUrl() async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      Get.snackbar(
-        "Error",
-        "Could not launch $url",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Could not launch $url");
     }
   }
 

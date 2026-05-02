@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/controllers/delivery_challan_controller.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/widgets/delivery_challan_table.dart';
@@ -48,6 +49,10 @@ class DeliveryChallanPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          onAdd: () async {
+            final result = await Get.toNamed(Routes.deliveryChallanAddEdit);
+            if (result == true) controller.refreshData();
+          },
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
           filters: [

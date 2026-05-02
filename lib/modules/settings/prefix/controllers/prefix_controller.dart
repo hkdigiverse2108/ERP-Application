@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:ai_setu/data/model/prefix/prefix_model.dart';
 import 'package:ai_setu/data/repositories/settings/prefix_repository.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class PrefixController extends GetxController {
   static PrefixController get instance => Get.find();
@@ -63,7 +64,7 @@ class PrefixController extends GetxController {
       _cache[cacheKey] = result.items;
       _cacheTimestamp[cacheKey] = DateTime.now();
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      AppSnackbar.error(e.toString());
     } finally {
       isLoading.value = false;
     }

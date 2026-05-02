@@ -140,6 +140,15 @@ class EstimateTable extends StatelessWidget {
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
                 pageSize: controller.limit.value,
+                onEditItem: (item) async {
+                  final result = await Get.toNamed(
+                    Routes.estimateAddEdit,
+                    arguments: item,
+                  );
+                  if (result == true) {
+                    controller.getEstimatesData();
+                  }
+                },
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

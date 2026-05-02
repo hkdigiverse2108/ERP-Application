@@ -7,6 +7,7 @@ import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/uom_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class AddItemController extends GetxController {
   static AddItemController get instance => Get.find();
@@ -95,7 +96,7 @@ class AddItemController extends GetxController {
     Future.delayed(const Duration(seconds: 1), () {
       isSaving.value = false;
       Get.back();
-      Get.snackbar("Success", "Item added successfully");
+      AppSnackbar.success("Item added successfully");
     });
   }
 
@@ -111,4 +112,3 @@ class AddItemController extends GetxController {
     super.onClose();
   }
 }
-

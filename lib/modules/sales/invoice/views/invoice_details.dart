@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/invoice_model.dart';
@@ -31,6 +32,11 @@ class InvoiceDetails extends StatelessWidget {
       status: invoice.paymentStatus ?? 'Pending',
       statusColor: _getStatusColor(context, invoice.paymentStatus),
       actions: [
+        DetailAction(
+          label: 'Edit',
+          icon: PhosphorIconsFill.pencilSimple,
+          onTap: () => Get.toNamed(Routes.invoiceAddEdit, arguments: invoice),
+        ),
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,

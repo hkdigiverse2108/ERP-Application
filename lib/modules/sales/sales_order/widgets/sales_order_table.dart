@@ -133,6 +133,15 @@ class SalesOrderTable extends StatelessWidget {
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
                 onPageChanged: (page) => controller.goToPage(page),
+                onEditItem: (item) async {
+                  final result = await Get.toNamed(
+                    Routes.salesOrderAddEdit,
+                    arguments: item,
+                  );
+                  if (result == true) {
+                    controller.getSalesOrdersData();
+                  }
+                },
                 pageSize: controller.limit.value,
               ),
             ],

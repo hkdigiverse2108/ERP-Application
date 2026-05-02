@@ -113,6 +113,11 @@ class DeliveryChallanController extends GetxController {
     }
   }
 
+  void refreshData() {
+    _clearCache();
+    getDeliveryChallansData();
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;

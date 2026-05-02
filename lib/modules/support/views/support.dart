@@ -12,6 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/settings_model.dart';
 
 class Support extends StatelessWidget {
@@ -20,33 +21,21 @@ class Support extends StatelessWidget {
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      Get.snackbar(
-        "Error",
-        "Could not launch $url",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Could not launch $url");
     }
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
     if (!await launchUrl(launchUri)) {
-      Get.snackbar(
-        "Error",
-        "Could not make call to $phoneNumber",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Could not make call to $phoneNumber");
     }
   }
 
   Future<void> _sendEmail(String email) async {
     final Uri launchUri = Uri(scheme: 'mailto', path: email);
     if (!await launchUrl(launchUri)) {
-      Get.snackbar(
-        "Error",
-        "Could not send email to $email",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Could not send email to $email");
     }
   }
 
@@ -57,11 +46,7 @@ class Support extends StatelessWidget {
     final Uri uri = Uri.parse(googleUrl);
 
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      Get.snackbar(
-        "Error",
-        "Could not open maps for $address",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Could not open maps for $address");
     }
   }
 

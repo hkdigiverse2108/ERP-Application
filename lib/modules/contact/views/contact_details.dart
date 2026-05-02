@@ -1,4 +1,4 @@
-// import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
@@ -22,11 +22,11 @@ class ContactDetails extends StatelessWidget {
       status: contact.isActive ? 'Active' : 'Inactive',
       statusColor: contact.isActive ? AppColors.success : AppColors.error,
       actions: [
-        // DetailAction(
-        //   label: 'Edit',
-        //   icon: PhosphorIconsFill.pencilSimple,
-        //   onTap: () => Get.toNamed(Routes.contact, arguments: contact),
-        // ),
+        DetailAction(
+          label: 'Edit',
+          icon: PhosphorIconsFill.pencilSimple,
+          onTap: () => Get.toNamed(Routes.addUpdateContact, arguments: contact),
+        ),
         DetailAction(
           label: 'Call',
           icon: PhosphorIconsFill.phone,

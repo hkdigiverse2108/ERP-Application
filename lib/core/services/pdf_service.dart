@@ -7,6 +7,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class PdfService {
   static final PdfService instance = PdfService._();
@@ -51,7 +52,7 @@ class PdfService {
           '${directory.path}/${data.filename ?? "${data.title}.pdf"}',
         );
         await file.writeAsBytes(bytes);
-        Get.snackbar("Success", "PDF saved to Downloads");
+        AppSnackbar.success("PDF saved to Downloads");
       }
     }
   }

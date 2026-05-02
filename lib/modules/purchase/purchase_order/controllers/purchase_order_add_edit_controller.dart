@@ -14,6 +14,7 @@ import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:get/get.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 
 class PurchaseOrderAddEditController extends GetxController {
   static PurchaseOrderAddEditController get instance => Get.find();
@@ -483,10 +484,10 @@ class PurchaseOrderAddEditController extends GetxController {
 
       if (result != null) {
         Get.back(result: true);
-        Get.snackbar('Success', 'Purchase Order saved successfully');
+        AppSnackbar.success('Purchase Order saved successfully');
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackbar.error(e.toString());
     } finally {
       isSaving.value = false;
     }

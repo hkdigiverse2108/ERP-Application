@@ -18,7 +18,7 @@ class InvoiceModel extends Equatable {
   final InvoiceAddress? shippingAddress;
   final bool reverseCharge;
   final List<IdNameModel> salesOrderIds;
-  final List<dynamic> deliveryChallanIds;
+  final List<IdNameModel> deliveryChallanIds;
   final String? taxType;
   final InvoiceShipping? shippingDetails;
   final List<InvoiceItem> items;
@@ -35,6 +35,7 @@ class InvoiceModel extends Equatable {
   final String? paymentTerms;
   final String? createdFrom;
   final String? salesManId;
+  final String? notes;
 
   const InvoiceModel({
     required this.id,
@@ -69,6 +70,7 @@ class InvoiceModel extends Equatable {
     this.paymentTerms,
     this.createdFrom,
     this.salesManId,
+    this.notes,
   });
 
   InvoiceModel copyWith({
@@ -87,7 +89,7 @@ class InvoiceModel extends Equatable {
     InvoiceAddress? shippingAddress,
     bool? reverseCharge,
     List<IdNameModel>? salesOrderIds,
-    List<dynamic>? deliveryChallanIds,
+    List<IdNameModel>? deliveryChallanIds,
     String? taxType,
     InvoiceShipping? shippingDetails,
     List<InvoiceItem>? items,
@@ -104,6 +106,7 @@ class InvoiceModel extends Equatable {
     String? paymentTerms,
     String? createdFrom,
     String? salesManId,
+    String? notes,
   }) {
     return InvoiceModel(
       id: id ?? this.id,
@@ -138,6 +141,7 @@ class InvoiceModel extends Equatable {
       paymentTerms: paymentTerms ?? this.paymentTerms,
       createdFrom: createdFrom ?? this.createdFrom,
       salesManId: salesManId ?? this.salesManId,
+      notes: notes ?? this.notes,
     );
   }
 
@@ -147,153 +151,165 @@ class InvoiceModel extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceModel.fromMap(Map<String, dynamic> map) => InvoiceModel(
-        id: map["_id"]?.toString() ?? "",
-        isDeleted: map["isDeleted"] as bool? ?? false,
-        isActive: map["isActive"] as bool? ?? true,
-        createdBy: map["createdBy"] == null
-            ? null
-            : InvoiceCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
-        updatedBy: map["updatedBy"]?.toString(),
-        companyId:
-            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
-        invoiceNo: map["invoiceNo"]?.toString(),
-        date: map["date"] != null ? DateTime.parse(map["date"].toString()) : null,
-        dueDate:
-            map["dueDate"] != null ? DateTime.parse(map["dueDate"].toString()) : null,
-        customerId: map["customerId"] == null
-            ? null
-            : InvoiceCustomer.fromMap(map["customerId"] as Map<String, dynamic>),
-        placeOfSupply: map["placeOfSupply"]?.toString(),
-        billingAddress: map["billingAddress"] == null
-            ? null
-            : InvoiceAddress.fromMap(map["billingAddress"] as Map<String, dynamic>),
-        shippingAddress: map["shippingAddress"] == null
-            ? null
-            : InvoiceAddress.fromMap(
-                map["shippingAddress"] as Map<String, dynamic>),
-        reverseCharge: map["reverseCharge"] as bool? ?? false,
-        salesOrderIds: List<IdNameModel>.from(
-          (map["salesOrderIds"] as List<dynamic>?)?.map(
-                (x) => IdNameModel.fromMap(x),
-              ) ??
-              [],
-        ),
-        deliveryChallanIds: List<dynamic>.from(
-          (map["deliveryChallanIds"] as List<dynamic>?)?.map((x) => x) ?? [],
-        ),
-        taxType: map["taxType"]?.toString(),
-        shippingDetails: map["shippingDetails"] == null
-            ? null
-            : InvoiceShipping.fromMap(
-                map["shippingDetails"] as Map<String, dynamic>),
-        items: List<InvoiceItem>.from(
-          (map["items"] as List<dynamic>?)?.map(
-                (x) => InvoiceItem.fromMap(x as Map<String, dynamic>),
-              ) ??
-              [],
-        ),
-        transactionSummary: map["transactionSummary"] == null
-            ? null
-            : InvoiceSummary.fromMap(
-                map["transactionSummary"] as Map<String, dynamic>),
-        additionalCharges: List<InvoiceAdditionalCharge>.from(
-          (map["additionalCharges"] as List<dynamic>?)?.map(
-                (x) => InvoiceAdditionalCharge.fromMap(x as Map<String, dynamic>),
-              ) ??
-              [],
-        ),
-        paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
-        balanceAmount: (map["balanceAmount"] as num? ?? 0).toDouble(),
-        paymentStatus: map["paymentStatus"]?.toString(),
-        termsAndConditionIds: List<dynamic>.from(
-          (map["termsAndConditionIds"] as List<dynamic>?)?.map((x) => x) ?? [],
-        ),
-        status: map["status"]?.toString(),
-        createdAt: map["createdAt"] != null
-            ? DateTime.parse(map["createdAt"].toString())
-            : null,
-        updatedAt: map["updatedAt"] != null
-            ? DateTime.parse(map["updatedAt"].toString())
-            : null,
-        branchId:
-            map["branchId"] == null ? null : IdNameModel.fromMap(map["branchId"]),
-        paymentTerms: map["paymentTerms"]?.toString(),
-        createdFrom: map["createdFrom"]?.toString(),
-        salesManId: map["salesManId"] is Map
-            ? map["salesManId"]["_id"]?.toString()
-            : map["salesManId"]?.toString(),
-      );
+    id: map["_id"]?.toString() ?? "",
+    isDeleted: map["isDeleted"] as bool? ?? false,
+    isActive: map["isActive"] as bool? ?? true,
+    createdBy: map["createdBy"] == null
+        ? null
+        : InvoiceCreatedBy.fromMap(map["createdBy"] as Map<String, dynamic>),
+    updatedBy: map["updatedBy"]?.toString(),
+    companyId: map["companyId"] == null
+        ? null
+        : IdNameModel.fromMap(map["companyId"]),
+    invoiceNo: map["invoiceNo"]?.toString(),
+    date: map["date"] != null ? DateTime.parse(map["date"].toString()) : null,
+    dueDate: map["dueDate"] != null
+        ? DateTime.parse(map["dueDate"].toString())
+        : null,
+    customerId: map["customerId"] == null
+        ? null
+        : InvoiceCustomer.fromMap(map["customerId"] as Map<String, dynamic>),
+    placeOfSupply: map["placeOfSupply"]?.toString(),
+    billingAddress: map["billingAddress"] == null
+        ? null
+        : InvoiceAddress.fromMap(map["billingAddress"] as Map<String, dynamic>),
+    shippingAddress: map["shippingAddress"] == null
+        ? null
+        : InvoiceAddress.fromMap(
+            map["shippingAddress"] as Map<String, dynamic>,
+          ),
+    reverseCharge: map["reverseCharge"] as bool? ?? false,
+    salesOrderIds: List<IdNameModel>.from(
+      (map["salesOrderIds"] as List<dynamic>?)?.map(
+            (x) => IdNameModel.fromMap(x),
+          ) ??
+          [],
+    ),
+    deliveryChallanIds: List<IdNameModel>.from(
+      (map["deliveryChallanIds"] as List<dynamic>?)?.map(
+            (x) => IdNameModel.fromMap(x),
+          ) ??
+          [],
+    ),
+    taxType: map["taxType"]?.toString(),
+    shippingDetails: map["shippingDetails"] == null
+        ? null
+        : InvoiceShipping.fromMap(
+            map["shippingDetails"] as Map<String, dynamic>,
+          ),
+    items: List<InvoiceItem>.from(
+      (map["items"] as List<dynamic>?)?.map(
+            (x) => InvoiceItem.fromMap(x as Map<String, dynamic>),
+          ) ??
+          [],
+    ),
+    transactionSummary: map["transactionSummary"] == null
+        ? null
+        : InvoiceSummary.fromMap(
+            map["transactionSummary"] as Map<String, dynamic>,
+          ),
+    additionalCharges: List<InvoiceAdditionalCharge>.from(
+      (map["additionalCharges"] as List<dynamic>?)?.map(
+            (x) => InvoiceAdditionalCharge.fromMap(x as Map<String, dynamic>),
+          ) ??
+          [],
+    ),
+    paidAmount: (map["paidAmount"] as num? ?? 0).toDouble(),
+    balanceAmount: (map["balanceAmount"] as num? ?? 0).toDouble(),
+    paymentStatus: map["paymentStatus"]?.toString(),
+    termsAndConditionIds: List<dynamic>.from(
+      (map["termsAndConditionIds"] as List<dynamic>?)?.map((x) => x) ?? [],
+    ),
+    status: map["status"]?.toString(),
+    createdAt: map["createdAt"] != null
+        ? DateTime.parse(map["createdAt"].toString())
+        : null,
+    updatedAt: map["updatedAt"] != null
+        ? DateTime.parse(map["updatedAt"].toString())
+        : null,
+    branchId: map["branchId"] == null
+        ? null
+        : IdNameModel.fromMap(map["branchId"]),
+    paymentTerms: map["paymentTerms"]?.toString(),
+    createdFrom: map["createdFrom"]?.toString(),
+    salesManId: map["salesManId"] is Map
+        ? map["salesManId"]["_id"]?.toString()
+        : map["salesManId"]?.toString(),
+    notes: map["notes"]?.toString(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "invoiceNo": invoiceNo,
-        "date": date?.toIso8601String(),
-        "dueDate": dueDate?.toIso8601String(),
-        "customerId": customerId?.toMap(),
-        "placeOfSupply": placeOfSupply,
-        "billingAddress": billingAddress?.toMap(),
-        "shippingAddress": shippingAddress?.toMap(),
-        "reverseCharge": reverseCharge,
-        "salesOrderIds": salesOrderIds.map((x) => x.toMap()).toList(),
-        "deliveryChallanIds": deliveryChallanIds,
-        "taxType": taxType,
-        "shippingDetails": shippingDetails?.toMap(),
-        "items": items.map((x) => x.toMap()).toList(),
-        "transactionSummary": transactionSummary?.toMap(),
-        "additionalCharges": additionalCharges.map((x) => x.toMap()).toList(),
-        "paidAmount": paidAmount,
-        "balanceAmount": balanceAmount,
-        "paymentStatus": paymentStatus,
-        "termsAndConditionIds": termsAndConditionIds,
-        "status": status,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "branchId": branchId?.toMap(),
-        "paymentTerms": paymentTerms,
-        "createdFrom": createdFrom,
-        "salesManId": salesManId,
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "invoiceNo": invoiceNo,
+    "date": date?.toIso8601String(),
+    "dueDate": dueDate?.toIso8601String(),
+    "customerId": customerId?.toMap(),
+    "placeOfSupply": placeOfSupply,
+    "billingAddress": billingAddress?.toMap(),
+    "shippingAddress": shippingAddress?.toMap(),
+    "reverseCharge": reverseCharge,
+    "salesOrderIds": salesOrderIds.map((x) => x.toMap()).toList(),
+    "deliveryChallanIds": deliveryChallanIds.map((x) => x.toMap()).toList(),
+    "taxType": taxType,
+    "shippingDetails": shippingDetails?.toMap(),
+    "items": items.map((x) => x.toMap()).toList(),
+    "transactionSummary": transactionSummary?.toMap(),
+    "additionalCharges": additionalCharges.map((x) => x.toMap()).toList(),
+    "paidAmount": paidAmount,
+    "balanceAmount": balanceAmount,
+    "paymentStatus": paymentStatus,
+    "termsAndConditionIds": termsAndConditionIds,
+    "status": status,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+    "branchId": branchId?.toMap(),
+    "paymentTerms": paymentTerms,
+    "createdFrom": createdFrom,
+    "salesManId": salesManId,
+    "notes": notes,
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        invoiceNo,
-        date,
-        dueDate,
-        customerId,
-        placeOfSupply,
-        billingAddress,
-        shippingAddress,
-        reverseCharge,
-        salesOrderIds,
-        deliveryChallanIds,
-        taxType,
-        shippingDetails,
-        items,
-        transactionSummary,
-        additionalCharges,
-        paidAmount,
-        balanceAmount,
-        paymentStatus,
-        termsAndConditionIds,
-        status,
-        createdAt,
-        updatedAt,
-        branchId,
-        paymentTerms,
-        createdFrom,
-        salesManId,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    invoiceNo,
+    date,
+    dueDate,
+    customerId,
+    placeOfSupply,
+    billingAddress,
+    shippingAddress,
+    reverseCharge,
+    salesOrderIds,
+    deliveryChallanIds,
+    taxType,
+    shippingDetails,
+    items,
+    transactionSummary,
+    additionalCharges,
+    paidAmount,
+    balanceAmount,
+    paymentStatus,
+    termsAndConditionIds,
+    status,
+    createdAt,
+    updatedAt,
+    branchId,
+    paymentTerms,
+    createdFrom,
+    salesManId,
+    notes,
+  ];
 
   @override
   bool get stringify => true;
@@ -349,12 +365,12 @@ class InvoiceAdditionalCharge extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "chargeId": chargeId,
-        "taxId": taxId,
-        "amount": amount,
-        "totalAmount": totalAmount,
-        "_id": id,
-      };
+    "chargeId": chargeId,
+    "taxId": taxId,
+    "amount": amount,
+    "totalAmount": totalAmount,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [chargeId, taxId, amount, totalAmount, id];
@@ -388,16 +404,16 @@ class InvoiceTax extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceTax.fromMap(Map<String, dynamic> map) => InvoiceTax(
-        id: map["_id"]?.toString() ?? "",
-        name: map["name"]?.toString() ?? "",
-        percentage: (map["percentage"] as num? ?? 0).toDouble(),
-      );
+    id: map["_id"]?.toString() ?? "",
+    name: map["name"]?.toString() ?? "",
+    percentage: (map["percentage"] as num? ?? 0).toDouble(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "name": name,
-        "percentage": percentage,
-      };
+    "_id": id,
+    "name": name,
+    "percentage": percentage,
+  };
 
   @override
   List<Object?> get props => [id, name, percentage];
@@ -451,35 +467,37 @@ class InvoiceAddress extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceAddress.fromMap(Map<String, dynamic> map) => InvoiceAddress(
-        addressLine1: map["addressLine1"]?.toString() ?? "",
-        addressLine2: map["addressLine2"]?.toString(),
-        country: map["country"] == null ? null : IdNameModel.fromMap(map["country"]),
-        state: map["state"] == null ? null : IdNameModel.fromMap(map["state"]),
-        city: map["city"] == null ? null : IdNameModel.fromMap(map["city"]),
-        pinCode: (map["pinCode"] as num? ?? 0).toInt(),
-        id: map["_id"]?.toString() ?? "",
-      );
+    addressLine1: map["addressLine1"]?.toString() ?? "",
+    addressLine2: map["addressLine2"]?.toString(),
+    country: map["country"] == null
+        ? null
+        : IdNameModel.fromMap(map["country"]),
+    state: map["state"] == null ? null : IdNameModel.fromMap(map["state"]),
+    city: map["city"] == null ? null : IdNameModel.fromMap(map["city"]),
+    pinCode: (map["pinCode"] as num? ?? 0).toInt(),
+    id: map["_id"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "addressLine1": addressLine1,
-        "addressLine2": addressLine2,
-        "country": country?.toMap(),
-        "state": state?.toMap(),
-        "city": city?.toMap(),
-        "pinCode": pinCode,
-        "_id": id,
-      };
+    "addressLine1": addressLine1,
+    "addressLine2": addressLine2,
+    "country": country?.toMap(),
+    "state": state?.toMap(),
+    "city": city?.toMap(),
+    "pinCode": pinCode,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [
-        addressLine1,
-        addressLine2,
-        country,
-        state,
-        city,
-        pinCode,
-        id,
-      ];
+    addressLine1,
+    addressLine2,
+    country,
+    state,
+    city,
+    pinCode,
+    id,
+  ];
 
   @override
   bool get stringify => true;
@@ -496,11 +514,7 @@ class InvoiceCreatedBy extends Equatable {
     required this.userType,
   });
 
-  InvoiceCreatedBy copyWith({
-    String? id,
-    String? fullName,
-    String? userType,
-  }) {
+  InvoiceCreatedBy copyWith({String? id, String? fullName, String? userType}) {
     return InvoiceCreatedBy(
       id: id ?? this.id,
       fullName: fullName ?? this.fullName,
@@ -513,17 +527,18 @@ class InvoiceCreatedBy extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory InvoiceCreatedBy.fromMap(Map<String, dynamic> map) => InvoiceCreatedBy(
+  factory InvoiceCreatedBy.fromMap(Map<String, dynamic> map) =>
+      InvoiceCreatedBy(
         id: map["_id"]?.toString() ?? "",
         fullName: map["fullName"]?.toString() ?? "",
         userType: map["userType"]?.toString() ?? "",
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -573,29 +588,29 @@ class InvoiceCustomer extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceCustomer.fromMap(Map<String, dynamic> map) => InvoiceCustomer(
-        id: map["_id"]?.toString() ?? "",
-        firstName: map["firstName"]?.toString() ?? "",
-        lastName: map["lastName"]?.toString() ?? "",
-        email: map["email"]?.toString(),
-        phoneNo: map["phoneNo"] == null
-            ? null
-            : InvoicePhone.fromMap(map["phoneNo"] as Map<String, dynamic>),
-        address: List<InvoiceAddress>.from(
-          (map["address"] as List<dynamic>?)?.map(
-                (x) => InvoiceAddress.fromMap(x as Map<String, dynamic>),
-              ) ??
-              [],
-        ),
-      );
+    id: map["_id"]?.toString() ?? "",
+    firstName: map["firstName"]?.toString() ?? "",
+    lastName: map["lastName"]?.toString() ?? "",
+    email: map["email"]?.toString(),
+    phoneNo: map["phoneNo"] == null
+        ? null
+        : InvoicePhone.fromMap(map["phoneNo"] as Map<String, dynamic>),
+    address: List<InvoiceAddress>.from(
+      (map["address"] as List<dynamic>?)?.map(
+            (x) => InvoiceAddress.fromMap(x as Map<String, dynamic>),
+          ) ??
+          [],
+    ),
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "phoneNo": phoneNo?.toMap(),
-        "address": address.map((x) => x.toMap()).toList(),
-      };
+    "_id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "email": email,
+    "phoneNo": phoneNo?.toMap(),
+    "address": address.map((x) => x.toMap()).toList(),
+  };
 
   @override
   List<Object?> get props => [id, firstName, lastName, email, phoneNo, address];
@@ -623,14 +638,14 @@ class InvoicePhone extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoicePhone.fromMap(Map<String, dynamic> map) => InvoicePhone(
-        countryCode: map["countryCode"]?.toString() ?? "91",
-        phoneNo: (map["phoneNo"] as num? ?? 0).toInt(),
-      );
+    countryCode: map["countryCode"]?.toString() ?? "91",
+    phoneNo: (map["phoneNo"] as num? ?? 0).toInt(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "countryCode": countryCode,
-        "phoneNo": phoneNo,
-      };
+    "countryCode": countryCode,
+    "phoneNo": phoneNo,
+  };
 
   @override
   List<Object?> get props => [countryCode, phoneNo];
@@ -708,56 +723,57 @@ class InvoiceItem extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceItem.fromMap(Map<String, dynamic> map) => InvoiceItem(
-        productId:
-            map["productId"] == null ? null : IdNameModel.fromMap(map["productId"]),
-        qty: (map["qty"] as num? ?? 0).toDouble(),
-        freeQty: (map["freeQty"] as num? ?? 0).toDouble(),
-        uomId: map["uomId"] == null ? null : IdNameModel.fromMap(map["uomId"]),
-        price: (map["price"] as num? ?? 0).toDouble(),
-        discount1: (map["discount1"] as num? ?? 0).toDouble(),
-        discount2: (map["discount2"] as num? ?? 0).toDouble(),
-        taxId: map["taxId"] == null
-            ? null
-            : InvoiceTax.fromMap(map["taxId"] as Map<String, dynamic>),
-        taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
-        totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
-        id: map["_id"]?.toString() ?? "",
-        unit: map["unit"]?.toString(),
-        tax: (map["tax"] as num? ?? 0).toDouble(),
-      );
+    productId: map["productId"] == null
+        ? null
+        : IdNameModel.fromMap(map["productId"]),
+    qty: (map["qty"] as num? ?? 0).toDouble(),
+    freeQty: (map["freeQty"] as num? ?? 0).toDouble(),
+    uomId: map["uomId"] == null ? null : IdNameModel.fromMap(map["uomId"]),
+    price: (map["price"] as num? ?? 0).toDouble(),
+    discount1: (map["discount1"] as num? ?? 0).toDouble(),
+    discount2: (map["discount2"] as num? ?? 0).toDouble(),
+    taxId: map["taxId"] == null
+        ? null
+        : InvoiceTax.fromMap(map["taxId"] as Map<String, dynamic>),
+    taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
+    totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+    id: map["_id"]?.toString() ?? "",
+    unit: map["unit"]?.toString(),
+    tax: (map["tax"] as num? ?? 0).toDouble(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId?.toMap(),
-        "qty": qty,
-        "freeQty": freeQty,
-        "uomId": uomId?.toMap(),
-        "price": price,
-        "discount1": discount1,
-        "discount2": discount2,
-        "taxId": taxId?.toMap(),
-        "taxableAmount": taxableAmount,
-        "totalAmount": totalAmount,
-        "_id": id,
-        "unit": unit,
-        "tax": tax,
-      };
+    "productId": productId?.toMap(),
+    "qty": qty,
+    "freeQty": freeQty,
+    "uomId": uomId?.toMap(),
+    "price": price,
+    "discount1": discount1,
+    "discount2": discount2,
+    "taxId": taxId?.toMap(),
+    "taxableAmount": taxableAmount,
+    "totalAmount": totalAmount,
+    "_id": id,
+    "unit": unit,
+    "tax": tax,
+  };
 
   @override
   List<Object?> get props => [
-        productId,
-        qty,
-        freeQty,
-        uomId,
-        price,
-        discount1,
-        discount2,
-        taxId,
-        taxableAmount,
-        totalAmount,
-        id,
-        unit,
-        tax,
-      ];
+    productId,
+    qty,
+    freeQty,
+    uomId,
+    price,
+    discount1,
+    discount2,
+    taxId,
+    taxableAmount,
+    totalAmount,
+    id,
+    unit,
+    tax,
+  ];
 
   @override
   bool get stringify => true;
@@ -772,6 +788,7 @@ class InvoiceShipping extends Equatable {
   final String? vehicleNo;
   final double weight;
   final String id;
+  final String? transporterId;
 
   const InvoiceShipping({
     required this.shippingType,
@@ -782,6 +799,7 @@ class InvoiceShipping extends Equatable {
     this.vehicleNo,
     required this.weight,
     required this.id,
+    this.transporterId,
   });
 
   InvoiceShipping copyWith({
@@ -793,6 +811,7 @@ class InvoiceShipping extends Equatable {
     String? vehicleNo,
     double? weight,
     String? id,
+    String? transporterId,
   }) {
     return InvoiceShipping(
       shippingType: shippingType ?? this.shippingType,
@@ -803,6 +822,7 @@ class InvoiceShipping extends Equatable {
       vehicleNo: vehicleNo ?? this.vehicleNo,
       weight: weight ?? this.weight,
       id: id ?? this.id,
+      transporterId: transporterId ?? this.transporterId,
     );
   }
 
@@ -812,42 +832,45 @@ class InvoiceShipping extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceShipping.fromMap(Map<String, dynamic> map) => InvoiceShipping(
-        shippingType: map["shippingType"]?.toString() ?? "delivery",
-        shippingDate: map["shippingDate"] != null
-            ? DateTime.parse(map["shippingDate"].toString())
-            : null,
-        referenceNo: map["referenceNo"]?.toString(),
-        transportDate: map["transportDate"] != null
-            ? DateTime.parse(map["transportDate"].toString())
-            : null,
-        modeOfTransport: map["modeOfTransport"]?.toString(),
-        vehicleNo: map["vehicleNo"]?.toString(),
-        weight: (map["weight"] as num? ?? 0).toDouble(),
-        id: map["_id"]?.toString() ?? "",
-      );
+    shippingType: map["shippingType"]?.toString() ?? "delivery",
+    shippingDate: map["shippingDate"] != null
+        ? DateTime.parse(map["shippingDate"].toString())
+        : null,
+    referenceNo: map["referenceNo"]?.toString(),
+    transportDate: map["transportDate"] != null
+        ? DateTime.parse(map["transportDate"].toString())
+        : null,
+    modeOfTransport: map["modeOfTransport"]?.toString(),
+    vehicleNo: map["vehicleNo"]?.toString(),
+    weight: (map["weight"] as num? ?? 0).toDouble(),
+    id: map["_id"]?.toString() ?? "",
+    transporterId: map["transporterId"]?.toString(),
+  );
 
   Map<String, dynamic> toMap() => {
-        "shippingType": shippingType,
-        "shippingDate": shippingDate?.toIso8601String(),
-        "referenceNo": referenceNo,
-        "transportDate": transportDate?.toIso8601String(),
-        "modeOfTransport": modeOfTransport,
-        "vehicleNo": vehicleNo,
-        "weight": weight,
-        "_id": id,
-      };
+    "shippingType": shippingType,
+    "shippingDate": shippingDate?.toIso8601String(),
+    "referenceNo": referenceNo,
+    "transportDate": transportDate?.toIso8601String(),
+    "modeOfTransport": modeOfTransport,
+    "vehicleNo": vehicleNo,
+    "weight": weight,
+    "_id": id,
+    "transporterId": transporterId,
+  };
 
   @override
   List<Object?> get props => [
-        shippingType,
-        shippingDate,
-        referenceNo,
-        transportDate,
-        modeOfTransport,
-        vehicleNo,
-        weight,
-        id,
-      ];
+    shippingType,
+    shippingDate,
+    referenceNo,
+    transportDate,
+    modeOfTransport,
+    vehicleNo,
+    weight,
+    id,
+    transporterId,
+  ];
 
   @override
   bool get stringify => true;
@@ -902,38 +925,38 @@ class InvoiceSummary extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   factory InvoiceSummary.fromMap(Map<String, dynamic> map) => InvoiceSummary(
-        flatDiscount: (map["flatDiscount"] as num? ?? 0).toDouble(),
-        grossAmount: (map["grossAmount"] as num? ?? 0).toDouble(),
-        discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
-        taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
-        taxAmount: (map["taxAmount"] as num? ?? 0).toDouble(),
-        roundOff: (map["roundOff"] as num? ?? 0).toDouble(),
-        netAmount: (map["netAmount"] as num? ?? 0).toDouble(),
-        id: map["_id"]?.toString() ?? "",
-      );
+    flatDiscount: (map["flatDiscount"] as num? ?? 0).toDouble(),
+    grossAmount: (map["grossAmount"] as num? ?? 0).toDouble(),
+    discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
+    taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
+    taxAmount: (map["taxAmount"] as num? ?? 0).toDouble(),
+    roundOff: (map["roundOff"] as num? ?? 0).toDouble(),
+    netAmount: (map["netAmount"] as num? ?? 0).toDouble(),
+    id: map["_id"]?.toString() ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "flatDiscount": flatDiscount,
-        "grossAmount": grossAmount,
-        "discountAmount": discountAmount,
-        "taxableAmount": taxableAmount,
-        "taxAmount": taxAmount,
-        "roundOff": roundOff,
-        "netAmount": netAmount,
-        "_id": id,
-      };
+    "flatDiscount": flatDiscount,
+    "grossAmount": grossAmount,
+    "discountAmount": discountAmount,
+    "taxableAmount": taxableAmount,
+    "taxAmount": taxAmount,
+    "roundOff": roundOff,
+    "netAmount": netAmount,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [
-        flatDiscount,
-        grossAmount,
-        discountAmount,
-        taxableAmount,
-        taxAmount,
-        roundOff,
-        netAmount,
-        id,
-      ];
+    flatDiscount,
+    grossAmount,
+    discountAmount,
+    taxableAmount,
+    taxAmount,
+    roundOff,
+    netAmount,
+    id,
+  ];
 
   @override
   bool get stringify => true;

@@ -1,4 +1,6 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:get/get.dart';
 import 'package:ai_setu/modules/contact/widgets/contact_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
 import 'package:ai_setu/shared/widgets/appbar.dart';
@@ -44,6 +46,7 @@ class Contact extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        onAdd: () => Get.toNamed(Routes.addUpdateContact),
         searchController: controller.searchController,
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

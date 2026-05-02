@@ -16,9 +16,9 @@ class EditTextField extends StatelessWidget {
   final int? maxLines;
   final String? hintText;
   final ValueChanged<String>? onChanged;
-
   final String? initialValue;
   final Widget? prefixIcon;
+  final bool isRequired;
 
   const EditTextField({
     super.key,
@@ -35,51 +35,75 @@ class EditTextField extends StatelessWidget {
     this.hintText,
     this.onChanged,
     this.initialValue,
+    this.isRequired = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      initialValue: initialValue,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      readOnly: readOnly,
-      onChanged: onChanged,
-      onTap: onTap,
-      validator: validator,
-      maxLines: maxLines,
-      style: TextHelper.bodyMedium,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        labelStyle: TextHelper.bodySmall,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: Sizes.paddingM,
-          vertical: Sizes.paddingM,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(label, style: TextHelper.bodySmall),
+            if (isRequired)
+              const Text(
+                ' *',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+          ],
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          initialValue: initialValue,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          readOnly: readOnly,
+          onTap: onTap,
+          onChanged: onChanged,
+          validator: validator,
+          maxLines: maxLines,
+          style: TextHelper.bodyMedium.copyWith(
+            color: readOnly ? Colors.grey.shade600 : null,
+          ),
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            filled: true,
+            fillColor: readOnly ? Colors.grey.shade100 : Colors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: Sizes.paddingM,
+              vertical: Sizes.paddingM,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              borderSide: BorderSide(
+                color: readOnly ? Colors.grey.shade200 : Colors.grey.shade300,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              borderSide: BorderSide(
+                color: context.appColors.primary,
+                width: 1.5,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              borderSide: const BorderSide(color: AppColors.error),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+            ),
+          ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: BorderSide(color: context.appColors.primary, width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: AppColors.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
-        ),
-      ),
+      ],
     );
   }
 }

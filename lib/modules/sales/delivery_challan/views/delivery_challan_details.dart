@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/selas/delivery_challan_model.dart';
@@ -31,6 +32,11 @@ class DeliveryChallanDetails extends StatelessWidget {
       status: challan.status ?? 'Pending',
       statusColor: _getStatusColor(context, challan.status),
       actions: [
+        DetailAction(
+          label: 'Edit',
+          icon: PhosphorIconsFill.pencilSimple,
+          onTap: () => Get.toNamed(Routes.deliveryChallanAddEdit, arguments: challan),
+        ),
         DetailAction(
           label: 'Print',
           icon: PhosphorIconsFill.printer,

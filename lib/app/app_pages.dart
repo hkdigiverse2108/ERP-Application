@@ -1,4 +1,5 @@
 import 'package:ai_setu/modules/contact/bindings/contact_binding.dart';
+import 'package:ai_setu/modules/contact/views/contact_add_edit_view.dart';
 import 'package:ai_setu/modules/accounting/credit/bindings/credit_add_edit_binding.dart';
 import 'package:ai_setu/modules/accounting/credit/bindings/credit_binding.dart';
 import 'package:ai_setu/modules/accounting/credit/views/credit_add_edit_view.dart';
@@ -82,18 +83,24 @@ import 'package:ai_setu/modules/pos/sales_register/bindings/sales_register_bindi
 import 'package:ai_setu/modules/pos/sales_register/views/sales_register.dart';
 
 import 'package:ai_setu/modules/sales/delivery_challan/bindings/delivery_challan_binding.dart';
+import 'package:ai_setu/modules/sales/delivery_challan/bindings/delivery_challan_add_edit_binding.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/views/delivery_challan.dart';
+import 'package:ai_setu/modules/sales/delivery_challan/views/delivery_challan_add_edit_view.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/views/delivery_challan_details.dart';
 import 'package:ai_setu/modules/sales/estimate/views/estimate.dart';
 import 'package:ai_setu/modules/sales/invoice/bindings/invoice_binding.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/bindings/sales_credit_note_binding.dart';
+import 'package:ai_setu/modules/sales/sales_credit_note/bindings/sales_credit_note_add_edit_binding.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note.dart';
 import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note_details.dart';
+import 'package:ai_setu/modules/sales/sales_credit_note/views/sales_credit_note_add_edit_view.dart';
 import 'package:ai_setu/shared/quick_action/bindings/quick_search_binding.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_search_view.dart';
 import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_binding.dart';
 import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
+import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_add_edit_binding.dart';
+import 'package:ai_setu/modules/sales/sales_order/views/sales_order_add_edit_view.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
@@ -101,6 +108,10 @@ import 'package:ai_setu/modules/inventory/product/views/product_details.dart';
 import 'package:ai_setu/modules/contact/views/contact_details.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice_details.dart';
 import 'package:ai_setu/modules/sales/estimate/views/estimate_details.dart';
+import 'package:ai_setu/modules/sales/estimate/views/estimate_add_edit_view.dart';
+import 'package:ai_setu/modules/sales/estimate/bindings/estimate_add_edit_binding.dart';
+import 'package:ai_setu/modules/sales/invoice/bindings/invoice_add_edit_binding.dart';
+import 'package:ai_setu/modules/sales/invoice/views/invoice_add_edit_view.dart';
 import 'package:ai_setu/app/middleware/permission_middleware.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
@@ -290,6 +301,11 @@ class AppPages {
       binding: ContactBinding(),
       middlewares: [PermissionMiddleware()],
     ),
+    GetPage(
+      name: Routes.addUpdateContact,
+      page: () => const ContactAddEditView(),
+      binding: ContactBinding(),
+    ),
 
     GetPage(
       name: Routes.user,
@@ -378,10 +394,20 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.estimateAddEdit,
+      page: () => const EstimateAddEditView(),
+      binding: EstimateAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.salesCreditNote,
       page: () => const SalesCreditNotePage(),
       binding: SalesCreditNoteBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.salesCreditNoteAddEdit,
+      page: () => const SalesCreditNoteAddEditView(),
+      binding: SalesCreditNoteAddEditBinding(),
     ),
     GetPage(
       name: Routes.salesOrder,
@@ -390,16 +416,31 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.salesOrderAddEdit,
+      page: () => const SalesOrderAddEditView(),
+      binding: SalesOrderAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.invoice,
       page: () => const InvoicePage(),
       binding: InvoiceBinding(),
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.invoiceAddEdit,
+      page: () => const InvoiceAddEditView(),
+      binding: InvoiceAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.deliveryChallan,
       page: () => const DeliveryChallanPage(),
       binding: DeliveryChallanBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.deliveryChallanAddEdit,
+      page: () => const DeliveryChallanAddEditView(),
+      binding: DeliveryChallanAddEditBinding(),
     ),
     GetPage(
       name: Routes.purchaseOrder,
