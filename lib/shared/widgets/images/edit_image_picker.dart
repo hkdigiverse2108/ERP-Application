@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:ai_setu/shared/widgets/images/image_viewer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -75,7 +76,15 @@ class EditImagePicker extends StatelessWidget {
                 tooltip: "Preview Image",
               ),
               IconButton(
-                onPressed: onRemoveImage,
+                onPressed: () {
+                  ConfirmDialog.show(
+                    title: "Remove Image",
+                    message: "Are you sure you want to remove this image?",
+                    confirmText: "Remove",
+                    confirmColor: Colors.red,
+                    onConfirm: onRemoveImage,
+                  );
+                },
                 icon: const Icon(PhosphorIconsLight.trash, color: Colors.red),
                 tooltip: "Remove Image",
               ),

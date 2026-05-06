@@ -52,7 +52,8 @@ class QuickAction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
                 ),
                 targetPadding: const EdgeInsets.all(8),
-                child: GestureDetector(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
                   onTap: () {
                     debugPrint("Quick Action");
                     Scaffold.of(context).openDrawer();

@@ -5,6 +5,8 @@ import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/contact_model/customer_pos_details_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/bank_cash/payment_repository.dart';
+import 'package:ai_setu/modules/bank_cash/payment/controllers/payment_controller.dart';
+import 'package:ai_setu/modules/bank_cash/receipt/controllers/receipt_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -228,13 +230,26 @@ class PaymentAddEditController extends GetxController {
       } else {
         await _paymentRepository.addPosPayment(data);
       }
-      Get.back(result: true);
+      _refreshAndBack();
       AppSnackbar.success('$label saved successfully');
     } catch (e) {
       AppSnackbar.error('Error saving payment: $e');
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (voucherType.value == VoucherType.sales) {
+      if (Get.isRegistered<ReceiptController>()) {
+        ReceiptController.instance.refreshData();
+      }
+    } else {
+      if (Get.isRegistered<PaymentController>()) {
+        PaymentController.instance.refreshData();
+      }
+    }
+    Get.back();
   }
 }
 

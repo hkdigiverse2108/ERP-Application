@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/payment_terms/controllers/payment_terms_controller.dart';
 import 'package:ai_setu/modules/settings/payment_terms/widgets/payment_terms_table.dart';
@@ -45,6 +46,7 @@ class PaymentTermsPage extends GetView<PaymentTermsController> {
         ),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () => Get.toNamed(Routes.settingsPaymentTermsAddEdit),
         filters: [
           FilterOption(
             label: "Active Status",

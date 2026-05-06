@@ -132,7 +132,6 @@ class SalesOrderTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
-                onPageChanged: (page) => controller.goToPage(page),
                 onEditItem: (item) async {
                   final result = await Get.toNamed(
                     Routes.salesOrderAddEdit,
@@ -142,6 +141,11 @@ class SalesOrderTable extends StatelessWidget {
                     controller.getSalesOrdersData();
                   }
                 },
+                onRemoveItem: (item) => controller.deleteSalesOrder(item.id),
+                deleteTitle: 'Delete Sales Order',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete sales order ${item.salesOrderNo}?',
+                onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),
             ],

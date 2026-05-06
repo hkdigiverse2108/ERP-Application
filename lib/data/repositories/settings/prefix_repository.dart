@@ -23,4 +23,36 @@ class PrefixRepository {
     }
     throw Exception(res.message ?? "Something went wrong");
   }
+
+  Future<PrefixModel> getPrefixById(String id) async {
+    final ResModel res = await _api.get(ApiConstants.getPrefixById(id));
+    if (res.status == 200) {
+      return PrefixModel.fromJson(res.data);
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<ResModel> createPrefix(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(ApiConstants.addPrefix, body: data);
+    if (res.status == 201) {
+      return res;
+    }
+    throw Exception(res.message ?? "Failed to create prefix");
+  }
+
+  Future<ResModel> updatePrefix(Map<String, dynamic> data) async {
+    final ResModel res = await _api.put(ApiConstants.updatePrefix, body: data);
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Failed to update prefix");
+  }
+
+  Future<ResModel> deletePrefix(String id) async {
+    final ResModel res = await _api.delete(ApiConstants.deletePrefix(id));
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Failed to delete prefix");
+  }
 }

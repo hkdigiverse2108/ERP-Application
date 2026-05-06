@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/user_roles/controllers/user_roles_controller.dart';
 import 'package:ai_setu/modules/settings/user_roles/widgets/user_roles_table.dart';
@@ -45,6 +46,7 @@ class UserRolesPage extends GetView<UserRolesController> {
         ),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () => Get.toNamed(Routes.settingsUserRoleAddEdit),
         filters: [
           FilterOption(
             label: "Active Status",

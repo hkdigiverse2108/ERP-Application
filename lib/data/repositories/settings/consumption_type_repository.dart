@@ -30,4 +30,46 @@ class ConsumptionTypeRepository {
     }
     throw Exception(res.message ?? "Something went wrong");
   }
+
+  Future<ConsumptionTypeModel> getConsumptionTypeById(String id) async {
+    final ResModel res = await _api.get(
+      ApiConstants.getConsumptionTypeById(id),
+    );
+    if (res.status == 200) {
+      return ConsumptionTypeModel.fromJson(res.data);
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<ResModel> createConsumptionType(Map<String, dynamic> data) async {
+    final ResModel res = await _api.post(
+      ApiConstants.addConsumptionType,
+      body: data,
+    );
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<ResModel> updateConsumptionType(Map<String, dynamic> data) async {
+    final ResModel res = await _api.put(
+      ApiConstants.updateConsumptionType,
+      body: data,
+    );
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
+
+  Future<ResModel> deleteConsumptionType(String id) async {
+    final ResModel res = await _api.delete(
+      ApiConstants.deleteConsumptionType(id),
+    );
+    if (res.status == 200) {
+      return res;
+    }
+    throw Exception(res.message ?? "Something went wrong");
+  }
 }

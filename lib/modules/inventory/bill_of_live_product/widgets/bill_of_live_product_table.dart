@@ -94,6 +94,10 @@ class BillLiveProductTable extends StatelessWidget {
                   Routes.addUpdateBillOfLiveProduct,
                   arguments: item,
                 ),
+                onRemoveItem: (item) => controller.deleteBillOfLiveProduct(item.id),
+                deleteTitle: "Delete Bill of Live Product",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete '${item.number}'? This action cannot be undone.",
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

@@ -107,9 +107,15 @@ class DiscountModel {
       usedCount: json["usedCount"] ?? 0,
       orders: json["orders"] ?? 0,
       revenue: (json["revenue"] ?? 0).toDouble(),
-      startDateTime: DateTime.parse(json["startDateTime"]),
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
+      startDateTime: json["startDateTime"] != null
+          ? DateTime.parse(json["startDateTime"])
+          : DateTime.now(),
+      createdAt: json["createdAt"] != null
+          ? DateTime.parse(json["createdAt"])
+          : DateTime.now(),
+      updatedAt: json["updatedAt"] != null
+          ? DateTime.parse(json["updatedAt"])
+          : DateTime.now(),
       rangeWiseRules:
           (json["rangeWiseRules"] as List<dynamic>?)
               ?.map((e) => RangeWiseRule.fromJson(e))
@@ -351,20 +357,31 @@ class RangeWiseRule {
 // ---------------------------------------------------
 
 class ProductAtFixAmount {
-  final double fixAmount;
-  final List<String> productId;
+  final double minimumAmount;
+  final List<DiscountIdName> freeProductIds;
+  final int freeQty;
 
-  ProductAtFixAmount({required this.fixAmount, required this.productId});
+  ProductAtFixAmount({
+    required this.minimumAmount,
+    required this.freeProductIds,
+    this.freeQty = 1,
+  });
 
   factory ProductAtFixAmount.fromJson(Map<String, dynamic> json) {
     return ProductAtFixAmount(
-      fixAmount: (json["fixAmount"] ?? 0).toDouble(),
-      productId: List<String>.from(json["productId"] ?? []),
+      minimumAmount: (json["minimumAmount"] ?? 0).toDouble(),
+      freeProductIds:
+          (json["freeProductIds"] as List<dynamic>?)
+              ?.map((e) => DiscountIdName.fromJson(e))
+              .toList() ??
+          [],
+      freeQty: json["freeQty"] ?? 1,
     );
   }
 
   Map<String, dynamic> toMap() => {
-    "fixAmount": fixAmount,
-    "productId": productId,
+    "minimumAmount": minimumAmount,
+    "freeProductIds": freeProductIds.map((e) => e.toMap()).toList(),
+    "freeQty": freeQty,
   };
 }

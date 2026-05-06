@@ -87,6 +87,24 @@ class PrefixController extends GetxController {
     getPrefixes();
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getPrefixes();
+  }
+
+  Future<void> deletePrefix(String id) async {
+    try {
+      isLoading.value = true;
+      await _repo.deletePrefix(id);
+      await refreshData();
+      AppSnackbar.success("Prefix deleted successfully");
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void _clearCache() {
     _cache.clear();
     _cacheTimestamp.clear();

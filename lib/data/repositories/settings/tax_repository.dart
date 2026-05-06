@@ -41,4 +41,39 @@ class TaxRepository {
     }
     throw Exception(response.message ?? "Failed to load taxes");
   }
+
+  Future<ResModel> addTax(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(ApiConstants.addTax, body: data);
+    if (response.status == 201) {
+      return response;
+    }
+    throw Exception(response.message ?? "Failed to add tax");
+  }
+
+  Future<ResModel> updateTax(Map<String, dynamic> data) async {
+    final ResModel response = await _api.put(
+      ApiConstants.updateTax,
+      body: data,
+    );
+    if (response.status == 200) {
+      return response;
+    }
+    throw Exception(response.message ?? "Failed to update tax");
+  }
+
+  Future<TaxItemModel> getTaxById(String id) async {
+    final ResModel response = await _api.get(ApiConstants.getTaxById(id));
+    if (response.status == 200) {
+      return TaxItemModel.fromMap(response.data);
+    }
+    throw Exception(response.message ?? "Failed to load tax");
+  }
+
+  Future<ResModel> deleteTax(String id) async {
+    final ResModel response = await _api.delete(ApiConstants.deleteTax(id));
+    if (response.status == 200) {
+      return response;
+    }
+    throw Exception(response.message ?? "Failed to delete tax");
+  }
 }

@@ -9,6 +9,8 @@ import 'package:ai_setu/data/model/selas/sales_order_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/sales/sales_repository.dart';
 // import 'package:ai_setu/data/repositories/user/user_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -147,6 +149,27 @@ class SalesOrderController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getSalesOrdersData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getSalesOrdersData();
+  }
+
+  Future<void> deleteSalesOrder(String id) async {
+    try {
+      final ResModel res = await _repository.deleteSalesOrder(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Sales Order deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete sales order");
+      }
+    } catch (e) {
+      Log.e("Sales Module Error (SalesOrder Delete)", e);
+      AppSnackbar.error("An error occurred while deleting sales order");
+    }
   }
 
   @override

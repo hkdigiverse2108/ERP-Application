@@ -103,6 +103,10 @@ class DebitTable extends StatelessWidget {
                     Get.toNamed(Routes.debitDetails, arguments: item),
                 onEditItem: (item) =>
                     Get.toNamed(Routes.addUpdateDebit, arguments: item),
+                deleteTitle: "Delete Debit Note",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete debit note '${item.voucherNumber}'? This action cannot be undone.",
+                onRemoveItem: (item) => controller.deleteDebitNote(id: item.id),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

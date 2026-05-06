@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 // import 'package:ai_setu/core/services/branch_controller.dart';
@@ -118,6 +119,27 @@ class SupplierBillController extends GetxController {
     } finally {
       isLodding.value = false;
     }
+  }
+
+  Future<void> deleteSupplierBill(String id) async {
+    try {
+      final res = await _repository.deleteSupplierBill(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Supplier bill deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete supplier bill");
+      }
+    } catch (e) {
+      Log.e("Purchase Module Error (SupplierBill Delete)", e);
+      AppSnackbar.error("An error occurred while deleting supplier bill");
+    }
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getSupplierBillsData();
   }
 
   void _clearCache() {

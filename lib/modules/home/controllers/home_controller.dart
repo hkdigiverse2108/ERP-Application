@@ -37,6 +37,8 @@ class HomeController extends GetxController {
   final graphsLoaded = false.obs;
   final salesAndPurchaseGraphLoading = false.obs;
   final transactionGraphLoading = false.obs;
+  final transactionGraphType = "sales".obs;
+  final transactionGraphTypes = ['sales', 'purchase'];
   final salesAndPurchaseGraph = <SalesAndPurchaseGraphModel>[].obs;
   final transactionGraph = <TransactionGraphModel>[].obs;
 
@@ -177,6 +179,7 @@ class HomeController extends GetxController {
         startDate: selectedDateRange.value.start,
         endDate: selectedDateRange.value.end,
         branchId: BranchController.to.selectedBranch.value?.id,
+        typeFilter: transactionGraphType.value,
       );
       transactionGraph.value = response;
     } catch (e) {
@@ -400,4 +403,3 @@ class HomeController extends GetxController {
     super.onClose();
   }
 }
-

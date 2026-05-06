@@ -26,6 +26,7 @@ import 'package:ai_setu/shared/widgets/date_section.dart';
 import 'package:ai_setu/shared/widgets/dialogs/quit_confirmation_dialog.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/section_shimmer.dart';
+import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -269,7 +270,14 @@ class _HomeBodyState extends State<_HomeBody> {
                                         AppBarChart(
                                           values: homeController
                                               .salesAndPurchaseGraph
-                                              .map((e) => [e.sales, e.purchase])
+                                              .map(
+                                                (e) => [
+                                                  e.sales,
+                                                  e.salesReturn,
+                                                  e.purchase,
+                                                  e.purchaseReturn,
+                                                ],
+                                              )
                                               .toList(),
                                           labels: homeController
                                               .salesAndPurchaseGraph
@@ -284,13 +292,17 @@ class _HomeBodyState extends State<_HomeBody> {
                                               .toList(),
                                           colors: [
                                             context.appColors.sectionSell,
+                                            Colors.redAccent,
                                             context
                                                 .appColors
                                                 .sectionSellPurchase,
+                                            Colors.orangeAccent,
                                           ],
                                           seriesNames: const [
                                             'Sales',
+                                            'Sales Return',
                                             'Purchase',
+                                            'Purchase Return',
                                           ],
                                         ),
                                         Gap(Sizes.lgVerticalSpace),
@@ -323,6 +335,29 @@ class _HomeBodyState extends State<_HomeBody> {
                                             homeController
                                                 .getTransactionGraph();
                                           },
+                                        ),
+                                        const Gap(8),
+                                        Obx(
+                                          () => CustomDropdown(
+                                            label: 'Type',
+                                            isFilter: true,
+                                            items: homeController
+                                                .transactionGraphTypes
+                                                .map((e) => e.capitalizeFirst!)
+                                                .toList(),
+                                            value: homeController
+                                                .transactionGraphType
+                                                .value
+                                                .capitalizeFirst,
+                                            onChanged: (value) {
+                                              homeController
+                                                  .transactionGraphType
+                                                  .value = value
+                                                  .toLowerCase();
+                                              homeController
+                                                  .getTransactionGraph();
+                                            },
+                                          ),
                                         ),
                                         Gap(Sizes.lgHorizontalSpace),
                                         AppBarChart(

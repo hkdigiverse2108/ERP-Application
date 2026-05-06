@@ -380,16 +380,16 @@ class ProductAddEditController extends GetxController {
         data["productId"] = product!.id;
         final res = await _productRepo.updateProduct(data);
         if (res) {
-          AppSnackbar.success("Product updated successfully");
           Get.back(result: true);
+          AppSnackbar.success("Product updated successfully");
         } else {
           AppSnackbar.error("Failed to update product");
         }
       } else {
         final res = await _productRepo.addProduct(data);
         if (res) {
-          AppSnackbar.success("Product added successfully");
           Get.back(result: true);
+          AppSnackbar.success("Product added successfully");
         } else {
           AppSnackbar.error("Failed to add product");
         }
@@ -428,4 +428,3 @@ class ProductAddEditController extends GetxController {
     super.onClose();
   }
 }
-

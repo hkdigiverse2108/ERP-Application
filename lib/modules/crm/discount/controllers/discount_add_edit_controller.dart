@@ -10,8 +10,8 @@ import 'package:ai_setu/data/repositories/inventory/brand_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/category_repository.dart';
 import 'package:ai_setu/data/repositories/crm/discount_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
+import 'package:ai_setu/modules/crm/discount/controllers/discount_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -45,8 +45,9 @@ class DiscountAddEditController extends GetxController {
   final RxList<String> getProductIds = <String>[].obs;
 
   // Product At Fix Amount Fields
-  final fixAmountController = TextEditingController();
-  final RxList<String> fixAmountProductIds = <String>[].obs;
+  final minAmountController = TextEditingController();
+  final freeQtyController = TextEditingController(text: "1");
+  final RxList<String> freeProductIds = <String>[].obs;
 
   // Requirements
   final minRequirementValueController = TextEditingController();
@@ -61,7 +62,6 @@ class DiscountAddEditController extends GetxController {
       <CategoryDropdownModel>[].obs;
   final RxList<BrandDropdownModel> brands = <BrandDropdownModel>[].obs;
   final RxList<ProductDropdownModel> products = <ProductDropdownModel>[].obs;
-  final Rxn<String> selectedImageUrl = Rxn<String>();
 
   // Observables for Dropdowns
   final RxList<String> selectedBranches = <String>[].obs;
@@ -119,10 +119,17 @@ class DiscountAddEditController extends GetxController {
     super.onInit();
     _fetchDropdownData();
 
-    final id = Get.parameters['id'];
-    if (id != null) {
+    // Check for arguments (Model passed from list) or parameters (ID passed via URL)
+    final arg = Get.arguments;
+    final paramId = Get.parameters['id'];
+
+    if (arg != null && arg is DiscountModel) {
       isEdit.value = true;
-      _loadDiscount(id);
+      existingDiscount = arg;
+      _populateFields(arg);
+    } else if (paramId != null) {
+      isEdit.value = true;
+      _loadDiscount(paramId);
     }
 
     // --- WORKERS ---
@@ -133,7 +140,7 @@ class DiscountAddEditController extends GetxController {
     });
 
     // Default dates for new discount
-    if (id == null) {
+    if (!isEdit.value) {
       startDateController.text = DateFormat(
         'yyyy-MM-dd',
       ).format(DateTime.now());
@@ -164,90 +171,85 @@ class DiscountAddEditController extends GetxController {
     try {
       existingDiscount = await _repository.getDiscountById(id);
       if (existingDiscount != null) {
-        titleController.text = existingDiscount!.title;
-        codeController.text = existingDiscount!.discountCode;
-        autoApply.value = existingDiscount!.autoApply;
-        discountApplicable.value = existingDiscount!.discountApplicable;
-        excludeAlreadyDiscounted.value =
-            existingDiscount!.excludeAlreadyDiscounted;
-        discountMode.value = existingDiscount!.discountMode;
-        appliesTo.value = existingDiscount!.appliesTo ?? 'specific_category';
-        minimumRequirement.value = existingDiscount!.minimumRequirement;
-
-        hasEndDate.value = existingDiscount!.endDateTime != null;
-
-        startDateController.text = existingDiscount!.startDateTime
-            .toIso8601String()
-            .split('T')[0];
-        endDateController.text =
-            existingDiscount!.endDateTime?.toIso8601String().split('T')[0] ??
-            '';
-        startTimeController.text = DateFormat(
-          'HH:mm:ss',
-        ).format(existingDiscount!.startDateTime);
-        endTimeController.text = existingDiscount!.endDateTime != null
-            ? DateFormat('HH:mm:ss').format(existingDiscount!.endDateTime!)
-            : '';
-
-        usageLimitController.text =
-            existingDiscount!.usageLimitTotal?.toString() ?? '';
-        isOneTimeUsage.value = existingDiscount!.usageLimitPerCustomer;
-
-        if (existingDiscount!.minimumRequirement == 'amount') {
-          minRequirementValueController.text =
-              existingDiscount!.minimumPurchaseAmount?.toString() ?? '';
-        } else if (existingDiscount!.minimumRequirement == 'quantity') {
-          minRequirementValueController.text =
-              existingDiscount!.minimumQuantity?.toString() ?? '';
-        } else {
-          minRequirementValueController.text = '';
-        }
-
-        // Select Branches
-        selectedBranches.assignAll(
-          existingDiscount!.branchIds.map((e) => e.id),
-        );
-
-        // Multi-selects
-        selectedCategories.assignAll(
-          existingDiscount!.categoryIds.map((e) => e.id),
-        );
-        selectedBrands.assignAll(existingDiscount!.brandIds.map((e) => e.id));
-        selectedProducts.assignAll(
-          existingDiscount!.productIds.map((e) => e.id),
-        );
-        excludeProducts.assignAll(
-          existingDiscount!.excludedProductIds.map((e) => e.id),
-        );
-
-        // Mode specific
-        if (discountMode.value == 'normal') {
-          discountType.value = existingDiscount!.discountType;
-          discountValueController.text = existingDiscount!.discountValue
-              .toString();
-        } else if (discountMode.value == 'range_wise') {
-          rangeRules.assignAll(existingDiscount!.rangeWiseRules);
-        } else if (discountMode.value == 'buy_x_get_y') {
-          final buy = existingDiscount!.buyXGetY;
-          if (buy != null) {
-            buyQtyController.text = buy.buyQty.toString();
-            getQtyController.text = buy.getQty.toString();
-            getDiscountType.value = buy.getDiscountType;
-            getDiscountValueController.text = buy.getDiscountValue.toString();
-            getProductIds.assignAll(buy.getProductIds.map((e) => e.id));
-          }
-        } else if (discountMode.value == 'product_at_fix_amount') {
-          fixAmountController.text =
-              existingDiscount!.productAtFixAmount?.fixAmount.toString() ?? '';
-          fixAmountProductIds.assignAll(
-            existingDiscount!.productAtFixAmount?.productId ?? [],
-          );
-        }
+        _populateFields(existingDiscount!);
       }
     } catch (e) {
       AppSnackbar.error("Error loading discount: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _populateFields(DiscountModel discount) {
+    titleController.text = discount.title;
+    codeController.text = discount.discountCode;
+    autoApply.value = discount.autoApply;
+    discountApplicable.value = discount.discountApplicable;
+    excludeAlreadyDiscounted.value = discount.excludeAlreadyDiscounted;
+    discountMode.value = discount.discountMode;
+    appliesTo.value = discount.appliesTo ?? 'specific_category';
+    minimumRequirement.value = discount.minimumRequirement;
+
+    hasEndDate.value = discount.endDateTime != null;
+
+    startDateController.text = discount.startDateTime.toIso8601String().split(
+      'T',
+    )[0];
+    endDateController.text =
+        discount.endDateTime?.toIso8601String().split('T')[0] ?? '';
+    startTimeController.text = DateFormat(
+      'HH:mm:ss',
+    ).format(discount.startDateTime);
+    endTimeController.text = discount.endDateTime != null
+        ? DateFormat('HH:mm:ss').format(discount.endDateTime!)
+        : '';
+
+    usageLimitController.text = discount.usageLimitTotal?.toString() ?? '';
+    isOneTimeUsage.value = discount.usageLimitPerCustomer;
+
+    if (discount.minimumRequirement == 'min_purchase_amount') {
+      minRequirementValueController.text =
+          discount.minimumPurchaseAmount?.toString() ?? '';
+    } else if (discount.minimumRequirement == 'min_quantity') {
+      minRequirementValueController.text =
+          discount.minimumQuantity?.toString() ?? '';
+    } else {
+      minRequirementValueController.text = '';
+    }
+
+    // Select Branches
+    selectedBranches.assignAll(discount.branchIds.map((e) => e.id));
+
+    // Multi-selects
+    selectedCategories.assignAll(discount.categoryIds.map((e) => e.id));
+    selectedBrands.assignAll(discount.brandIds.map((e) => e.id));
+    selectedProducts.assignAll(discount.productIds.map((e) => e.id));
+    excludeProducts.assignAll(discount.excludedProductIds.map((e) => e.id));
+
+    // Mode specific
+    if (discountMode.value == 'normal') {
+      discountType.value = discount.discountType;
+      discountValueController.text = discount.discountValue.toString();
+    } else if (discountMode.value == 'range_wise') {
+      rangeRules.assignAll(discount.rangeWiseRules);
+    } else if (discountMode.value == 'buy_x_get_y') {
+      final buy = discount.buyXGetY;
+      if (buy != null) {
+        buyQtyController.text = buy.buyQty.toString();
+        getQtyController.text = buy.getQty.toString();
+        getDiscountType.value = buy.getDiscountType;
+        getDiscountValueController.text = buy.getDiscountValue.toString();
+        getProductIds.assignAll(buy.getProductIds.map((e) => e.id));
+      }
+    } else if (discountMode.value == 'product_at_fix_amount') {
+      minAmountController.text =
+          discount.productAtFixAmount?.minimumAmount.toString() ?? '';
+      freeQtyController.text =
+          discount.productAtFixAmount?.freeQty.toString() ?? "1";
+      freeProductIds.assignAll(
+        discount.productAtFixAmount?.freeProductIds.map((e) => e.id).toList() ??
+            [],
+      );
     }
   }
 
@@ -268,10 +270,96 @@ class DiscountAddEditController extends GetxController {
 
   Future<void> save() async {
     if (!formKey.currentState!.validate()) return;
-    // if (selectedBranches.isEmpty) {
-    //   AppSnackbar.error("Please select a branch");
-    //   return;
-    // }
+
+    // --- Validation Logic Based on Joi Schema ---
+    if (discountMode.value == 'range_wise') {
+      if (rangeRules.isEmpty) {
+        AppSnackbar.error("Please add at least one range rule");
+        return;
+      }
+      for (var rule in rangeRules) {
+        if (rule.maxQty < rule.minQty) {
+          AppSnackbar.error("Max Quantity cannot be less than Min Quantity");
+          return;
+        }
+      }
+    }
+
+    if (discountMode.value == 'buy_x_get_y') {
+      final buyQty = int.tryParse(buyQtyController.text) ?? 0;
+      final getQty = int.tryParse(getQtyController.text) ?? 0;
+      if (buyQty < 1 || getQty < 1) {
+        AppSnackbar.error("Buy and Get quantities must be at least 1");
+        return;
+      }
+    }
+
+    if (discountMode.value == 'product_at_fix_amount') {
+      final minAmount = double.tryParse(minAmountController.text) ?? 0;
+      final freeQty = int.tryParse(freeQtyController.text) ?? 0;
+      if (minAmount < 0) {
+        AppSnackbar.error("Minimum amount cannot be negative");
+        return;
+      }
+      if (freeProductIds.isEmpty) {
+        AppSnackbar.error("Please select at least one free product");
+        return;
+      }
+      if (freeQty < 1) {
+        AppSnackbar.error("Free quantity must be at least 1");
+        return;
+      }
+    }
+
+    // Targeting Validation
+    if (discountApplicable.value == 'product_wise') {
+      if (appliesTo.value == 'specific_category' &&
+          selectedCategories.isEmpty) {
+        AppSnackbar.error("Please select at least one category");
+        return;
+      }
+      if (appliesTo.value == 'specific_brand' && selectedBrands.isEmpty) {
+        AppSnackbar.error("Please select at least one brand");
+        return;
+      }
+      if (appliesTo.value == 'specific_products' && selectedProducts.isEmpty) {
+        AppSnackbar.error("Please select at least one product");
+        return;
+      }
+    }
+
+    // Minimum Requirement Validation
+    if (minimumRequirement.value == 'min_purchase_amount') {
+      final amt = double.tryParse(minRequirementValueController.text) ?? 0;
+      if (amt <= 0) {
+        AppSnackbar.error("Minimum purchase amount must be greater than 0");
+        return;
+      }
+    } else if (minimumRequirement.value == 'min_quantity') {
+      final qty = int.tryParse(minRequirementValueController.text) ?? 0;
+      if (qty <= 0) {
+        AppSnackbar.error("Minimum quantity must be at least 1");
+        return;
+      }
+    }
+
+    // Date Validation
+    if (hasEndDate.value) {
+      if (endDateController.text.isEmpty || endTimeController.text.isEmpty) {
+        AppSnackbar.error("Please select end date and time");
+        return;
+      }
+      final start = DateTime.parse(
+        '${startDateController.text}T${startTimeController.text}',
+      );
+      final end = DateTime.parse(
+        '${endDateController.text}T${endTimeController.text}',
+      );
+      if (end.isBefore(start)) {
+        AppSnackbar.error("End date cannot be before start date");
+        return;
+      }
+    }
 
     isLoading.value = true;
     try {
@@ -298,7 +386,7 @@ class DiscountAddEditController extends GetxController {
           "productIds": selectedProducts.toList(),
         if (discountApplicable.value == 'product_wise' &&
             excludeProducts.isNotEmpty)
-          "excludeProductIds": excludeProducts.toList(),
+          "excludedProductIds": excludeProducts.toList(),
         "minimumRequirement": minimumRequirement.value,
         // only add minimumQuantity if minimumRequirement is 'quantity'
         if (minimumRequirement.value == 'min_quantity')
@@ -337,8 +425,9 @@ class DiscountAddEditController extends GetxController {
         };
       } else if (discountMode.value == 'product_at_fix_amount') {
         payload["productAtFixAmount"] = {
-          "fixAmount": double.tryParse(fixAmountController.text) ?? 0,
-          "productId": fixAmountProductIds.toList(),
+          "minimumAmount": double.tryParse(minAmountController.text) ?? 0,
+          "freeProductIds": freeProductIds.toList(),
+          "freeQty": int.tryParse(freeQtyController.text) ?? 1,
         };
       }
 
@@ -349,27 +438,13 @@ class DiscountAddEditController extends GetxController {
         await _repository.addDiscount(payload);
         AppSnackbar.success("Discount added successfully");
       }
-      Get.back(result: true);
+      await _refreshAndBack();
     } catch (e) {
       Log.e("Error saving discount: $e");
       AppSnackbar.error(e.toString());
     } finally {
       isLoading.value = false;
     }
-  }
-
-  Future<void> pickImage() async {
-    await MediaPickerDialog.show(
-      onMediaSelected: (selected) {
-        if (selected.isNotEmpty) {
-          selectedImageUrl.value = selected.first.url;
-        }
-      },
-    );
-  }
-
-  void removeImage() {
-    selectedImageUrl.value = null;
   }
 
   @override
@@ -384,11 +459,22 @@ class DiscountAddEditController extends GetxController {
     buyQtyController.dispose();
     getQtyController.dispose();
     getDiscountValueController.dispose();
-    fixAmountController.dispose();
+    minAmountController.dispose();
+    freeQtyController.dispose();
     minRequirementValueController.dispose();
     usageLimitController.dispose();
     userLimitController.dispose();
     super.onClose();
   }
-}
 
+  Future<void> _refreshAndBack() async {
+    final discountController = Get.isRegistered<DiscountController>()
+        ? Get.find<DiscountController>()
+        : null;
+
+    if (discountController != null) {
+      await discountController.refreshData();
+    }
+    Get.back(result: true);
+  }
+}

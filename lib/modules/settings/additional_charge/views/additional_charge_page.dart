@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/additional_charge/controllers/additional_charge_controller.dart';
 import 'package:ai_setu/modules/settings/additional_charge/widgets/additional_charge_table.dart';
@@ -40,6 +41,10 @@ class AdditionalChargePage extends GetView<AdditionalChargeController> {
       ),
       child: FilterSection(
         title: "Additional Charge",
+        onAdd: () => Get.toNamed(
+          Routes.settingsAdditionalChargeAddEdit,
+          arguments: {'isEdit': false},
+        ),
         searchController: TextEditingController(
           text: controller.searchQuery.value,
         ),
@@ -51,6 +56,11 @@ class AdditionalChargePage extends GetView<AdditionalChargeController> {
             filterKey: "activeFilter",
             options: {"Active": "true", "Inactive": "false"},
           ),
+          // FilterOption(
+          //   label: "Charge Type",
+          //   filterKey: "typeFilter",
+          //   options: {"Purchase": "Purchase", "Sales": "Sales"},
+          // ),
         ],
       ),
     );

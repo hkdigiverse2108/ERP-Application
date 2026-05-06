@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/data/model/consumption_type/consumption_type_model.dart';
 import 'package:ai_setu/data/repositories/settings/consumption_type_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:get/get.dart';
 
 class ConsumptionTypeController extends GetxController {
@@ -94,6 +95,28 @@ class ConsumptionTypeController extends GetxController {
     if (page < 1 || page > totalPages.value) return;
     currentPage.value = page;
     getConsumptionTypes();
+  }
+
+  Future<void> refreshData() async {
+    _clearCache();
+    await getConsumptionTypes();
+  }
+
+  Future<void> deleteConsumptionType(String id) async {
+    try {
+      final item = types.firstWhereOrNull((e) => e.id == id);
+      if (item != null && item.isSystemGenerated) {
+        AppSnackbar.error(
+          "System-generated consumption type cannot be deleted",
+        );
+        return;
+      }
+      await _repo.deleteConsumptionType(id);
+      AppSnackbar.success("Consumption type deleted successfully");
+      await refreshData();
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    }
   }
 
   void _clearCache() {

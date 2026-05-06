@@ -6,6 +6,7 @@ import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/repositories/inventory/material_consumption_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/settings/consumption_type_repository.dart';
+import 'package:ai_setu/modules/inventory/material_consumption/controllers/material_consumption_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -165,8 +166,8 @@ class MaterialConsumptionAddEditController extends GetxController {
       }
 
       if (success) {
-        Get.back(result: true);
-        AppSnackbar.success("Material Consumption saved successfully");
+        await _refreshAndBack();
+        AppSnackbar.success("Material consumption saved successfully");
       } else {
         AppSnackbar.error("Failed to save Material Consumption");
       }
@@ -181,6 +182,18 @@ class MaterialConsumptionAddEditController extends GetxController {
   void onClose() {
     remarkController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final materialConsumptionController =
+        Get.isRegistered<MaterialConsumptionController>()
+            ? Get.find<MaterialConsumptionController>()
+            : null;
+
+    if (materialConsumptionController != null) {
+      await materialConsumptionController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 

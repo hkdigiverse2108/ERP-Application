@@ -139,14 +139,15 @@ class PurchaseOrderAddEditView extends GetView<PurchaseOrderAddEditController> {
                       child: CustomDropdown(
                         label: "Billing Address",
                         value: _formatAddress(
-                            controller.selectedBillingAddress.value),
+                          controller.selectedBillingAddress.value,
+                        ),
                         items: supplier.address
                             .map((a) => _formatAddress(a))
                             .toList(),
                         onChanged: (v) {
-                          controller.selectedBillingAddress.value =
-                              supplier.address.firstWhereOrNull(
-                                  (a) => _formatAddress(a) == v);
+                          controller.selectedBillingAddress.value = supplier
+                              .address
+                              .firstWhereOrNull((a) => _formatAddress(a) == v);
                         },
                       ),
                     ),
@@ -155,14 +156,15 @@ class PurchaseOrderAddEditView extends GetView<PurchaseOrderAddEditController> {
                       child: CustomDropdown(
                         label: "Shipping Address",
                         value: _formatAddress(
-                            controller.selectedShippingAddress.value),
+                          controller.selectedShippingAddress.value,
+                        ),
                         items: supplier.address
                             .map((a) => _formatAddress(a))
                             .toList(),
                         onChanged: (v) {
-                          controller.selectedShippingAddress.value =
-                              supplier.address.firstWhereOrNull(
-                                  (a) => _formatAddress(a) == v);
+                          controller.selectedShippingAddress.value = supplier
+                              .address
+                              .firstWhereOrNull((a) => _formatAddress(a) == v);
                         },
                       ),
                     ),
@@ -844,7 +846,7 @@ class PurchaseOrderAddEditView extends GetView<PurchaseOrderAddEditController> {
       address.addressLine2,
       address.city?.name,
       address.state?.name,
-      address.pinCode?.toString()
+      address.pinCode?.toString(),
     ].where((e) => e != null && e.toString().isNotEmpty).toList();
     return parts.join(", ");
   }

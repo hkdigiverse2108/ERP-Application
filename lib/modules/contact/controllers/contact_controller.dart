@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
@@ -95,9 +96,30 @@ class ContactController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await fetchContacts();
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;
+  }
+
+  Future<void> deleteContact(String id) async {
+    try {
+      final res = await _repo.deleteContact(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Contact deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete contact");
+      }
+    } catch (e) {
+      Log.e("Contact Module Error (Delete)", e);
+      AppSnackbar.error("An error occurred while deleting contact");
+    }
   }
 
   void onSearch(String query) {

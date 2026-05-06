@@ -21,6 +21,7 @@ class ApiConstants {
   static const String verifyOtp = "/auth/verify-otp";
   static const String resendOtp = "/auth/resend-otp";
   static const String updatePassword = "/auth/update-password";
+  static const String changePassword = "/auth/reset-password";
 
   // Dashboard
   static const String transactions = "/dashboard/transactions";
@@ -438,8 +439,10 @@ class ApiConstants {
     "activeFilter": activeFilter,
   });
   static const String addMaterialConsumption = "/material-consumption/add";
-  static const String getMaterialConsumptionById =
-      "/material-consumption/getById";
+  static String getMaterialConsumptionById({required String id}) =>
+      "/material-consumption/$id";
+  static String deleteMaterialConsumption({required String id}) =>
+      "/material-consumption/$id";
   static const String updateMaterialConsumption = "/material-consumption/edit";
   static const String materialConsumptionDropdown =
       "/material-consumption/dropdown";
@@ -543,8 +546,8 @@ class ApiConstants {
   });
   static const String addDebitNote = "/debit-note/add";
   static const String updateDebitNote = "/debit-note/edit";
-  static String deleteDebitNote(String id) => "/debit-note/$id";
-  static String getDebitNoteById(String id) => "/debit-note/$id";
+  static String deleteDebitNote({required String id}) => "/debit-note/$id";
+  static String getDebitNoteById({required String id}) => "/debit-note/$id";
 
   // Sales Debit Note
   static String getAllSalesDebitNote({
@@ -607,8 +610,8 @@ class ApiConstants {
   });
   static const String addCreditNote = "/credit-note/add";
   static const String updateCreditNote = "/credit-note/edit";
-  static String deleteCreditNote(String id) => "/credit-note/$id";
-  static String getCreditNoteById(String id) => "/credit-note/$id";
+  static String deleteCreditNote({required String id}) => "/credit-note/$id";
+  static String getCreditNoteById({required String id}) => "/credit-note/$id";
 
   // Sales Credit Note
   static String getAllSalesCreditNote({
@@ -990,12 +993,14 @@ class ApiConstants {
     String? search,
     String? branchId,
     String? activeFilter,
+    String? typeFilter,
   }) => buildUrl("/additional-charge/all", {
     "page": page,
     "limit": limit,
     "search": search,
     "branchFilter": branchId,
     "activeFilter": activeFilter,
+    "typeFilter": typeFilter,
   });
   static const String addAdditionalCharge = "/additional-charge/add";
   static String getAdditionalChargeById(String id) => "/additional-charge/$id";
@@ -1449,4 +1454,31 @@ class ApiConstants {
   static String getPermitionById(String id) => "/permission/details?userId=$id";
   static String getPermitionTabs(String id) =>
       "/permission/child/details?userId=$id";
+
+  // stock Transfer
+  static String getAllStockTransfer({
+    int? page,
+    int? limit,
+    String? search,
+    String? branchId,
+    String? fromDate,
+    String? toDate,
+    String? activeFilter,
+    String? typeFilter,
+    String? statusFilter,
+  }) => buildUrl("/stock-transfer/all", {
+    "page": page,
+    "limit": limit,
+    "search": search,
+    "branchFilter": branchId,
+    "startDate": fromDate,
+    "endDate": toDate,
+    "activeFilter": activeFilter,
+    "typeFilter": typeFilter,
+    "statusFilter": statusFilter,
+  });
+  static const String addStockTransfer = "/stock-transfer/request";
+  static String getStockTransferById(String id) => "/stock-transfer/$id";
+  static const String updateStockTransfer = "/stock-transfer/edit";
+  static String deleteStockTransfer(String id) => "/stock-transfer/$id";
 }

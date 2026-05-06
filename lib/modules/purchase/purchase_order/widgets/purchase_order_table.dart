@@ -44,6 +44,8 @@ class PurchaseOrderTable extends StatelessWidget {
                     Get.toNamed(Routes.purchaseOrderDetails, arguments: item),
                 onEditItem: (item) =>
                     Get.toNamed(Routes.purchaseOrderAddEdit, arguments: item),
+                onRemoveItem: (item) => controller.deletePurchaseOrder(item.id),
+                confirmDelete: true,
                 columns: [
                   TableColumn(
                     title: 'Order No',

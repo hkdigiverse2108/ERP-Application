@@ -85,4 +85,8 @@ class PaymentRepository {
     }
     return [];
   }
+
+  Future<ResModel> deleteVoucher(String id) async {
+    return await _api.delete(ApiConstants.deleteVoucher(id));
+  }
 }

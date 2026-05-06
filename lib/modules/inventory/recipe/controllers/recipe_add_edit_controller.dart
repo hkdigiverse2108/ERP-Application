@@ -5,6 +5,7 @@ import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/recipe_repository.dart';
+import 'package:ai_setu/modules/inventory/recipe/controllers/recipe_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -174,16 +175,16 @@ class RecipeAddEditController extends GetxController {
         data["recipeId"] = recipe!.id;
         final res = await _recipeRepo.updateRecipe(data);
         if (res) {
+          await _refreshAndBack();
           AppSnackbar.success("Recipe updated successfully");
-          Get.back(result: true);
         } else {
           AppSnackbar.error("Failed to update recipe");
         }
       } else {
         final res = await _recipeRepo.addRecipe(data);
         if (res) {
+          await _refreshAndBack();
           AppSnackbar.success("Recipe added successfully");
-          Get.back(result: true);
         } else {
           AppSnackbar.error("Failed to add recipe");
         }
@@ -202,6 +203,17 @@ class RecipeAddEditController extends GetxController {
     finalProductQtyController.dispose();
     finalProductMrpController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final recipeController = Get.isRegistered<RecipeController>()
+        ? Get.find<RecipeController>()
+        : null;
+
+    if (recipeController != null) {
+      await recipeController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 
@@ -236,4 +248,3 @@ class RawProductItem {
     );
   }
 }
-

@@ -4,6 +4,7 @@ import 'package:ai_setu/data/model/bank_cash/bank_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
 import 'package:ai_setu/data/repositories/bank_cash/bank_repository.dart';
+import 'package:ai_setu/modules/bank_cash/bank/controllers/bank_controller.dart';
 import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/location_repository.dart';
 import 'package:flutter/material.dart';
@@ -270,7 +271,7 @@ class BankAddEditController extends GetxController {
         data["bankId"] = bank!.id;
         final res = await _bankRepo.updateBank(data);
         if (res) {
-          Get.back(result: true);
+          _refreshAndBack();
           AppSnackbar.success("Bank updated successfully");
         } else {
           AppSnackbar.error("Failed to update bank");
@@ -278,8 +279,8 @@ class BankAddEditController extends GetxController {
       } else {
         final res = await _bankRepo.addBank(data);
         if (res) {
+          _refreshAndBack();
           AppSnackbar.success("Bank added successfully");
-          Get.back(result: true);
         } else {
           AppSnackbar.error("Failed to add bank");
         }
@@ -289,6 +290,13 @@ class BankAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<BankController>()) {
+      BankController.instance.refreshData();
+    }
+    Get.back();
   }
 
   @override

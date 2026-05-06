@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/taxes/controllers/taxes_controller.dart';
 import 'package:ai_setu/modules/settings/taxes/widgets/tax_table.dart';
@@ -45,6 +46,7 @@ class TaxesPage extends GetView<TaxesController> {
         ),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () => Get.toNamed(Routes.settingsTaxAddEdit),
         filters: [
           FilterOption(
             label: "Active Status",

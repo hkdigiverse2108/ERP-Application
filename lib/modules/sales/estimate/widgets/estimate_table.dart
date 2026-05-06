@@ -149,6 +149,10 @@ class EstimateTable extends StatelessWidget {
                     controller.getEstimatesData();
                   }
                 },
+                onRemoveItem: (item) => controller.deleteEstimate(item.id),
+                deleteTitle: 'Delete Estimate',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete estimate ${item.estimateNo}?',
                 onPageChanged: (page) => controller.goToPage(page),
               ),
             ],

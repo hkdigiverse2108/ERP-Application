@@ -127,4 +127,12 @@ class BankRepository {
         await _api.put(ApiConstants.updateBankTransaction, body: data);
     return res.status == 200;
   }
+
+  Future<ResModel> deleteBank(String id) async {
+    return await _api.delete(ApiConstants.deleteBank(id));
+  }
+
+  Future<ResModel> deleteBankTransaction(String id) async {
+    return await _api.delete(ApiConstants.deleteBankTransaction(id));
+  }
 }

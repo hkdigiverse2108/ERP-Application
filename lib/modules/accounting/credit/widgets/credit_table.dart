@@ -103,6 +103,11 @@ class CreditTable extends StatelessWidget {
                     Get.toNamed(Routes.creditDetails, arguments: item),
                 onEditItem: (item) =>
                     Get.toNamed(Routes.addUpdateCredit, arguments: item),
+                deleteTitle: "Delete Credit Note",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete credit note '${item.voucherNumber}'? This action cannot be undone.",
+                onRemoveItem: (item) =>
+                    controller.deleteCreditNote(id: item.id),
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

@@ -157,6 +157,7 @@ class LoyaltyTable extends StatelessWidget {
                   );
                   if (res == true) controller.getLoyaltyData();
                 },
+                onRemoveItem: (item) => controller.deleteLoyalty(item.id),
               ),
             ],
           ),

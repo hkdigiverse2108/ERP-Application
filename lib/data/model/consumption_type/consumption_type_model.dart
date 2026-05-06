@@ -25,6 +25,8 @@ class ConsumptionTypeModel {
     this.companyId,
   });
 
+  bool get isSystemGenerated => createdBy.userType == 'super-admin';
+
   factory ConsumptionTypeModel.fromRawJson(String str) =>
       ConsumptionTypeModel.fromJson(json.decode(str));
 

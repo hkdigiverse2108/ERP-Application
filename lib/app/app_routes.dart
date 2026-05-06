@@ -23,6 +23,9 @@ abstract class Routes {
       '/add-update-material-consumption';
   static const addUpdateStockVerification = '/add-update-stock-verification';
   static const addUpdateBillOfLiveProduct = '/add-update-bill-of-live-product';
+  static const stockTransfer = '/stock-transfer';
+  static const addUpdateStockTransfer = '/add-update-stock-transfer';
+  static const stockTransferDetails = '/stock-transfer-details';
 
   // accounting
   static const debit = '/debit-note'; // Accounting Debit Note
@@ -89,7 +92,10 @@ abstract class Routes {
   static const settingsPrefix = '/setting/prefix';
   static const settingsPaymentTerms = '/setting/payment-terms';
   static const settingsAdditionalCharge = '/setting/additional-charge';
+  static const settingsTaxAddEdit = '/setting/tax-add-edit';
+  static const settingsUserRoleAddEdit = '/setting/user-role-add-edit';
   static const settingsConsumptionType = '/setting/consumption-type';
+  static const settingsChangePassword = '/setting/change-password';
 
   static const accessDenied = '/access-denied';
 
@@ -142,4 +148,10 @@ abstract class Routes {
 
   // Support
   static const support = '/support';
+  static const settingsPrefixAddEdit = '/setting/prefix-add-edit';
+  static const settingsPaymentTermsAddEdit = '/setting/payment-terms-add-edit';
+  static const settingsAdditionalChargeAddEdit =
+      '/setting/additional-charge-add-edit';
+  static const settingsConsumptionTypeAddEdit =
+      '/setting/consumption-type-add-edit';
 }

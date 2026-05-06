@@ -1,10 +1,12 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_order_model.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/purchase/purchase_repository.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +114,29 @@ class PurchaseOrderController extends GetxController {
     }
   }
 
+  Future<void> deletePurchaseOrder(String id) async {
+    try {
+      final ResModel res = await _repository.deletePurchaseOrder(id);
+      if (res.status == 200) {
+        AppSnackbar.success(
+          res.message ?? "Purchase order deleted successfully",
+        );
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete purchase order");
+      }
+    } catch (e) {
+      Log.e("Purchase Module Error (PurchaseOrder Delete)", e);
+      AppSnackbar.error("An error occurred while deleting purchase order");
+    }
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getPurchaseOrdersData();
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;
@@ -152,4 +177,3 @@ class PurchaseOrderController extends GetxController {
     super.onClose();
   }
 }
-

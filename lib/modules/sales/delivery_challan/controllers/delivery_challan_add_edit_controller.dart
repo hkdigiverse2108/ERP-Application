@@ -16,6 +16,7 @@ import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
 import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_setu/modules/sales/delivery_challan/controllers/delivery_challan_controller.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
@@ -515,7 +516,7 @@ class DeliveryChallanAddEditController extends GetxController {
           : await _salesRepository.addDeliveryChallan(payload);
 
       if (res.status == 200 || res.status == 201) {
-        Get.back(result: true);
+        _refreshAndBack();
         AppSnackbar.success(
           isEdit.value
               ? "Delivery Challan updated"
@@ -536,6 +537,13 @@ class DeliveryChallanAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<DeliveryChallanController>()) {
+      DeliveryChallanController.instance.refreshData();
+    }
+    Get.back();
   }
 
   @override

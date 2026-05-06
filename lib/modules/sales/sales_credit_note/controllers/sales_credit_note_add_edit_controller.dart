@@ -17,6 +17,7 @@ import 'package:ai_setu/data/repositories/settings/additional_charge_repository.
 import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_setu/modules/sales/sales_credit_note/controllers/sales_credit_note_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -609,7 +610,7 @@ class SalesCreditNoteAddEditController extends GetxController {
           : await _salesRepository.addSalesCreditNote(payload);
 
       if (res.status == 200 || res.status == 201) {
-        Get.back(result: true);
+        _refreshAndBack();
         AppSnackbar.success(
           isEdit.value ? "Credit Note updated" : "Credit Note created",
           position: SnackPosition.BOTTOM,
@@ -628,6 +629,13 @@ class SalesCreditNoteAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<SalesCreditNoteController>()) {
+      SalesCreditNoteController.instance.refreshData();
+    }
+    Get.back();
   }
 
   @override

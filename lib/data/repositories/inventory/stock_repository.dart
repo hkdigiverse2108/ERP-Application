@@ -50,4 +50,9 @@ class StockRepository {
 
     throw Exception(response.message ?? 'Failed to load product');
   }
+
+  Future<bool> deleteStock(String id) async {
+    final ResModel response = await _api.delete(ApiConstants.deleteStock(id));
+    return response.status == 200;
+  }
 }

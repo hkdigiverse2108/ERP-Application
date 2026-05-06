@@ -6,6 +6,7 @@ import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/bill_live_product_model.dart';
 import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/bill_of_live_product_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -109,10 +110,12 @@ class BillOfLiveProductController extends GetxController {
       }
 
       // Date range filters
-      combinedFilters['startDate'] =
-          DateFormat('yyyy-MM-dd').format(selectedDateRange.value.start);
-      combinedFilters['endDate'] =
-          DateFormat('yyyy-MM-dd').format(selectedDateRange.value.end);
+      combinedFilters['startDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.start);
+      combinedFilters['endDate'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(selectedDateRange.value.end);
 
       final res = await _repo.getBillOfLiveProductList(
         page: currentPage.value,
@@ -132,6 +135,12 @@ class BillOfLiveProductController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getBillOfLiveProductData();
   }
 
   void _clearCache() {
@@ -168,5 +177,21 @@ class BillOfLiveProductController extends GetxController {
       await getBillOfLiveProductData();
     }
   }
-}
 
+  Future<void> deleteBillOfLiveProduct(String id) async {
+    try {
+      final success = await _repo.deleteBillOfLiveProduct(id);
+      if (success) {
+        AppSnackbar.success("Bill of live product deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete bill of live product");
+      }
+    } catch (e) {
+      Log.e("Error deleting bill of live product", e);
+      AppSnackbar.error(
+        "An error occurred while deleting bill of live product",
+      );
+    }
+  }
+}

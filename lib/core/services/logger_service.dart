@@ -33,7 +33,8 @@ class LoggerService {
   /// Log a message at level [Level.error]
   static void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     try {
-      _logger.e(message, error: error, stackTrace: stackTrace);
+      final msg = message?.toString() ?? "Null Message";
+      _logger.e(msg, error: error, stackTrace: stackTrace);
     } catch (e) {
       debugPrint("Logging Error: $e");
       debugPrint("Original Message: $message");

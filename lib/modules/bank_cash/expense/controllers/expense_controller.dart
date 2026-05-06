@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/expense_model.dart';
 
@@ -138,6 +139,27 @@ class ExpenseController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getExpensesData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getExpensesData();
+  }
+
+  Future<void> deleteExpense(String id) async {
+    try {
+      final res = await _repository.deleteExpense(id);
+      if (res.status == 200) {
+        AppSnackbar.success( res.message ?? 'Expense deleted successfully');
+        await refreshData();
+      } else {
+        AppSnackbar.error( res.message ?? 'Failed to delete expense');
+      }
+    } catch (e) {
+      Log.e("Expense Module Error (Delete)", e);
+      AppSnackbar.error( 'An error occurred while deleting expense');
+    }
   }
 
   @override

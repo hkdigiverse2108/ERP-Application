@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
@@ -168,9 +169,25 @@ class StockVerificationController extends GetxController {
     }
   }
 
-  void refreshData() {
-    _clearCache();
-    getStockVerificationData();
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getStockVerificationData();
+  }
+
+  Future<void> deleteStockVerification(String id) async {
+    try {
+      final success = await _repo.deleteStockVerification(id);
+      if (success) {
+        AppSnackbar.success("Stock verification deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete stock verification");
+      }
+    } catch (e) {
+      Log.e("Error deleting stock verification", e);
+      AppSnackbar.error("An error occurred while deleting stock verification");
+    }
   }
 }
 

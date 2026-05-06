@@ -52,4 +52,10 @@ class BillOfLiveProductRepository {
 
     throw Exception(response.message ?? 'Failed to load bill of live product detail');
   }
+
+  Future<bool> deleteBillOfLiveProduct(String id) async {
+    final ResModel response =
+        await _api.delete(ApiConstants.deleteBillOfLiveProduct(id));
+    return response.status == 200;
+  }
 }

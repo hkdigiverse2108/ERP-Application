@@ -121,6 +121,10 @@ class SalaryTable extends StatelessWidget {
                   );
                   if (res == true) controller.getSalaryData();
                 },
+                onRemoveItem: (item) => controller.deleteSalary(item.id),
+                deleteTitle: 'Delete Salary',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete this salary entry?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

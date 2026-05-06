@@ -116,6 +116,10 @@ class RecipeTable extends StatelessWidget {
                     Get.toNamed(Routes.recipeDetails, arguments: item),
                 onEditItem: (item) =>
                     Get.toNamed(Routes.addUpdateRecipe, arguments: item),
+                onRemoveItem: (item) => controller.deleteRecipe(item.id),
+                deleteTitle: "Delete Recipe",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete '${item.name}'? This action cannot be undone.",
                 pageSize: controller.limit.value,
                 onPageChanged: (page) => controller.goToPage(page),
               ),

@@ -78,4 +78,10 @@ class StockVerificationRepository {
 
     throw Exception(response.message ?? 'Failed to update stock verification');
   }
+
+  Future<bool> deleteStockVerification(String id) async {
+    final ResModel response =
+        await _api.delete(ApiConstants.deleteStockVerification(id));
+    return response.status == 200;
+  }
 }

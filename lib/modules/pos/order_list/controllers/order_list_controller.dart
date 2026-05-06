@@ -125,6 +125,12 @@ class OrderListController extends GetxController {
     getOrderListData();
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getOrderListData();
+  }
+
   @override
   void onClose() {
     _fyWorker?.dispose();

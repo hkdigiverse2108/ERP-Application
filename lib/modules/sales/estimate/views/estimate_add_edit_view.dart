@@ -690,14 +690,33 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
       padding: const EdgeInsets.all(Sizes.paddingM),
       decoration: BoxDecoration(
         color: context.appColors.surface,
-        border: Border(top: BorderSide(color: context.appColors.border)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Expanded(
             child: OutlinedButton(
               onPressed: () => Get.back(),
-              child: const Text("Cancel"),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: context.appColors.border),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+              ),
+              child: Text(
+                "Cancel",
+                style: TextHelper.bodyMediumStyle(context).copyWith(
+                  color: context.appColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
           const Gap(Sizes.paddingM),
@@ -709,12 +728,28 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
                     : () => controller.saveEstimate(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.appColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
                 ),
                 child: controller.isSaving.value
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
                         "Save Estimate",
-                        style: TextStyle(color: Colors.white),
+                        style: TextHelper.bodyMediumStyle(context).copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
               ),
             ),

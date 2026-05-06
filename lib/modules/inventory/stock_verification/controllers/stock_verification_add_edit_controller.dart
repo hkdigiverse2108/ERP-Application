@@ -5,6 +5,7 @@ import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/invetory/stock_verification_model.dart';
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/stock_verification_repository.dart';
+import 'package:ai_setu/modules/inventory/stock_verification/controllers/stock_verification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ class StockVerificationAddEditController extends GetxController {
   // Items
   var items = <StockVerificationItem>[].obs;
   var products = <ProductDropdownModel>[].obs;
-  
+
   // Totals
   RxDouble totalProducts = 0.0.obs;
   RxDouble totalPhysicalQty = 0.0.obs;
@@ -51,7 +52,7 @@ class StockVerificationAddEditController extends GetxController {
 
   void loadStockVerificationData() {
     if (stockVerification == null) return;
-    
+
     items.value = List.from(stockVerification!.items);
     calculateTotals();
   }
@@ -87,7 +88,7 @@ class StockVerificationAddEditController extends GetxController {
   void updatePhysicalQty(int index, String value) {
     final qty = double.tryParse(value) ?? 0.0;
     final item = items[index];
-    
+
     final differenceQty = qty - item.systemQty;
     final differenceAmount = differenceQty * item.price;
 
@@ -96,14 +97,20 @@ class StockVerificationAddEditController extends GetxController {
       differenceQty: differenceQty,
       differenceAmount: differenceAmount,
     );
-    
+
     calculateTotals();
   }
 
   void calculateTotals() {
     totalProducts.value = items.length.toDouble();
-    totalPhysicalQty.value = items.fold(0.0, (sum, item) => sum + item.physicalQty);
-    totalDifferenceAmount.value = items.fold(0.0, (sum, item) => sum + item.differenceAmount);
+    totalPhysicalQty.value = items.fold(
+      0.0,
+      (sum, item) => sum + item.physicalQty,
+    );
+    totalDifferenceAmount.value = items.fold(
+      0.0,
+      (sum, item) => sum + item.differenceAmount,
+    );
   }
 
   Future<void> save() async {
@@ -116,17 +123,21 @@ class StockVerificationAddEditController extends GetxController {
       isSaving.value = true;
 
       final Map<String, dynamic> data = {
-        "items": items.map((item) => {
-          "productId": item.productId.id,
-          "landingCost": item.landingCost,
-          "price": item.price,
-          "mrp": item.mrp,
-          "sellingPrice": item.sellingPrice,
-          "systemQty": item.systemQty,
-          "physicalQty": item.physicalQty,
-          "differenceQty": item.differenceQty,
-          "differenceAmount": item.differenceAmount,
-        }).toList(),
+        "items": items
+            .map(
+              (item) => {
+                "productId": item.productId.id,
+                "landingCost": item.landingCost,
+                "price": item.price,
+                "mrp": item.mrp,
+                "sellingPrice": item.sellingPrice,
+                "systemQty": item.systemQty,
+                "physicalQty": item.physicalQty,
+                "differenceQty": item.differenceQty,
+                "differenceAmount": item.differenceAmount,
+              },
+            )
+            .toList(),
         "totalProducts": totalProducts.value,
         "totalPhysicalQty": totalPhysicalQty.value,
         "totalDifferenceAmount": totalDifferenceAmount.value,
@@ -142,7 +153,7 @@ class StockVerificationAddEditController extends GetxController {
       }
 
       if (success) {
-        Get.back(result: true);
+        await _refreshAndBack();
         AppSnackbar.success("Stock Verification saved successfully");
       } else {
         AppSnackbar.error("Failed to save Stock Verification");
@@ -157,16 +168,29 @@ class StockVerificationAddEditController extends GetxController {
 
   Future<List<ProductDropdownModel>> searchProducts(String query) async {
     try {
-      // In a real app, this might be a paginated search. 
-      // For now, we'll use the dropdown repo if it supports search, 
+      // In a real app, this might be a paginated search.
+      // For now, we'll use the dropdown repo if it supports search,
       // or fetch all and filter.
       final products = await _productRepo.getProductDropdown();
       if (query.isEmpty) return products;
-      return products.where((p) => p.name.toLowerCase().contains(query.toLowerCase())).toList();
+      return products
+          .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     } catch (e) {
       Log.e("Search Product Error", e);
       return [];
     }
   }
-}
 
+  Future<void> _refreshAndBack() async {
+    final stockVerificationController =
+        Get.isRegistered<StockVerificationController>()
+        ? Get.find<StockVerificationController>()
+        : null;
+
+    if (stockVerificationController != null) {
+      await stockVerificationController.refreshData();
+    }
+    Get.back(result: true);
+  }
+}

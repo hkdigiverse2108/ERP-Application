@@ -106,6 +106,10 @@ class BankTable extends StatelessWidget {
                 onEditItem: (item) {
                   Get.toNamed(Routes.addUpdateBank, arguments: item);
                 },
+                onRemoveItem: (item) => controller.deleteBank(item.id),
+                deleteTitle: 'Delete Bank',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete bank ${item.name}?',
                 onRowTap: (item) =>
                     Get.toNamed(Routes.bankDetails, arguments: item),
                 onPageChanged: (page) => controller.goToPage(page),

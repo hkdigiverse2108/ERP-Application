@@ -2,6 +2,7 @@ import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dar
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
+import 'package:ai_setu/modules/purchase/purchase_order/controllers/purchase_order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_order_model.dart';
@@ -209,20 +210,23 @@ class PurchaseOrderAddEditController extends GetxController {
     roundOffController.text = order.summary?.roundOff.toString() ?? "0";
 
     ever(suppliers, (allSuppliers) {
-      final supplier =
-          allSuppliers.firstWhereOrNull((s) => s.id == order.supplierId?.id);
+      final supplier = allSuppliers.firstWhereOrNull(
+        (s) => s.id == order.supplierId?.id,
+      );
       if (supplier != null) {
         selectedSupplier.value = supplier;
         final billingId = order.billingAddress?.id;
         final shippingId = order.shippingAddress?.id;
 
         if (billingId != null) {
-          selectedBillingAddress.value =
-              supplier.address.firstWhereOrNull((a) => a.id == billingId);
+          selectedBillingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == billingId,
+          );
         }
         if (shippingId != null) {
-          selectedShippingAddress.value =
-              supplier.address.firstWhereOrNull((a) => a.id == shippingId);
+          selectedShippingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == shippingId,
+          );
         }
       }
     });
@@ -483,7 +487,7 @@ class PurchaseOrderAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        await _refreshAndBack();
         AppSnackbar.success('Purchase Order saved successfully');
       }
     } catch (e) {
@@ -502,6 +506,17 @@ class PurchaseOrderAddEditController extends GetxController {
     flatDiscountController.dispose();
     roundOffController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final purchaseOrderController = Get.isRegistered<PurchaseOrderController>()
+        ? Get.find<PurchaseOrderController>()
+        : null;
+
+    if (purchaseOrderController != null) {
+      await purchaseOrderController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 

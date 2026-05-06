@@ -56,4 +56,8 @@ class SalaryRepository {
     }
     throw Exception(res.message ?? 'Failed to fetch salary');
   }
+
+  Future<ResModel> deleteSalary(String id) async {
+    return await _api.delete(ApiConstants.deleteSalary(id));
+  }
 }

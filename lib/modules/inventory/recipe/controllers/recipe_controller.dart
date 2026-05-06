@@ -2,6 +2,7 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
 import 'package:ai_setu/data/repositories/inventory/recipe_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,6 +73,27 @@ class RecipeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> deleteRecipe(String id) async {
+    try {
+      final success = await _repo.deleteRecipe(id);
+      if (success) {
+        AppSnackbar.success("Recipe deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete recipe");
+      }
+    } catch (e) {
+      Log.e("Error deleting recipe", e);
+      AppSnackbar.error("An error occurred while deleting recipe");
+    }
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getRecipeData();
   }
 
   void _clearCache() {

@@ -2,6 +2,7 @@ import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dar
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
+import 'package:ai_setu/modules/purchase/supplier_bill/controllers/supplier_bill_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/payment_terms/payment_terms_model.dart';
@@ -720,7 +721,7 @@ class SupplierBillAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        await _refreshAndBack();
         AppSnackbar.success('Supplier Bill saved successfully');
       }
     } catch (e) {
@@ -728,6 +729,17 @@ class SupplierBillAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  Future<void> _refreshAndBack() async {
+    final supplierBillController = Get.isRegistered<SupplierBillController>()
+        ? Get.find<SupplierBillController>()
+        : null;
+
+    if (supplierBillController != null) {
+      await supplierBillController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 

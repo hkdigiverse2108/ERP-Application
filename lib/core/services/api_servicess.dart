@@ -220,7 +220,9 @@ class ApiService extends GetxService {
     log("Headers: ${request.headers}");
     if (files != null) {
       for (var f in files) {
-        log("File key: ${f.field}, filename: ${f.filename}, length: ${f.length}");
+        log(
+          "File key: ${f.field}, filename: ${f.filename}, length: ${f.length}",
+        );
       }
     }
 
@@ -257,12 +259,14 @@ class ApiService extends GetxService {
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     final http.Response response;
+
+    log("Delete Request: $url");
     try {
       response = await http
           .delete(
             url,
             headers: {'Content-Type': 'application/json', ...headers},
-            body: jsonEncode(body),
+            // body: jsonEncode(body),
           )
           .timeout(
             const Duration(seconds: 10),

@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
@@ -94,6 +95,11 @@ class TaxesController extends GetxController {
     currentPage.value = 1;
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getTaxesData();
+  }
+
   void onSearch(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
@@ -113,6 +119,19 @@ class TaxesController extends GetxController {
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page;
       await getTaxesData();
+    }
+  }
+
+  Future<void> deleteTax(String id) async {
+    try {
+      isLoading.value = true;
+      await _repo.deleteTax(id);
+      await refreshData();
+      AppSnackbar.success("Tax deleted successfully");
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 

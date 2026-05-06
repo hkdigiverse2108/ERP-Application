@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/crm/coupon_model.dart';
 import 'package:ai_setu/data/repositories/crm/coupon_repository.dart';
+import 'package:ai_setu/modules/crm/coupon/controllers/coupon_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -129,7 +130,7 @@ class CouponAddEditController extends GetxController {
         await _repository.addCoupon(data);
       }
 
-      Get.back(result: true);
+      await _refreshAndBack();
       AppSnackbar.success('Coupon ${isEdit.value ? "updated" : "added"} successfully');
     } catch (e) {
       AppSnackbar.error('Error saving coupon: $e');
@@ -146,5 +147,16 @@ class CouponAddEditController extends GetxController {
     usageLimitController.dispose();
     expiryDaysController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final couponController = Get.isRegistered<CouponController>()
+        ? Get.find<CouponController>()
+        : null;
+
+    if (couponController != null) {
+      await couponController.refreshData();
+    }
+    Get.back();
   }
 }

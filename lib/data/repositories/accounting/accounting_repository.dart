@@ -71,10 +71,7 @@ class AccountingRepository {
   }
 
   Future<ResModel> addDebitNote(Map<String, dynamic> data) async {
-    final ResModel res = await _api.post(
-      ApiConstants.addDebitNote,
-      body: data,
-    );
+    final ResModel res = await _api.post(ApiConstants.addDebitNote, body: data);
     return res;
   }
 
@@ -84,5 +81,19 @@ class AccountingRepository {
       body: data,
     );
     return res;
+  }
+
+  Future<bool> deleteDebitNote({required String id}) async {
+    final ResModel response = await _api.delete(
+      ApiConstants.deleteDebitNote(id: id),
+    );
+    return response.status == 200;
+  }
+
+  Future<bool> deleteCreditNote({required String id}) async {
+    final ResModel response = await _api.delete(
+      ApiConstants.deleteCreditNote(id: id),
+    );
+    return response.status == 200;
   }
 }

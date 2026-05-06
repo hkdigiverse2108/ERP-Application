@@ -7,6 +7,7 @@ import 'package:ai_setu/data/model/invetory/stock_model.dart';
 import 'package:ai_setu/data/repositories/inventory/brand_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/category_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/stock_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -212,6 +213,22 @@ class StockController extends GetxController {
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page;
       await getStockList();
+    }
+  }
+
+  Future<void> deleteStock(String id) async {
+    try {
+      final success = await _repo.deleteStock(id);
+      if (success) {
+        AppSnackbar.success("Stock deleted successfully");
+        _clearCache();
+        await getStockList();
+      } else {
+        AppSnackbar.error("Failed to delete stock");
+      }
+    } catch (e) {
+      Log.e("Error deleting stock", e);
+      AppSnackbar.error("An error occurred while deleting stock");
     }
   }
 }

@@ -34,6 +34,11 @@ class Settings extends StatelessWidget {
       'Consumption Type',
       Routes.settingsConsumptionType,
     ),
+    (
+      PhosphorIconsLight.lockKey,
+      'Change Password',
+      Routes.settingsChangePassword,
+    ),
   ];
 
   @override

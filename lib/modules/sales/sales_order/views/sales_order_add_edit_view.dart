@@ -91,7 +91,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  controller.isEdit.value ? "Edit Sales Order" : "Add Sales Order",
+                  controller.isEdit.value
+                      ? "Edit Sales Order"
+                      : "Add Sales Order",
                   style: TextHelper.h5Style(context).copyWith(
                     fontWeight: FontWeight.bold,
                     color: context.appColors.textPrimary,
@@ -99,9 +101,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                 ),
                 Text(
                   "Manage your sales orders efficiently",
-                  style: TextHelper.captionStyle(context).copyWith(
-                    color: context.appColors.textSecondary,
-                  ),
+                  style: TextHelper.captionStyle(
+                    context,
+                  ).copyWith(color: context.appColors.textSecondary),
                 ),
               ],
             ),
@@ -126,8 +128,8 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                   items: controller.estimates.map((e) => e.name).toList(),
                   searchable: true,
                   onChanged: (v) {
-                    controller.selectedEstimate.value =
-                        controller.estimates.firstWhereOrNull((e) => e.name == v);
+                    controller.selectedEstimate.value = controller.estimates
+                        .firstWhereOrNull((e) => e.name == v);
                   },
                 ),
               ),
@@ -139,8 +141,8 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                   items: controller.salesmen.map((e) => e.fullName).toList(),
                   searchable: true,
                   onChanged: (v) {
-                    controller.selectedSalesman.value =
-                        controller.salesmen.firstWhereOrNull((e) => e.fullName == v);
+                    controller.selectedSalesman.value = controller.salesmen
+                        .firstWhereOrNull((e) => e.fullName == v);
                   },
                 ),
               ),
@@ -153,8 +155,8 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
             items: controller.customers.map((e) => e.name).toList(),
             searchable: true,
             onChanged: (v) {
-              controller.selectedCustomer.value =
-                  controller.customers.firstWhereOrNull((e) => e.name == v);
+              controller.selectedCustomer.value = controller.customers
+                  .firstWhereOrNull((e) => e.name == v);
             },
           ),
           const Gap(Sizes.paddingM),
@@ -168,8 +170,12 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                 Expanded(
                   child: CustomDropdown(
                     label: "Billing Address",
-                    value: _formatAddress(controller.selectedBillingAddress.value),
-                    items: customer.address.map((a) => _formatAddress(a)).toList(),
+                    value: _formatAddress(
+                      controller.selectedBillingAddress.value,
+                    ),
+                    items: customer.address
+                        .map((a) => _formatAddress(a))
+                        .toList(),
                     onChanged: (v) {
                       controller.selectedBillingAddress.value = customer.address
                           .firstWhereOrNull((a) => _formatAddress(a) == v);
@@ -180,10 +186,15 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                 Expanded(
                   child: CustomDropdown(
                     label: "Shipping Address",
-                    value: _formatAddress(controller.selectedShippingAddress.value),
-                    items: customer.address.map((a) => _formatAddress(a)).toList(),
+                    value: _formatAddress(
+                      controller.selectedShippingAddress.value,
+                    ),
+                    items: customer.address
+                        .map((a) => _formatAddress(a))
+                        .toList(),
                     onChanged: (v) {
-                      controller.selectedShippingAddress.value = customer.address
+                      controller.selectedShippingAddress.value = customer
+                          .address
                           .firstWhereOrNull((a) => _formatAddress(a) == v);
                     },
                   ),
@@ -201,7 +212,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                     child: EditTextField(
                       label: "Date",
                       controller: TextEditingController(
-                        text: DateFormat('dd/MM/yyyy').format(controller.salesOrderDate.value),
+                        text: DateFormat(
+                          'dd/MM/yyyy',
+                        ).format(controller.salesOrderDate.value),
                       ),
                       suffixIcon: const Icon(PhosphorIconsLight.calendar),
                     ),
@@ -229,7 +242,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                     child: EditTextField(
                       label: "Due Date",
                       controller: TextEditingController(
-                        text: DateFormat('dd/MM/yyyy').format(controller.dueDate.value),
+                        text: DateFormat(
+                          'dd/MM/yyyy',
+                        ).format(controller.dueDate.value),
                       ),
                       suffixIcon: const Icon(PhosphorIconsLight.calendar),
                     ),
@@ -243,8 +258,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                   value: controller.selectedPaymentTerm.value?.name,
                   items: controller.paymentTerms.map((e) => e.name).toList(),
                   onChanged: (v) {
-                    controller.selectedPaymentTerm.value =
-                        controller.paymentTerms.firstWhereOrNull((e) => e.name == v);
+                    controller.selectedPaymentTerm.value = controller
+                        .paymentTerms
+                        .firstWhereOrNull((e) => e.name == v);
                   },
                 ),
               ),
@@ -267,7 +283,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
               searchable: true,
               items: controller.products.map((e) => e.name).toList(),
               onChanged: (v) {
-                final product = controller.products.firstWhereOrNull((e) => e.name == v);
+                final product = controller.products.firstWhereOrNull(
+                  (e) => e.name == v,
+                );
                 if (product != null) {
                   controller.addItem(product);
                 }
@@ -277,13 +295,17 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
             if (controller.items.isEmpty)
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Sizes.paddingXL),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.paddingXL,
+                  ),
                   child: Column(
                     children: [
                       Icon(
                         PhosphorIconsLight.shoppingCartSimple,
                         size: 48,
-                        color: context.appColors.textSecondary.withValues(alpha: 0.3),
+                        color: context.appColors.textSecondary.withValues(
+                          alpha: 0.3,
+                        ),
                       ),
                       const Gap(Sizes.paddingS),
                       Text(
@@ -384,14 +406,17 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                 child: CustomDropdown(
                   label: "Charge Name",
                   value: charge.name.isEmpty ? null : charge.name,
-                  items: controller.availableAdditionalCharges.map((e) => e.name).toList(),
+                  items: controller.availableAdditionalCharges
+                      .map((e) => e.name)
+                      .toList(),
                   searchable: true,
                   onChanged: (v) {
                     final selected = controller.availableAdditionalCharges
                         .firstWhereOrNull((e) => e.name == v);
                     if (selected != null) {
-                      final tax = controller.taxes
-                          .firstWhereOrNull((t) => t.id == selected.taxId.id);
+                      final tax = controller.taxes.firstWhereOrNull(
+                        (t) => t.id == selected.taxId.id,
+                      );
                       controller.updateAdditionalCharge(
                         index,
                         charge.copyWith(
@@ -422,7 +447,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
               Expanded(
                 child: EditTextField(
                   label: "Amount",
-                  controller: TextEditingController(text: charge.amount.toString()),
+                  controller: TextEditingController(
+                    text: charge.amount.toString(),
+                  ),
                   keyboardType: TextInputType.number,
                   onChanged: (v) {
                     controller.updateAdditionalCharge(
@@ -436,10 +463,14 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
               Expanded(
                 child: CustomDropdown(
                   label: "Tax",
-                  value: controller.taxes.firstWhereOrNull((t) => t.id == charge.taxId)?.name,
+                  value: controller.taxes
+                      .firstWhereOrNull((t) => t.id == charge.taxId)
+                      ?.name,
                   items: controller.taxes.map((e) => e.name).toList(),
                   onChanged: (v) {
-                    final selected = controller.taxes.firstWhereOrNull((t) => t.name == v);
+                    final selected = controller.taxes.firstWhereOrNull(
+                      (t) => t.name == v,
+                    );
                     if (selected != null) {
                       controller.updateAdditionalCharge(
                         index,
@@ -481,7 +512,9 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                     value: null,
                     searchable: true,
                     onChanged: (v) {
-                      final selected = unselected.firstWhere((t) => t.termsCondition == v);
+                      final selected = unselected.firstWhere(
+                        (t) => t.termsCondition == v,
+                      );
                       controller.toggleTerm(selected);
                     },
                   );
@@ -526,7 +559,10 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
                       ),
                       IconButton(
                         onPressed: () => controller.toggleTerm(term),
-                        icon: Icon(PhosphorIconsLight.trash, color: context.appColors.error),
+                        icon: Icon(
+                          PhosphorIconsLight.trash,
+                          color: context.appColors.error,
+                        ),
                       ),
                     ],
                   ),
@@ -552,17 +588,19 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
         ),
         actions: [
           TextButton(onPressed: () => Get.back(), child: const Text("Cancel")),
-          Obx(() => ElevatedButton(
-                onPressed: controller.isAddingTerm.value
-                    ? null
-                    : () async {
-                        if (contentController.text.isNotEmpty) {
-                          await controller.addNewTerm("", contentController.text);
-                          Get.back();
-                        }
-                      },
-                child: const Text("Save Term"),
-              )),
+          Obx(
+            () => ElevatedButton(
+              onPressed: controller.isAddingTerm.value
+                  ? null
+                  : () async {
+                      if (contentController.text.isNotEmpty) {
+                        await controller.addNewTerm("", contentController.text);
+                        Get.back();
+                      }
+                    },
+              child: const Text("Save Term"),
+            ),
+          ),
         ],
       ),
     );
@@ -578,25 +616,30 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
           Row(
             children: [
               Expanded(
-                child: Obx(() => CustomDropdown(
-                      label: "Transporter",
-                      items: controller.transporters.map((e) => e.name).toList(),
-                      value: controller.selectedTransporter.value?.name,
-                      searchable: true,
-                      onChanged: (v) {
-                        controller.selectedTransporter.value =
-                            controller.transporters.firstWhereOrNull((e) => e.name == v);
-                      },
-                    )),
+                child: Obx(
+                  () => CustomDropdown(
+                    label: "Transporter",
+                    items: controller.transporters.map((e) => e.name).toList(),
+                    value: controller.selectedTransporter.value?.name,
+                    searchable: true,
+                    onChanged: (v) {
+                      controller.selectedTransporter.value = controller
+                          .transporters
+                          .firstWhereOrNull((e) => e.name == v);
+                    },
+                  ),
+                ),
               ),
               const Gap(Sizes.paddingM),
               Expanded(
-                child: Obx(() => CustomDropdown(
-                      label: "Shipping Type",
-                      items: const ["delivery", "pickup", "courier", "other"],
-                      value: controller.shippingType.value,
-                      onChanged: (v) => controller.shippingType.value = v,
-                    )),
+                child: Obx(
+                  () => CustomDropdown(
+                    label: "Shipping Type",
+                    items: const ["delivery", "pickup", "courier", "other"],
+                    value: controller.shippingType.value,
+                    onChanged: (v) => controller.shippingType.value = v,
+                  ),
+                ),
               ),
             ],
           ),
@@ -604,28 +647,35 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
           Row(
             children: [
               Expanded(
-                child: Obx(() => InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: controller.shippingDate.value ?? DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (picked != null) controller.shippingDate.value = picked;
-                      },
-                      child: IgnorePointer(
-                        child: EditTextField(
-                          label: "Shipping Date",
-                          controller: TextEditingController(
-                            text: controller.shippingDate.value != null
-                                ? DateFormat('dd/MM/yyyy').format(controller.shippingDate.value!)
-                                : '',
-                          ),
-                          suffixIcon: const Icon(PhosphorIconsLight.calendar),
+                child: Obx(
+                  () => InkWell(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            controller.shippingDate.value ?? DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        controller.shippingDate.value = picked;
+                      }
+                    },
+                    child: IgnorePointer(
+                      child: EditTextField(
+                        label: "Shipping Date",
+                        controller: TextEditingController(
+                          text: controller.shippingDate.value != null
+                              ? DateFormat(
+                                  'dd/MM/yyyy',
+                                ).format(controller.shippingDate.value!)
+                              : '',
                         ),
+                        suffixIcon: const Icon(PhosphorIconsLight.calendar),
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ),
               const Gap(Sizes.paddingM),
               Expanded(
@@ -670,26 +720,66 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
       padding: const EdgeInsets.all(Sizes.paddingM),
       decoration: BoxDecoration(
         color: context.appColors.surface,
-        border: Border(top: BorderSide(color: context.appColors.border)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Expanded(
             child: OutlinedButton(
               onPressed: () => Get.back(),
-              child: const Text("Cancel"),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: context.appColors.border),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+              ),
+              child: Text(
+                "Cancel",
+                style: TextHelper.bodyMediumStyle(context).copyWith(
+                  color: context.appColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
           const Gap(Sizes.paddingM),
           Expanded(
-            child: Obx(() => ElevatedButton(
-                  onPressed: controller.isSaving.value ? null : () => controller.saveSalesOrder(),
-                  style: ElevatedButton.styleFrom(backgroundColor: context.appColors.primary),
-                  child: controller.isSaving.value
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(controller.isEdit.value ? "Update Order" : "Save Order", 
-                          style: const TextStyle(color: Colors.white)),
-                )),
+            child: Obx(
+              () => ElevatedButton(
+                onPressed: controller.isSaving.value
+                    ? null
+                    : () => controller.saveSalesOrder(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.appColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
+                ),
+                child: controller.isSaving.value
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        controller.isEdit.value ? "Update Order" : "Save Order",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+              ),
+            ),
           ),
         ],
       ),

@@ -141,6 +141,12 @@ class SalesRegisterController extends GetxController {
     getSalesRegisterData();
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getSalesRegisterData();
+  }
+
   @override
   void onClose() {
     _fyWorker?.dispose();

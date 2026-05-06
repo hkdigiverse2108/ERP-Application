@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/bank_transaction_model.dart';
 
@@ -112,10 +113,30 @@ class BankTransactionController extends GetxController {
     getTransactionsData();
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getTransactionsData();
+  }
+
+  Future<void> deleteBankTransaction(String id) async {
+    try {
+      final res = await _repository.deleteBankTransaction(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? 'Transaction deleted successfully');
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? 'Failed to delete transaction');
+      }
+    } catch (e) {
+      Log.e("BankTransaction Module Error (Delete)", e);
+      AppSnackbar.error('An error occurred while deleting transaction');
+    }
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();
     super.onClose();
   }
 }
-

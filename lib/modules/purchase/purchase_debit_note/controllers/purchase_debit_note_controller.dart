@@ -1,10 +1,12 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 
 import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_debit_note_model.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/purchase/purchase_repository.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +114,31 @@ class PurchaseDebitNoteController extends GetxController {
     }
   }
 
+  Future<void> deletePurchaseDebitNote(String id) async {
+    try {
+      final ResModel res = await _repository.deletePurchaseDebitNote(id);
+      if (res.status == 200) {
+        AppSnackbar.success(
+          res.message ?? "Purchase debit note deleted successfully",
+        );
+        await refreshData();
+      } else {
+        AppSnackbar.error(
+          res.message ?? "Failed to delete purchase debit note",
+        );
+      }
+    } catch (e) {
+      Log.e("Purchase Module Error (PurchaseDebitNote Delete)", e);
+      AppSnackbar.error("An error occurred while deleting purchase debit note");
+    }
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getPurchaseDebitNotesData();
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;
@@ -152,4 +179,3 @@ class PurchaseDebitNoteController extends GetxController {
     super.onClose();
   }
 }
-

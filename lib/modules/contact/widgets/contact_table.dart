@@ -76,6 +76,16 @@ class ContactTable extends StatelessWidget {
                     ),
                   ),
                   TableColumn(
+                    title: 'Type',
+                    width: 120,
+                    alignment: TextAlign.center,
+                    cellBuilder: (context, item, index) => Text(
+                      item.contactType,
+                      textAlign: TextAlign.center,
+                      style: TextHelper.bodySmall,
+                    ),
+                  ),
+                  TableColumn(
                     title: 'Loyalty Points',
                     width: 100,
                     alignment: TextAlign.center,

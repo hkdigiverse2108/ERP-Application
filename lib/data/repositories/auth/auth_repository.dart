@@ -88,6 +88,31 @@ class AuthRepository {
     throw Exception(res.message ?? 'Failed to update password');
   }
 
+  Future<ResModel> changePassword({
+    required String email,
+    required String loginSource,
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    final ResModel res = await _api.post(
+      ApiConstants.changePassword,
+      body: {
+        "email": email,
+        "loginSource": loginSource,
+        "oldPassword": oldPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+      },
+    );
+
+    if (res.status == 200) {
+      return res;
+    }
+
+    throw Exception(res.message ?? 'Failed to change password');
+  }
+
   Future<void> logout() async {
     try {
       await _api.storageService.clearSession();

@@ -149,11 +149,13 @@ class DashboardRepository {
     DateTime? startDate,
     DateTime? endDate,
     String? branchId,
+    String? typeFilter,
   }) async {
     final String url = ApiConstants.buildUrl(ApiConstants.transactionGraph, {
       if (startDate != null) 'startDate': startDate.toIso8601String(),
       if (endDate != null) 'endDate': endDate.toIso8601String(),
       'branchFilter': branchId ?? 'all',
+      'typeFilter': typeFilter,
     });
     final ResModel res = await _api.get(url);
 

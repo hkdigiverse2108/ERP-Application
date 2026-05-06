@@ -1,7 +1,9 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/crm/discount_model.dart';
 import 'package:ai_setu/data/repositories/crm/discount_repository.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -78,23 +80,24 @@ class DiscountController extends GetxController {
     }
   }
 
-  void _clearCache() {
+  Future<void> refreshData() async {
     _cache.clear();
     currentPage.value = 1;
+    await getDiscountData();
   }
 
   void onSearch(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       searchQuery.value = query;
-      _clearCache();
+      refreshData();
       getDiscountData();
     });
   }
 
   void onFiltersChanged(Map<String, dynamic> filters) {
     this.filters.value = filters;
-    _clearCache();
+    refreshData();
     getDiscountData();
   }
 
@@ -107,8 +110,22 @@ class DiscountController extends GetxController {
 
   void updateDateRange(DateTimeRange range) {
     selectedDateRange.value = range;
-    _clearCache();
-    getDiscountData();
+    refreshData();
+  }
+
+  Future<void> deleteDiscount(String id) async {
+    try {
+      final ResModel res = await _repository.deleteDiscount(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Discount deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete discount");
+      }
+    } catch (e) {
+      Log.e("CRM Module Error (Discount Delete)", e);
+      AppSnackbar.error("An error occurred while deleting discount");
+    }
   }
 
   @override

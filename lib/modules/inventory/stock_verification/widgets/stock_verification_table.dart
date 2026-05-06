@@ -50,6 +50,11 @@ class StockVerificationTable extends StatelessWidget {
                     controller.refreshData();
                   }
                 },
+                onRemoveItem: (item) =>
+                    controller.deleteStockVerification(item.id),
+                deleteTitle: "Delete Stock Verification",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete '${item.stockVerificationNo}'? This action cannot be undone.",
                 isLoading: controller.isLoading.value,
                 items: controller.stockVerifications,
                 columns: [

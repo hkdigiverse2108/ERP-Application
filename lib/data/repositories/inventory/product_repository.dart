@@ -75,6 +75,11 @@ class ProductRepository {
     throw Exception(res.message ?? 'Failed to update product');
   }
 
+  Future<bool> deleteProduct(String id) async {
+    final ResModel res = await _api.delete(ApiConstants.deleteProduct(id));
+    return res.status == 200;
+  }
+
   Future<List<ProductDropdownModel>> getProductDropdown({
     bool? isNewProduct,
   }) async {

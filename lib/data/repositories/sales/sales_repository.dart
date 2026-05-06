@@ -403,4 +403,24 @@ class SalesRepository {
     }
     throw Exception(res.message ?? 'Failed to fetch sales credit note details');
   }
+
+  Future<ResModel> deleteEstimate(String id) async {
+    return await _api.delete(ApiConstants.deleteEstimate(id));
+  }
+
+  Future<ResModel> deleteSalesOrder(String id) async {
+    return await _api.delete(ApiConstants.deleteSalesOrder(id));
+  }
+
+  Future<ResModel> deleteInvoice(String id) async {
+    return await _api.delete(ApiConstants.deleteInvoice(id));
+  }
+
+  Future<ResModel> deleteDeliveryChallan(String id) async {
+    return await _api.delete(ApiConstants.deleteDeliveryChallan(id));
+  }
+
+  Future<ResModel> deleteSalesCreditNote(String id) async {
+    return await _api.delete(ApiConstants.deleteSalesCreditNote(id));
+  }
 }

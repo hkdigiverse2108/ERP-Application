@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/crm/loyalty_model.dart';
 import 'package:ai_setu/data/repositories/crm/loyalty_repository.dart';
+import 'package:ai_setu/modules/crm/loyalty/controllers/loyalty_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -106,8 +107,7 @@ class LoyaltyAddEditController extends GetxController {
       } else {
         await _repository.addLoyalty(data);
       }
-
-      Get.back(result: true);
+      await _refreshAndBack();
       AppSnackbar.success(
         'Loyalty campaign ${isEdit.value ? "updated" : "added"} successfully',
       );
@@ -127,5 +127,16 @@ class LoyaltyAddEditController extends GetxController {
     usageLimitController.dispose();
     descriptionController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final loyaltyController = Get.isRegistered<LoyaltyController>()
+        ? Get.find<LoyaltyController>()
+        : null;
+
+    if (loyaltyController != null) {
+      await loyaltyController.refreshData();
+    }
+    Get.back();
   }
 }

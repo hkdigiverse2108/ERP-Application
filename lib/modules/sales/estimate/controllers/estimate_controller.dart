@@ -8,6 +8,8 @@ import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/selas/estimate_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/sales/sales_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -155,6 +157,27 @@ class EstimateController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getEstimatesData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getEstimatesData();
+  }
+
+  Future<void> deleteEstimate(String id) async {
+    try {
+      final ResModel res = await _repository.deleteEstimate(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Estimate deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete estimate");
+      }
+    } catch (e) {
+      Log.e("Sales Module Error (Estimate Delete)", e);
+      AppSnackbar.error("An error occurred while deleting estimate");
+    }
   }
 
   @override

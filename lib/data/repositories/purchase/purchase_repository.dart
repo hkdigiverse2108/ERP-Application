@@ -67,6 +67,10 @@ class PurchaseRepository {
     }
   }
 
+  Future<ResModel> deletePurchaseOrder(String id) async {
+    return await _api.delete(ApiConstants.deletePurchaseOrder(id));
+  }
+
   // Supplier Bill
   Future<PaginationModel<SupplierBillModel>> getAllSupplierBill({
     int? page,
@@ -125,6 +129,10 @@ class PurchaseRepository {
     } else {
       throw Exception(res.message);
     }
+  }
+
+  Future<ResModel> deleteSupplierBill(String id) async {
+    return await _api.delete(ApiConstants.deleteSupplierBill(id));
   }
 
   Future<PaginationModel<PurchaseDebitNoteModel>> getAllPurchaseDebitNote({
@@ -187,5 +195,9 @@ class PurchaseRepository {
     } else {
       throw Exception(res.message);
     }
+  }
+
+  Future<ResModel> deletePurchaseDebitNote(String id) async {
+    return await _api.delete(ApiConstants.deletePurchaseDebitNote(id));
   }
 }

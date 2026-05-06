@@ -3,6 +3,7 @@ import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/bank_transaction_model.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/repositories/bank_cash/bank_repository.dart';
+import 'package:ai_setu/modules/bank_cash/bank_transaction/controllers/bank_transaction_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -108,7 +109,7 @@ class BankTransactionAddEditController extends GetxController {
         data["bankTransactionId"] = transaction!.id;
         final res = await _bankRepo.updateBankTransaction(data);
         if (res) {
-          Get.back(result: true);
+          _refreshAndBack();
           AppSnackbar.success("Transaction updated successfully");
         } else {
           AppSnackbar.error("Failed to update transaction");
@@ -116,7 +117,7 @@ class BankTransactionAddEditController extends GetxController {
       } else {
         final res = await _bankRepo.addBankTransaction(data);
         if (res) {
-          Get.back(result: true);
+          _refreshAndBack();
           AppSnackbar.success("Transaction added successfully");
         } else {
           AppSnackbar.error("Failed to add transaction");
@@ -127,6 +128,13 @@ class BankTransactionAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<BankTransactionController>()) {
+      BankTransactionController.instance.refreshData();
+    }
+    Get.back();
   }
 
   void selectDate(BuildContext context) async {

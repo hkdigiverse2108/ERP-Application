@@ -60,4 +60,8 @@ class ExpenseRepository {
     }
     throw Exception(res.message ?? 'Failed to fetch expense');
   }
+
+  Future<ResModel> deleteExpense(String id) async {
+    return await _api.delete(ApiConstants.deleteExpense(id));
+  }
 }

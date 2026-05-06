@@ -56,4 +56,8 @@ class DiscountRepository {
       throw Exception(res.message ?? "Something went wrong");
     }
   }
+
+  Future<ResModel> deleteDiscount(String id) async {
+    return await _api.delete(ApiConstants.deleteDiscount(id));
+  }
 }

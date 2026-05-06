@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/payment_terms/payment_terms_model.dart';
@@ -7,7 +8,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class PaymentTermsTable extends StatelessWidget {
@@ -46,11 +46,15 @@ class PaymentTermsTable extends StatelessWidget {
             totalItems: controller.totalItems.value,
             onPageChanged: (page) => controller.goToPage(page),
             onEditItem: (item) {
-              AppSnackbar.info("Edit Payment Term: ${item.name}");
+              Get.toNamed(
+                Routes.settingsPaymentTermsAddEdit,
+                arguments: {'paymentTermId': item.id, 'isEdit': true},
+              );
             },
-            onRemoveItem: (item) {
-              AppSnackbar.warning("Delete Payment Term: ${item.name}");
-            },
+            onRemoveItem: (item) => controller.deletePaymentTerm(item.id),
+            deleteTitle: "Delete Payment Term",
+            deleteMessage: (item) =>
+                "Are you sure you want to delete '${item.name}'? This action cannot be undone.",
             // canEdit: isAuthorized,
             // canDelete: isAuthorized,
             columns: [

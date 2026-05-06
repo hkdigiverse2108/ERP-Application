@@ -7,6 +7,8 @@ import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/selas/invoice_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/sales/sales_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -146,6 +148,27 @@ class InvoiceController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getInvoicesData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getInvoicesData();
+  }
+
+  Future<void> deleteInvoice(String id) async {
+    try {
+      final ResModel res = await _repository.deleteInvoice(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Invoice deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete invoice");
+      }
+    } catch (e) {
+      Log.e("Sales Module Error (Invoice Delete)", e);
+      AppSnackbar.error("An error occurred while deleting invoice");
+    }
   }
 
   @override

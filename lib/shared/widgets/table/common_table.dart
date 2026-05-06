@@ -6,6 +6,7 @@ import 'package:ai_setu/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:ai_setu/shared/widgets/app_showcase_tooltip.dart';
+import 'package:ai_setu/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -47,6 +48,10 @@ class CommonTable<T> extends StatelessWidget {
   final int? totalItems;
   final int pageSize;
 
+  final bool confirmDelete;
+  final String? deleteTitle;
+  final String Function(T item)? deleteMessage;
+
   const CommonTable({
     super.key,
     required this.items,
@@ -69,6 +74,9 @@ class CommonTable<T> extends StatelessWidget {
     this.totalItems,
     this.pageSize = 10,
     this.showcaseKey,
+    this.confirmDelete = true,
+    this.deleteTitle,
+    this.deleteMessage,
   });
 
   static const double _colSerial = 40;
@@ -361,7 +369,21 @@ class CommonTable<T> extends StatelessWidget {
                             context,
                             icon: PhosphorIconsBold.trash,
                             color: AppColors.error,
-                            onTap: () => onRemoveItem?.call(item),
+                            onTap: () {
+                              if (confirmDelete) {
+                                ConfirmDialog.show(
+                                  title: deleteTitle ?? "Confirm Delete",
+                                  message: deleteMessage?.call(item) ??
+                                      "Are you sure you want to delete this item?",
+                                  confirmText: "Delete",
+                                  confirmColor: AppColors.error,
+                                  icon: Icons.delete_outline,
+                                  onConfirm: () => onRemoveItem?.call(item),
+                                );
+                              } else {
+                                onRemoveItem?.call(item);
+                              }
+                            },
                             tooltip: 'Delete',
                           ),
                       ],

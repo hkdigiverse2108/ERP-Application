@@ -99,14 +99,11 @@ class DebitAddEditController extends GetxController {
       }
 
       if (res.status == 200) {
-        Get.back();
+        await _refreshAndBack();
         AppSnackbar.success(
           res.message ??
               "Debit Note ${isEdit ? 'Updated' : 'Added'} Successfully",
         );
-        if (Get.isRegistered<DebitController>()) {
-          Get.find<DebitController>().getDebitNotesData();
-        }
       } else {
         AppSnackbar.error(res.message ?? "Something went wrong");
       }
@@ -140,6 +137,17 @@ class DebitAddEditController extends GetxController {
     descriptionController.dispose();
     dateController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final debitController = Get.isRegistered<DebitController>()
+        ? Get.find<DebitController>()
+        : null;
+
+    if (debitController != null) {
+      await debitController.refreshData();
+    }
+    Get.back();
   }
 }
 

@@ -138,73 +138,77 @@ class _FilterSectionState extends State<FilterSection>
               ),
             const Gap(5),
             // Active filter badge + button
-            Showcase.withWidget(
-              key: ShowcaseService.to.productFilterKey,
-              container: AppShowcaseTooltip(
-                title: Strings.showcaseFilterTitle,
-                description: Strings.showcaseFilterDesc,
-                onNext: () => ShowcaseView.get().next(),
-                onSkip: () => ShowcaseView.get().dismiss(),
-              ),
-              targetShapeBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              ),
-              targetPadding: const EdgeInsets.all(8),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                onTap: _toggleFilters,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _filtersOpen || _activeCount > 0
-                        ? context.appColors.sectionSell
-                        : Colors.transparent,
-                    border: Border.all(
-                      color: _filtersOpen || _activeCount > 0
-                          ? Theme.of(context).colorScheme.primary
-                          : context.appColors.border,
+            if (widget.filters.isNotEmpty)
+              Showcase.withWidget(
+                key: ShowcaseService.to.productFilterKey,
+                container: AppShowcaseTooltip(
+                  title: Strings.showcaseFilterTitle,
+                  description: Strings.showcaseFilterDesc,
+                  onNext: () => ShowcaseView.get().next(),
+                  onSkip: () => ShowcaseView.get().dismiss(),
+                ),
+                targetShapeBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+                targetPadding: const EdgeInsets.all(8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  onTap: _toggleFilters,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
                     ),
-                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        PhosphorIconsLight.funnelSimple,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.onSurface,
+                    decoration: BoxDecoration(
+                      color: _filtersOpen || _activeCount > 0
+                          ? context.appColors.sectionSell
+                          : Colors.transparent,
+                      border: Border.all(
+                        color: _filtersOpen || _activeCount > 0
+                            ? Theme.of(context).colorScheme.primary
+                            : context.appColors.border,
                       ),
-                      const Gap(4),
-                      Text('Filter', style: TextHelper.bodySmallStyle(context)),
-                      if (_activeCount > 0) ...[
-                        const Gap(6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 1,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '$_activeCount',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          PhosphorIconsLight.funnelSimple,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        const Gap(4),
+                        Text(
+                          'Filter',
+                          style: TextHelper.bodySmallStyle(context),
+                        ),
+                        if (_activeCount > 0) ...[
+                          const Gap(6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 1,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '$_activeCount',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
 

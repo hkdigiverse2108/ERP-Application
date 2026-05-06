@@ -51,4 +51,9 @@ class RecipeRepository {
     final ResModel response = await _api.post(ApiConstants.updateRecipe, body: data);
     return response.status == 200;
   }
+
+  Future<bool> deleteRecipe(String id) async {
+    final ResModel response = await _api.delete(ApiConstants.deleteRecipe(id));
+    return response.status == 200;
+  }
 }

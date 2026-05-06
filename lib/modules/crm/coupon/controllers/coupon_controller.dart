@@ -2,8 +2,10 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/crm/coupon_model.dart';
 import 'package:ai_setu/data/repositories/crm/coupon_repository.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -129,6 +131,27 @@ class CouponController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getCouponData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getCouponData();
+  }
+
+  Future<void> deleteCoupon(String id) async {
+    try {
+      final ResModel res = await _repository.deleteCoupon(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Coupon deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete coupon");
+      }
+    } catch (e) {
+      Log.e("CRM Module Error (Coupon Delete)", e);
+      AppSnackbar.error("An error occurred while deleting coupon");
+    }
   }
 
   @override

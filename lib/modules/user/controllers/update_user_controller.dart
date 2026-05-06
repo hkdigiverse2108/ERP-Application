@@ -7,6 +7,7 @@ import 'package:ai_setu/data/model/user_model.dart';
 import 'package:ai_setu/data/repositories/inventory/location_repository.dart';
 import 'package:ai_setu/data/repositories/user/role_repository.dart';
 import 'package:ai_setu/data/repositories/user/user_repository.dart';
+import 'package:ai_setu/modules/user/controllers/user_controller.dart';
 import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -319,8 +320,8 @@ class UpdateUserController extends GetxController {
       final ResModel res = await _repo.updateUser(userData);
 
       if (res.status == 200) {
-        Get.back();
         AppSnackbar.success("User updated successfully");
+        await _refreshAndBack();
       } else {
         AppSnackbar.error(res.message ?? "Failed to update user");
       }
@@ -413,5 +414,15 @@ class UpdateUserController extends GetxController {
 
     super.onClose();
   }
-}
 
+  Future<void> _refreshAndBack() async {
+    final userController = Get.isRegistered<UserController>()
+        ? Get.find<UserController>()
+        : null;
+
+    if (userController != null) {
+      await userController.refreshData();
+    }
+    Get.back();
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/consumption_type/consumption_type_model.dart';
@@ -7,7 +8,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class ConsumptionTypeTable extends StatelessWidget {
@@ -35,9 +35,17 @@ class ConsumptionTypeTable extends StatelessWidget {
             totalItems: controller.totalItems.value,
             onPageChanged: (page) => controller.goToPage(page),
             onEditItem: (item) {
-              AppSnackbar.info("Edit Consumption Type: ${item.name}");
+              Get.toNamed(
+                Routes.settingsConsumptionTypeAddEdit,
+                arguments: {'isEdit': true, 'consumptionTypeId': item.id},
+              );
             },
-            // Note: Omitting delete button and authorization as per recent pattern
+            onRemoveItem: (item) => controller.deleteConsumptionType(item.id),
+            deleteTitle: "Delete Consumption Type",
+            deleteMessage: (item) =>
+                "Are you sure you want to delete '${item.name}'? This action cannot be undone.",
+            canEdit: (item) => !item.isSystemGenerated,
+            canDelete: (item) => !item.isSystemGenerated,
             columns: [
               TableColumn(
                 title: "Name",
@@ -50,32 +58,40 @@ class ConsumptionTypeTable extends StatelessWidget {
                 ),
               ),
               TableColumn(
-                title: "Default",
+                title: "System",
                 width: 100,
-                cellBuilder: (context, item, index) => item.isDefault
+                cellBuilder: (context, item, index) => item.isSystemGenerated
                     ? Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
-                          vertical: 2,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.1),
+                          color: Colors.blue.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
                         ),
                         child: Text(
-                          "Default",
+                          "Yes",
                           style: TextHelper.bodySmall.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Colors.blue,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       )
-                    : const SizedBox.shrink(),
+                    : Text(
+                        "No",
+                        style: TextHelper.bodySmall.copyWith(
+                          color: Colors.grey,
+                        ),
+                      ),
+              ),
+              TableColumn(
+                title: "Created By",
+                width: 180,
+                cellBuilder: (context, item, index) => Text(
+                  item.isSystemGenerated ? "System" : item.createdBy.fullName,
+                  style: TextHelper.bodySmall,
+                ),
               ),
               TableColumn(
                 title: "Status",

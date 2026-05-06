@@ -2,6 +2,7 @@ import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dar
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
+import 'package:ai_setu/modules/purchase/purchase_debit_note/controllers/purchase_debit_note_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/purchase/purchase_debit_note_model.dart';
@@ -195,14 +196,20 @@ class PurchaseDebitNoteAddEditController extends GetxController {
         : note.shippingAddress?.id;
 
     ever(suppliers, (allSuppliers) {
-      final supplier = allSuppliers.firstWhereOrNull((s) => s.id == note.supplierId?.id);
+      final supplier = allSuppliers.firstWhereOrNull(
+        (s) => s.id == note.supplierId?.id,
+      );
       if (supplier != null) {
         selectedSupplier.value = supplier;
         if (billingId != null) {
-          selectedBillingAddress.value = supplier.address.firstWhereOrNull((a) => a.id == billingId);
+          selectedBillingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == billingId,
+          );
         }
         if (shippingId != null) {
-          selectedShippingAddress.value = supplier.address.firstWhereOrNull((a) => a.id == shippingId);
+          selectedShippingAddress.value = supplier.address.firstWhereOrNull(
+            (a) => a.id == shippingId,
+          );
         }
       }
     });
@@ -215,12 +222,12 @@ class PurchaseDebitNoteAddEditController extends GetxController {
             : (e['productId']?.toString() ?? '');
         final prodName = e['productId'] is Map
             ? (e['productId']['name']?.toString() ??
-                e['name']?.toString() ??
-                'Unknown')
+                  e['name']?.toString() ??
+                  'Unknown')
             : (e['productName']?.toString() ??
-                e['name']?.toString() ??
-                e['productNameId']?.toString() ??
-                'Unknown');
+                  e['name']?.toString() ??
+                  e['productNameId']?.toString() ??
+                  'Unknown');
         final taxId = e['taxId'] is Map
             ? (e['taxId']['_id']?.toString())
             : e['taxId']?.toString();
@@ -502,7 +509,7 @@ class PurchaseDebitNoteAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        await _refreshAndBack();
         AppSnackbar.success('Debit Note saved successfully');
       }
     } catch (e) {
@@ -543,6 +550,18 @@ class PurchaseDebitNoteAddEditController extends GetxController {
     } finally {
       isAddingTerm.value = false;
     }
+  }
+
+  Future<void> _refreshAndBack() async {
+    final purchaseDebitNoteController =
+        Get.isRegistered<PurchaseDebitNoteController>()
+        ? Get.find<PurchaseDebitNoteController>()
+        : null;
+
+    if (purchaseDebitNoteController != null) {
+      await purchaseDebitNoteController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 

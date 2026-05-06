@@ -156,6 +156,10 @@ class InvoiceTable extends StatelessWidget {
                 onEditItem: (item) {
                   Get.toNamed(Routes.invoiceAddEdit, arguments: item);
                 },
+                onRemoveItem: (item) => controller.deleteInvoice(item.id),
+                deleteTitle: 'Delete Invoice',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete invoice ${item.invoiceNo}?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

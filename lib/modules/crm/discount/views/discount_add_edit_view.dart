@@ -8,7 +8,6 @@ import 'package:ai_setu/shared/widgets/containers/edit_section.dart';
 import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
-import 'package:ai_setu/shared/widgets/images/edit_image_picker.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -58,7 +57,6 @@ class DiscountAddEditView extends GetView<DiscountAddEditController> {
                         _buildApplicabilitySection(context),
                         _buildRequirementsSection(context),
                         _buildLimitsAndDates(context),
-                        _buildImageSection(context),
                       ],
                     ),
                   ),
@@ -464,34 +462,49 @@ class DiscountAddEditView extends GetView<DiscountAddEditController> {
         icon: PhosphorIconsLight.money,
         child: Column(
           children: [
-            EditTextField(
-              label: "Fixed Price",
-              controller: controller.fixAmountController,
-              keyboardType: TextInputType.number,
-              hintText: "0.00",
+            Row(
+              children: [
+                Expanded(
+                  child: EditTextField(
+                    label: "Minimum Amount",
+                    controller: controller.minAmountController,
+                    keyboardType: TextInputType.number,
+                    hintText: "0.00",
+                  ),
+                ),
+                const Gap(Sizes.paddingM),
+                Expanded(
+                  child: EditTextField(
+                    label: "Free Quantity",
+                    controller: controller.freeQtyController,
+                    keyboardType: TextInputType.number,
+                    hintText: "1",
+                  ),
+                ),
+              ],
             ),
             const Gap(Sizes.defVerticalSpace),
             _buildMultiSelect(
               context,
-              label: "Select Products",
+              label: "Free Products",
               items: controller.products.map((e) => e.name).toList(),
               selectedItems: controller.products
-                  .where((p) => controller.fixAmountProductIds.contains(p.id))
+                  .where((p) => controller.freeProductIds.contains(p.id))
                   .map((p) => p.name)
                   .toList(),
               onSelected: (val) {
                 final id = controller.products
                     .firstWhere((p) => p.name == val)
                     .id;
-                if (!controller.fixAmountProductIds.contains(id)) {
-                  controller.fixAmountProductIds.add(id);
+                if (!controller.freeProductIds.contains(id)) {
+                  controller.freeProductIds.add(id);
                 }
               },
               onRemoved: (val) {
                 final id = controller.products
                     .firstWhere((p) => p.name == val)
                     .id;
-                controller.fixAmountProductIds.remove(id);
+                controller.freeProductIds.remove(id);
               },
             ),
           ],
@@ -793,21 +806,6 @@ class DiscountAddEditView extends GetView<DiscountAddEditController> {
           ),
         ],
       ],
-    );
-  }
-
-  Widget _buildImageSection(BuildContext context) {
-    return EditSection(
-      title: "Discount Image",
-      icon: PhosphorIconsLight.image,
-      child: Obx(
-        () => EditImagePicker(
-          imagePath: controller.selectedImageUrl.value,
-          onPickImage: controller.pickImage,
-          onRemoveImage: controller.removeImage,
-          label: "Tap to select discount banner",
-        ),
-      ),
     );
   }
 

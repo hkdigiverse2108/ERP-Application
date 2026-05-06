@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dart';
@@ -7,7 +8,6 @@ import 'package:ai_setu/shared/widgets/table/common_table.dart';
 import 'package:ai_setu/shared/widgets/table_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class AdditionalChargeTable extends StatelessWidget {
@@ -35,8 +35,15 @@ class AdditionalChargeTable extends StatelessWidget {
             totalItems: controller.totalItems.value,
             onPageChanged: (page) => controller.goToPage(page),
             onEditItem: (item) {
-              AppSnackbar.info("Edit Additional Charge: ${item.name}");
+              Get.toNamed(
+                Routes.settingsAdditionalChargeAddEdit,
+                arguments: {'isEdit': true, 'chargeId': item.id},
+              );
             },
+            onRemoveItem: (item) => controller.deleteCharge(item.id),
+            deleteTitle: "Delete Additional Charge",
+            deleteMessage: (item) =>
+                "Are you sure you want to delete '${item.name}'? This action cannot be undone.",
             // Note: Omitting delete button and authorization as per recent pattern in Prefix/PaymentTerms
             columns: [
               TableColumn(

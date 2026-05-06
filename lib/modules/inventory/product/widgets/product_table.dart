@@ -45,8 +45,6 @@ class ProductTable extends StatelessWidget {
                     onTap: () => Get.toNamed(Routes.addItem),
                     label: 'Add Item',
                   ),
-                  const Gap(8),
-                  SectionButton(onTap: () {}, label: 'Remove Item'),
                 ],
               ),
               Gap(Sizes.defHorizontalSpace),
@@ -62,6 +60,10 @@ class ProductTable extends StatelessWidget {
                   items: controller.products,
                   onEditItem: (item) =>
                       Get.toNamed(Routes.addUpdateProduct, arguments: item),
+                  onRemoveItem: (item) => controller.deleteProduct(item.id),
+                  deleteTitle: "Delete Product",
+                  deleteMessage: (item) =>
+                      "Are you sure you want to delete '${item.name}'? This action cannot be undone.",
                   onRowTap: (item) =>
                       Get.toNamed(Routes.productDetails, arguments: item),
                   columns: [

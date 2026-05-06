@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/bank_cash/bank_model.dart';
 
@@ -94,10 +95,30 @@ class BankController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getBanksData();
+  }
+
+  Future<void> deleteBank(String id) async {
+    try {
+      final res = await _repository.deleteBank(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? 'Bank deleted successfully');
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? 'Failed to delete bank');
+      }
+    } catch (e) {
+      Log.e("Bank Module Error (Delete)", e);
+      AppSnackbar.error('An error occurred while deleting bank');
+    }
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();
     super.onClose();
   }
 }
-

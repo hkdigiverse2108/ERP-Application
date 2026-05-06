@@ -56,4 +56,8 @@ class LoyaltyRepository {
       throw Exception(res.message ?? "Something went wrong");
     }
   }
+
+  Future<ResModel> deleteLoyalty(String id) async {
+    return await _api.delete(ApiConstants.loyaltyDelete(id));
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/debit_note_model.dart';
@@ -59,7 +60,11 @@ class DebitController extends GetxController {
       if (res.status == 200 && res.data != null) {
         final List? dataList = res.data["debitNote_data"] ?? res.data["data"];
         final items = dataList != null
-            ? dataList.map((e) => DebitNoteModel.fromJson(e as Map<String, dynamic>)).toList()
+            ? dataList
+                  .map(
+                    (e) => DebitNoteModel.fromJson(e as Map<String, dynamic>),
+                  )
+                  .toList()
             : <DebitNoteModel>[];
 
         _cache[key] = (items: items, fetchedAt: DateTime.now());
@@ -72,6 +77,21 @@ class DebitController extends GetxController {
       Log.e("Accounting Module Error (Debit)", e);
     } finally {
       isLodding.value = false;
+    }
+  }
+
+  Future<void> deleteDebitNote({required String id}) async {
+    try {
+      final success = await _repository.deleteDebitNote(id: id);
+      if (success) {
+        AppSnackbar.success("Debit note deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete debit note");
+      }
+    } catch (e) {
+      Log.e("Error deleting debit note", e);
+      AppSnackbar.error("An error occurred while deleting debit note");
     }
   }
 
@@ -102,10 +122,15 @@ class DebitController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getDebitNotesData();
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();
     super.onClose();
   }
 }
-

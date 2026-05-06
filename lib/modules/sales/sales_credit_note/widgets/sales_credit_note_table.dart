@@ -131,6 +131,10 @@ class SalesCreditNoteTable extends StatelessWidget {
                 onEditItem: (item) {
                   Get.toNamed(Routes.salesCreditNoteAddEdit, arguments: item);
                 },
+                onRemoveItem: (item) => controller.deleteSalesCreditNote(item.id),
+                deleteTitle: 'Delete Sales Credit Note',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete sales credit note ${item.creditNoteNo}?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

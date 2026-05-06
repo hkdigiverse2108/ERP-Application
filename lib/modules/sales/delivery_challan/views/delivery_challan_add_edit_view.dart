@@ -812,7 +812,20 @@ class DeliveryChallanAddEditView
           Expanded(
             child: OutlinedButton(
               onPressed: () => Get.back(),
-              child: const Text("Cancel"),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: context.appColors.border),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                ),
+              ),
+              child: Text(
+                "Cancel",
+                style: TextHelper.bodyMediumStyle(context).copyWith(
+                  color: context.appColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
           const Gap(Sizes.paddingM),
@@ -824,6 +837,12 @@ class DeliveryChallanAddEditView
                     : () => controller.saveDeliveryChallan(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.appColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                  ),
                 ),
                 child: controller.isSaving.value
                     ? const SizedBox(
@@ -834,7 +853,11 @@ class DeliveryChallanAddEditView
                           color: Colors.white,
                         ),
                       )
-                    : Text(controller.isEdit.value ? "Update" : "Save"),
+                    : Text(
+                        controller.isEdit.value
+                            ? "Update Challan"
+                            : "Save Challan",
+                      ),
               ),
             ),
           ),

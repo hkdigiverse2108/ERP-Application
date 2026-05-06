@@ -69,4 +69,11 @@ class MaterialConsumptionRepository {
     );
     return response.status == 200;
   }
+
+  Future<bool> deleteMaterialConsumption({required String id}) async {
+    final ResModel response = await _api.delete(
+      ApiConstants.deleteMaterialConsumption(id: id),
+    );
+    return response.status == 200;
+  }
 }

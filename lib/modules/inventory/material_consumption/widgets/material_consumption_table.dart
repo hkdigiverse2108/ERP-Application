@@ -48,6 +48,11 @@ class MaterialConsumptionTable extends StatelessWidget {
                   Routes.addUpdateMaterialConsumption,
                   arguments: item,
                 ),
+                onRemoveItem: (item) =>
+                    controller.deleteMaterialConsumption(item.id),
+                deleteTitle: "Delete Material Consumption",
+                deleteMessage: (item) =>
+                    "Are you sure you want to delete material consumption '${item.number}'? This action cannot be undone.",
                 isLoading: controller.isLoading.value,
                 items: controller.materialConsumptions,
                 columns: [

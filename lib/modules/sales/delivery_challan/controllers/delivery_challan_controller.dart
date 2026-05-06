@@ -7,6 +7,8 @@ import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/selas/delivery_challan_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/sales/sales_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -113,9 +115,10 @@ class DeliveryChallanController extends GetxController {
     }
   }
 
-  void refreshData() {
-    _clearCache();
-    getDeliveryChallansData();
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getDeliveryChallansData();
   }
 
   void _clearCache() {
@@ -149,6 +152,23 @@ class DeliveryChallanController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getDeliveryChallansData();
+  }
+
+  Future<void> deleteDeliveryChallan(String id) async {
+    try {
+      final ResModel res = await _repository.deleteDeliveryChallan(id);
+      if (res.status == 200) {
+        AppSnackbar.success(
+          res.message ?? "Delivery Challan deleted successfully",
+        );
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete delivery challan");
+      }
+    } catch (e) {
+      Log.e("Sales Module Error (DeliveryChallan Delete)", e);
+      AppSnackbar.error("An error occurred while deleting delivery challan");
+    }
   }
 
   @override

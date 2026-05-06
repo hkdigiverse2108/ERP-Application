@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/consumption_type/controllers/consumption_type_controller.dart';
 import 'package:ai_setu/modules/settings/consumption_type/widgets/consumption_type_table.dart';
@@ -45,6 +46,7 @@ class ConsumptionTypePage extends GetView<ConsumptionTypeController> {
         ),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
+        onAdd: () => Get.toNamed(Routes.settingsConsumptionTypeAddEdit),
         filters: [
           FilterOption(
             label: "Active Status",

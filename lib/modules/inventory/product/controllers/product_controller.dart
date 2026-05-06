@@ -9,6 +9,7 @@ import 'package:ai_setu/data/repositories/inventory/brand_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/category_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/settings/tax_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -203,6 +204,26 @@ class ProductController extends GetxController {
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page;
       await getProductsData();
+    }
+  }
+
+  void refreshData() {
+    _clearCache();
+    getProductsData();
+  }
+
+  Future<void> deleteProduct(String id) async {
+    try {
+      final success = await _repo.deleteProduct(id);
+      if (success) {
+        AppSnackbar.success("Product deleted successfully");
+        refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete product");
+      }
+    } catch (e) {
+      Log.e("Error deleting product", e);
+      AppSnackbar.error("An error occurred while deleting product");
     }
   }
 }

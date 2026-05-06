@@ -96,8 +96,26 @@ class PaymentTermsController extends GetxController {
     getPaymentTerms();
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getPaymentTerms();
+  }
+
   void _clearCache() {
     _cache.clear();
     _cacheTimestamp.clear();
+  }
+
+  Future<void> deletePaymentTerm(String id) async {
+    try {
+      isLoading.value = true;
+      await _repo.deletePaymentTerm(id);
+      await refreshData();
+      AppSnackbar.success("Payment term deleted successfully");
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

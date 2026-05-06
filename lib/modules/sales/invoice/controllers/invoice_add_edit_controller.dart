@@ -19,6 +19,7 @@ import 'package:ai_setu/data/repositories/settings/payment_terms_repository.dart
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
+import 'package:ai_setu/modules/sales/invoice/controllers/invoice_controller.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 
@@ -639,7 +640,7 @@ class InvoiceAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        _refreshAndBack();
         AppSnackbar.success('Invoice saved successfully');
       }
     } catch (e) {
@@ -648,6 +649,13 @@ class InvoiceAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<InvoiceController>()) {
+      InvoiceController.instance.refreshData();
+    }
+    Get.back();
   }
 
   bool isTermSelected(String id) => selectedTerms.any((t) => t.id == id);

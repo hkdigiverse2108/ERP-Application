@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,7 @@ class AdditionalChargeController extends GetxController {
   // Search and Filters
   final searchQuery = "".obs;
   final activeFilter = "".obs;
+  final typeFilter = "".obs;
   Timer? _searchDebounce;
 
   // Cache settings
@@ -37,7 +39,7 @@ class AdditionalChargeController extends GetxController {
 
   Future<void> getCharges({bool useCache = true}) async {
     final cacheKey =
-        "charges_${currentPage.value}_${limit.value}_${searchQuery.value}_${activeFilter.value}";
+        "charges_${currentPage.value}_${limit.value}_${searchQuery.value}_${activeFilter.value}_${typeFilter.value}";
 
     // Check cache
     if (useCache && _cache.containsKey(cacheKey)) {
@@ -56,6 +58,7 @@ class AdditionalChargeController extends GetxController {
         limit: limit.value,
         search: searchQuery.value,
         activeFilter: activeFilter.value,
+        typeFilter: typeFilter.value,
       );
 
       charges.value = result.items;
@@ -72,6 +75,16 @@ class AdditionalChargeController extends GetxController {
     }
   }
 
+  Future<void> deleteCharge(String id) async {
+    try {
+      await _repo.deleteAdditionalCharge(id);
+      AppSnackbar.success("Additional charge deleted successfully");
+      await refreshData();
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    }
+  }
+
   void onSearch(String query) {
     if (_searchDebounce?.isActive ?? false) _searchDebounce?.cancel();
 
@@ -85,6 +98,7 @@ class AdditionalChargeController extends GetxController {
 
   void onFiltersChanged(Map<String, String?> filters) {
     activeFilter.value = filters['activeFilter'] ?? "";
+    typeFilter.value = filters['typeFilter'] ?? "";
     currentPage.value = 1;
     _clearCache();
     getCharges();
@@ -94,6 +108,11 @@ class AdditionalChargeController extends GetxController {
     if (page < 1 || page > totalPages.value) return;
     currentPage.value = page;
     getCharges();
+  }
+
+  Future<void> refreshData() async {
+    _clearCache();
+    await getCharges();
   }
 
   void _clearCache() {

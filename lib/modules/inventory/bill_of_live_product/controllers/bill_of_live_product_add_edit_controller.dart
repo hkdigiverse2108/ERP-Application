@@ -6,6 +6,7 @@ import 'package:ai_setu/data/repositories/inventory/bill_of_live_product_reposit
 import 'package:ai_setu/data/repositories/inventory/product_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/recipe_repository.dart';
 import 'package:ai_setu/data/model/invetory/recipe_model.dart';
+import 'package:ai_setu/modules/inventory/bill_of_live_product/controllers/bill_of_live_product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -207,15 +208,15 @@ class BillOfLiveProductAddEditController extends GetxController {
         final res = await _repo.updateBillOfLiveProduct(data);
         if (res.status == 200) {
           AppSnackbar.success("BOM updated successfully");
-          Get.back(result: true);
+          await _refreshAndBack();
         } else {
           AppSnackbar.error(res.message ?? "Failed to update BOM");
         }
       } else {
         final res = await _repo.addBillOfLiveProduct(data);
         if (res.status == 200) {
-          Get.back(result: true);
           AppSnackbar.success("BOM added successfully");
+          await _refreshAndBack();
         } else {
           AppSnackbar.error(res.message ?? "Failed to add BOM");
         }
@@ -231,6 +232,18 @@ class BillOfLiveProductAddEditController extends GetxController {
   void onClose() {
     numberController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final billOfLiveProductController =
+        Get.isRegistered<BillOfLiveProductController>()
+        ? Get.find<BillOfLiveProductController>()
+        : null;
+
+    if (billOfLiveProductController != null) {
+      await billOfLiveProductController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
 
@@ -323,4 +336,3 @@ class IngredientItem {
     "useQty": useQty,
   };
 }
-

@@ -162,6 +162,7 @@ class DiscountTable extends StatelessWidget {
                   );
                   if (res == true) controller.getDiscountData();
                 },
+                onRemoveItem: (item) => controller.deleteDiscount(item.id),
               ),
             ],
           ),

@@ -129,6 +129,10 @@ class DeliveryChallanTable extends StatelessWidget {
                   final result = await Get.toNamed(Routes.deliveryChallanAddEdit, arguments: item);
                   if (result == true) controller.refreshData();
                 },
+                onRemoveItem: (item) => controller.deleteDeliveryChallan(item.id),
+                deleteTitle: 'Delete Delivery Challan',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete delivery challan ${item.deliveryChallanNo}?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

@@ -133,6 +133,9 @@ class PurchaseDebitNoteTable extends StatelessWidget {
                   Routes.purchaseDebitNoteAddEdit,
                   arguments: item,
                 ),
+                onRemoveItem: (item) =>
+                    controller.deletePurchaseDebitNote(item.id),
+                confirmDelete: true,
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

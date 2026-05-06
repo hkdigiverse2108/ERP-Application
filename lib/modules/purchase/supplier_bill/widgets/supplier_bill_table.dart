@@ -44,6 +44,7 @@ class SupplierBillTable extends StatelessWidget {
                     Get.toNamed(Routes.supplierBillDetails, arguments: item),
                 onEditItem: (item) =>
                     Get.toNamed(Routes.supplierBillAddEdit, arguments: item),
+                onRemoveItem: (item) => controller.deleteSupplierBill(item.id),
                 columns: [
                   TableColumn(
                     title: 'Status',

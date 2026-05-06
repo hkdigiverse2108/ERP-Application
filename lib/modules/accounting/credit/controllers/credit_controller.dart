@@ -1,4 +1,5 @@
 import 'package:ai_setu/core/services/logger_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'dart:async';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:ai_setu/data/model/accounting/cradit_note_model.dart';
@@ -84,6 +85,21 @@ class CreditController extends GetxController {
     }
   }
 
+  Future<void> deleteCreditNote({required String id}) async {
+    try {
+      final success = await _repository.deleteCreditNote(id: id);
+      if (success) {
+        AppSnackbar.success("Credit note deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete credit note");
+      }
+    } catch (e) {
+      Log.e("Error deleting credit note", e);
+      AppSnackbar.error("An error occurred while deleting credit note");
+    }
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;
@@ -111,9 +127,10 @@ class CreditController extends GetxController {
     }
   }
 
-  void refreshData() {
-    _clearCache();
-    getCreditNotesData();
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getCreditNotesData();
   }
 
   @override
@@ -122,4 +139,3 @@ class CreditController extends GetxController {
     super.onClose();
   }
 }
-

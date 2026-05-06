@@ -52,4 +52,8 @@ class CouponRepository {
     }
     throw Exception(res.message ?? "Failed to fetch coupon details");
   }
+
+  Future<ResModel> deleteCoupon(String id) async {
+    return await _api.delete(ApiConstants.deleteCoupon(id));
+  }
 }

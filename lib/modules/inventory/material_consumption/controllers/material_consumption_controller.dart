@@ -5,6 +5,7 @@ import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/model/invetory/material_consumption_model.dart';
 import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/material_consumption_repository.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -129,6 +130,12 @@ class MaterialConsumptionController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getMaterialConsumptionData();
+  }
+
   void _clearCache() {
     _cache.clear();
     currentPage.value = 1;
@@ -161,5 +168,21 @@ class MaterialConsumptionController extends GetxController {
       await getMaterialConsumptionData();
     }
   }
-}
 
+  Future<void> deleteMaterialConsumption(String id) async {
+    try {
+      final success = await _repo.deleteMaterialConsumption(id: id);
+      if (success) {
+        AppSnackbar.success("Material consumption deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error("Failed to delete material consumption");
+      }
+    } catch (e) {
+      Log.e("Error deleting material consumption", e);
+      AppSnackbar.error(
+        "An error occurred while deleting material consumption",
+      );
+    }
+  }
+}

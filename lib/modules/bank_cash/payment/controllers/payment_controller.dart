@@ -3,8 +3,8 @@ import 'package:ai_setu/core/services/financial_year_controller.dart';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/constants/enums.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
-
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/bank_cash/payment_repository.dart';
@@ -162,6 +162,27 @@ class PaymentController extends GetxController {
     getPaymentsData();
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getPaymentsData();
+  }
+
+  Future<void> deleteVoucher(String id) async {
+    try {
+      final res = await _repository.deleteVoucher(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? 'Voucher deleted successfully');
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? 'Failed to delete voucher');
+      }
+    } catch (e) {
+      Log.e("Payment Module Error (Delete)", e);
+      AppSnackbar.error('An error occurred while deleting voucher');
+    }
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();
@@ -170,4 +191,3 @@ class PaymentController extends GetxController {
     super.onClose();
   }
 }
-

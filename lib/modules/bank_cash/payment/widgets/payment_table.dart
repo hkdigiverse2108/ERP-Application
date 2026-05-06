@@ -45,6 +45,10 @@ class PaymentTable extends StatelessWidget {
                 },
                 onEditItem: (item) =>
                     Get.toNamed(Routes.addUpdatePayment, arguments: item),
+                onRemoveItem: (item) => controller.deleteVoucher(item.id),
+                deleteTitle: 'Delete Voucher',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete this voucher?',
                 isLoading: controller.isLodding.value,
                 items: controller.payments,
                 columns: [

@@ -108,6 +108,12 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getUsersData(page: 1);
+  }
+
   @override
   void onClose() {
     _debounceTimer?.cancel();

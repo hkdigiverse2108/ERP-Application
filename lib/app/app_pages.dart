@@ -46,6 +46,11 @@ import 'package:ai_setu/modules/inventory/material_consumption/views/material_co
 import 'package:ai_setu/modules/inventory/stock_verification/views/stock_verification_add_edit_view.dart';
 import 'package:ai_setu/modules/purchase/supplier_bill/views/supplier_bill_add_edit_view.dart';
 import 'package:ai_setu/modules/sales/estimate/bindings/estimate_binding.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/bindings/stock_transfer_binding.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/bindings/stock_transfer_add_edit_binding.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/views/stock_transfer_screen.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/views/stock_transfer_add_edit_view.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/views/stock_transfer_details_view.dart';
 
 import 'package:ai_setu/modules/contact/views/contact_page.dart';
 import 'package:ai_setu/modules/home/bindings/home_bindings.dart';
@@ -135,17 +140,31 @@ import 'package:ai_setu/modules/settings/bindings/settings_binding.dart';
 import 'package:ai_setu/modules/settings/company_profile/bindings/company_profile_binding.dart';
 import 'package:ai_setu/modules/settings/company_profile/views/company_profile_page.dart';
 import 'package:ai_setu/modules/settings/consumption_type/bindings/consumption_type_binding.dart';
+import 'package:ai_setu/modules/settings/consumption_type/bindings/consumption_type_add_edit_binding.dart';
 import 'package:ai_setu/modules/settings/consumption_type/views/consumption_type_page.dart';
+import 'package:ai_setu/modules/settings/consumption_type/views/consumption_type_add_edit_view.dart';
 import 'package:ai_setu/modules/settings/payment_terms/bindings/payment_terms_binding.dart';
+import 'package:ai_setu/modules/settings/payment_terms/bindings/payment_terms_add_edit_binding.dart';
 import 'package:ai_setu/modules/settings/payment_terms/views/payment_terms_page.dart';
+import 'package:ai_setu/modules/settings/payment_terms/views/payment_terms_add_edit_view.dart';
+import 'package:ai_setu/modules/settings/additional_charge/bindings/additional_charge_add_edit_binding.dart';
+import 'package:ai_setu/modules/settings/additional_charge/views/additional_charge_add_edit_view.dart';
 import 'package:ai_setu/modules/settings/prefix/bindings/prefix_binding.dart';
+import 'package:ai_setu/modules/settings/prefix/bindings/prefix_add_edit_binding.dart';
+import 'package:ai_setu/modules/settings/prefix/views/prefix_add_edit_view.dart';
 import 'package:ai_setu/modules/settings/prefix/views/prefix_page.dart';
 import 'package:ai_setu/modules/settings/taxes/bindings/taxes_binding.dart';
+import 'package:ai_setu/modules/settings/taxes/bindings/tax_add_edit_binding.dart';
 import 'package:ai_setu/modules/settings/taxes/views/taxes_page.dart';
+import 'package:ai_setu/modules/settings/taxes/views/tax_add_edit_view.dart';
 import 'package:ai_setu/modules/settings/user_profile/bindings/user_profile_binding.dart';
 import 'package:ai_setu/modules/settings/user_profile/views/user_profile_page.dart';
 import 'package:ai_setu/modules/settings/user_roles/bindings/user_roles_binding.dart';
+import 'package:ai_setu/modules/settings/user_roles/bindings/user_role_add_edit_binding.dart';
 import 'package:ai_setu/modules/settings/user_roles/views/user_roles_page.dart';
+import 'package:ai_setu/modules/settings/user_roles/views/user_role_add_edit_view.dart';
+import 'package:ai_setu/modules/settings/change_password/bindings/change_password_binding.dart';
+import 'package:ai_setu/modules/settings/change_password/views/change_password_view.dart';
 import 'package:ai_setu/modules/settings/views/settings.dart';
 import 'package:ai_setu/modules/access_denied/bindings/access_denied_binding.dart';
 import 'package:ai_setu/modules/access_denied/views/access_denied_page.dart';
@@ -272,6 +291,17 @@ class AppPages {
       name: Routes.addUpdateMaterialConsumption,
       page: () => const MaterialConsumptionAddEditView(),
       binding: MaterialConsumptionBinding(),
+    ),
+    GetPage(
+      name: Routes.stockTransfer,
+      page: () => const StockTransferScreen(),
+      binding: StockTransferBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.addUpdateStockTransfer,
+      page: () => const StockTransferAddEditView(),
+      binding: StockTransferAddEditBinding(),
     ),
     GetPage(
       name: Routes.debit,
@@ -554,10 +584,19 @@ class AppPages {
       // middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.settingsTaxAddEdit,
+      page: () => const TaxAddEditView(),
+      binding: TaxAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.settingsUserRoles,
       page: () => const UserRolesPage(),
       binding: UserRolesBinding(),
-      // middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsUserRoleAddEdit,
+      page: () => const UserRoleAddEditView(),
+      binding: UserRoleAddEditBinding(),
     ),
     GetPage(
       name: Routes.settingsPrefix,
@@ -566,10 +605,20 @@ class AppPages {
       // middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.settingsPrefixAddEdit,
+      page: () => const PrefixAddEditView(),
+      binding: PrefixAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.settingsPaymentTerms,
       page: () => const PaymentTermsPage(),
       binding: PaymentTermsBinding(),
       // middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsPaymentTermsAddEdit,
+      page: () => const PaymentTermsAddEditView(),
+      binding: PaymentTermsAddEditBinding(),
     ),
     GetPage(
       name: Routes.settingsAdditionalCharge,
@@ -578,10 +627,25 @@ class AppPages {
       // middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.settingsAdditionalChargeAddEdit,
+      page: () => const AdditionalChargeAddEditView(),
+      binding: AdditionalChargeAddEditBinding(),
+    ),
+    GetPage(
       name: Routes.settingsConsumptionType,
       page: () => const ConsumptionTypePage(),
       binding: ConsumptionTypeBinding(),
       // middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.settingsConsumptionTypeAddEdit,
+      page: () => const ConsumptionTypeAddEditView(),
+      binding: ConsumptionTypeAddEditBinding(),
+    ),
+    GetPage(
+      name: Routes.settingsChangePassword,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
     GetPage(
       name: Routes.accessDenied,
@@ -607,6 +671,11 @@ class AppPages {
       name: Routes.estimateDetails,
       page: () => const EstimateDetails(),
       binding: EstimateBinding(),
+    ),
+    GetPage(
+      name: Routes.stockTransferDetails,
+      page: () => const StockTransferDetailsView(),
+      binding: StockTransferBinding(),
     ),
     GetPage(
       name: Routes.deliveryChallanDetails,

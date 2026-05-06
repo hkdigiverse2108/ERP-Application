@@ -128,6 +128,11 @@ class BankTransactionTable extends StatelessWidget {
                     controller.getTransactionsData();
                   }
                 },
+                onRemoveItem: (item) =>
+                    controller.deleteBankTransaction(item.id),
+                deleteTitle: 'Delete Transaction',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete transaction ${item.voucherNo}?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

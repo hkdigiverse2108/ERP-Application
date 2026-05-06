@@ -19,6 +19,7 @@ import 'package:ai_setu/data/repositories/settings/payment_terms_repository.dart
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
+import 'package:ai_setu/modules/sales/sales_order/controllers/sales_order_controller.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 
@@ -594,7 +595,7 @@ class SalesOrderAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        _refreshAndBack();
         AppSnackbar.success('Sales Order saved successfully');
       }
     } catch (e) {
@@ -603,6 +604,13 @@ class SalesOrderAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<SalesOrderController>()) {
+      SalesOrderController.instance.refreshData();
+    }
+    Get.back();
   }
 
   bool isTermSelected(String id) => selectedTerms.any((t) => t.id == id);

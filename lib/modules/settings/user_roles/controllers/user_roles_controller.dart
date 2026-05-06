@@ -96,8 +96,26 @@ class UserRolesController extends GetxController {
     getRoles();
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getRoles();
+  }
+
   void _clearCache() {
     _cache.clear();
     _cacheTimestamp.clear();
+  }
+
+  Future<void> deleteRole(String id) async {
+    try {
+      isLoading.value = true;
+      await _repo.deleteRole(id);
+      await refreshData();
+      AppSnackbar.success("Role deleted successfully");
+    } catch (e) {
+      AppSnackbar.error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

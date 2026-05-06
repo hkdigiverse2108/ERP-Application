@@ -1,3 +1,4 @@
+
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/settings/prefix/controllers/prefix_controller.dart';
 import 'package:ai_setu/modules/settings/prefix/widgets/prefix_table.dart';
@@ -44,7 +45,7 @@ class PrefixPage extends GetView<PrefixController> {
           text: controller.searchQuery.value,
         ),
         onSearchChanged: (query) => controller.onSearch(query),
-        onFiltersChanged: (filters) {}, // No extra filters for now
+        onFiltersChanged: (filters) {},
         filters: const [],
       ),
     );

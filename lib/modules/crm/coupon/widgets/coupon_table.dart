@@ -156,6 +156,7 @@ class CouponTable extends StatelessWidget {
                   );
                   if (res == true) controller.getCouponData();
                 },
+                onRemoveItem: (item) => controller.deleteCoupon(item.id),
               ),
             ],
           ),

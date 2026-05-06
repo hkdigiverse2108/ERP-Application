@@ -4,6 +4,7 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/data/model/media/media_model.dart';
 import 'package:ai_setu/shared/widgets/media_picker/controllers/media_picker_controller.dart';
+import 'package:ai_setu/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -372,117 +373,13 @@ class MediaPickerDialog extends StatelessWidget {
                         right: 6,
                         child: GestureDetector(
                           onTap: () async {
-                            Get.dialog(
-                              Dialog(
-                                backgroundColor: context.appColors.surface,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    Sizes.borderRadiusL,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(Sizes.paddingL),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(
-                                          Sizes.paddingM,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red.withValues(
-                                            alpha: 0.1,
-                                          ),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Icon(
-                                          PhosphorIconsFill.trash,
-                                          color: Colors.red,
-                                          size: 32,
-                                        ),
-                                      ),
-                                      const Gap(Sizes.paddingL),
-                                      Text(
-                                        "Delete this media?",
-                                        style: TextHelper.h4Style(context)
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  context.appColors.textPrimary,
-                                            ),
-                                      ),
-                                      const Gap(Sizes.paddingS),
-                                      Text(
-                                        "This action cannot be undone. The image will be permanently removed from the server.",
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextHelper.bodySmallStyle(
-                                              context,
-                                            ).copyWith(
-                                              color: context
-                                                  .appColors
-                                                  .textSecondary,
-                                            ),
-                                      ),
-                                      const Gap(Sizes.paddingL),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextButton(
-                                              onPressed: () => Get.back(),
-                                              style: TextButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                    ),
-                                              ),
-                                              child: Text(
-                                                "Cancel",
-                                                style: TextStyle(
-                                                  color: context
-                                                      .appColors
-                                                      .textSecondary,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const Gap(Sizes.paddingM),
-                                          Expanded(
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                controller.deleteMedia(media);
-                                                Get.back();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.red,
-                                                foregroundColor: Colors.white,
-                                                elevation: 0,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                    ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        Sizes.borderRadiusM,
-                                                      ),
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                "Delete",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            ConfirmDialog.show(
+                              title: "Delete Media",
+                              message:
+                                  "This action cannot be undone. The image will be permanently removed from the server.",
+                              confirmText: "Delete",
+                              confirmColor: Colors.red,
+                              onConfirm: () => controller.deleteMedia(media),
                             );
                           },
                           child: Container(

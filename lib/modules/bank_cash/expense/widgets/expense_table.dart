@@ -116,6 +116,10 @@ class ExpenseTable extends StatelessWidget {
                   );
                   if (res == true) controller.getExpensesData();
                 },
+                onRemoveItem: (item) => controller.deleteExpense(item.id),
+                deleteTitle: 'Delete Expense',
+                deleteMessage: (item) =>
+                    'Are you sure you want to delete this expense?',
                 onPageChanged: (page) => controller.goToPage(page),
                 pageSize: controller.limit.value,
               ),

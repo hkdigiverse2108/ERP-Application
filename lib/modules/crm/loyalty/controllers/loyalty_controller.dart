@@ -2,8 +2,10 @@ import 'package:ai_setu/core/services/logger_service.dart';
 import 'dart:async';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/data/model/crm/loyalty_model.dart';
 import 'package:ai_setu/data/repositories/crm/loyalty_repository.dart';
+import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -129,6 +131,27 @@ class LoyaltyController extends GetxController {
     selectedDateRange.value = range;
     _clearCache();
     getLoyaltyData();
+  }
+
+  Future<void> refreshData() async {
+    _cache.clear();
+    currentPage.value = 1;
+    await getLoyaltyData();
+  }
+
+  Future<void> deleteLoyalty(String id) async {
+    try {
+      final ResModel res = await _repository.deleteLoyalty(id);
+      if (res.status == 200) {
+        AppSnackbar.success(res.message ?? "Loyalty deleted successfully");
+        await refreshData();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to delete loyalty");
+      }
+    } catch (e) {
+      Log.e("CRM Module Error (Loyalty Delete)", e);
+      AppSnackbar.error("An error occurred while deleting loyalty");
+    }
   }
 
   @override

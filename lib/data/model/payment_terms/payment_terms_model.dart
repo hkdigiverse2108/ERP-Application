@@ -32,19 +32,23 @@ class PaymentTermsModel {
 
   String toRawJson() => json.encode(toJson());
 
-  factory PaymentTermsModel.fromJson(Map<String, dynamic> json) =>
+  factory PaymentTermsModel.fromJson(Map<String, dynamic>? json) =>
       PaymentTermsModel(
-        id: json["_id"],
-        name: json["name"],
-        companyId: CompanyId.fromJson(json["companyId"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        createdBy: CreatedBy.fromJson(json["createdBy"]),
-        day: json["day"],
-        isActive: json["isActive"],
-        isDefault: json["isDefault"],
-        isDeleted: json["isDeleted"],
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        updatedBy: json["updatedBy"],
+        id: json?["_id"]?.toString() ?? "",
+        name: json?["name"]?.toString() ?? "",
+        companyId: CompanyId.fromJson(json?["companyId"]),
+        createdAt: json?["createdAt"] != null
+            ? DateTime.parse(json!["createdAt"])
+            : DateTime.now(),
+        createdBy: CreatedBy.fromJson(json?["createdBy"]),
+        day: json?["day"] ?? 0,
+        isActive: json?["isActive"] ?? false,
+        isDefault: json?["isDefault"] ?? false,
+        isDeleted: json?["isDeleted"] ?? false,
+        updatedAt: json?["updatedAt"] != null
+            ? DateTime.parse(json!["updatedAt"])
+            : DateTime.now(),
+        updatedBy: json?["updatedBy"]?.toString() ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -73,8 +77,15 @@ class CompanyId {
 
   String toRawJson() => json.encode(toJson());
 
-  factory CompanyId.fromJson(Map<String, dynamic> json) =>
-      CompanyId(id: json["_id"], name: json["name"]);
+  factory CompanyId.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return CompanyId(
+        id: json["_id"]?.toString() ?? "",
+        name: json["name"]?.toString() ?? "",
+      );
+    }
+    return CompanyId(id: json?.toString() ?? "", name: "");
+  }
 
   Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
@@ -91,11 +102,16 @@ class CreatedBy {
 
   String toRawJson() => json.encode(toJson());
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-    id: json["_id"],
-    fullName: json["fullName"],
-    userType: json["userType"],
-  );
+  factory CreatedBy.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return CreatedBy(
+        id: json["_id"]?.toString() ?? "",
+        fullName: json["fullName"]?.toString() ?? "",
+        userType: json["userType"]?.toString() ?? "",
+      );
+    }
+    return CreatedBy(id: json?.toString() ?? "", fullName: "", userType: "");
+  }
 
   Map<String, dynamic> toJson() => {
     "_id": id,

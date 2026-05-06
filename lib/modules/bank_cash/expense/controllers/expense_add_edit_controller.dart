@@ -9,6 +9,8 @@ import 'package:ai_setu/data/repositories/bank_cash/salary_repository.dart';
 import 'package:ai_setu/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_setu/shared/widgets/media_picker/views/media_picker_dialog.dart';
+import 'package:ai_setu/modules/bank_cash/expense/controllers/expense_controller.dart';
+import 'package:ai_setu/modules/bank_cash/salary/controllers/salary_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -170,7 +172,7 @@ class ExpenseAddEditController extends GetxController {
           await _expenseRepo.addExpense(data);
         }
       }
-      Get.back(result: true);
+      _refreshAndBack();
       AppSnackbar.success(
         '${isSalary.value ? "Salary" : "Expense"} saved successfully',
       );
@@ -179,6 +181,19 @@ class ExpenseAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (isSalary.value) {
+      if (Get.isRegistered<SalaryController>()) {
+        SalaryController.instance.refreshData();
+      }
+    } else {
+      if (Get.isRegistered<ExpenseController>()) {
+        ExpenseController.instance.refreshData();
+      }
+    }
+    Get.back();
   }
 
   Future<void> pickImage() async {

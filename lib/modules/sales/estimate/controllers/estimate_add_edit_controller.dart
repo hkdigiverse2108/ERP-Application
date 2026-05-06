@@ -16,6 +16,7 @@ import 'package:ai_setu/data/repositories/settings/payment_terms_repository.dart
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
+import 'package:ai_setu/modules/sales/estimate/controllers/estimate_controller.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
 
@@ -459,7 +460,7 @@ class EstimateAddEditController extends GetxController {
       }
 
       if (result != null) {
-        Get.back(result: true);
+        _refreshAndBack();
         AppSnackbar.success('Estimate saved successfully');
       }
     } catch (e) {
@@ -468,6 +469,13 @@ class EstimateAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _refreshAndBack() {
+    if (Get.isRegistered<EstimateController>()) {
+      EstimateController.instance.refreshData();
+    }
+    Get.back();
   }
 
   bool isTermSelected(String id) => selectedTerms.any((t) => t.id == id);

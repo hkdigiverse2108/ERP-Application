@@ -99,9 +99,8 @@ class CreditAddEditController extends GetxController {
       }
 
       if (res.status == 200) {
-        Get.back();
+        await _refreshAndBack();
         AppSnackbar.success(res.message ?? "Credit Note Added Successfully");
-        Get.find<CreditController>().refreshData();
       } else {
         AppSnackbar.error(res.message ?? "Something went wrong");
       }
@@ -135,6 +134,17 @@ class CreditAddEditController extends GetxController {
     descriptionController.dispose();
     dateController.dispose();
     super.onClose();
+  }
+
+  Future<void> _refreshAndBack() async {
+    final creditController = Get.isRegistered<CreditController>()
+        ? Get.find<CreditController>()
+        : null;
+
+    if (creditController != null) {
+      await creditController.refreshData();
+    }
+    Get.back();
   }
 }
 

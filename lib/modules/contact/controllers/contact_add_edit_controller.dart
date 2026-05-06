@@ -4,6 +4,7 @@ import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/location/location_model.dart';
 import 'package:ai_setu/data/repositories/contact/contact_repository.dart';
 import 'package:ai_setu/data/repositories/inventory/location_repository.dart';
+import 'package:ai_setu/modules/contact/controllers/contact_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
@@ -228,7 +229,7 @@ class ContactAddEditController extends GetxController {
           : await _repo.addContact(payload);
 
       if (res.status == 200 || res.status == 201) {
-        Get.back(result: true);
+        await _refreshAndBack();
         AppSnackbar.success(res.message ?? "Contact saved successfully");
       } else {
         AppSnackbar.error(res.message ?? "Failed to save contact");
@@ -239,5 +240,16 @@ class ContactAddEditController extends GetxController {
     } finally {
       isSaving.value = false;
     }
+  }
+
+  Future<void> _refreshAndBack() async {
+    final contactController = Get.isRegistered<ContactController>()
+        ? Get.find<ContactController>()
+        : null;
+
+    if (contactController != null) {
+      await contactController.refreshData();
+    }
+    Get.back(result: true);
   }
 }
