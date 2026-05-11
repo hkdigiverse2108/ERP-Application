@@ -3,16 +3,17 @@ import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropdown extends StatefulWidget {
+class CustomDropdown<T> extends StatefulWidget {
   final String label;
-  final List<String> items;
-  final String? value;
-  final Function(String) onChanged;
+  final List<T> items;
+  final T? value;
+  final Function(T) onChanged;
   final bool searchable;
   final String searchHint;
   final bool isFilter;
   final bool readOnly;
   final bool isRequired;
+  final String Function(T)? itemLabelBuilder;
 
   const CustomDropdown({
     super.key,
@@ -25,22 +26,39 @@ class CustomDropdown extends StatefulWidget {
     this.isFilter = false,
     this.readOnly = false,
     this.isRequired = false,
+    this.itemLabelBuilder,
   });
 
   @override
-  State<CustomDropdown> createState() => _CustomDropdownState();
+  State<CustomDropdown<T>> createState() => _CustomDropdownState<T>();
 }
 
-class _CustomDropdownState extends State<CustomDropdown> {
+class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
   final TextEditingController _searchController = TextEditingController();
-  List<String> _filteredItems = [];
+  List<T> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
     _filteredItems = widget.items;
+  }
+
+  String _getItemLabel(T item) {
+    if (widget.itemLabelBuilder != null) {
+      return widget.itemLabelBuilder!(item);
+    }
+    // Standard approach for AI Setu dropdown models
+    try {
+      return (item as dynamic).name ?? item.toString();
+    } catch (_) {
+      try {
+        return (item as dynamic).fullName ?? item.toString();
+      } catch (_) {
+        return item.toString();
+      }
+    }
   }
 
   void _toggleDropdown() {
@@ -63,6 +81,21 @@ class _CustomDropdownState extends State<CustomDropdown> {
   OverlayEntry _createOverlay() {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final availableHeightBelow =
+        MediaQuery.of(context).size.height -
+        MediaQuery.of(context).viewInsets.bottom -
+        offset.dy -
+        size.height;
+    final availableHeightAbove = offset.dy;
+
+    // Choose direction and max height
+    bool showAbove =
+        availableHeightBelow < 300 &&
+        availableHeightAbove > availableHeightBelow;
+    double maxHeight = showAbove
+        ? (availableHeightAbove > 300 ? 300 : availableHeightAbove - 10)
+        : (availableHeightBelow > 300 ? 300 : availableHeightBelow - 10);
 
     return OverlayEntry(
       builder: (context) => Stack(
@@ -77,7 +110,14 @@ class _CustomDropdownState extends State<CustomDropdown> {
             width: size.width,
             child: CompositedTransformFollower(
               link: _layerLink,
-              offset: Offset(0, size.height + 5),
+              showWhenUnlinked: false,
+              followerAnchor: showAbove
+                  ? Alignment.bottomLeft
+                  : Alignment.topLeft,
+              targetAnchor: showAbove
+                  ? Alignment.topLeft
+                  : Alignment.bottomLeft,
+              offset: Offset(0, showAbove ? -5 : 5),
               child: Material(
                 elevation: 8,
                 shadowColor: Theme.of(context).brightness == Brightness.dark
@@ -85,7 +125,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     : Colors.black26,
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
-                  constraints: const BoxConstraints(maxHeight: 300),
+                  constraints: BoxConstraints(maxHeight: maxHeight),
                   decoration: BoxDecoration(
                     color: context.appColors.surface,
                     borderRadius: BorderRadius.circular(12),
@@ -136,9 +176,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                   setOverlayState(() {
                                     _filteredItems = widget.items
                                         .where(
-                                          (item) => item.toLowerCase().contains(
-                                            value.toLowerCase(),
-                                          ),
+                                          (item) => _getItemLabel(item)
+                                              .toLowerCase()
+                                              .contains(value.toLowerCase()),
                                         )
                                         .toList();
                                   });
@@ -153,6 +193,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                               itemBuilder: (context, index) {
                                 final item = _filteredItems[index];
                                 final isSelected = item == widget.value;
+                                final label = _getItemLabel(item);
 
                                 return InkWell(
                                   onTap: () {
@@ -173,7 +214,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            item,
+                                            label,
                                             style:
                                                 TextHelper.bodyMediumStyle(
                                                   context,
@@ -284,8 +325,11 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.value ??
-                          (widget.isFilter ? "All" : "Select ${widget.label}"),
+                      widget.value != null
+                          ? _getItemLabel(widget.value as T)
+                          : (widget.isFilter
+                                ? "All"
+                                : "Select ${widget.label}"),
                       style: TextHelper.bodyMediumStyle(context).copyWith(
                         color: widget.readOnly
                             ? Colors.grey.shade600

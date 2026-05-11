@@ -40,6 +40,7 @@ class DeliveryChallanTable extends StatelessWidget {
               CommonTable<DeliveryChallanModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.deliveryChallans,
+                route: Routes.deliveryChallan,
                 onRowTap: (item) => Get.toNamed(Routes.deliveryChallanDetails, arguments: item),
                 columns: [
                   TableColumn(

@@ -68,6 +68,7 @@ class SalesRegisterTable extends StatelessWidget {
               CommonTable<SalesRegisterModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.salesRegisters,
+                route: Routes.posSalesRegister,
                 columns: [
                   TableColumn(
                     title: 'Sales Man',

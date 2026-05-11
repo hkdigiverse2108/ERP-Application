@@ -49,6 +49,7 @@ class PurchaseDebitNotePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.purchaseReturn,
           onAdd: () => Get.toNamed(Routes.purchaseDebitNoteAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

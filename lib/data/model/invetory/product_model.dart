@@ -267,8 +267,8 @@ class ProductModel extends Equatable {
     hasExpiry: map["hasExpiry"] ?? false,
     ingredients: map["ingredients"] != null
         ? (map["ingredients"] is List
-            ? List<dynamic>.from(map["ingredients"].map((x) => x))
-            : [map["ingredients"]])
+              ? List<dynamic>.from(map["ingredients"].map((x) => x))
+              : [map["ingredients"]])
         : [],
     masterQty: map["masterQty"],
     stockIds: map["stockIds"] == null
@@ -789,6 +789,7 @@ class ProductDropdownModel extends Equatable {
   final double sellingMargin;
   final TaxId? purchaseTaxId;
   final TaxId? salesTaxId;
+  final UomId? uomId;
 
   const ProductDropdownModel({
     required this.id,
@@ -803,6 +804,7 @@ class ProductDropdownModel extends Equatable {
     required this.sellingMargin,
     this.purchaseTaxId,
     this.salesTaxId,
+    this.uomId,
   });
 
   ProductDropdownModel copyWith({
@@ -818,6 +820,7 @@ class ProductDropdownModel extends Equatable {
     double? sellingMargin,
     TaxId? purchaseTaxId,
     TaxId? salesTaxId,
+    UomId? uomId,
   }) {
     return ProductDropdownModel(
       id: id ?? this.id,
@@ -832,6 +835,7 @@ class ProductDropdownModel extends Equatable {
       sellingMargin: sellingMargin ?? this.sellingMargin,
       purchaseTaxId: purchaseTaxId ?? this.purchaseTaxId,
       salesTaxId: salesTaxId ?? this.salesTaxId,
+      uomId: uomId ?? this.uomId,
     );
   }
 
@@ -860,6 +864,7 @@ class ProductDropdownModel extends Equatable {
         salesTaxId: map["salesTaxId"] == null
             ? null
             : TaxId.fromMap(map["salesTaxId"]),
+        uomId: map["uomId"] == null ? null : UomId.fromMap(map["uomId"]),
       );
 
   Map<String, dynamic> toMap() => {
@@ -875,6 +880,7 @@ class ProductDropdownModel extends Equatable {
     "sellingMargin": sellingMargin,
     "purchaseTaxId": purchaseTaxId?.toMap(),
     "salesTaxId": salesTaxId?.toMap(),
+    "uomId": uomId?.toMap(),
   };
 
   @override
@@ -891,6 +897,7 @@ class ProductDropdownModel extends Equatable {
     sellingMargin,
     purchaseTaxId,
     salesTaxId,
+    uomId,
   ];
 
   @override

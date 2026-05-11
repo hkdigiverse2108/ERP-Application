@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ class CommonTable<T> extends StatelessWidget {
   final bool confirmDelete;
   final String? deleteTitle;
   final String Function(T item)? deleteMessage;
+  final String? route;
 
   const CommonTable({
     super.key,
@@ -77,6 +79,7 @@ class CommonTable<T> extends StatelessWidget {
     this.confirmDelete = true,
     this.deleteTitle,
     this.deleteMessage,
+    this.route,
   });
 
   static const double _colSerial = 40;
@@ -117,41 +120,48 @@ class CommonTable<T> extends StatelessWidget {
         // Scrollable Table (horizontal + vertical)
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+            border: Border.all(color: borderColor, width: 1),
+            color: borderColor, // Frame color
           ),
-          clipBehavior: Clip.antiAlias,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: _totalTableWidth,
-              child: Column(
-                children: [
-                  // Header Row
-                  _buildHeaderRow(headerBg),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Sizes.borderRadiusM - 1),
+            child: Container(
+              color: surfaceColor, // Content background
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: _totalTableWidth,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header Row
+                      _buildHeaderRow(headerBg),
 
-                  // Data Rows
-                  if (isLoading)
-                    _buildLoadingOverlay(borderColor)
-                  else if (items.isEmpty)
-                    emptyState ?? _buildEmptyState(surfaceColor)
-                  else
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 400),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: List.generate(items.length, (index) {
-                            return _buildDataRow(
-                              context,
-                              index,
-                              index.isEven ? surfaceColor : stripColor,
-                              borderColor,
-                            );
-                          }),
+                      // Data Rows
+                      if (isLoading)
+                        _buildLoadingOverlay(borderColor)
+                      else if (items.isEmpty)
+                        emptyState ?? _buildEmptyState(surfaceColor)
+                      else
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 400),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: List.generate(items.length, (index) {
+                                return _buildDataRow(
+                                  context,
+                                  index,
+                                  index.isEven ? surfaceColor : stripColor,
+                                  borderColor,
+                                );
+                              }),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -341,10 +351,19 @@ class CommonTable<T> extends StatelessWidget {
             if (onRemoveItem != null || onEditItem != null)
               Builder(
                 builder: (context) {
+                  final hasEditPermission =
+                      route == null || PermissionService.to.canEdit(route);
+                  final hasDeletePermission =
+                      route == null || PermissionService.to.canDelete(route);
+
                   final showEdit =
-                      onEditItem != null && (canEdit?.call(item) ?? true);
+                      onEditItem != null &&
+                      (canEdit?.call(item) ?? true) &&
+                      hasEditPermission;
                   final showDelete =
-                      onRemoveItem != null && (canDelete?.call(item) ?? true);
+                      onRemoveItem != null &&
+                      (canDelete?.call(item) ?? true) &&
+                      hasDeletePermission;
 
                   if (!showEdit && !showDelete) {
                     return const SizedBox(width: _colActions);
@@ -373,7 +392,8 @@ class CommonTable<T> extends StatelessWidget {
                               if (confirmDelete) {
                                 ConfirmDialog.show(
                                   title: deleteTitle ?? "Confirm Delete",
-                                  message: deleteMessage?.call(item) ??
+                                  message:
+                                      deleteMessage?.call(item) ??
                                       "Are you sure you want to delete this item?",
                                   confirmText: "Delete",
                                   confirmColor: AppColors.error,

@@ -40,7 +40,7 @@ abstract class Routes {
   static const addUpdateBank = '/add-update-bank';
   static const bankTransaction = '/bank-transaction';
   static const addUpdateBankTransaction = '/add-update-bank-transaction';
-  static const posPayment = '/payment';
+  static const payment = '/payment';
   static const addUpdatePayment = '/add-update-payment';
   static const receipt = '/receipt';
   static const addUpdateReceipt = '/add-update-receipt';
@@ -74,6 +74,9 @@ abstract class Routes {
   static const posSalesRegister = '/sales-register';
   static const posOrderList = '/order-list';
   static const posCreditNote = '/pos-credit-note';
+  static const posNew = '/pos/new';
+  static const posMultiplePay = '/pos/multiple-pay';
+  static const posTransactions = '/pos/transactions';
 
   // CRM
   static const coupon = '/coupon';
@@ -123,9 +126,12 @@ abstract class Routes {
   static const materialConsumptionDetails = '/material-consumption-details';
 
   // POS Details
-  static const posOrderDetails = '/pos-order-details';
-  static const posCreditNoteDetails = '/pos-credit-note-details';
+  static String posOrderCustomer(String id) => "/pos-order/customer/$id";
+  static const String posOrderDetails = '/pos-order-details';
+  static const String posHoldBill = '/pos/hold-bill';
+  static const String posCreditNoteDetails = '/pos-credit-note-details';
   static const posSalesRegisterDetails = '/sales-register-details';
+  static const posTransactionsDetails = '/pos-transactions-details';
 
   // Accounting Details
   static const debitDetails = '/debit-note-details';

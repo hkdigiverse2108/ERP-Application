@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/constants/strings.dart';
 import 'package:ai_setu/core/services/showcase_service.dart';
@@ -28,6 +29,7 @@ class FilterSection extends StatefulWidget {
   final String title;
   final List<FilterOption> filters;
   final VoidCallback? onAdd;
+  final String? route;
   final ValueChanged<String> onSearchChanged;
   final ValueChanged<Map<String, String?>> onFiltersChanged;
   final TextEditingController? searchController;
@@ -36,6 +38,7 @@ class FilterSection extends StatefulWidget {
     super.key,
     required this.title,
     this.onAdd,
+    this.route,
     required this.filters,
     required this.onSearchChanged,
     required this.onFiltersChanged,
@@ -130,7 +133,9 @@ class _FilterSectionState extends State<FilterSection>
             ),
             const Spacer(),
             // on Add
-            if (widget.onAdd != null)
+            if (widget.onAdd != null &&
+                (widget.route == null ||
+                    PermissionService.to.canAdd(widget.route)))
               SectionButton(
                 onTap: widget.onAdd,
                 label: 'Add',

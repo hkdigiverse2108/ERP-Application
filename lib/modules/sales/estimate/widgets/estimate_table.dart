@@ -40,6 +40,7 @@ class EstimateTable extends StatelessWidget {
               CommonTable<EstimateModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.estimates,
+                route: Routes.estimate,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.estimateDetails, arguments: item),
                 columns: [

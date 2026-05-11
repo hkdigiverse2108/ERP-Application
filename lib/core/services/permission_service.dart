@@ -166,6 +166,34 @@ class PermissionService extends GetxService {
     return false;
   }
 
+  /// Returns the PermissionModel for a given route.
+  PermissionModel? getPermissionForRoute(String? route) {
+    if (route == null || route.isEmpty) return null;
+    if (route == Routes.dashboard) {
+      return _findTabByName(permittedTabs, "dashboard");
+    }
+    return _findTabByRoute(permittedTabs, route);
+  }
+
+  PermissionModel? _findTabByRoute(List<PermissionModel> tabs, String route) {
+    for (var tab in tabs) {
+      // We check if the route matches the tab's tabUrl or its resolved route
+      if (tab.tabUrl == route || RouteResolver.resolve(tab) == route) {
+        return tab;
+      }
+      if (tab.children.isNotEmpty) {
+        final found = _findTabByRoute(tab.children, route);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  bool canAdd(String? route) => getPermissionForRoute(route)?.add ?? false;
+  bool canEdit(String? route) => getPermissionForRoute(route)?.edit ?? false;
+  bool canDelete(String? route) =>
+      getPermissionForRoute(route)?.delete ?? false;
+
   bool isTabPermitted(String tabName) {
     return _checkPermission(permittedTabs, tabName);
   }
@@ -188,4 +216,3 @@ class PermissionService extends GetxService {
     _storage.remove(StorageKeys.userPermissions);
   }
 }
-

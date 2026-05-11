@@ -38,6 +38,7 @@ class BankTransactionTable extends StatelessWidget {
               CommonTable<BankTransactionModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.transactions,
+                route: Routes.bankTransaction,
                 columns: [
                   TableColumn(
                     title: 'Voucher No',

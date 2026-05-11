@@ -30,6 +30,7 @@ class BankTable extends StatelessWidget {
               CommonTable<BankModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.banks,
+                route: Routes.bank,
                 columns: [
                   TableColumn(
                     title: 'Bank Name',

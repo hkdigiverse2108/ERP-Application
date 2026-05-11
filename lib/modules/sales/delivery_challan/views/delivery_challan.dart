@@ -49,6 +49,7 @@ class DeliveryChallanPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.deliveryChallan,
           onAdd: () async {
             final result = await Get.toNamed(Routes.deliveryChallanAddEdit);
             if (result == true) controller.refreshData();

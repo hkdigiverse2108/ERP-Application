@@ -40,6 +40,7 @@ class InvoiceTable extends StatelessWidget {
               CommonTable<InvoiceModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.invoices,
+                route: Routes.invoice,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.invoiceDetails, arguments: item),
                 columns: [

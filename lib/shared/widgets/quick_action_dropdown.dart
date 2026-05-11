@@ -73,7 +73,7 @@ class QuickActionDropdown extends StatelessWidget {
                         ),
                         QuickActionItem(
                           title: "Payment",
-                          route: Routes.posPayment,
+                          route: Routes.payment,
                         ),
                         QuickActionItem(
                           title: "Expense",

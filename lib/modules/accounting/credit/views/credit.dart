@@ -1,5 +1,6 @@
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/modules/accounting/credit/controllers/credit_controller.dart';
 import 'package:ai_setu/modules/accounting/credit/widgets/credit_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -15,6 +16,14 @@ class CreditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = CreditController.instance;
+
+    final perm = PermissionService.to.getPermissionForRoute(Routes.credit);
+    debugPrint("--- Permission for Credit Note ---");
+    debugPrint("View: ${perm?.view}");
+    debugPrint("Add: ${perm?.add}");
+    debugPrint("Edit: ${perm?.edit}");
+    debugPrint("Delete: ${perm?.delete}");
+    debugPrint("---------------------------------");
 
     return SafeArea(
       top: false,
@@ -45,6 +54,7 @@ class CreditPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        route: Routes.credit,
         onAdd: () => Get.toNamed(Routes.addUpdateCredit),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

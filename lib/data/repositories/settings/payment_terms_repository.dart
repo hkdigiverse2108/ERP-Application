@@ -71,4 +71,14 @@ class PaymentTermsRepository {
     }
     throw Exception(response.message ?? "Failed to delete payment term");
   }
+
+  Future<List<PaymentTermsModel>> getPaymentTermDropdown() async {
+    final ResModel response = await _api.get(ApiConstants.paymentTermDropdown);
+    if (response.status == 200 && response.data != null) {
+      return (response.data as List)
+          .map((e) => PaymentTermsModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
 }

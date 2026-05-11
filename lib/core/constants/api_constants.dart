@@ -589,8 +589,15 @@ class ApiConstants {
     "activeFilter": activeFilter,
   });
 
-  static const String redeemPosCreditNote = "/pos-credit-note/redeem";
+  static String getPosCreditNoteDropdown({
+    String? typeFilter,
+    String? customerFilter,
+  }) => buildUrl("/pos-credit-note/redeem-dropdown", {
+    "typeFilter": typeFilter, // credit_note,advance_payment
+    "customerFilter": customerFilter,
+  });
 
+  static const String redeemPosCreditNote = "/pos-credit-note/redeem";
   static String deletePosCreditNote(String id) => "/pos-credit-note/$id";
   static String getPosCreditNoteById(String id) => "/pos-credit-note/$id";
 
@@ -1252,6 +1259,7 @@ class ApiConstants {
   static String deleteCoupon(String id) => "/coupon/$id";
   static const String removeCoupon = "/coupon/remove";
   static const String couponDropdown = "/coupon/dropdown";
+  static const String verifyCoupon = "/coupon/verify";
 
   // Discount
   static String getAllDiscount({

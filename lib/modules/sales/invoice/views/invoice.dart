@@ -46,6 +46,7 @@ class InvoicePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.invoice,
           onAdd: () => Get.toNamed(Routes.invoiceAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

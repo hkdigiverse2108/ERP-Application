@@ -56,4 +56,12 @@ class CouponRepository {
   Future<ResModel> deleteCoupon(String id) async {
     return await _api.delete(ApiConstants.deleteCoupon(id));
   }
+  
+  Future<ResModel> getCouponDropdown() async {
+    return await _api.get(ApiConstants.couponDropdown);
+  }
+
+  Future<ResModel> verifyCoupon(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.verifyCoupon, body: data);
+  }
 }

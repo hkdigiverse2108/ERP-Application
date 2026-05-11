@@ -281,15 +281,9 @@ class _HomeBodyState extends State<_HomeBody> {
                                               .toList(),
                                           labels: homeController
                                               .salesAndPurchaseGraph
-                                              .map(
-                                                (e) => _formatChartDate(
-                                                  e.date,
-                                                  homeController
-                                                      .selectedDateRange
-                                                      .value,
-                                                ),
-                                              )
+                                              .map((e) => e.date)
                                               .toList(),
+                                          labelFormatter: _formatChartDate,
                                           colors: [
                                             context.appColors.sectionSell,
                                             Colors.redAccent,
@@ -376,15 +370,9 @@ class _HomeBodyState extends State<_HomeBody> {
                                               .toList(),
                                           labels: homeController
                                               .transactionGraph
-                                              .map(
-                                                (e) => _formatChartDate(
-                                                  e.date,
-                                                  homeController
-                                                      .selectedDateRange
-                                                      .value,
-                                                ),
-                                              )
+                                              .map((e) => e.date)
                                               .toList(),
+                                          labelFormatter: _formatChartDate,
                                           colors: const [
                                             Colors.green,
                                             Colors.blue,
@@ -511,14 +499,13 @@ class _HomeBodyState extends State<_HomeBody> {
     );
   }
 
-  String _formatChartDate(String rawDate, DateTimeRange range) {
+  String _formatChartDate(String rawDate, double visibleRange) {
     final date = DateTime.tryParse(rawDate);
     if (date == null) return rawDate;
 
-    final days = range.end.difference(range.start).inDays;
-    if (days >= 300) {
+    if (visibleRange >= 300) {
       return DateFormat('MMM yy').format(date);
-    } else if (days > 180) {
+    } else if (visibleRange > 180) {
       return DateFormat('d MMM yy').format(date);
     } else {
       return DateFormat('d MMM').format(date);

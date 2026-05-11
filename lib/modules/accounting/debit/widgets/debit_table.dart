@@ -24,12 +24,14 @@ class DebitTable extends StatelessWidget {
           return const TableShimmer();
         }
 
+
         return BorderContainer(
           child: Column(
             children: [
               CommonTable<DebitNoteModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.debitNotes,
+                route: Routes.debit,
                 columns: [
                   TableColumn(
                     title: 'Voucher No',

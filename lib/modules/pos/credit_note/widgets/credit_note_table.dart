@@ -68,6 +68,7 @@ class CreditNoteTable extends StatelessWidget {
               CommonTable<CreditNoteModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.creditNotes.toList(),
+                route: Routes.posCreditNote,
                 columns: [
                   TableColumn(
                     title: 'Credit Note No.',

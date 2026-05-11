@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/pos/credit_note/controllers/credit_note_controller.dart';
@@ -45,6 +46,7 @@ class CreditNotePage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Credit Note List',
+        route: Routes.posCreditNote,
         filters: [
           FilterOption(
             label: 'Select Status',

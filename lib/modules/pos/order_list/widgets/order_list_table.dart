@@ -69,6 +69,7 @@ class OrderListTable extends StatelessWidget {
               CommonTable<OrderListModel>(
                 onRowTap: (item) =>
                     Get.toNamed(Routes.posOrderDetails, arguments: item),
+                route: Routes.posOrderList,
                 isLoading: controller.isLoading.value,
                 items: controller.orderList.toList(),
                 columns: [

@@ -2,6 +2,7 @@ import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/services/showcase_service.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
@@ -32,21 +33,22 @@ class ProductTable extends StatelessWidget {
         return BorderContainer(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SectionButton(
-                    onTap: () {},
-                    label: 'Import',
-                    icon: PhosphorIconsLight.fileArchive,
-                  ),
-                  const Gap(8),
-                  SectionButton(
-                    onTap: () => Get.toNamed(Routes.addItem),
-                    label: 'Add Item',
-                  ),
-                ],
-              ),
+              if (PermissionService.to.canAdd(Routes.product))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SectionButton(
+                      onTap: () {},
+                      label: 'Import',
+                      icon: PhosphorIconsLight.fileArchive,
+                    ),
+                    const Gap(8),
+                    SectionButton(
+                      onTap: () => Get.toNamed(Routes.addItem),
+                      label: 'Add Item',
+                    ),
+                  ],
+                ),
               Gap(Sizes.defHorizontalSpace),
               RangedDatePicker(
                 initialDateRange: controller.selectedDateRange.value,
@@ -58,6 +60,7 @@ class ProductTable extends StatelessWidget {
                 () => CommonTable<ProductItemModel>(
                   isLoading: controller.isLodding.value,
                   items: controller.products,
+                  route: Routes.product,
                   onEditItem: (item) =>
                       Get.toNamed(Routes.addUpdateProduct, arguments: item),
                   onRemoveItem: (item) => controller.deleteProduct(item.id),

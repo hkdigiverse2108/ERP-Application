@@ -45,6 +45,7 @@ class DiscountPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Discount List',
+        route: Routes.discount,
         onAdd: () async {
           final res = await Get.toNamed(Routes.addUpdateDiscount);
           if (res == true) controller.getDiscountData();

@@ -1,5 +1,6 @@
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
+import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/modules/accounting/debit/controllers/debit_controller.dart';
 import 'package:ai_setu/modules/accounting/debit/widgets/debit_table.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -15,6 +16,14 @@ class DebitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = DebitController.instance;
+
+    final perm = PermissionService.to.getPermissionForRoute(Routes.debit);
+    debugPrint("--- Permission for Debit Note ---");
+    debugPrint("View: ${perm?.view}");
+    debugPrint("Add: ${perm?.add}");
+    debugPrint("Edit: ${perm?.edit}");
+    debugPrint("Delete: ${perm?.delete}");
+    debugPrint("---------------------------------");
 
     return SafeArea(
       top: false,
@@ -45,6 +54,7 @@ class DebitPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        route: Routes.debit,
         onAdd: () => Get.toNamed(Routes.addUpdateDebit),
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

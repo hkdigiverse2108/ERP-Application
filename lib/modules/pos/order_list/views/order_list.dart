@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/pos/order_list/controllers/order_list_controller.dart';
@@ -45,6 +46,7 @@ class OrderListPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Order List',
+        route: Routes.posOrderList,
         filters: [
           FilterOption(
             label: 'Select Status',

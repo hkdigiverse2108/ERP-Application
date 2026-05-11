@@ -1,4 +1,3 @@
-import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
@@ -45,7 +44,12 @@ class EditTextField extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(label, style: TextHelper.bodySmall),
+            Text(
+              label,
+              style: TextHelper.bodySmall.copyWith(
+                color: context.appColors.textSecondary,
+              ),
+            ),
             if (isRequired)
               const Text(
                 ' *',
@@ -68,23 +72,25 @@ class EditTextField extends StatelessWidget {
           validator: validator,
           maxLines: maxLines,
           style: TextHelper.bodyMedium.copyWith(
-            color: readOnly ? Colors.grey.shade600 : null,
+            color: readOnly
+                ? context.appColors.textSecondary
+                : context.appColors.textPrimary,
           ),
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             filled: true,
-            fillColor: readOnly ? Colors.grey.shade100 : Colors.white,
+            fillColor: readOnly
+                ? context.appColors.background
+                : context.appColors.surface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: Sizes.paddingM,
               vertical: Sizes.paddingM,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              borderSide: BorderSide(
-                color: readOnly ? Colors.grey.shade200 : Colors.grey.shade300,
-              ),
+              borderSide: BorderSide(color: context.appColors.border),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
@@ -95,11 +101,14 @@ class EditTextField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              borderSide: const BorderSide(color: AppColors.error),
+              borderSide: BorderSide(color: context.appColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+              borderSide: BorderSide(
+                color: context.appColors.error,
+                width: 1.5,
+              ),
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/modules/pos/sales_register/controllers/sales_register_controller.dart';
@@ -46,6 +47,7 @@ class SalesRegisterPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: 'Sales Register List',
+          route: Routes.posSalesRegister,
           filters: [
             FilterOption(
               label: 'Select Salesman',

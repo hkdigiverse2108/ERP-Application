@@ -69,6 +69,7 @@ class LoyaltyTable extends StatelessWidget {
               CommonTable<LoyaltyModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.loyaltyList.toList(),
+                route: Routes.loyalty,
                 columns: [
                   TableColumn(
                     title: 'Name',

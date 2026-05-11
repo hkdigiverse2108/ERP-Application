@@ -47,6 +47,7 @@ class SupplierBillPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.supplierBill,
           onAdd: () => Get.toNamed(Routes.supplierBillAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

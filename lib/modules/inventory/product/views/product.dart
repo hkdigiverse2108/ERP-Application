@@ -102,6 +102,7 @@ class _ProductBodyState extends State<_ProductBody> {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.product,
           onAdd: () => Get.toNamed(Routes.addUpdateProduct),
           filters: [
             FilterOption(

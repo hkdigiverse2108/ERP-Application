@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/data/model/crm/loyalty_model.dart';
+import 'package:ai_setu/data/model/crm/loyalty_pos_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 
@@ -59,5 +60,19 @@ class LoyaltyRepository {
 
   Future<ResModel> deleteLoyalty(String id) async {
     return await _api.delete(ApiConstants.loyaltyDelete(id));
+  }
+
+  Future<List<LoyaltyDropdownModel>> getLoyaltyDropdown() async {
+    final res = await _api.get(ApiConstants.loyaltyDropdown);
+    if (res.status == 200 && res.data != null) {
+      return (res.data as List)
+          .map((e) => LoyaltyDropdownModel.fromJson(e))
+          .toList();
+    }
+    return [];
+  }
+
+  Future<ResModel> redeemLoyalty(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.loyaltyRedeem, body: data);
   }
 }

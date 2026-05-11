@@ -46,6 +46,7 @@ class EstimatePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.estimate,
           onAdd: () async {
             final result = await Get.toNamed(Routes.estimateAddEdit);
             if (result == true) {

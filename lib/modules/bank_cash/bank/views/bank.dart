@@ -45,6 +45,7 @@ class BankPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        route: Routes.bank,
         onAdd: () {
           Get.toNamed(Routes.addUpdateBank);
         },

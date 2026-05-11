@@ -69,6 +69,7 @@ class DiscountTable extends StatelessWidget {
               CommonTable<DiscountModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.discountList.toList(),
+                route: Routes.discount,
                 columns: [
                   TableColumn(
                     title: 'Title',

@@ -40,6 +40,7 @@ class SalesOrderTable extends StatelessWidget {
               CommonTable<SalesOrderModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.salesOrders,
+                route: Routes.salesOrder,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.salesOrderDetails, arguments: item),
                 columns: [

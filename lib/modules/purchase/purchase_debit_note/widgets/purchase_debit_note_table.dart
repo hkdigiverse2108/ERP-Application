@@ -41,6 +41,7 @@ class PurchaseDebitNoteTable extends StatelessWidget {
               CommonTable<PurchaseDebitNoteModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.purchaseDebitNotes,
+                route: Routes.purchaseReturn,
                 onRowTap: (item) => Get.toNamed(
                   Routes.purchaseDebitNoteDetails,
                   arguments: item,

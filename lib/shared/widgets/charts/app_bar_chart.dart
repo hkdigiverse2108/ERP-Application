@@ -7,6 +7,7 @@ class AppBarChart extends StatefulWidget {
   final List<String> labels;
   final List<Color>? colors;
   final List<String>? seriesNames;
+  final String Function(String label, double visibleRange)? labelFormatter;
   final double? maxY;
   final double aspectRatio;
 
@@ -14,6 +15,7 @@ class AppBarChart extends StatefulWidget {
     super.key,
     required this.values,
     required this.labels,
+    this.labelFormatter,
     this.colors,
     this.seriesNames,
     this.maxY,
@@ -296,13 +298,14 @@ class _AppBarChartState extends State<AppBarChart> {
                                         return null;
                                       }
 
-                                      final label = widget.labels[actualIndex];
+                                      final rawLabel = widget.labels[actualIndex];
+                                      final label = widget.labelFormatter?.call(rawLabel, visibleRange) ?? rawLabel;
                                       final seriesName =
                                           (widget.seriesNames != null &&
-                                              rodIndex <
-                                                  widget.seriesNames!.length)
-                                          ? widget.seriesNames![rodIndex]
-                                          : null;
+                                               rodIndex <
+                                                   widget.seriesNames!.length)
+                                           ? widget.seriesNames![rodIndex]
+                                           : null;
 
                                       return BarTooltipItem(
                                         '$label\n',
@@ -349,11 +352,13 @@ class _AppBarChartState extends State<AppBarChart> {
                                         index % labelInterval != 0) {
                                       return const SizedBox();
                                     }
+                                    final rawLabel = widget.labels[index];
+                                    final label = widget.labelFormatter?.call(rawLabel, visibleRange) ?? rawLabel;
                                     return SideTitleWidget(
                                       meta: meta,
                                       space: 8,
                                       child: Text(
-                                        widget.labels[index],
+                                        label,
                                         style: TextStyle(
                                           color: textColor,
                                           fontWeight: FontWeight.w600,

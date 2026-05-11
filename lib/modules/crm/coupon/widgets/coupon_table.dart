@@ -69,6 +69,7 @@ class CouponTable extends StatelessWidget {
               CommonTable<CouponModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.couponList.toList(),
+                route: Routes.coupon,
                 columns: [
                   TableColumn(
                     title: 'Name',

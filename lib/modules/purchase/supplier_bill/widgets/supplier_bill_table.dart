@@ -40,6 +40,7 @@ class SupplierBillTable extends StatelessWidget {
               CommonTable<SupplierBillModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.supplierBills,
+                route: Routes.supplierBill,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.supplierBillDetails, arguments: item),
                 onEditItem: (item) =>

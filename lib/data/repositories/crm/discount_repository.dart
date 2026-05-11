@@ -60,4 +60,12 @@ class DiscountRepository {
   Future<ResModel> deleteDiscount(String id) async {
     return await _api.delete(ApiConstants.deleteDiscount(id));
   }
+
+  Future<ResModel> getDiscountDropdown() async {
+    return await _api.get(ApiConstants.discountDropdown);
+  }
+
+  Future<ResModel> verifyDiscount(Map<String, dynamic> data) async {
+    return await _api.post(ApiConstants.discountVerify, body: data);
+  }
 }

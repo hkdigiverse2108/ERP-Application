@@ -45,6 +45,7 @@ class LoyaltyPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Loyalty List',
+        route: Routes.loyalty,
         onAdd: () async {
           final res = await Get.toNamed(Routes.addUpdateLoyalty);
           if (res == true) controller.getLoyaltyData();

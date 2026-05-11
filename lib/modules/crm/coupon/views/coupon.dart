@@ -45,6 +45,7 @@ class CouponPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: 'Coupon List',
+        route: Routes.coupon,
         onAdd: () async {
           final res = await Get.toNamed(Routes.addUpdateCoupon);
           if (res == true) controller.getCouponData();

@@ -46,6 +46,7 @@ class SalesOrderPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.salesOrder,
           onAdd: () async {
             final result = await Get.toNamed(Routes.salesOrderAddEdit);
             if (result == true) {

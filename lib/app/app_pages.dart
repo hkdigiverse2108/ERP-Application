@@ -31,13 +31,13 @@ import 'package:ai_setu/modules/bank_cash/expense/views/expense.dart';
 import 'package:ai_setu/modules/bank_cash/payment/bindings/payment_add_edit_binding.dart';
 import 'package:ai_setu/modules/bank_cash/payment/bindings/payment_binding.dart';
 import 'package:ai_setu/modules/bank_cash/payment/views/payment_add_edit_view.dart';
-import 'package:ai_setu/modules/bank_cash/payment/views/payment.dart';
 import 'package:ai_setu/modules/bank_cash/salary/bindings/salary_binding.dart';
 import 'package:ai_setu/modules/bank_cash/salary/views/salary.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/bindings/receipt_binding.dart';
 import 'package:ai_setu/modules/bank_cash/receipt/views/receipt.dart';
 import 'package:ai_setu/modules/crm/coupon/bindings/coupon_binding.dart';
 import 'package:ai_setu/modules/crm/loyalty/bindings/loyalty_binding.dart';
+import 'package:ai_setu/modules/bank_cash/payment/views/payment.dart';
 import 'package:ai_setu/modules/inventory/bill_of_live_product/views/bill_of_live_product_add_edit_view.dart';
 import 'package:ai_setu/modules/inventory/product/views/add_item.dart';
 import 'package:ai_setu/modules/inventory/product/views/product_add_edit_view.dart';
@@ -183,9 +183,17 @@ import 'package:ai_setu/modules/inventory/recipe/views/recipe_details.dart';
 import 'package:ai_setu/modules/pos/credit_note/views/pos_credit_note_details.dart';
 import 'package:ai_setu/modules/bank_cash/bank/views/bank_details.dart';
 import 'package:ai_setu/modules/pos/sales_register/views/sales_register_details.dart';
+import 'package:ai_setu/modules/pos/pos_new/bindings/pos_new_binding.dart';
+import 'package:ai_setu/modules/pos/pos_new/views/pos_new_view.dart';
+import 'package:ai_setu/modules/pos/pos_multiple_pay/bindings/pos_multiple_pay_binding.dart';
+import 'package:ai_setu/modules/pos/pos_multiple_pay/views/pos_multiple_pay_view.dart';
+import 'package:ai_setu/modules/pos/pos_payment/bindings/pos_payment_binding.dart';
+import 'package:ai_setu/modules/pos/pos_payment/views/pos_payment_view.dart';
 
 import 'package:ai_setu/modules/announcement/bindings/announcement_binding.dart';
 import 'package:ai_setu/modules/announcement/views/announcement_view.dart';
+import 'package:ai_setu/modules/pos/pos_hold/pos_hold_binding.dart';
+import 'package:ai_setu/modules/pos/pos_hold/pos_hold_view.dart';
 import 'package:ai_setu/modules/support/bindings/support_binding.dart';
 import 'package:ai_setu/modules/support/views/support.dart';
 
@@ -373,10 +381,15 @@ class AppPages {
       binding: BankTransactionAddEditBinding(),
     ),
     GetPage(
-      name: Routes.posPayment,
+      name: Routes.payment,
       page: () => const PaymentPage(),
       binding: PaymentBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.posTransactions,
+      page: () => const PosPaymentView(),
+      binding: PosPaymentBinding(),
     ),
     GetPage(
       name: Routes.addUpdatePayment,
@@ -523,6 +536,22 @@ class AppPages {
       page: () => const CreditNotePage(),
       binding: CreditNoteBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.posNew,
+      page: () => const PosNewPage(),
+      binding: PosNewBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.posMultiplePay,
+      page: () => const PosMultiplePayView(),
+      binding: PosMultiplePayBinding(),
+    ),
+    GetPage(
+      name: Routes.posHoldBill,
+      page: () => const PosHoldView(),
+      binding: PosHoldBinding(),
     ),
     // crm
     GetPage(

@@ -40,6 +40,7 @@ class PurchaseOrderTable extends StatelessWidget {
               CommonTable<PurchaseOrderModel>(
                 isLoading: controller.isLodding.value,
                 items: controller.purchaseOrders,
+                route: Routes.purchaseOrder,
                 onRowTap: (item) =>
                     Get.toNamed(Routes.purchaseOrderDetails, arguments: item),
                 onEditItem: (item) =>

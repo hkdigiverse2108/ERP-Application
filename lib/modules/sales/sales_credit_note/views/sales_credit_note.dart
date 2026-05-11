@@ -49,6 +49,7 @@ class SalesCreditNotePage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.salesCreditNote,
           onAdd: () => Get.toNamed(Routes.salesCreditNoteAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

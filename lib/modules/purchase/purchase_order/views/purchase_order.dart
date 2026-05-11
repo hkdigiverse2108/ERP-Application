@@ -47,6 +47,7 @@ class PurchaseOrderPage extends StatelessWidget {
       child: Obx(
         () => FilterSection(
           title: title,
+          route: Routes.purchaseOrder,
           onAdd: () => Get.toNamed(Routes.purchaseOrderAddEdit),
           onSearchChanged: (query) => controller.onSearch(query),
           onFiltersChanged: (filters) => controller.onFiltersChanged(filters),

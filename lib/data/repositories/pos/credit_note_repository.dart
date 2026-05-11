@@ -37,4 +37,30 @@ class CreditNoteRepository {
       throw Exception(res.message);
     }
   }
+
+  Future<List<dynamic>> getRedeemDropdown({
+    String? typeFilter,
+    String? customerFilter,
+  }) async {
+    final url = ApiConstants.getPosCreditNoteDropdown(
+      typeFilter: typeFilter,
+      customerFilter: customerFilter,
+    );
+
+    final ResModel res = await _api.get(url);
+
+    if (res.status == 200 && res.data != null) {
+      return res.data as List;
+    } else {
+      return [];
+    }
+  }
+
+  Future<ResModel> redeemCreditNote(Map<String, dynamic> payload) async {
+    final res = await _api.post(
+      ApiConstants.redeemPosCreditNote,
+      body: payload,
+    );
+    return res;
+  }
 }

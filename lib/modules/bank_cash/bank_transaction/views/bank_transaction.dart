@@ -45,6 +45,7 @@ class BankTransactionPage extends StatelessWidget {
       ),
       child: FilterSection(
         title: title,
+        route: Routes.bankTransaction,
         onSearchChanged: (query) => controller.onSearch(query),
         onFiltersChanged: (filters) => controller.onFiltersChanged(filters),
         onAdd: () async {
