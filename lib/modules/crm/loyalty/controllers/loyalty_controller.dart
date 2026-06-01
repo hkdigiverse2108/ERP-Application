@@ -49,7 +49,8 @@ class LoyaltyController extends GetxController {
         updateDateRange(year.dateRange);
       }
     });
-    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+    _branchWorker = ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       _clearCache();
       getLoyaltyData();
     });

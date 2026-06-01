@@ -298,14 +298,20 @@ class _AppBarChartState extends State<AppBarChart> {
                                         return null;
                                       }
 
-                                      final rawLabel = widget.labels[actualIndex];
-                                      final label = widget.labelFormatter?.call(rawLabel, visibleRange) ?? rawLabel;
+                                      final rawLabel =
+                                          widget.labels[actualIndex];
+                                      final label =
+                                          widget.labelFormatter?.call(
+                                            rawLabel,
+                                            visibleRange,
+                                          ) ??
+                                          rawLabel;
                                       final seriesName =
                                           (widget.seriesNames != null &&
-                                               rodIndex <
-                                                   widget.seriesNames!.length)
-                                           ? widget.seriesNames![rodIndex]
-                                           : null;
+                                              rodIndex <
+                                                  widget.seriesNames!.length)
+                                          ? widget.seriesNames![rodIndex]
+                                          : null;
 
                                       return BarTooltipItem(
                                         '$label\n',
@@ -353,7 +359,12 @@ class _AppBarChartState extends State<AppBarChart> {
                                       return const SizedBox();
                                     }
                                     final rawLabel = widget.labels[index];
-                                    final label = widget.labelFormatter?.call(rawLabel, visibleRange) ?? rawLabel;
+                                    final label =
+                                        widget.labelFormatter?.call(
+                                          rawLabel,
+                                          visibleRange,
+                                        ) ??
+                                        rawLabel;
                                     return SideTitleWidget(
                                       meta: meta,
                                       space: 8,
@@ -390,8 +401,14 @@ class _AppBarChartState extends State<AppBarChart> {
                               ),
                             ),
                             borderData: FlBorderData(show: false),
-                            barGroups: widget.values.asMap().entries
-                                .where((e) => e.key >= _minX.floor() && e.key <= _maxX.ceil())
+                            barGroups: widget.values
+                                .asMap()
+                                .entries
+                                .where(
+                                  (e) =>
+                                      e.key >= _minX.floor() &&
+                                      e.key <= _maxX.ceil(),
+                                )
                                 .map(
                                   (e) => BarChartGroupData(
                                     x: e.key,
@@ -400,8 +417,10 @@ class _AppBarChartState extends State<AppBarChart> {
                                       e.value.length,
                                       (rodIndex) => BarChartRodData(
                                         toY: e.value[rodIndex],
-                                        color: (widget.colors != null &&
-                                            rodIndex < widget.colors!.length)
+                                        color:
+                                            (widget.colors != null &&
+                                                rodIndex <
+                                                    widget.colors!.length)
                                             ? widget.colors![rodIndex]
                                             : defaultColor,
                                         width: _calculateRodWidth(
@@ -415,7 +434,8 @@ class _AppBarChartState extends State<AppBarChart> {
                                       ),
                                     ),
                                   ),
-                                ).toList(),
+                                )
+                                .toList(),
                           ),
                         ),
                       ),

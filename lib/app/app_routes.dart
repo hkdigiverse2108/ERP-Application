@@ -8,6 +8,7 @@ abstract class Routes {
   static const dashboard = '/dashboard';
   static const editUser = '/edit-user';
   static const user = '/users';
+  static const userPermission = '/user-permission';
 
   // inventory
   static const product = '/product';
@@ -74,6 +75,8 @@ abstract class Routes {
   static const posSalesRegister = '/sales-register';
   static const posOrderList = '/order-list';
   static const posCreditNote = '/pos-credit-note';
+  static const posCreditNoteList = '/pos-credit-note-list';
+  static const cashControl = '/cash-control';
   static const posNew = '/pos/new';
   static const posMultiplePay = '/pos/multiple-pay';
   static const posTransactions = '/pos/transactions';

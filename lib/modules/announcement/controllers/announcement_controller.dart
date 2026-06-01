@@ -16,7 +16,10 @@ class AnnouncementController extends GetxController {
     super.onInit();
     fetchAnnouncements();
     // Watch for branch changes
-    ever(BranchController.to.selectedBranch, (_) => fetchAnnouncements());
+    ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
+      fetchAnnouncements();
+    });
   }
 
   Future<void> fetchAnnouncements() async {

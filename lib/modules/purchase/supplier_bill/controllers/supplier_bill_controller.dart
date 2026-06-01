@@ -57,7 +57,8 @@ class SupplierBillController extends GetxController {
       }
     });
 
-    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+    _branchWorker = ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       _clearCache();
       getSupplierBillsData();
     });

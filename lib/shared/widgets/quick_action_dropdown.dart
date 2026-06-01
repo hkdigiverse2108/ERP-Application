@@ -43,7 +43,9 @@ class QuickActionDropdown extends StatelessWidget {
                     _MainHeader(
                       title: "Dashboard",
                       onTap: () {
-                        Get.toNamed(Routes.dashboard);
+                        Get.back();
+                        if (Get.currentRoute == Routes.dashboard) return;
+                        Get.offAllNamed(Routes.dashboard);
                       },
                     ),
                     _ExpandableSection(
@@ -284,9 +286,12 @@ class _MainHeader extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (onTap != null) {
-            Get.toNamed(Routes.dashboard);
+            onTap!();
           } else {
-            Get.toNamed(Routes.dashboard);
+            Get.back();
+            if (Get.currentRoute != Routes.dashboard) {
+              Get.offAllNamed(Routes.dashboard);
+            }
           }
         },
         child: Text(

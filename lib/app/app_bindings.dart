@@ -29,4 +29,3 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => SettingsController(), fenix: true);
   }
 }
-

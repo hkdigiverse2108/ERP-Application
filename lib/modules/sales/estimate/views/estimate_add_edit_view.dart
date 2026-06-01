@@ -177,7 +177,15 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () => _selectDate(context, controller.estimateDate),
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: controller.estimateDate.value,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) controller.updateEstimateDate(picked);
+                  },
                   child: IgnorePointer(
                     child: EditTextField(
                       label: "Date",
@@ -207,7 +215,15 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () => _selectDate(context, controller.dueDate),
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: controller.dueDate.value,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) controller.updateDueDate(picked);
+                  },
                   child: IgnorePointer(
                     child: EditTextField(
                       label: "Due Date",
@@ -228,9 +244,10 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
                   value: controller.selectedPaymentTerm.value?.name,
                   items: controller.paymentTerms.map((e) => e.name).toList(),
                   onChanged: (v) {
-                    controller.selectedPaymentTerm.value = controller
-                        .paymentTerms
-                        .firstWhereOrNull((e) => e.name == v);
+                    final term = controller.paymentTerms.firstWhereOrNull(
+                      (e) => e.name == v,
+                    );
+                    controller.updatePaymentTerm(term);
                   },
                 ),
               ),
@@ -762,15 +779,5 @@ class EstimateAddEditView extends GetView<EstimateAddEditController> {
   String _formatAddress(ContactAddress? addr) {
     if (addr == null) return "";
     return "${addr.addressLine1}, ${addr.city?.name}";
-  }
-
-  void _selectDate(BuildContext context, Rx<DateTime> date) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: date.value,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) date.value = picked;
   }
 }

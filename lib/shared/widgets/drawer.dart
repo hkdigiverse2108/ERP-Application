@@ -12,6 +12,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:ai_setu/shared/widgets/dialogs/logout_confirmation_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ai_setu/core/utils/app_snackbar.dart';
+import 'package:ai_setu/app/app_routes.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -321,11 +322,13 @@ class _NavItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pop();
         if (route.isNotEmpty) {
-          // Store which tab was tapped so the drawer can highlight exactly
-          // this item — even when two tabs resolve to different routes but
-          // share the same tabUrl.
+          if (Get.currentRoute == route) return;
           PermissionService.to.activeTabId.value = tabId;
-          Get.toNamed(route);
+          if (route == Routes.dashboard) {
+            Get.offAllNamed(route);
+          } else {
+            Get.toNamed(route);
+          }
         }
       },
       child: AnimatedContainer(

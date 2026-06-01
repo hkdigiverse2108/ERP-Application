@@ -59,6 +59,8 @@ class _HomeBodyState extends State<_HomeBody> {
 
     final homeController = Get.find<HomeController>();
 
+    ShowcaseService.to.resetKeys();
+
     ShowcaseView.register(
       scope: ShowcaseService.homeScope,
       onFinish: () {
@@ -108,7 +110,9 @@ class _HomeBodyState extends State<_HomeBody> {
 
   @override
   void dispose() {
-    ShowcaseView.getNamed(ShowcaseService.homeScope).unregister();
+    if (Get.currentRoute != Routes.dashboard) {
+      ShowcaseView.getNamed(ShowcaseService.homeScope).unregister();
+    }
     super.dispose();
   }
 

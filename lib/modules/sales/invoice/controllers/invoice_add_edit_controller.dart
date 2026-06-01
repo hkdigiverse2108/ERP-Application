@@ -2,6 +2,8 @@ import 'package:ai_setu/data/model/additional_charge/additional_charge_model.dar
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/user_model.dart';
+import 'package:ai_setu/data/model/selas/sales_order_model.dart';
+import 'package:ai_setu/data/model/selas/delivery_challan_model.dart';
 import 'package:ai_setu/data/repositories/settings/additional_charge_repository.dart';
 import 'package:ai_setu/data/repositories/settings/terms_and_condition_repository.dart';
 import 'package:ai_setu/data/repositories/user/user_repository.dart';
@@ -174,8 +176,6 @@ class InvoiceAddEditController extends GetxController {
         _additionalChargeRepository.getAdditionalCharges(limit: 100),
         _contactRepository.getContactDropdown(typeFilter: 'transporter'),
         _userRepository.getUserDropDown(),
-        _salesRepository.getSalesOrderDropdown(statusFilter: 'pending'),
-        _salesRepository.getDeliveryChallanDropdown(statusFilter: 'pending'),
       ]);
 
       customers.value = results[0] as List<ContactDropdownModel>;
@@ -188,8 +188,6 @@ class InvoiceAddEditController extends GetxController {
       availableAdditionalCharges.value = chargesRes.items;
       transporters.value = results[6] as List<ContactDropdownModel>;
       salesmen.value = results[7] as List<UserDropDownModel>;
-      salesOrders.value = results[8] as List<IdNameModel>;
-      deliveryChallans.value = results[9] as List<IdNameModel>;
     } catch (e) {
       debugPrint('Error loading initial data: $e');
     } finally {
@@ -262,8 +260,9 @@ class InvoiceAddEditController extends GetxController {
 
       ever(transporters, (allTrans) {
         if (allTrans.isNotEmpty && ship.transporterId != null) {
-          selectedTransporter.value =
-              allTrans.firstWhereOrNull((t) => t.id == ship.transporterId);
+          selectedTransporter.value = allTrans.firstWhereOrNull(
+            (t) => t.id == ship.transporterId,
+          );
         }
       });
     }
@@ -280,8 +279,8 @@ class InvoiceAddEditController extends GetxController {
     }
 
     if (inv.transactionSummary != null) {
-      flatDiscountController.text =
-          inv.transactionSummary!.flatDiscount.toString();
+      flatDiscountController.text = inv.transactionSummary!.flatDiscount
+          .toString();
       roundOffController.text = inv.transactionSummary!.roundOff.toString();
     }
 
@@ -289,6 +288,11 @@ class InvoiceAddEditController extends GetxController {
   }
 
   Future<void> _fetchDropdowns({String? customerId}) async {
+    if (customerId == null || customerId.isEmpty) {
+      salesOrders.clear();
+      deliveryChallans.clear();
+      return;
+    }
     try {
       final results = await Future.wait([
         _salesRepository.getSalesOrderDropdown(
@@ -297,7 +301,7 @@ class InvoiceAddEditController extends GetxController {
         ),
         _salesRepository.getDeliveryChallanDropdown(
           customerFilter: customerId,
-          statusFilter: 'pending',
+          // statusFilter: 'pending',
         ),
       ]);
       salesOrders.value = results[0];
@@ -407,18 +411,68 @@ class InvoiceAddEditController extends GetxController {
 
     // Append items
     for (var e in itemsList) {
-      items.add(InvoiceItemState(
-        productId: e.productId?.id ?? "",
-        productName: e.productId?.name ?? "Unknown",
-        qty: e.qty,
-        freeQty: e.freeQty,
-        price: e.price,
-        discount1: e.discount1,
-        taxId: e.taxId?.id,
-        taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
-        uomId: e.uomId?.id,
-        unit: e.unit,
-      ));
+      String? prodId;
+      String prodName = "Unknown";
+      double qty = 0.0;
+      double freeQty = 0.0;
+      double price = 0.0;
+      double discount1 = 0.0;
+      String? taxId;
+      double taxPercent = 0.0;
+      String? uomId;
+      String? unit;
+
+      if (e is SalesOrderItem) {
+        prodId = e.productId?.id;
+        prodName = e.productId?.name ?? "Unknown";
+        qty = e.qty;
+        freeQty = e.freeQty;
+        price = e.price;
+        discount1 = e.discount1;
+        taxId = e.taxId?.id;
+        taxPercent = e.taxId?.percentage.toDouble() ?? 0.0;
+        uomId = e.uomId?.id;
+        unit = e.uomId?.name;
+      } else if (e is DeliveryChallanItem) {
+        prodId = e.productId?.id;
+        prodName = e.productId?.name ?? "Unknown";
+        qty = e.qty;
+        freeQty = e.freeQty;
+        price = e.price;
+        discount1 = e.discount1;
+        taxId = e.taxId?.id;
+        taxPercent = e.taxId?.percentage.toDouble() ?? 0.0;
+        uomId = e.uomId;
+        unit = e.unit;
+      } else {
+        try {
+          prodId = e.productId?.id ?? "";
+          prodName = e.productId?.name ?? "Unknown";
+          qty = (e.qty as num?)?.toDouble() ?? 0.0;
+          freeQty = (e.freeQty as num?)?.toDouble() ?? 0.0;
+          price = (e.price as num?)?.toDouble() ?? 0.0;
+          discount1 = (e.discount1 as num?)?.toDouble() ?? 0.0;
+          taxId = e.taxId?.id;
+          taxPercent = (e.taxId?.percentage as num?)?.toDouble() ?? 0.0;
+          uomId = e.uomId is String ? e.uomId : e.uomId?.id;
+          unit = e.uomId is String ? e.unit : e.uomId?.name;
+        } catch (_) {}
+      }
+
+      items.add(
+        InvoiceItemState(
+          productId: prodId ?? "",
+          productName: prodName,
+          qty: qty,
+          freeQty: freeQty,
+          price: price,
+          discount1: discount1,
+          taxId: taxId,
+          taxPercent: taxPercent,
+          uomId: uomId,
+          unit: unit,
+        ),
+      );
     }
 
     // Append charges (avoid duplicates by charge ID if necessary, but here we just append)
@@ -427,13 +481,15 @@ class InvoiceAddEditController extends GetxController {
         (c) => c.id == e.chargeId,
       );
       final tax = taxes.firstWhereOrNull((t) => t.id == e.taxId);
-      additionalCharges.add(InvoiceAdditionalChargeState(
-        id: e.chargeId ?? "",
-        name: charge?.name ?? "Charge",
-        amount: e.amount,
-        taxId: e.taxId,
-        taxPercent: tax?.percentage.toDouble() ?? 0.0,
-      ));
+      additionalCharges.add(
+        InvoiceAdditionalChargeState(
+          id: e.chargeId ?? "",
+          name: charge?.name ?? "Charge",
+          amount: e.amount,
+          taxId: e.taxId,
+          taxPercent: tax?.percentage.toDouble() ?? 0.0,
+        ),
+      );
     }
 
     // Merge terms
@@ -602,7 +658,10 @@ class InvoiceAddEditController extends GetxController {
         'taxType': taxType.value == TaxType.exclusive ? "exclusive" : "default",
         'reverseCharge': "false",
         'items': items.map((e) => e.toMap()).toList(),
-        'additionalCharges': additionalCharges.map((e) => e.toMap()).toList(),
+        'additionalCharges': additionalCharges
+            .where((e) => e.id.isNotEmpty)
+            .map((e) => e.toMap())
+            .toList(),
         'shippingDetails': shippingDetails,
         'transactionSummary': {
           'flatDiscount': flatDiscountValue.value,
@@ -628,7 +687,9 @@ class InvoiceAddEditController extends GetxController {
                 (match) => '-${match.group(1)!.toLowerCase()}',
               ),
         'salesOrderIds': selectedSalesOrders.map((e) => e.id).toList(),
-        'deliveryChallanIds': selectedDeliveryChallans.map((e) => e.id).toList(),
+        'deliveryChallanIds': selectedDeliveryChallans
+            .map((e) => e.id)
+            .toList(),
       };
 
       dynamic result;
@@ -750,7 +811,7 @@ class InvoiceItemState {
       'price': price,
       'discount1': discount1,
       'tax': tax,
-      'taxId': taxId ?? "",
+      'taxId': (taxId == null || taxId!.isEmpty) ? null : taxId,
       'taxableAmount': taxable,
       'totalAmount': total,
     };
@@ -791,7 +852,7 @@ class InvoiceAdditionalChargeState {
   Map<String, dynamic> toMap() {
     return {
       'chargeId': id,
-      'taxId': taxId ?? "",
+      'taxId': (taxId == null || taxId!.isEmpty) ? null : taxId,
       'amount': amount,
       'totalAmount': amount + (amount * taxPercent / 100),
     };

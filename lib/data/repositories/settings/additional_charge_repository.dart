@@ -78,7 +78,7 @@ class AdditionalChargeRepository {
 
   Future<List<IdNameModel>> getAccountGroupDropdown() async {
     final ResModel res = await _api.get(
-      ApiConstants.accountGroupDropdown("", ""),
+      ApiConstants.accountGroupDropdown("", "", null),
     );
     if (res.status == 200) {
       return (res.data as List).map((e) => IdNameModel.fromMap(e)).toList();

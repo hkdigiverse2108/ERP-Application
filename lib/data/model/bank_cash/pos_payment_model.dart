@@ -9,6 +9,10 @@ class PosPaymentModel extends Equatable {
   final String paymentType;
   final PosPaymentParty? partyId;
   final PosPaymentOrder? posOrderId;
+  final String? purchaseBillId;
+  final String? posCreditNoteId;
+  final String? invoiceId;
+  final String? salesCreditNoteId;
   final String posCashRegisterId;
   final String paymentMode;
   final double totalAmount;
@@ -35,6 +39,10 @@ class PosPaymentModel extends Equatable {
     required this.paymentType,
     this.partyId,
     this.posOrderId,
+    this.purchaseBillId,
+    this.posCreditNoteId,
+    this.invoiceId,
+    this.salesCreditNoteId,
     required this.posCashRegisterId,
     required this.paymentMode,
     required this.totalAmount,
@@ -125,6 +133,18 @@ class PosPaymentModel extends Equatable {
     posOrderId: map["posOrderId"] == null
         ? null
         : PosPaymentOrder.fromMap(map["posOrderId"] as Map<String, dynamic>),
+    purchaseBillId: map["purchaseBillId"] is Map
+        ? map["purchaseBillId"]["_id"]?.toString()
+        : map["purchaseBillId"]?.toString(),
+    posCreditNoteId: map["posCreditNoteId"] is Map
+        ? map["posCreditNoteId"]["_id"]?.toString()
+        : map["posCreditNoteId"]?.toString(),
+    invoiceId: map["invoiceId"] is Map
+        ? map["invoiceId"]["_id"]?.toString()
+        : map["invoiceId"]?.toString(),
+    salesCreditNoteId: map["salesCreditNoteId"] is Map
+        ? map["salesCreditNoteId"]["_id"]?.toString()
+        : map["salesCreditNoteId"]?.toString(),
     posCashRegisterId: map["posCashRegisterId"]?.toString() ?? "",
     paymentMode: map["paymentMode"]?.toString() ?? "",
     totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
@@ -160,6 +180,10 @@ class PosPaymentModel extends Equatable {
     "paymentType": paymentType,
     "partyId": partyId?.toMap(),
     "posOrderId": posOrderId?.toMap(),
+    "purchaseBillId": purchaseBillId,
+    "posCreditNoteId": posCreditNoteId,
+    "invoiceId": invoiceId,
+    "salesCreditNoteId": salesCreditNoteId,
     "posCashRegisterId": posCashRegisterId,
     "paymentMode": paymentMode,
     "totalAmount": totalAmount,

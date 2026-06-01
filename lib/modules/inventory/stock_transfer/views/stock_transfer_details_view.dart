@@ -1,91 +1,100 @@
 import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/invetory/stock_transfer_model.dart';
+import 'package:ai_setu/modules/inventory/stock_transfer/controllers/stock_transfer_details_controller.dart';
 import 'package:ai_setu/shared/widgets/details/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class StockTransferDetailsView extends StatelessWidget {
+class StockTransferDetailsView extends GetView<StockTransferDetailsController> {
   const StockTransferDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final StockTransferModel transfer = Get.arguments;
-    final dateStr = DateFormat('dd MMM yyyy').format(transfer.createdAt);
+    return Obx(() {
+      final transfer = controller.transfer.value;
+      if (transfer == null) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+      final dateStr = DateFormat('dd MMM yyyy').format(transfer.createdAt);
 
-    return DetailsView(
-      title: 'Stock Transfer #${transfer.transferNo}',
-      subtitle: 'Date: $dateStr',
-      heroIcon: PhosphorIconsFill.package,
-      status: transfer.status,
-      statusColor: _getStatusColor(transfer.status),
-      sections: [
-        DetailSection(
-          title: 'Transfer Information',
-          children: [
-            DataGrid(
-              items: [
-                DetailItem(
-                  label: 'From Branch',
-                  value: transfer.requestedByBranchId?.name ?? '-',
-                ),
-                DetailItem(
-                  label: 'To Branch',
-                  value: transfer.requestedToBranchId?.name ?? '-',
-                ),
-                DetailItem(
-                  label: 'Requested By',
-                  value: transfer.createdBy?.fullName ?? '-',
-                ),
-                DetailItem(label: 'Type', value: transfer.type),
-                if (transfer.approvedBy != null)
+      return DetailsView(
+        title: 'Stock Transfer #${transfer.transferNo}',
+        subtitle: 'Date: $dateStr',
+        heroIcon: PhosphorIconsFill.package,
+        status: transfer.status,
+        statusColor: _getStatusColor(transfer.status),
+        actions: controller.getActions(context),
+        sections: [
+          DetailSection(
+            title: 'Transfer Information',
+            children: [
+              DataGrid(
+                items: [
                   DetailItem(
-                    label: 'Approved By',
-                    value: transfer.approvedBy?.fullName ?? '-',
+                    label: 'From Branch',
+                    value: transfer.requestedByBranchId?.name ?? '-',
                   ),
-                if (transfer.approvedAt != null)
                   DetailItem(
-                    label: 'Approved At',
-                    value: DateFormat(
-                      'dd MMM yyyy HH:mm',
-                    ).format(transfer.approvedAt!),
+                    label: 'To Branch',
+                    value: transfer.requestedToBranchId?.name ?? '-',
                   ),
+                  DetailItem(
+                    label: 'Requested By',
+                    value: transfer.createdBy?.fullName ?? '-',
+                  ),
+                  DetailItem(label: 'Type', value: transfer.type),
+                  if (transfer.approvedBy != null)
+                    DetailItem(
+                      label: 'Approved By',
+                      value: transfer.approvedBy?.fullName ?? '-',
+                    ),
+                  if (transfer.approvedAt != null)
+                    DetailItem(
+                      label: 'Approved At',
+                      value: DateFormat(
+                        'dd MMM yyyy HH:mm',
+                      ).format(transfer.approvedAt!),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          DetailSection(
+            title: 'Items',
+            children: [_buildItemsTable(context, transfer.items)],
+          ),
+          if (transfer.requestNote.isNotEmpty)
+            DetailSection(
+              title: 'Request Note',
+              children: [
+                Text(
+                  transfer.requestNote,
+                  style: TextHelper.bodySmall.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
-        DetailSection(
-          title: 'Items',
-          children: [_buildItemsTable(context, transfer.items)],
-        ),
-        if (transfer.requestNote.isNotEmpty)
-          DetailSection(
-            title: 'Request Note',
-            children: [
-              Text(
-                transfer.requestNote,
-                style: TextHelper.bodySmall.copyWith(
-                  color: AppColors.lightTextSecondary,
+          if (transfer.approvalNote.isNotEmpty)
+            DetailSection(
+              title: 'Approval/Rejection Note',
+              children: [
+                Text(
+                  transfer.approvalNote,
+                  style: TextHelper.bodySmall.copyWith(
+                    color: AppColors.lightTextSecondary,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        if (transfer.approvalNote.isNotEmpty)
-          DetailSection(
-            title: 'Approval Note',
-            children: [
-              Text(
-                transfer.approvalNote,
-                style: TextHelper.bodySmall.copyWith(
-                  color: AppColors.lightTextSecondary,
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
+              ],
+            ),
+        ],
+      );
+    });
   }
 
   Color _getStatusColor(String status) {
@@ -96,6 +105,10 @@ class StockTransferDetailsView extends StatelessWidget {
         return Colors.orange;
       case 'rejected':
         return Colors.red;
+      case 'dispatched':
+        return Colors.blue;
+      case 'completed':
+        return Colors.teal;
       default:
         return Colors.blue;
     }

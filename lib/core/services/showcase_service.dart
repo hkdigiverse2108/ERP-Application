@@ -13,20 +13,33 @@ class ShowcaseService extends GetxService {
   static const String inventoryScope = 'inventory_scope';
 
   // Home Page Keys
-  final GlobalKey drawerKey = GlobalKey();
-  final GlobalKey searchKey = GlobalKey();
-  final GlobalKey themeKey = GlobalKey();
-  final GlobalKey salesKey = GlobalKey();
-  final GlobalKey purchaseKey = GlobalKey();
+  GlobalKey drawerKey = GlobalKey();
+  GlobalKey searchKey = GlobalKey();
+  GlobalKey themeKey = GlobalKey();
+  GlobalKey salesKey = GlobalKey();
+  GlobalKey purchaseKey = GlobalKey();
 
   // Product Page Keys
-  final GlobalKey productSearchKey = GlobalKey();
-  final GlobalKey productFilterKey = GlobalKey();
+  GlobalKey productSearchKey = GlobalKey();
+  GlobalKey productFilterKey = GlobalKey();
 
   // New Showcases
-  final GlobalKey yearSelectionKey = GlobalKey();
-  final GlobalKey dateRangeKey = GlobalKey();
-  final GlobalKey tableRowKey = GlobalKey();
+  GlobalKey yearSelectionKey = GlobalKey();
+  GlobalKey dateRangeKey = GlobalKey();
+  GlobalKey tableRowKey = GlobalKey();
+
+  void resetKeys() {
+    drawerKey = GlobalKey();
+    searchKey = GlobalKey();
+    themeKey = GlobalKey();
+    salesKey = GlobalKey();
+    purchaseKey = GlobalKey();
+    productSearchKey = GlobalKey();
+    productFilterKey = GlobalKey();
+    yearSelectionKey = GlobalKey();
+    dateRangeKey = GlobalKey();
+    tableRowKey = GlobalKey();
+  }
 
   bool get hasSeenTour => _storage.read<bool>(_tourKey) ?? false;
 

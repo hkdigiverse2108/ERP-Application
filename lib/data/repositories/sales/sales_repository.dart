@@ -211,9 +211,7 @@ class SalesRepository {
   }
 
   Future<SalesOrderModel> getSalesOrderById(String id) async {
-    final ResModel res = await _api.get(
-      "${ApiConstants.getSalesOrderById}/$id",
-    );
+    final ResModel res = await _api.get(ApiConstants.getSalesOrderById(id));
     if (res.status == 200 && res.data != null) {
       return SalesOrderModel.fromMap(res.data as Map<String, dynamic>);
     }

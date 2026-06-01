@@ -98,7 +98,8 @@ class HomeController extends GetxController {
     selectedDateRange.value = FinancialYearController.to.selectedRange;
 
     // Listen to branch changes globally
-    ever(BranchController.to.selectedBranch, (_) {
+    ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       // Reset all section flags to force refresh
       graphsLoaded.value = false;
       customersLoaded.value = false;
@@ -128,7 +129,7 @@ class HomeController extends GetxController {
     super.onReady();
     Future.delayed(const Duration(milliseconds: 100), () {
       isLoaded.value = true;
-      getTopSectionData(); // Section 1 fires immediately
+      getTopSectionData();
     });
   }
 

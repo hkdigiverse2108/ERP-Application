@@ -50,3 +50,4 @@ omnitype.txt
 # Antigravity temporary files
 .antigravity/
 .gemini/
+.omnitype/

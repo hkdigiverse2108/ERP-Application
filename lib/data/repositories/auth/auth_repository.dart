@@ -4,6 +4,7 @@ import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/model/auth/login_response_model.dart';
 import 'package:ai_setu/data/model/res/res_model.dart';
 import 'package:get/get.dart';
@@ -115,9 +116,18 @@ class AuthRepository {
 
   Future<void> logout() async {
     try {
-      await _api.storageService.clearSession();
-      PermissionService.to.clearPermissions();
-      Get.offAllNamed(Routes.signIn);
+      // 1. Navigate to the sign-in screen first to dispose of active view controllers and their listeners
+
+      if (Get.isRegistered<BranchController>()) {
+        BranchController.to.clearData();
+      }
+
+      // 2. Delay clearing the cache and session storage to allow the route transition to complete
+      Future.delayed(const Duration(milliseconds: 200), () async {
+        await _api.storageService.clearSession();
+        PermissionService.to.clearPermissions();
+        Get.offAllNamed(Routes.signIn);
+      });
     } catch (e) {
       log(e.toString());
       throw Exception('Logout failed');

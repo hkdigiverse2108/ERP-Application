@@ -146,11 +146,22 @@ class EstimateModel extends Equatable {
         placeOfSupply: map["placeOfSupply"]?.toString(),
         billingAddress: map["billingAddress"] == null
             ? null
-            : EstimateAddress.fromMap(map["billingAddress"] as Map<String, dynamic>),
+            : (map["billingAddress"] is String
+                ? EstimateAddress(
+                    id: map["billingAddress"].toString(),
+                    addressLine1: "",
+                    pinCode: 0)
+                : EstimateAddress.fromMap(
+                    map["billingAddress"] as Map<String, dynamic>)),
         shippingAddress: map["shippingAddress"] == null
             ? null
-            : EstimateAddress.fromMap(
-                map["shippingAddress"] as Map<String, dynamic>),
+            : (map["shippingAddress"] is String
+                ? EstimateAddress(
+                    id: map["shippingAddress"].toString(),
+                    addressLine1: "",
+                    pinCode: 0)
+                : EstimateAddress.fromMap(
+                    map["shippingAddress"] as Map<String, dynamic>)),
         customerId: map["customerId"] == null
             ? null
             : EstimateCustomer.fromMap(map["customerId"] as Map<String, dynamic>),

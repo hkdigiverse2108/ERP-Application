@@ -272,7 +272,7 @@ class EditUser extends GetView<UpdateUserController> {
 
                             EditTextField(
                               label: "Branch",
-                              controller: controller.branchController,
+                              controller: controller.bankBranchController,
                             ),
                           ],
                         ),

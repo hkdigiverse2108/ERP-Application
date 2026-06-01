@@ -1,4 +1,5 @@
 import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/data/model/invetory/stock_transfer_model.dart';
@@ -129,7 +130,9 @@ class StockTransferTable extends StatelessWidget {
                   Get.toNamed(Routes.stockTransferDetails, arguments: item);
                 },
                 canEdit: (item) {
-                  return item.status.toLowerCase() == "pending";
+                  return item.status.toLowerCase() == "pending" &&
+                      item.requestedByBranchId?.id ==
+                          BranchController.to.selectedBranch.value?.id;
                 },
                 onEditItem: (item) {
                   Get.toNamed(Routes.addUpdateStockTransfer, arguments: item);

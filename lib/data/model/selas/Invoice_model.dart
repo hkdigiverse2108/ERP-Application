@@ -172,12 +172,26 @@ class InvoiceModel extends Equatable {
     placeOfSupply: map["placeOfSupply"]?.toString(),
     billingAddress: map["billingAddress"] == null
         ? null
-        : InvoiceAddress.fromMap(map["billingAddress"] as Map<String, dynamic>),
+        : (map["billingAddress"] is String
+              ? InvoiceAddress(
+                  id: map["billingAddress"].toString(),
+                  addressLine1: "",
+                  pinCode: 0,
+                )
+              : InvoiceAddress.fromMap(
+                  map["billingAddress"] as Map<String, dynamic>,
+                )),
     shippingAddress: map["shippingAddress"] == null
         ? null
-        : InvoiceAddress.fromMap(
-            map["shippingAddress"] as Map<String, dynamic>,
-          ),
+        : (map["shippingAddress"] is String
+              ? InvoiceAddress(
+                  id: map["shippingAddress"].toString(),
+                  addressLine1: "",
+                  pinCode: 0,
+                )
+              : InvoiceAddress.fromMap(
+                  map["shippingAddress"] as Map<String, dynamic>,
+                )),
     reverseCharge: map["reverseCharge"] as bool? ?? false,
     salesOrderIds: List<IdNameModel>.from(
       (map["salesOrderIds"] as List<dynamic>?)?.map(

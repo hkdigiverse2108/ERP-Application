@@ -290,6 +290,25 @@ class EstimateAddEditController extends GetxController {
     }
   }
 
+  void updateEstimateDate(DateTime date) {
+    estimateDate.value = date;
+    if (selectedPaymentTerm.value != null) {
+      dueDate.value = date.add(Duration(days: selectedPaymentTerm.value!.day));
+    }
+  }
+
+  void updateDueDate(DateTime date) {
+    dueDate.value = date;
+    selectedPaymentTerm.value = null;
+  }
+
+  void updatePaymentTerm(PaymentTermsModel? term) {
+    selectedPaymentTerm.value = term;
+    if (term != null) {
+      dueDate.value = estimateDate.value.add(Duration(days: term.day));
+    }
+  }
+
   // Item Management
   void addItem(ProductDropdownModel product) async {
     try {

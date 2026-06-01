@@ -2,7 +2,7 @@ import 'package:ai_setu/core/constants/colors.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/core/constants/strings.dart';
-import 'package:ai_setu/core/services/showcase_service.dart';
+
 import 'package:ai_setu/shared/widgets/containers/border_container.dart';
 import 'package:ai_setu/shared/widgets/app_showcase_tooltip.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,14 @@ import 'package:showcaseview/showcaseview.dart';
 class RangedDatePicker extends StatefulWidget {
   final DateTimeRange? initialDateRange;
   final Function(DateTimeRange)? onChanged;
+  final GlobalKey? showcaseKey;
 
-  const RangedDatePicker({super.key, this.initialDateRange, this.onChanged});
+  const RangedDatePicker({
+    super.key,
+    this.initialDateRange,
+    this.onChanged,
+    this.showcaseKey,
+  });
 
   @override
   State<RangedDatePicker> createState() => _RangedDatePickerState();
@@ -65,51 +71,57 @@ class _RangedDatePickerState extends State<RangedDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Showcase.withWidget(
-      key: ShowcaseService.to.dateRangeKey,
-      container: AppShowcaseTooltip(
-        title: Strings.showcaseDateTitle,
-        description: Strings.showcaseDateDesc,
-        onNext: () => ShowcaseView.get().next(),
-        onSkip: () => ShowcaseView.get().dismiss(),
-      ),
-      targetShapeBorder: RoundedRectangleBorder(
+    final content = BorderContainer(
+      padding: EdgeInsets.zero,
+      child: InkWell(
+        onTap: () => _showPickerBottomSheet(context),
         borderRadius: BorderRadius.circular(8),
-      ),
-      targetPadding: const EdgeInsets.all(4),
-      child: BorderContainer(
-        padding: EdgeInsets.zero,
-        child: InkWell(
-          onTap: () => _showPickerBottomSheet(context),
-          borderRadius: BorderRadius.circular(8),
-          child: Row(
-            children: [
-              Obx(
-                () => _dateButton(
-                  context: context,
-                  date: DateFormat(
-                    'dd-MM-yyyy',
-                  ).format(_selectedDateRange.value.start),
-                ),
+        child: Row(
+          children: [
+            Obx(
+              () => _dateButton(
+                context: context,
+                date: DateFormat(
+                  'dd-MM-yyyy',
+                ).format(_selectedDateRange.value.start),
               ),
-              Container(
-                width: 1,
-                height: 20,
-                color: Colors.grey.withValues(alpha: 0.3),
+            ),
+            Container(
+              width: 1,
+              height: 20,
+              color: Colors.grey.withValues(alpha: 0.3),
+            ),
+            Obx(
+              () => _dateButton(
+                context: context,
+                date: DateFormat(
+                  'dd-MM-yyyy',
+                ).format(_selectedDateRange.value.end),
               ),
-              Obx(
-                () => _dateButton(
-                  context: context,
-                  date: DateFormat(
-                    'dd-MM-yyyy',
-                  ).format(_selectedDateRange.value.end),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+
+    if (widget.showcaseKey != null) {
+      return Showcase.withWidget(
+        key: widget.showcaseKey!,
+        container: AppShowcaseTooltip(
+          title: Strings.showcaseDateTitle,
+          description: Strings.showcaseDateDesc,
+          onNext: () => ShowcaseView.get().next(),
+          onSkip: () => ShowcaseView.get().dismiss(),
+        ),
+        targetShapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        targetPadding: const EdgeInsets.all(4),
+        child: content,
+      );
+    }
+
+    return content;
   }
 
   Widget _dateButton({required BuildContext context, required String date}) {

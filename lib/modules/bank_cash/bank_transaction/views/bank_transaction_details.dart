@@ -23,7 +23,8 @@ class BankTransactionDetails extends StatelessWidget {
       title: 'Transaction #${transaction.voucherNo}',
       subtitle: 'Date: $dateStr',
       heroIcon: PhosphorIconsFill.bank,
-      status: transaction.transactionType.capitalizeFirst ??
+      status:
+          transaction.transactionType.capitalizeFirst ??
           transaction.transactionType,
       statusColor: _getTypeColor(transaction.transactionType),
       actions: [
@@ -52,7 +53,8 @@ class BankTransactionDetails extends StatelessWidget {
               items: [
                 DetailItem(
                   label: 'Type',
-                  value: transaction.transactionType.capitalizeFirst ??
+                  value:
+                      transaction.transactionType.capitalizeFirst ??
                       transaction.transactionType,
                 ),
                 DetailItem(

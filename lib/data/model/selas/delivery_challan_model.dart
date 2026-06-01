@@ -159,12 +159,24 @@ class DeliveryChallanModel extends Equatable {
         placeOfSupply: map["placeOfSupply"]?.toString(),
         billingAddress: map["billingAddress"] == null
             ? null
-            : DeliveryChallanAddress.fromMap(
-                map["billingAddress"] as Map<String, dynamic>),
+            : (map["billingAddress"] is String
+                ? DeliveryChallanAddress(
+                    id: map["billingAddress"].toString(),
+                    addressLine1: "",
+                    pinCode: 0,
+                  )
+                : DeliveryChallanAddress.fromMap(
+                    map["billingAddress"] as Map<String, dynamic>)),
         shippingAddress: map["shippingAddress"] == null
             ? null
-            : DeliveryChallanAddress.fromMap(
-                map["shippingAddress"] as Map<String, dynamic>),
+            : (map["shippingAddress"] is String
+                ? DeliveryChallanAddress(
+                    id: map["shippingAddress"].toString(),
+                    addressLine1: "",
+                    pinCode: 0,
+                  )
+                : DeliveryChallanAddress.fromMap(
+                    map["shippingAddress"] as Map<String, dynamic>)),
         invoiceIds: List<IdNameModel>.from(
           (map["invoiceIds"] as List<dynamic>?)?.map(
                 (x) => IdNameModel.fromMap(x as Map<String, dynamic>),

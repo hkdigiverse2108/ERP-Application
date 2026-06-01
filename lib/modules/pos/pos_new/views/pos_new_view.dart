@@ -14,7 +14,9 @@ import 'package:ai_setu/shared/widgets/drawer.dart';
 import 'package:ai_setu/shared/widgets/text_fields/custom_dropdown.dart';
 import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
 import 'package:ai_setu/modules/pos/pos_new/widgets/pos_action_drawer.dart';
+import 'package:ai_setu/modules/pos/pos_new/widgets/close_register_dialog.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -177,7 +179,8 @@ class PosNewPage extends GetView<PosNewController> {
                       const Gap(20),
                       // --- Summary Grid ---
                       _buildSummaryGrid(context),
-                      // const Gap(24),
+                      const Gap(12),
+                      _buildDiscountBreakdown(context),
 
                       // --- Action Buttons ---
                       const Gap(16),
@@ -200,7 +203,16 @@ class PosNewPage extends GetView<PosNewController> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildCircularIcon(context, Icons.wifi_tethering, Colors.green),
+            Obx(() {
+              final imageFile = controller.selectedImage.value;
+              return _buildCircularIcon(
+                context,
+                imageFile == null ? Icons.add_a_photo : null,
+                context.appColors.success,
+                imageFile: imageFile,
+                onTap: () => controller.showImageOptions(context),
+              );
+            }),
             _buildCircularIcon(
               context,
               Icons.print_outlined,
@@ -238,7 +250,21 @@ class PosNewPage extends GetView<PosNewController> {
               Icons.fullscreen_rounded,
               context.appColors.textSecondary,
             ),
-            _buildCircularIcon(context, Icons.close_rounded, Colors.red),
+            _buildCircularIcon(
+              context,
+              Icons.close_rounded,
+              Colors.red,
+              onTap: () async {
+                final registerData = await controller
+                    .getLatestRegisterDetails();
+                if (registerData != null) {
+                  Get.dialog(
+                    CloseRegisterDialog(registerData: registerData),
+                    barrierDismissible: true,
+                  );
+                }
+              },
+            ),
           ],
         );
       },
@@ -247,20 +273,33 @@ class PosNewPage extends GetView<PosNewController> {
 
   Widget _buildCircularIcon(
     BuildContext context,
-    IconData icon,
+    IconData? icon,
     Color color, {
+    File? imageFile,
     VoidCallback? onTap,
   }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(50),
       child: Container(
-        padding: const EdgeInsets.all(8),
+        width: 40,
+        height: 40,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: context.appColors.border),
         ),
-        child: Icon(icon, color: color, size: 22),
+        child: imageFile != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.file(
+                  imageFile,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Icon(icon, color: color, size: 22),
       ),
     );
   }
@@ -635,7 +674,11 @@ class PosNewPage extends GetView<PosNewController> {
         ),
         child: Row(
           children: [
-            Icon(Icons.card_giftcard, color: context.appColors.primary, size: 20),
+            Icon(
+              Icons.card_giftcard,
+              color: context.appColors.primary,
+              size: 20,
+            ),
             const Gap(8),
             Expanded(
               child: Column(
@@ -671,6 +714,102 @@ class PosNewPage extends GetView<PosNewController> {
         ),
       );
     });
+  }
+
+  Widget _buildDiscountBreakdown(BuildContext context) {
+    return Obx(() {
+      final discountTotal = controller.productDiscountTotal.value;
+      final flatDisc = controller.flatDiscount.value;
+      final couponDisc = controller.promoDiscountAmount.value;
+      final loyaltyDisc = controller.appliedLoyalty.value?.discountValue ?? 0.0;
+      final redemptionDisc = controller.appliedRedemption.value?.amount ?? 0.0;
+
+      if (discountTotal == 0 &&
+          flatDisc == 0 &&
+          couponDisc == 0 &&
+          loyaltyDisc == 0 &&
+          redemptionDisc == 0) {
+        return const SizedBox.shrink();
+      }
+
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: context.appColors.sectionSellPurchase.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: context.appColors.sectionSellPurchase.withValues(alpha: 0.1),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Discount Breakdown",
+              style: TextHelper.bodySmall.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+            const Gap(8),
+            if (discountTotal > 0)
+              _breakdownRow(
+                "Items Discount",
+                "₹${discountTotal.toStringAsFixed(2)}",
+              ),
+            if (flatDisc > 0)
+              _breakdownRow("Flat Discount", "₹${flatDisc.toStringAsFixed(2)}"),
+            if (couponDisc > 0)
+              _breakdownRow(
+                "Coupon Discount",
+                "₹${couponDisc.toStringAsFixed(2)}",
+              ),
+            if (loyaltyDisc > 0)
+              _breakdownRow(
+                "Loyalty Discount",
+                "₹${loyaltyDisc.toStringAsFixed(2)}",
+              ),
+            if (redemptionDisc > 0)
+              _breakdownRow(
+                "Credit Redemption",
+                "₹${redemptionDisc.toStringAsFixed(2)}",
+              ),
+            const Divider(height: 16),
+            _breakdownRow(
+              "Total Discount",
+              "₹${controller.totalDiscount.value.toStringAsFixed(2)}",
+              isTotal: true,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _breakdownRow(String label, String value, {bool isTotal = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextHelper.bodySmall.copyWith(
+              fontSize: 11,
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          Text(
+            value,
+            style: TextHelper.bodySmall.copyWith(
+              fontSize: 11,
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              color: isTotal ? Colors.red : null,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildActionButtonGrid(BuildContext context) {

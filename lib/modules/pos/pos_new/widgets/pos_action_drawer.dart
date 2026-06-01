@@ -1,4 +1,5 @@
 import 'package:ai_setu/app/app_routes.dart';
+import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
 import 'package:ai_setu/modules/pos/pos_new/controllers/pos_new_controller.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class PosActionDrawer extends StatelessWidget {
         'icon': PhosphorIconsLight.creditCard,
         'onTap': () {
           Get.back();
-          controller.goToMultiplePay();
+          _showPaymentSelection(context);
         },
       },
       {
@@ -50,7 +51,7 @@ class PosActionDrawer extends StatelessWidget {
         'icon': PhosphorIconsLight.fileText,
         'onTap': () {
           Get.back();
-          Get.toNamed(Routes.posCreditNote);
+          Get.toNamed(Routes.posCreditNoteList);
         },
       },
       {
@@ -66,7 +67,7 @@ class PosActionDrawer extends StatelessWidget {
         'icon': PhosphorIconsLight.wallet,
         'onTap': () {
           Get.back();
-          // Cash control placeholder
+          Get.toNamed(Routes.cashControl);
         },
       },
     ];
@@ -158,6 +159,111 @@ class PosActionDrawer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showPaymentSelection(BuildContext context) {
+    Get.bottomSheet(
+      SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: context.appColors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                // margin: const EdgeInsets.bottom(20),
+                decoration: BoxDecoration(
+                  color: context.appColors.border.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Text(
+                "Choose Category",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: context.appColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildCategoryItem(
+                      context,
+                      label: "Sales",
+                      icon: PhosphorIconsLight.receipt,
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(
+                          Routes.addUpdateReceipt,
+                          arguments: {'voucherType': VoucherType.sales},
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildCategoryItem(
+                      context,
+                      label: "Expense",
+                      icon: PhosphorIconsLight.money,
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.addUpdateExpense);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryItem(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        decoration: BoxDecoration(
+          color: context.appColors.primary.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: context.appColors.primary.withValues(alpha: 0.1),
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 40, color: context.appColors.primary),
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: context.appColors.textPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

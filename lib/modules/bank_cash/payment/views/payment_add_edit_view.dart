@@ -107,13 +107,17 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
                 items: controller.parties.map((e) => e.name).toList(),
                 value: controller.party.value?.name,
                 onChanged: (val) {
-                  final p = controller.parties.firstWhere((e) => e.name == val);
+                  final p = controller.parties.firstWhereOrNull(
+                    (e) => e.name == val,
+                  );
                   controller.onPartyChanged(p);
                 },
                 searchable: true,
+                readOnly: controller.isEdit.value,
+                // enabled: !controller.isEdit.value,
               ),
               const Gap(Sizes.defVerticalSpace),
-              _buildCustomerSummary(context),
+              // _buildCustomerSummary(context),
               Row(
                 children: [
                   Expanded(
@@ -152,7 +156,7 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
                 label: "Amount",
                 controller: controller.amountController,
                 keyboardType: TextInputType.number,
-                readOnly: controller.paymentType.value == 'against_voucher',
+                readOnly: controller.paymentType.value == 'against_bill',
                 suffixIcon: const Padding(
                   padding: EdgeInsets.all(12),
                   child: Text(
@@ -162,6 +166,36 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
                 ),
               ),
               const Gap(Sizes.defVerticalSpace),
+              CustomDropdown(
+                label: "Payment Mode",
+                items: controller.paymentModes
+                    .map((e) => e.capitalizeFirst!)
+                    .toList(),
+                value: controller.selectedPaymentMode.value.capitalizeFirst,
+                onChanged: (val) =>
+                    controller.onPaymentModeChanged(val.toLowerCase()),
+                readOnly: controller.isEdit.value,
+              ),
+              if (controller.isBankRelated(
+                controller.selectedPaymentMode.value,
+              )) ...[
+                const Gap(Sizes.defVerticalSpace),
+                CustomDropdown(
+                  label: "Bank Account",
+                  items: controller.banks.map((e) => e.name).toList(),
+                  value: controller.selectedBank.value?.name,
+                  onChanged: (val) {
+                    final b = controller.banks.firstWhereOrNull(
+                      (e) => e.name == val,
+                    );
+                    controller.selectedBank.value = b;
+                  },
+                  // isLoading: controller.isBankLoading.value,
+                  searchable: true,
+                  readOnly: controller.isEdit.value,
+                ),
+              ],
+              const Gap(Sizes.defVerticalSpace),
               EditTextField(
                 label: "Description",
                 controller: controller.descriptionController,
@@ -170,7 +204,7 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
             ],
           ),
         ),
-        if (controller.paymentType.value == 'against_voucher')
+        if (controller.paymentType.value == 'against_bill')
           _buildVoucherSection(context),
         const Gap(Sizes.paddingL),
         Padding(
@@ -209,7 +243,7 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
           child: Row(
             children: [
               _toggleItem(context, "Advance ${controller.label}", "advance"),
-              _toggleItem(context, "Against Voucher", "against_voucher"),
+              _toggleItem(context, "Against Voucher", "against_bill"),
             ],
           ),
         ),
@@ -221,7 +255,9 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
     final isSelected = controller.paymentType.value == value;
     return Expanded(
       child: GestureDetector(
-        onTap: () => controller.onPaymentTypeChanged(value),
+        onTap: controller.isEdit.value
+            ? null
+            : () => controller.onPaymentTypeChanged(value),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
@@ -261,94 +297,133 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
         children: [
           CustomDropdown(
             label: "Select Sales/Voucher",
-            items: controller.dueVouchers.map((e) => e.orderNo).toList(),
+            items: controller.dueVouchers.map((e) => e.docNo).toList(),
             onChanged: (val) {
-              final v = controller.dueVouchers.firstWhere(
-                (e) => e.orderNo == val,
+              final v = controller.dueVouchers.firstWhereOrNull(
+                (e) => e.docNo == val,
               );
-              controller.addVoucherRow(v);
+              if (v != null) controller.selectVoucher(v);
             },
             searchable: true,
+            readOnly: !controller.isEdit.value,
           ),
           const Gap(Sizes.paddingM),
-          if (controller.selectedVouchers.isEmpty)
+          if (controller.selectedVoucher.value == null)
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(Sizes.paddingL),
                 child: Text(
-                  "No vouchers selected",
+                  "No voucher selected",
                   style: TextStyle(color: context.appColors.textSecondary),
                 ),
               ),
             )
           else
-            _buildVoucherTable(context),
+            _buildSelectedVoucherDetail(context),
         ],
       ),
     );
   }
 
-  Widget _buildVoucherTable(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columnSpacing: 20,
-        horizontalMargin: 0,
-        columns: const [
-          DataColumn(label: Text("Sales")),
-          DataColumn(label: Text("Total")),
-          DataColumn(label: Text("Pending")),
-          DataColumn(label: Text("Amount")),
-          DataColumn(label: Text("Kasar")),
-          DataColumn(label: Text("Action")),
-        ],
-        rows: controller.selectedVouchers.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          return DataRow(
-            cells: [
-              DataCell(Text(item.voucherNo)),
-              DataCell(Text("₹${item.totalAmount}")),
-              DataCell(
-                Text(
-                  "₹${item.pendingAmount}",
-                  style: const TextStyle(color: Colors.red),
+  Widget _buildSelectedVoucherDetail(BuildContext context) {
+    final item = controller.selectedVoucher.value!;
+    return Container(
+      padding: const EdgeInsets.all(Sizes.paddingM),
+      decoration: BoxDecoration(
+        color: context.appColors.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+        border: Border.all(
+          color: context.appColors.primary.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                item.voucherNo,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.red, size: 20),
+                onPressed: () => controller.removeSelectedVoucher(),
+              ),
+            ],
+          ),
+          const Divider(),
+          const Gap(8),
+          Row(
+            children: [
+              _buildInfoItem(context, "Total", "₹${item.totalAmount}"),
+              const Gap(16),
+              _buildInfoItem(
+                context,
+                "Pending",
+                "₹${item.pendingAmount}",
+                color: Colors.red,
+              ),
+              const Spacer(),
+              _buildInfoItem(
+                context,
+                "Remaining",
+                "₹${controller.remainingAmount.toStringAsFixed(2)}",
+                color: controller.remainingAmount == 0
+                    ? Colors.green
+                    : Colors.orange,
+              ),
+            ],
+          ),
+          const Gap(16),
+          Row(
+            children: [
+              Expanded(
+                child: EditTextField(
+                  label: "Settlement Amount",
+                  controller: controller.amountSettleController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => controller.onAmountChanged(v),
                 ),
               ),
-              DataCell(
-                SizedBox(
-                  width: 80,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(isDense: true),
-                    onChanged: (v) => controller.onAmountChanged(index, v),
-                  ),
-                ),
-              ),
-              DataCell(
-                SizedBox(
-                  width: 60,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(isDense: true),
-                    onChanged: (v) => controller.onKasarChanged(index, v),
-                  ),
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                    size: 20,
-                  ),
-                  onPressed: () => controller.removeVoucherRow(index),
+              const Gap(Sizes.paddingM),
+              Expanded(
+                child: EditTextField(
+                  label: "Kasar",
+                  controller: controller.kasarSettleController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => controller.onKasarChanged(v),
                 ),
               ),
             ],
-          );
-        }).toList(),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildInfoItem(
+    BuildContext context,
+    String label,
+    String value, {
+    Color? color,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextHelper.captionStyle(
+            context,
+          ).copyWith(color: context.appColors.textSecondary),
+        ),
+        Text(
+          value,
+          style: TextHelper.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 
@@ -390,7 +465,11 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
                         strokeWidth: 2,
                       ),
                     )
-                  : Text(controller.isEdit.value ? "Update" : "Save ${controller.label}"),
+                  : Text(
+                      controller.isEdit.value
+                          ? "Update"
+                          : "Save ${controller.label}",
+                    ),
             ),
           ),
         ],
@@ -398,75 +477,75 @@ class PaymentAddEditView extends GetView<PaymentAddEditController> {
     );
   }
 
-  Widget _buildCustomerSummary(BuildContext context) {
-    return Obx(() {
-      final details = controller.customerDetails.value;
-      if (details == null) return const SizedBox.shrink();
+  // Widget _buildCustomerSummary(BuildContext context) {
+  //   return Obx(() {
+  //     final details = controller.customerDetails.value;
+  //     if (details == null) return const SizedBox.shrink();
 
-      return Container(
-        margin: const EdgeInsets.only(bottom: Sizes.defVerticalSpace),
-        padding: const EdgeInsets.all(Sizes.paddingM),
-        decoration: BoxDecoration(
-          color: context.appColors.primary.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
-          border: Border.all(
-            color: context.appColors.primary.withValues(alpha: 0.1),
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildSummaryItem(
-                  context,
-                  "Total Due",
-                  "₹${details.totalDueAmount.toStringAsFixed(2)}",
-                  Colors.red,
-                ),
-                _buildSummaryItem(
-                  context,
-                  "Total Purchase",
-                  "₹${details.totalPurchaseAmount.toStringAsFixed(2)}",
-                  context.appColors.primary,
-                ),
-                _buildSummaryItem(
-                  context,
-                  "Loyalty Points",
-                  details.customer?.loyaltyPoints.toInt().toString() ?? "0",
-                  Colors.orange,
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
-  }
+  //     return Container(
+  //       margin: const EdgeInsets.only(bottom: Sizes.defVerticalSpace),
+  //       padding: const EdgeInsets.all(Sizes.paddingM),
+  //       decoration: BoxDecoration(
+  //         color: context.appColors.primary.withValues(alpha: 0.05),
+  //         borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+  //         border: Border.all(
+  //           color: context.appColors.primary.withValues(alpha: 0.1),
+  //         ),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               _buildSummaryItem(
+  //                 context,
+  //                 "Total Due",
+  //                 "₹${details.totalDueAmount.toStringAsFixed(2)}",
+  //                 Colors.red,
+  //               ),
+  //               _buildSummaryItem(
+  //                 context,
+  //                 "Total Purchase",
+  //                 "₹${details.totalPurchaseAmount.toStringAsFixed(2)}",
+  //                 context.appColors.primary,
+  //               ),
+  //               _buildSummaryItem(
+  //                 context,
+  //                 "Loyalty Points",
+  //                 details.customer?.loyaltyPoints.toInt().toString() ?? "0",
+  //                 Colors.orange,
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   });
+  // }
 
-  Widget _buildSummaryItem(
-    BuildContext context,
-    String label,
-    String value,
-    Color color,
-  ) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextHelper.captionStyle(
-            context,
-          ).copyWith(color: context.appColors.textSecondary),
-        ),
-        const Gap(4),
-        Text(
-          value,
-          style: TextHelper.bodyMedium.copyWith(
-            color: color,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildSummaryItem(
+  //   BuildContext context,
+  //   String label,
+  //   String value,
+  //   Color color,
+  // ) {
+  //   return Column(
+  //     children: [
+  //       Text(
+  //         label,
+  //         style: TextHelper.captionStyle(
+  //           context,
+  //         ).copyWith(color: context.appColors.textSecondary),
+  //       ),
+  //       const Gap(4),
+  //       Text(
+  //         value,
+  //         style: TextHelper.bodyMedium.copyWith(
+  //           color: color,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

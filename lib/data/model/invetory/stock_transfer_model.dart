@@ -44,52 +44,51 @@ class StockTransferModel extends Equatable {
     required this.type,
   });
 
-  factory StockTransferModel.fromMap(
-    Map<String, dynamic> map,
-  ) => StockTransferModel(
-    id: map["_id"]?.toString() ?? "",
-    isDeleted: map["isDeleted"] as bool? ?? false,
-    isActive: map["isActive"] as bool? ?? true,
-    createdBy: map["createdBy"] == null
-        ? null
-        : StockTransferUser.fromMap(map["createdBy"] as Map<String, dynamic>),
-    updatedBy: map["updatedBy"]?.toString() ?? "",
-    companyId: map["companyId"] == null
-        ? null
-        : IdNameModel.fromMap(map["companyId"]),
-    branchId: map["branchId"] == null
-        ? null
-        : IdNameModel.fromMap(map["branchId"]),
-    transferNo: map["transferNo"]?.toString() ?? "",
-    requestedByBranchId: map["requestedByBranchId"] == null
-        ? null
-        : IdNameModel.fromMap(map["requestedByBranchId"]),
-    requestedToBranchId: map["requestedToBranchId"] == null
-        ? null
-        : IdNameModel.fromMap(map["requestedToBranchId"]),
-    status: map["status"]?.toString() ?? "",
-    items: List<StockTransferItem>.from(
-      (map["items"] as List<dynamic>?)?.map(
-            (x) => StockTransferItem.fromMap(x as Map<String, dynamic>),
-          ) ??
-          [],
-    ),
-    requestNote: map["requestNote"]?.toString() ?? "",
-    createdAt: map["createdAt"] != null
-        ? DateTime.parse(map["createdAt"].toString())
-        : DateTime.now(),
-    updatedAt: map["updatedAt"] != null
-        ? DateTime.parse(map["updatedAt"].toString())
-        : DateTime.now(),
-    approvalNote: map["approvalNote"]?.toString() ?? "",
-    approvedAt: map["approvedAt"] != null
-        ? DateTime.parse(map["approvedAt"].toString())
-        : null,
-    approvedBy: map["approvedBy"] == null
-        ? null
-        : StockTransferUser.fromMap(map["approvedBy"] as Map<String, dynamic>),
-    type: map["type"]?.toString() ?? "",
-  );
+  factory StockTransferModel.fromMap(Map<String, dynamic> map) =>
+      StockTransferModel(
+        id: map["_id"]?.toString() ?? "",
+        isDeleted: map["isDeleted"] as bool? ?? false,
+        isActive: map["isActive"] as bool? ?? true,
+        createdBy: map["createdBy"] == null
+            ? null
+            : StockTransferUser.fromMap(map["createdBy"]),
+        updatedBy: map["updatedBy"]?.toString() ?? "",
+        companyId: map["companyId"] == null
+            ? null
+            : IdNameModel.fromMap(map["companyId"]),
+        branchId: map["branchId"] == null
+            ? null
+            : IdNameModel.fromMap(map["branchId"]),
+        transferNo: map["transferNo"]?.toString() ?? "",
+        requestedByBranchId: map["requestedByBranchId"] == null
+            ? null
+            : IdNameModel.fromMap(map["requestedByBranchId"]),
+        requestedToBranchId: map["requestedToBranchId"] == null
+            ? null
+            : IdNameModel.fromMap(map["requestedToBranchId"]),
+        status: map["status"]?.toString() ?? "",
+        items: List<StockTransferItem>.from(
+          (map["items"] as List<dynamic>?)?.map(
+                (x) => StockTransferItem.fromMap(x as Map<String, dynamic>),
+              ) ??
+              [],
+        ),
+        requestNote: map["requestNote"]?.toString() ?? "",
+        createdAt: map["createdAt"] != null
+            ? DateTime.parse(map["createdAt"].toString())
+            : DateTime.now(),
+        updatedAt: map["updatedAt"] != null
+            ? DateTime.parse(map["updatedAt"].toString())
+            : DateTime.now(),
+        approvalNote: map["approvalNote"]?.toString() ?? "",
+        approvedAt: map["approvedAt"] != null
+            ? DateTime.parse(map["approvedAt"].toString())
+            : null,
+        approvedBy: map["approvedBy"] == null
+            ? null
+            : StockTransferUser.fromMap(map["approvedBy"]),
+        type: map["type"]?.toString() ?? "",
+      );
 
   Map<String, dynamic> toMap() => {
     "_id": id,
@@ -143,11 +142,18 @@ class StockTransferUser extends Equatable {
 
   const StockTransferUser({required this.id, required this.fullName});
 
-  factory StockTransferUser.fromMap(Map<String, dynamic> map) =>
-      StockTransferUser(
-        id: map["_id"]?.toString() ?? "",
-        fullName: map["fullName"]?.toString() ?? "",
+  factory StockTransferUser.fromMap(dynamic json) {
+    if (json is Map) {
+      return StockTransferUser(
+        id: json["_id"]?.toString() ?? "",
+        fullName: json["fullName"]?.toString() ?? "",
       );
+    }
+    if (json is String) {
+      return StockTransferUser(id: json, fullName: "");
+    }
+    return const StockTransferUser(id: "", fullName: "");
+  }
 
   Map<String, dynamic> toMap() => {"_id": id, "fullName": fullName};
 

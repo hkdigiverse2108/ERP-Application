@@ -51,7 +51,8 @@ class MaterialConsumptionController extends GetxController {
     });
 
     // Listen to global branch changes
-    ever(BranchController.to.selectedBranch, (_) {
+    ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       _clearCache();
       getMaterialConsumptionData();
     });

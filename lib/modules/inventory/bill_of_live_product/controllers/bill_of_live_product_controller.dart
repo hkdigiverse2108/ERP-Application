@@ -58,7 +58,8 @@ class BillOfLiveProductController extends GetxController {
     });
 
     // Listen to global branch changes
-    _branchWorker = ever(BranchController.to.selectedBranch, (_) {
+    _branchWorker = ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       _clearCache();
       getBillOfLiveProductData();
     });

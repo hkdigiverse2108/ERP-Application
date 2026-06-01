@@ -150,6 +150,8 @@ class EstimateTable extends StatelessWidget {
                     controller.getEstimatesData();
                   }
                 },
+                canEdit: (item) => item.status == 'pending',
+                canDelete: (item) => item.status == 'pending',
                 onRemoveItem: (item) => controller.deleteEstimate(item.id),
                 deleteTitle: 'Delete Estimate',
                 deleteMessage: (item) =>

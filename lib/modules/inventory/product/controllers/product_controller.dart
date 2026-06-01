@@ -61,7 +61,8 @@ class ProductController extends GetxController {
     // Watch for brand change to load sub-brands
     ever(selectedBrandId, (id) => _loadSubBrands(id));
     // Watch for branch change to refresh data
-    ever(BranchController.to.selectedBranch, (_) {
+    ever(BranchController.to.selectedBranch, (branch) {
+      if (branch == null) return;
       _clearCache();
       getProductsData();
     });

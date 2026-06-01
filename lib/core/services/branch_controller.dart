@@ -3,6 +3,7 @@ import 'package:ai_setu/data/model/branch/branch_model.dart';
 import 'package:ai_setu/data/repositories/settings/branch_repository.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
+import 'dart:convert';
 
 class BranchController extends GetxController {
   static BranchController get to => Get.find();
@@ -20,7 +21,8 @@ class BranchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _isMainBranch.value = _storage.read<bool>(StorageKeys.isMainBranch) ?? false;
+    _isMainBranch.value =
+        _storage.read<bool>(StorageKeys.isMainBranch) ?? false;
     if (isMainBranch) {
       fetchBranches();
     } else {
@@ -44,17 +46,65 @@ class BranchController extends GetxController {
     }
   }
 
-  void _loadSavedBranch() {
-    final savedId = _storage.read<String>('selected_branch_id');
-    if (savedId != null && availableBranches.isNotEmpty) {
-      selectedBranch.value = availableBranches.firstWhereOrNull(
-        (b) => b.id == savedId,
-      );
+  Future<void> onUserLogin() async {
+    _isMainBranch.value =
+        _storage.read<bool>(StorageKeys.isMainBranch) ?? false;
+    if (isMainBranch) {
+      await fetchBranches();
+    } else {
+      availableBranches.clear();
+      _loadSavedBranch();
     }
+  }
 
-    // Default to first if none saved or not found
-    if (selectedBranch.value == null && availableBranches.isNotEmpty) {
-      selectedBranch.value = availableBranches.first;
+  void clearData() {
+    availableBranches.clear();
+    selectedBranch.value = null;
+    _isMainBranch.value = false;
+    _storage.remove(StorageKeys.isMainBranch);
+    _storage.remove('selected_branch_id');
+  }
+
+  void _loadSavedBranch() {
+    if (isMainBranch) {
+      final savedId = _storage.read<String>('selected_branch_id');
+      if (savedId != null && availableBranches.isNotEmpty) {
+        selectedBranch.value = availableBranches.firstWhereOrNull(
+          (b) => b.id == savedId,
+        );
+      }
+
+      // Default to first if none saved or not found
+      if (selectedBranch.value == null && availableBranches.isNotEmpty) {
+        selectedBranch.value = availableBranches.first;
+      }
+    } else {
+      // Non-main branch user: they only have access to their assigned branch.
+      final rawData = _storage.read(StorageKeys.userData);
+      Map<String, dynamic>? userData;
+      if (rawData is Map) {
+        userData = Map<String, dynamic>.from(rawData);
+      } else if (rawData is String && rawData.isNotEmpty) {
+        try {
+          userData = Map<String, dynamic>.from(jsonDecode(rawData) as Map);
+        } catch (_) {}
+      }
+      final branchData = userData?['branchId'];
+      if (branchData != null) {
+        final branchId = branchData['_id'] ?? branchData['id'];
+        final branchName = branchData['name'];
+        if (branchId != null) {
+          final branch = BranchDropdownModel(
+            id: branchId,
+            name: branchName ?? '',
+          );
+          availableBranches.assignAll([branch]);
+          selectedBranch.value = branch;
+          return;
+        }
+      }
+      availableBranches.clear();
+      selectedBranch.value = null;
     }
   }
 
@@ -76,4 +126,3 @@ class BranchController extends GetxController {
     // This could be a callback or a global event
   }
 }
-

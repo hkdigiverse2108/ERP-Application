@@ -19,6 +19,7 @@ import 'package:ai_setu/data/repositories/pos/credit_note_repository.dart';
 import 'package:ai_setu/data/repositories/crm/coupon_repository.dart';
 import 'package:ai_setu/data/repositories/crm/discount_repository.dart';
 import 'package:ai_setu/data/repositories/pos/pos_order_repository.dart';
+import 'package:ai_setu/data/repositories/pos/cash_register_repository.dart';
 import 'package:ai_setu/data/model/crm/coupon_model.dart';
 import 'package:ai_setu/data/model/crm/discount_model.dart';
 import 'package:ai_setu/modules/pos/pos_new/widgets/redeem_credit_bottom_sheet.dart';
@@ -31,6 +32,7 @@ import 'package:ai_setu/modules/pos/pos_new/widgets/pay_later_bottom_sheet.dart'
 import 'package:ai_setu/data/repositories/bank_cash/bank_repository.dart';
 import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/modules/pos/pos_new/widgets/quick_add_customer_sheet.dart';
+import 'package:ai_setu/modules/pos/pos_new/widgets/image_source_bottom_sheet.dart';
 import 'package:ai_setu/app/app_routes.dart';
 import 'package:ai_setu/shared/widgets/text_fields/edit_text_field.dart';
 import 'package:gap/gap.dart';
@@ -39,9 +41,51 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'dart:ui';
 import 'dart:math' as math;
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
+class RedemptionItem {
+  final String id;
+  final String code;
+  final String type;
+  final double amount;
+  final String customerId;
+
+  RedemptionItem({
+    required this.id,
+    required this.code,
+    required this.type,
+    required this.amount,
+    required this.customerId,
+  });
+
+  RedemptionItem copyWith({
+    String? id,
+    String? code,
+    String? type,
+    double? amount,
+    String? customerId,
+  }) {
+    return RedemptionItem(
+      id: id ?? this.id,
+      code: code ?? this.code,
+      type: type ?? this.type,
+      amount: amount ?? this.amount,
+      customerId: customerId ?? this.customerId,
+    );
+  }
+
+  Map<String, dynamic> toRedeemPayload() {
+    return {"code": code, "type": type, "customerId": customerId};
+  }
+}
 
 class PosNewController extends GetxController {
   static PosNewController get instance => Get.find();
+
+  // Image Selection
+  final ImagePicker _picker = ImagePicker();
+  final Rxn<File> selectedImage = Rxn<File>();
 
   // Order Type: Walk In = 0, Delivery = 1
   final orderType = 0.obs;
@@ -70,9 +114,12 @@ class PosNewController extends GetxController {
   final _orderRepo = PosOrderRepository();
   final _bankRepo = BankRepository();
   final _loyaltyRepo = LoyaltyRepository();
+  final _registerRepo = CashRegisterRepository();
 
   // State
   final isLoading = false.obs;
+  final isRegisterOpen = true.obs;
+  final registerDetails = Rxn<Map<String, dynamic>>();
   final isRedeemLoading = false.obs;
   final isCustomerPosLoading = false.obs;
   final customerPosDetails = Rxn<Map<String, dynamic>>();
@@ -87,6 +134,10 @@ class PosNewController extends GetxController {
   final addCharges = 0.0.obs;
   final totalAmount = 0.0.obs;
   final isSavingCustomer = false.obs;
+
+  // Edit Mode state
+  final isEditMode = false.obs;
+  final editingOrderId = RxnString();
 
   // Inputs
   final remarkController = TextEditingController();
@@ -129,6 +180,9 @@ class PosNewController extends GetxController {
   // This prevents the "jitter" where typing causes the cursor to reset or values to format unexpectedly
   final Map<String, TextEditingController> _discountControllers = {};
 
+  // Internal flag to prevent side effects (like clearing promos) during order reconstruction
+  bool _isResuming = false;
+
   TextEditingController getDiscountController(
     int index,
     String productId,
@@ -146,7 +200,7 @@ class PosNewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchInitialData();
+    fetchInitialData().then((_) => _checkArguments());
 
     // Listen to flat discount and round off changes
     flatDiscountController.addListener(() {
@@ -181,6 +235,7 @@ class PosNewController extends GetxController {
         _userRepo.getUserDropDown(typeFilter: 'salesman'),
         _contactRepo.getContactDropdown(typeFilter: 'customer'),
         fetchBankAccounts(),
+        checkRegisterStatus(),
       ]);
 
       products.value = results[0] as List<ProductDropdownModel>;
@@ -212,6 +267,259 @@ class PosNewController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> checkRegisterStatus() async {
+    try {
+      final res = await _registerRepo.getRegisterDetails();
+      if (res.status == 200 &&
+          res.data != null &&
+          res.data['status'] == 'open') {
+        registerDetails.value = res.data;
+        isRegisterOpen.value = true;
+      } else {
+        isRegisterOpen.value = false;
+        _showOpenRegisterDialog();
+      }
+    } catch (e) {
+      isRegisterOpen.value = false;
+      _showOpenRegisterDialog();
+    }
+  }
+
+  void _showOpenRegisterDialog() {
+    final openingCashController = TextEditingController(text: "0");
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    Get.dialog(
+      PopScope(
+        canPop: false,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+          child: Material(
+            color: Colors.transparent,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(Get.context!).viewInsets.bottom + 24,
+              ),
+              child: Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 80,
+                  ),
+                  width: double.infinity,
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  decoration: BoxDecoration(
+                    color: Get.context!.appColors.surface,
+                    borderRadius: BorderRadius.circular(Sizes.borderRadiusXL),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Gap(28),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Get.context!.appColors.primary.withValues(
+                              alpha: 0.1,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            PhosphorIconsLight.lockOpen,
+                            color: Get.context!.appColors.primary,
+                            size: 32,
+                          ),
+                        ),
+                        const Gap(16),
+                        Text(
+                          "Register Closed",
+                          style: TextHelper.h4Style(
+                            Get.context!,
+                          ).copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const Gap(8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            "No active cash register is currently open. Please open a new register to perform sales.",
+                            textAlign: TextAlign.center,
+                            style: TextHelper.bodySmall.copyWith(
+                              color: Get.context!.appColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                        const Gap(24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: EditTextField(
+                            label: "Opening Cash (Amount)",
+                            controller: openingCashController,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            prefixIcon: Icon(
+                              PhosphorIconsLight.currencyInr,
+                              size: 20,
+                              color: Get.context!.appColors.textSecondary,
+                            ),
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return "Opening cash is required";
+                              }
+                              if (double.tryParse(val) == null) {
+                                return "Please enter a valid amount";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const Gap(28),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Get.back(); // Close dialog
+                                    Get.offAllNamed(
+                                      Routes.dashboard,
+                                    ); // Redirect to dashboard
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Get.context!.appColors.border,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Sizes.borderRadiusM,
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Text("Cancel"),
+                                ),
+                              ),
+                              const Gap(12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    if (formKey.currentState?.validate() ??
+                                        false) {
+                                      final amt =
+                                          double.tryParse(
+                                            openingCashController.text,
+                                          ) ??
+                                          0.0;
+                                      Get.back(); // Close dialog
+                                      await _openRegisterWithAmount(amt);
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Get.context!.appColors.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Sizes.borderRadiusM,
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Text("Open Register"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+    );
+  }
+
+  Future<void> _openRegisterWithAmount(double openingCash) async {
+    try {
+      isLoading.value = true;
+      final payload = {"openingCash": openingCash};
+      final res = await _registerRepo.openRegister(payload);
+      if (res.status == 200 || res.status == 201) {
+        AppSnackbar.success(res.message ?? "Register opened successfully");
+        isRegisterOpen.value = true;
+        await checkRegisterStatus();
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to open register");
+        _showOpenRegisterDialog();
+      }
+    } catch (e) {
+      AppSnackbar.error("Error opening register: $e");
+      _showOpenRegisterDialog();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getLatestRegisterDetails() async {
+    try {
+      isLoading.value = true;
+      final res = await _registerRepo.getRegisterDetails();
+      if (res.status == 200 && res.data != null) {
+        registerDetails.value = res.data;
+        return res.data;
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to load register details");
+      }
+    } catch (e) {
+      debugPrint("Error fetching latest register details: $e");
+      AppSnackbar.error("Failed to load register details: $e");
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
+  Future<bool> closeActiveRegister(Map<String, dynamic> payload) async {
+    try {
+      isLoading.value = true;
+      final res = await _registerRepo.closeRegister(payload);
+      if (res.status == 200) {
+        isRegisterOpen.value = false;
+        registerDetails.value = null;
+        return true;
+      } else {
+        AppSnackbar.error(res.message ?? "Failed to close register");
+      }
+    } catch (e) {
+      debugPrint("Error closing register: $e");
+      AppSnackbar.error("Failed to close register: $e");
+    } finally {
+      isLoading.value = false;
+    }
+    return false;
   }
 
   @override
@@ -260,6 +568,7 @@ class PosNewController extends GetxController {
   }
 
   void _clearPromoSilent() {
+    if (_isResuming) return;
     if (appliedCoupon.value != null ||
         appliedDiscount.value != null ||
         appliedRedemption.value != null ||
@@ -342,6 +651,7 @@ class PosNewController extends GetxController {
     // Reset selection
     selectedProduct.value = null;
     selectedCustomer.value = null;
+    selectedImage.value = null;
     appliedRedemption.value = null;
     appliedLoyalty.value = null;
     appliedCoupon.value = null;
@@ -349,13 +659,35 @@ class PosNewController extends GetxController {
     promoDiscountAmount.value = 0.0;
     customerPosDetails.value = null;
 
+    // Reset Edit Mode
+    isEditMode.value = false;
+    editingOrderId.value = null;
+
     // Recalculate (will reset all totals to 0)
     calculateTotals();
   }
 
+  void _checkArguments() {
+    if (Get.arguments != null && Get.arguments is OrderListModel) {
+      loadOrderForEdit(Get.arguments as OrderListModel);
+    }
+  }
+
+  void loadOrderForEdit(OrderListModel order) {
+    // We can reuse resumeOrder logic by converting model to JSON
+    resumeOrder(order.toJson());
+  }
+
   void resumeOrder(Map<String, dynamic> order) {
+    _isResuming = true;
     // 1. Clear existing state
     clearCart();
+
+    // 1.1 Set edit mode if ID is present
+    if (order['_id'] != null) {
+      isEditMode.value = true;
+      editingOrderId.value = order['_id'].toString();
+    }
 
     // 2. Set Customer
     final customerData = order['customerId'] as Map<String, dynamic>?;
@@ -384,7 +716,18 @@ class PosNewController extends GetxController {
       selectedCustomer.value = customer;
     }
 
-    // 3. Set Order Type
+    // 3. Set Salesman
+    final salesManData = order['salesManId'] as Map<String, dynamic>?;
+    if (salesManData != null) {
+      final salesman = salesmen.firstWhereOrNull(
+        (s) => s.id == salesManData['_id'],
+      );
+      if (salesman != null) {
+        selectedSalesman.value = salesman;
+      }
+    }
+
+    // 4. Set Order Type
     final typeStr = order['orderType']?.toString().toLowerCase() ?? 'walk_in';
     orderType.value = typeStr == 'delivery' ? 1 : 0;
 
@@ -392,32 +735,55 @@ class PosNewController extends GetxController {
     remarkController.text = order['remarks']?.toString() ?? "";
 
     // 5. Set Items
-    final items = order['items'] as List<dynamic>?;
-    if (items != null) {
-      for (var item in items) {
-        final product = item['productId'] as Map<String, dynamic>?;
-        if (product != null) {
-          cartItems.add({
-            'id': product['_id']?.toString() ?? "",
-            'name': product['name']?.toString() ?? "",
-            'uom': product['uomId'] is Map
-                ? (product['uomId']['code'] ?? "")
-                : "",
-            'availableQty': (product['qty'] as num? ?? 0).toDouble(),
+    final itemsData = order['items'] as List<dynamic>?;
+    _discountControllers.clear();
+    if (itemsData != null) {
+      for (var item in itemsData) {
+        final productData = item['productId'] as Map<String, dynamic>?;
+        if (productData != null) {
+          final prodId = productData['_id']?.toString() ?? "";
+          // Try to find current available qty from master list
+          final masterProduct = products.firstWhereOrNull(
+            (p) => p.id == prodId,
+          );
+
+          final cartItem = {
+            'id': prodId,
+            'name':
+                productData['name']?.toString() ?? masterProduct?.name ?? "",
+            'uom': productData['uomId'] is Map
+                ? (productData['uomId']['code'] ?? "")
+                : (masterProduct?.uomId?.code ?? ""),
+            'availableQty':
+                masterProduct?.qty ??
+                (productData['qty'] as num? ?? 0).toDouble(),
             'qty': (item['qty'] as num? ?? 1).toDouble(),
             'mrp': (item['mrp'] as num? ?? 0).toDouble(),
             'discount': (item['discountAmount'] as num? ?? 0).toDouble(),
             'additionalDisc': (item['additionalDiscountAmount'] as num? ?? 0)
                 .toDouble(),
             'unitCost': (item['unitCost'] as num? ?? 0).toDouble(),
-            'taxPercentage': product['salesTaxId'] is Map
-                ? (product['salesTaxId']['percentage'] as num? ?? 0).toDouble()
-                : 0.0,
-            'taxId': product['salesTaxId'] is Map
-                ? (product['salesTaxId']['_id']?.toString() ?? "")
-                : "",
+            'taxPercentage': productData['salesTaxId'] is Map
+                ? (productData['salesTaxId']['percentage'] as num? ?? 0)
+                      .toDouble()
+                : (masterProduct?.salesTaxId?.percentage ?? 0.0),
+            'taxId': productData['salesTaxId'] is Map
+                ? (productData['salesTaxId']['_id']?.toString() ?? "")
+                : (masterProduct?.salesTaxId?.id ?? ""),
+            'isTaxIncluding':
+                productData['isSalesTaxIncluding'] as bool? ??
+                false, // Order items from list have this field
             'netAmount': (item['netAmount'] as num? ?? 0).toDouble(),
-          });
+          };
+
+          cartItems.add(cartItem);
+
+          // Initialize discount controller for this item
+          getDiscountController(
+            cartItems.length - 1,
+            prodId,
+            (item['discountAmount'] as num? ?? 0).toDouble(),
+          );
         }
       }
     }
@@ -429,10 +795,183 @@ class PosNewController extends GetxController {
       2,
     );
 
-    // 7. Recalculate all totals
+    // 7. Coupons, Loyalty & Redemptions
+    appliedCoupon.value = null;
+    appliedDiscount.value = null;
+    appliedLoyalty.value = null;
+    appliedRedemption.value = null;
+    promoDiscountAmount.value = 0.0;
+
+    if ((order['couponDiscount'] as num? ?? 0) > 0) {
+      promoDiscountAmount.value = (order['couponDiscount'] as num? ?? 0)
+          .toDouble();
+      appliedCoupon.value = CouponModel(
+        id: order['couponId']?.toString() ?? "",
+        name: "Applied Coupon",
+        // Name might not be in the order list, but we show the amount
+        isActive: true,
+        isDeleted: false,
+        status: "active",
+        redemptionType: "flat",
+        redeemValue: (order['couponDiscount'] as num? ?? 0).toInt(),
+        singleTimeUse: false,
+        usedCount: 0,
+        createdAt: DateTime.now(),
+        customerIds: [],
+      );
+    }
+
+    if (order['discountId'] != null &&
+        (order['discountAmount'] as num? ?? 0) > 0) {
+      promoDiscountAmount.value = (order['discountAmount'] as num? ?? 0)
+          .toDouble();
+      appliedDiscount.value = DiscountModel(
+        id: order['discountId'].toString(),
+        title: "Order Discount",
+        discountCode: "",
+        isActive: true,
+        isDeleted: false,
+        autoApply: false,
+        excludeAlreadyDiscounted: false,
+        applyToEntireSelection: true,
+        usageLimitPerCustomer: false,
+        hasEndDate: false,
+        discountApplicable: "entire_order",
+        discountMode: order['discountMode']?.toString() ?? "normal",
+        // discountCode: order['discountCode']?.toString() ?? "",
+        discountType: "flat",
+        discountValue: (order['discountAmount'] as num? ?? 0).toDouble(),
+        minimumRequirement: "none",
+        status: "active",
+        usedCount: 0,
+        orders: 0,
+        revenue: 0,
+        startDateTime: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        rangeWiseRules: [],
+        categoryIds: [],
+        subcategoryIds: [],
+        brandIds: [],
+        productIds: [],
+        excludedProductIds: [],
+        branchIds: [],
+      );
+    }
+
+    if (order['loyaltyId'] != null &&
+        (order['loyaltyDiscount'] as num? ?? 0) > 0) {
+      appliedLoyalty.value = LoyaltyRedeemResponse(
+        loyaltyId: order['loyaltyId'].toString(),
+        name: "Loyalty Discount",
+        type: "flat",
+        discountValue: (order['loyaltyDiscount'] as num? ?? 0).toDouble(),
+      );
+    }
+
+    if (order['redeemCreditId'] != null &&
+        (order['redeemCreditAmount'] as num? ?? 0) > 0) {
+      appliedRedemption.value = RedemptionItem(
+        id: order['redeemCreditId'].toString(),
+        code: "",
+        type: order['redeemCreditType']?.toString() ?? "credit_note",
+        amount: (order['redeemCreditAmount'] as num? ?? 0).toDouble(),
+        customerId: customerData?['_id']?.toString() ?? "",
+      );
+    }
+    // 8. Recalculate all totals
     calculateTotals();
 
+    // 9. Re-validate all promos asynchronously
+    revalidateResumedPromos();
+
+    _isResuming = false;
     AppSnackbar.success("Order ${order['orderNo']} resumed successfully");
+  }
+
+  Future<void> revalidateResumedPromos() async {
+    // 1. Re-validate Coupon
+    if (appliedCoupon.value != null) {
+      final coupon = appliedCoupon.value!;
+      appliedCoupon.value = null;
+      await applyCoupon(coupon);
+      if (appliedCoupon.value == null) {
+        AppSnackbar.warning(
+          "Previously applied coupon is no longer valid for this order and has been removed.",
+        );
+      }
+    }
+
+    // 2. Re-validate Discount
+    if (appliedDiscount.value != null) {
+      final discount = appliedDiscount.value!;
+      appliedDiscount.value = null;
+      await applyDiscount(discount);
+      if (appliedDiscount.value == null) {
+        AppSnackbar.warning(
+          "Previously applied discount is no longer valid for this order and has been removed.",
+        );
+      }
+    }
+
+    // 3. Re-validate Loyalty
+    if (appliedLoyalty.value != null) {
+      await fetchLoyalties();
+      final loyalty = loyalties.firstWhereOrNull(
+        (l) => l.id == appliedLoyalty.value!.loyaltyId,
+      );
+      if (loyalty != null) {
+        appliedLoyalty.value = null;
+        await redeemLoyalty(loyalty);
+      } else {
+        appliedLoyalty.value = null;
+        calculateTotals();
+        AppSnackbar.warning(
+          "Previously applied loyalty reward is no longer available.",
+        );
+      }
+    }
+
+    // 4. Re-validate Redemption (Credit Note / Advance)
+    if (appliedRedemption.value != null) {
+      final redemption = appliedRedemption.value!;
+      try {
+        final res = await _creditNoteRepo.redeemCreditNote({
+          "code": redemption.code,
+          "type": redemption.type,
+          "customerId": redemption.customerId,
+        });
+
+        if (res.status == 200 && res.data != null) {
+          final double available =
+              double.tryParse(
+                res.data['redeemableAmount']?.toString() ?? '0',
+              ) ??
+              0.0;
+
+          if (available <= 0) {
+            appliedRedemption.value = null;
+            AppSnackbar.warning(
+              "Previously applied credit note/advance is no longer available.",
+            );
+          } else if (available < redemption.amount) {
+            appliedRedemption.value = redemption.copyWith(amount: available);
+            AppSnackbar.warning(
+              "Redemption amount adjusted to available balance: ₹${available.toStringAsFixed(2)}",
+            );
+          }
+          // If available >= redemption.amount, we keep it as is.
+        } else {
+          appliedRedemption.value = null;
+          AppSnackbar.warning(
+            "Previously applied credit note/advance verification failed and has been removed.",
+          );
+        }
+      } catch (e) {
+        debugPrint("Error re-validating redemption: $e");
+      }
+      calculateTotals();
+    }
   }
 
   void updateQuantity(int index, double delta) {
@@ -486,11 +1025,25 @@ class PosNewController extends GetxController {
       final itemDiscount = (item['discount'] as num).toDouble();
       final itemAdditionalDisc = (item['additionalDisc'] as num).toDouble();
       final taxPercent = (item['taxPercentage'] as num).toDouble();
+      final isTaxIncluding = item['isTaxIncluding'] as bool? ?? false;
 
       // Individual item calculations
       double itemDiscAmount = itemDiscount + itemAdditionalDisc;
-      double taxableValue = itemMrp - itemDiscAmount;
-      double itemTax = taxableValue * (taxPercent / 100);
+      double taxableValue;
+      double itemTax;
+
+      if (isTaxIncluding) {
+        // Reverse calculation for inclusive tax
+        // taxable = (mrp - discount) / (1 + taxRate)
+        double inclusiveBase = itemMrp - itemDiscAmount;
+        taxableValue = inclusiveBase / (1 + (taxPercent / 100));
+        itemTax = inclusiveBase - taxableValue;
+      } else {
+        // Exclusive calculation
+        taxableValue = itemMrp - itemDiscAmount;
+        itemTax = taxableValue * (taxPercent / 100);
+      }
+
       double sellingPrice = taxableValue + itemTax;
       double netAmount = itemQty * sellingPrice;
 
@@ -584,8 +1137,7 @@ class PosNewController extends GetxController {
       isLoading.value = true;
       final payload = {
         "loyaltyId": loyalty.id,
-        "totalAmount": totalMRP
-            .value, // MRP before discounts as requested? User said 1280 in example.
+        "totalAmount": totalMRP.value,
         "customerId": selectedCustomer.value?.id,
       };
 
@@ -1467,7 +2019,18 @@ class PosNewController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      final res = await _orderRepo.addPosOrder(payload);
+
+      // If editing and status not explicitly set (e.g. by holdOrder), set to done
+      if (isEditMode.value && payload["status"] == null) {
+        payload["status"] = "completed";
+      }
+
+      final res = isEditMode.value
+          ? await _orderRepo.editPosOrder({
+              ...payload,
+              "posOrderId": editingOrderId.value,
+            })
+          : await _orderRepo.addPosOrder(payload);
 
       if (res.status == 200 || res.status == 201) {
         if (shouldPrint && res.data != null) {
@@ -1477,6 +2040,7 @@ class PosNewController extends GetxController {
         AppSnackbar.success(successMessage ?? "Order placed successfully");
         clearCart();
         if (Get.isBottomSheetOpen ?? false) Get.back();
+        await checkRegisterStatus();
       } else {
         AppSnackbar.error(res.message ?? "Something went wrong");
       }
@@ -1597,24 +2161,37 @@ class PosNewController extends GetxController {
       AppSnackbar.error("Failed to print receipt: $e");
     }
   }
-}
 
-class RedemptionItem {
-  final String id;
-  final String code;
-  final String type;
-  final double amount;
-  final String customerId;
+  Future<void> pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);
+        AppSnackbar.success("Image selected successfully");
+      }
+    } catch (e) {
+      debugPrint("Error picking image: $e");
+      AppSnackbar.error("Failed to pick image: $e");
+    }
+  }
 
-  RedemptionItem({
-    required this.id,
-    required this.code,
-    required this.type,
-    required this.amount,
-    required this.customerId,
-  });
+  void removeImage() {
+    selectedImage.value = null;
+    AppSnackbar.info("Image removed");
+  }
 
-  Map<String, dynamic> toRedeemPayload() {
-    return {"code": code, "type": type, "customerId": customerId};
+  void showImageOptions(BuildContext context) {
+    Get.bottomSheet(
+      ImageSourceBottomSheet(
+        onSourceSelected: (source) => pickImage(source),
+        onRemove: () => removeImage(),
+        hasImage: selectedImage.value != null,
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+    );
   }
 }

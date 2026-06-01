@@ -24,4 +24,8 @@ class PosOrderRepository {
   Future<ResModel> deletePosOrder(String id) async {
     return await _api.delete(ApiConstants.posOrderById(id));
   }
+
+  Future<ResModel> editPosOrder(Map<String, dynamic> payload) async {
+    return await _api.put(ApiConstants.editPosOrder, body: payload);
+  }
 }

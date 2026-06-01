@@ -14,4 +14,35 @@ class PermissionRepository {
     }
     return [];
   }
+
+  Future<List<PermissionModel>> getPermissionsByUserId(String userId) async {
+    final response = await _api.get(ApiConstants.getPermitionById(userId));
+    if (response.data != null && response.data is List) {
+      return List<PermissionModel>.from(
+        (response.data as List).map((x) => PermissionModel.fromJson(x)),
+      );
+    }
+    return [];
+  }
+
+  Future<void> updatePermissions(
+    String userId,
+    List<PermissionModel> permissions,
+  ) async {
+    final data = {
+      "userId": userId,
+      "modules": permissions
+          .map(
+            (e) => {
+              "_id": e.id,
+              "view": e.view,
+              "add": e.add,
+              "edit": e.edit,
+              "delete": e.delete,
+            },
+          )
+          .toList(),
+    };
+    await _api.put(ApiConstants.updatePermition, body: data);
+  }
 }

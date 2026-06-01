@@ -77,4 +77,36 @@ class StockTransferRepository {
     );
     return response.status == 200;
   }
+
+  Future<bool> approveStockTransfer(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.approveStockTransfer,
+      body: data,
+    );
+    return response.status == 200;
+  }
+
+  Future<bool> rejectStockTransfer(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.rejectStockTransfer,
+      body: data,
+    );
+    return response.status == 200;
+  }
+
+  Future<bool> dispatchStockTransfer(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.dispatchStockTransfer,
+      body: data,
+    );
+    return response.status == 200;
+  }
+
+  Future<bool> confirmReceiptStockTransfer(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.confirmReceiptStockTransfer,
+      body: data,
+    );
+    return response.status == 200;
+  }
 }

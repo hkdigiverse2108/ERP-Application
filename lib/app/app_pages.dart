@@ -86,6 +86,8 @@ import 'package:ai_setu/modules/pos/order_list/bindings/order_list_binding.dart'
 import 'package:ai_setu/modules/pos/order_list/views/order_list.dart';
 import 'package:ai_setu/modules/pos/sales_register/bindings/sales_register_binding.dart';
 import 'package:ai_setu/modules/pos/sales_register/views/sales_register.dart';
+import 'package:ai_setu/modules/pos/pos_credit_note/bindings/pos_credit_note_binding.dart';
+import 'package:ai_setu/modules/pos/pos_credit_note/views/pos_credit_note_view.dart';
 
 import 'package:ai_setu/modules/sales/delivery_challan/bindings/delivery_challan_binding.dart';
 import 'package:ai_setu/modules/sales/delivery_challan/bindings/delivery_challan_add_edit_binding.dart';
@@ -106,9 +108,12 @@ import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_binding.d
 import 'package:ai_setu/modules/sales/sales_order/views/sales_order.dart';
 import 'package:ai_setu/modules/sales/sales_order/bindings/sales_order_add_edit_binding.dart';
 import 'package:ai_setu/modules/sales/sales_order/views/sales_order_add_edit_view.dart';
+import 'package:ai_setu/modules/sales/sales_order/views/sales_order_details.dart';
 import 'package:ai_setu/modules/user/bindings/user_binding.dart';
 import 'package:ai_setu/modules/user/views/edit_user.dart';
 import 'package:ai_setu/modules/user/views/user.dart';
+import 'package:ai_setu/modules/user/permission/bindings/user_permission_binding.dart';
+import 'package:ai_setu/modules/user/permission/views/user_permission_view.dart';
 import 'package:ai_setu/modules/inventory/product/views/product_details.dart';
 import 'package:ai_setu/modules/contact/views/contact_details.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice_details.dart';
@@ -117,6 +122,8 @@ import 'package:ai_setu/modules/sales/estimate/views/estimate_add_edit_view.dart
 import 'package:ai_setu/modules/sales/estimate/bindings/estimate_add_edit_binding.dart';
 import 'package:ai_setu/modules/sales/invoice/bindings/invoice_add_edit_binding.dart';
 import 'package:ai_setu/modules/sales/invoice/views/invoice_add_edit_view.dart';
+import 'package:ai_setu/modules/pos/cash_control/bindings/cash_control_binding.dart';
+import 'package:ai_setu/modules/pos/cash_control/views/cash_control_view.dart';
 import 'package:ai_setu/app/middleware/permission_middleware.dart';
 import 'package:get/get.dart';
 import 'package:ai_setu/app/app_routes.dart';
@@ -352,6 +359,11 @@ class AppPages {
       middlewares: [PermissionMiddleware()],
     ),
     GetPage(
+      name: Routes.userPermission,
+      page: () => const UserPermissionView(),
+      binding: UserPermissionBinding(),
+    ),
+    GetPage(
       name: Routes.dashboard,
       page: () => Home(),
       binding: HomeBindings(),
@@ -464,6 +476,11 @@ class AppPages {
       binding: SalesOrderAddEditBinding(),
     ),
     GetPage(
+      name: Routes.salesOrderDetails,
+      page: () => const SalesOrderDetails(),
+      binding: SalesOrderBinding(),
+    ),
+    GetPage(
       name: Routes.invoice,
       page: () => const InvoicePage(),
       binding: InvoiceBinding(),
@@ -529,13 +546,24 @@ class AppPages {
       name: Routes.posOrderList,
       page: () => const OrderListPage(),
       binding: OrderListBinding(),
-      middlewares: [PermissionMiddleware()],
+      // middlewares: [PermissionMiddleware()],
     ),
     GetPage(
       name: Routes.posCreditNote,
       page: () => const CreditNotePage(),
       binding: CreditNoteBinding(),
       middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.posCreditNoteList,
+      page: () => const PosCreditNoteView(),
+      binding: PosCreditNoteBinding(),
+      middlewares: [PermissionMiddleware()],
+    ),
+    GetPage(
+      name: Routes.cashControl,
+      page: () => const CashControlView(),
+      binding: CashControlBinding(),
     ),
     GetPage(
       name: Routes.posNew,

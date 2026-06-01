@@ -2,6 +2,8 @@ import 'package:ai_setu/data/model/common/id_name_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
 import 'package:ai_setu/data/model/contact_model/contact_model.dart';
 import 'package:ai_setu/data/model/selas/delivery_challan_model.dart';
+import 'package:ai_setu/data/model/selas/sales_order_model.dart';
+import 'package:ai_setu/data/model/selas/invoice_model.dart';
 import 'package:ai_setu/data/model/tax/tax_model.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
 import 'package:ai_setu/data/model/payment_terms/payment_terms_model.dart';
@@ -132,10 +134,10 @@ class DeliveryChallanAddEditController extends GetxController {
 
     ever(selectedCustomer, (customer) {
       if (customer != null) {
-        if (!isEdit.value && selectedSalesOrders.isEmpty) {
+        if (!isEdit.value) {
+          selectedSalesOrders.clear();
+          selectedInvoices.clear();
           fetchSalesOrders();
-        }
-        if (!isEdit.value && selectedInvoices.isEmpty) {
           fetchInvoices();
         }
         if (customer.address.isNotEmpty) {
@@ -369,16 +371,214 @@ class DeliveryChallanAddEditController extends GetxController {
     }
   }
 
-  void addSalesOrder(IdNameModel order) {
-    if (!selectedSalesOrders.any((e) => e.id == order.id)) {
-      selectedSalesOrders.add(order);
+  Future<void> addSalesOrder(IdNameModel order) async {
+    if (selectedSalesOrders.any((e) => e.id == order.id)) return;
+    selectedSalesOrders.add(order);
+    try {
+      isLoading.value = true;
+      final details = await _salesRepository.getSalesOrderById(order.id);
+      _mergeAutoFillData(
+        customerId: details.customerId?.id,
+        placeOfSupplyStr: details.placeOfSupply,
+        taxTypeStr: details.taxType,
+        notes: details.notes,
+        itemsList: details.items,
+        chargesList: details.additionalCharges,
+        termsIds: details.termsAndConditionIds,
+        shipping: details.shippingDetails,
+      );
+    } catch (e) {
+      debugPrint('Error fetching sales order details: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void addInvoice(IdNameModel invoice) {
-    if (!selectedInvoices.any((e) => e.id == invoice.id)) {
-      selectedInvoices.add(invoice);
+  Future<void> addInvoice(IdNameModel invoice) async {
+    if (selectedInvoices.any((e) => e.id == invoice.id)) return;
+    selectedInvoices.add(invoice);
+    try {
+      isLoading.value = true;
+      final details = await _salesRepository.getInvoiceById(invoice.id);
+      _mergeAutoFillData(
+        customerId: details.customerId?.id,
+        placeOfSupplyStr: details.placeOfSupply,
+        taxTypeStr: details.taxType,
+        notes: details.notes,
+        itemsList: details.items,
+        chargesList: details.additionalCharges,
+        termsIds: details.termsAndConditionIds,
+        shipping: details.shippingDetails,
+      );
+    } catch (e) {
+      debugPrint('Error fetching invoice details: $e');
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  void _mergeAutoFillData({
+    String? customerId,
+    String? placeOfSupplyStr,
+    String? taxTypeStr,
+    String? notes,
+    required List itemsList,
+    required List chargesList,
+    required List<dynamic> termsIds,
+    dynamic shipping,
+  }) {
+    if (customerId != null && selectedCustomer.value == null) {
+      selectedCustomer.value = availableCustomers.firstWhereOrNull(
+        (c) => c.id == customerId,
+      );
+    }
+    if (placeOfSupply.value.isEmpty) {
+      placeOfSupply.value = placeOfSupplyStr ?? '';
+    }
+    if (taxTypeStr != null) {
+      taxType.value = taxTypeStr;
+    }
+    if (notes != null && notesController.text.isEmpty) {
+      notesController.text = notes;
+    }
+
+    if (items.length == 1 && items[0].productId.value == null) {
+      items.clear();
+    }
+
+    // Append items
+    for (var e in itemsList) {
+      final state = DeliveryChallanItemState(
+        onChanged: calculateSummary,
+        availableTaxes: availableTaxes,
+      );
+
+      String? prodId;
+      double qty = 0.0;
+      double freeQty = 0.0;
+      double price = 0.0;
+      double discount1 = 0.0;
+      String? taxId;
+      String? uomId;
+      String? unit;
+
+      if (e is SalesOrderItem) {
+        prodId = e.productId?.id;
+        qty = e.qty;
+        freeQty = e.freeQty;
+        price = e.price;
+        discount1 = e.discount1;
+        taxId = e.taxId?.id;
+        uomId = e.uomId?.id;
+        unit = e.uomId?.name;
+      } else if (e is InvoiceItem) {
+        prodId = e.productId?.id;
+        qty = e.qty;
+        freeQty = e.freeQty;
+        price = e.price;
+        discount1 = e.discount1;
+        taxId = e.taxId?.id;
+        uomId = e.uomId?.id;
+        unit = e.unit ?? e.uomId?.name;
+      } else {
+        try {
+          prodId = e.productId?.id ?? "";
+          qty = (e.qty as num?)?.toDouble() ?? 0.0;
+          freeQty = (e.freeQty as num?)?.toDouble() ?? 0.0;
+          price = (e.price as num?)?.toDouble() ?? 0.0;
+          discount1 = (e.discount1 as num?)?.toDouble() ?? 0.0;
+          taxId = e.taxId?.id;
+          uomId = e.uomId is String ? e.uomId : e.uomId?.id;
+          unit = e.uomId is String ? e.unit : e.uomId?.name;
+        } catch (_) {}
+      }
+
+      if (prodId != null) {
+        state.productId.value = availableProducts.firstWhereOrNull(
+          (p) => p.id == prodId,
+        );
+      }
+      state.qty.value = qty;
+      state.qtyController.text = qty.toString();
+      state.price.value = price;
+      state.priceController.text = price.toString();
+      state.uomId.value = uomId;
+      state.unit.value = unit ?? "";
+      if (taxId != null) {
+        state.taxId.value = availableTaxes.firstWhereOrNull(
+          (t) => t.id == taxId,
+        );
+      }
+      state.discount1.value = discount1;
+      state.discountController.text = discount1.toString();
+      state.freeQty.value = freeQty;
+      state.freeQtyController.text = freeQty.toString();
+      state.calculate();
+
+      items.add(state);
+    }
+
+    // Append charges
+    for (var e in chargesList) {
+      final state = DeliveryChallanAdditionalChargeState(
+        onChanged: calculateSummary,
+      );
+
+      String? chargeId;
+      double amount = 0.0;
+      String? taxId;
+      double totalAmount = 0.0;
+
+      // Polymorphic charge parsing
+      try {
+        chargeId = e.chargeId?.toString() ?? e.chargeId?.id?.toString();
+        amount = (e.amount as num?)?.toDouble() ?? 0.0;
+        taxId = e.taxId?.toString() ?? e.taxId?.id?.toString();
+        totalAmount = (e.totalAmount as num?)?.toDouble() ?? amount;
+      } catch (_) {}
+
+      if (chargeId != null) {
+        state.chargeId.value = availableCharges.firstWhereOrNull(
+          (c) => c.id == chargeId,
+        );
+      }
+      state.amount.value = amount;
+      state.amountController.text = amount.toString();
+      state.taxId.value = taxId;
+      state.totalAmount.value = totalAmount;
+
+      additionalCharges.add(state);
+    }
+
+    // Append terms
+    for (var id in termsIds) {
+      final idStr = id is String ? id : id.toString();
+      if (!selectedTermsAndConditionIds.contains(idStr)) {
+        selectedTermsAndConditionIds.add(idStr);
+      }
+    }
+
+    // Shipping details
+    if (shipping != null) {
+      try {
+        shippingType.value = shipping.shippingType ?? "";
+        shippingTypeController.text = shipping.shippingType ?? "";
+        referenceNo.value = shipping.referenceNo ?? "";
+        referenceNoController.text = shipping.referenceNo ?? "";
+        if (shipping.shippingDate != null) {
+          if (shipping.shippingDate is DateTime) {
+            shippingDate.value = shipping.shippingDate;
+          } else {
+            shippingDate.value = DateTime.tryParse(shipping.shippingDate.toString());
+          }
+        }
+        weight.value = (shipping.weight as num?)?.toDouble() ?? 0.0;
+        weightController.text = weight.value.toString();
+      } catch (_) {}
+    }
+
+    _updateDateControllers();
+    calculateSummary();
   }
 
   void addItem() {
@@ -482,7 +682,10 @@ class DeliveryChallanAddEditController extends GetxController {
         "termsAndConditionIds": selectedTermsAndConditionIds,
         "items": items.map((e) => e.toMap()).toList(),
         if (additionalCharges.isNotEmpty)
-          "additionalCharges": additionalCharges.map((e) => e.toMap()).toList(),
+          "additionalCharges": additionalCharges
+              .where((e) => e.chargeId.value != null && e.chargeId.value!.id.isNotEmpty)
+              .map((e) => e.toMap())
+              .toList(),
         "shippingDetails": {
           "shippingType": shippingType.value.isNotEmpty
               ? shippingType.value
@@ -639,7 +842,7 @@ class DeliveryChallanItemState {
       "price": price.value,
       "uomId": uomId.value,
       "unit": unit.value,
-      "taxId": taxId.value?.id,
+      "taxId": (taxId.value == null || taxId.value!.id.isEmpty) ? null : taxId.value!.id,
       "discount1": discount1.value,
       "freeQty": freeQty.value,
       "tax": taxAmount.value,
@@ -674,7 +877,7 @@ class DeliveryChallanAdditionalChargeState {
     return {
       "chargeId": chargeId.value?.id,
       "amount": amount.value,
-      "taxId": taxId.value,
+      "taxId": (taxId.value == null || taxId.value!.isEmpty) ? null : taxId.value,
       "totalAmount": totalAmount.value,
     };
   }

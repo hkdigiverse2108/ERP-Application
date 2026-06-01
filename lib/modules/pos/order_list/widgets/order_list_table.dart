@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ai_setu/modules/pos/pos_new/controllers/pos_new_controller.dart';
 
 class OrderListTable extends StatelessWidget {
   const OrderListTable({super.key});
@@ -69,6 +70,17 @@ class OrderListTable extends StatelessWidget {
               CommonTable<OrderListModel>(
                 onRowTap: (item) =>
                     Get.toNamed(Routes.posOrderDetails, arguments: item),
+                onEditItem: (item) {
+                  if (Get.isRegistered<PosNewController>()) {
+                    Get.find<PosNewController>().loadOrderForEdit(item);
+                    // If we are currently on the order list page (dedicated route), go back
+                    if (Get.currentRoute == Routes.posOrderList) {
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    Get.toNamed(Routes.posNew, arguments: item);
+                  }
+                },
                 route: Routes.posOrderList,
                 isLoading: controller.isLoading.value,
                 items: controller.orderList.toList(),

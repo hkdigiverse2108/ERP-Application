@@ -146,31 +146,49 @@ class SalesCreditNoteModel extends Equatable {
         createdBy: map["createdBy"] == null
             ? null
             : SalesCreditNoteCreatedBy.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
+                map["createdBy"] as Map<String, dynamic>,
+              ),
         updatedBy: map["updatedBy"] is Map
             ? map["updatedBy"]["_id"]?.toString()
             : map["updatedBy"]?.toString(),
-        companyId:
-            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
+        companyId: map["companyId"] == null
+            ? null
+            : IdNameModel.fromMap(map["companyId"]),
         customerId: map["customerId"] == null
             ? null
             : SalesCreditNoteCustomer.fromMap(
-                map["customerId"] as Map<String, dynamic>),
+                map["customerId"] as Map<String, dynamic>,
+              ),
         placeOfSupply: map["placeOfSupply"]?.toString(),
         billingAddress: map["billingAddress"] == null
             ? null
-            : SalesCreditNoteAddress.fromMap(
-                map["billingAddress"] as Map<String, dynamic>),
+            : (map["billingAddress"] is String
+                  ? SalesCreditNoteAddress(
+                      id: map["billingAddress"].toString(),
+                      addressLine1: "",
+                      pinCode: 0,
+                    )
+                  : SalesCreditNoteAddress.fromMap(
+                      map["billingAddress"] as Map<String, dynamic>,
+                    )),
         shippingAddress: map["shippingAddress"] == null
             ? null
-            : SalesCreditNoteAddress.fromMap(
-                map["shippingAddress"] as Map<String, dynamic>),
+            : (map["shippingAddress"] is String
+                  ? SalesCreditNoteAddress(
+                      id: map["shippingAddress"].toString(),
+                      addressLine1: "",
+                      pinCode: 0,
+                    )
+                  : SalesCreditNoteAddress.fromMap(
+                      map["shippingAddress"] as Map<String, dynamic>,
+                    )),
         creditNoteDate: map["creditNoteDate"] != null
             ? DateTime.parse(map["creditNoteDate"].toString())
             : null,
         creditNoteNo: map["creditNoteNo"]?.toString(),
-        dueDate:
-            map["dueDate"] != null ? DateTime.parse(map["dueDate"].toString()) : null,
+        dueDate: map["dueDate"] != null
+            ? DateTime.parse(map["dueDate"].toString())
+            : null,
         reason: map["reason"]?.toString(),
         reverseCharge: map["reverseCharge"] as bool? ?? false,
         sez: map["sez"]?.toString(),
@@ -185,7 +203,8 @@ class SalesCreditNoteModel extends Equatable {
         additionalCharges: List<SalesCreditNoteAdditionalCharge>.from(
           (map["additionalCharges"] as List<dynamic>?)?.map(
                 (x) => SalesCreditNoteAdditionalCharge.fromMap(
-                    x as Map<String, dynamic>),
+                  x as Map<String, dynamic>,
+                ),
               ) ??
               [],
         ),
@@ -199,10 +218,13 @@ class SalesCreditNoteModel extends Equatable {
         shippingDetails: map["shippingDetails"] == null
             ? null
             : SalesCreditNoteShipping.fromMap(
-                map["shippingDetails"] as Map<String, dynamic>),
+                map["shippingDetails"] as Map<String, dynamic>,
+              ),
         summary: map["summary"] == null
             ? null
-            : SalesCreditNoteSummary.fromMap(map["summary"] as Map<String, dynamic>),
+            : SalesCreditNoteSummary.fromMap(
+                map["summary"] as Map<String, dynamic>,
+              ),
         status: map["status"]?.toString(),
         createdAt: map["createdAt"] != null
             ? DateTime.parse(map["createdAt"].toString())
@@ -220,71 +242,71 @@ class SalesCreditNoteModel extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "customerId": customerId?.toMap(),
-        "placeOfSupply": placeOfSupply,
-        "billingAddress": billingAddress?.toMap(),
-        "shippingAddress": shippingAddress?.toMap(),
-        "creditNoteDate": creditNoteDate?.toIso8601String(),
-        "creditNoteNo": creditNoteNo,
-        "dueDate": dueDate?.toIso8601String(),
-        "reason": reason,
-        "reverseCharge": reverseCharge,
-        "sez": sez,
-        "paymentReminder": paymentReminder,
-        "productType": productType,
-        "productDetails": productDetails.map((x) => x.toMap()).toList(),
-        "additionalCharges": additionalCharges.map((x) => x.toMap()).toList(),
-        "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
-        "notes": notes,
-        "shippingDetails": shippingDetails?.toMap(),
-        "summary": summary?.toMap(),
-        "status": status,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "salesManId": salesManId,
-        "salesId": salesId,
-        "accountLedgerId": accountLedgerId,
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "customerId": customerId?.toMap(),
+    "placeOfSupply": placeOfSupply,
+    "billingAddress": billingAddress?.toMap(),
+    "shippingAddress": shippingAddress?.toMap(),
+    "creditNoteDate": creditNoteDate?.toIso8601String(),
+    "creditNoteNo": creditNoteNo,
+    "dueDate": dueDate?.toIso8601String(),
+    "reason": reason,
+    "reverseCharge": reverseCharge,
+    "sez": sez,
+    "paymentReminder": paymentReminder,
+    "productType": productType,
+    "productDetails": productDetails.map((x) => x.toMap()).toList(),
+    "additionalCharges": additionalCharges.map((x) => x.toMap()).toList(),
+    "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
+    "notes": notes,
+    "shippingDetails": shippingDetails?.toMap(),
+    "summary": summary?.toMap(),
+    "status": status,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+    "salesManId": salesManId,
+    "salesId": salesId,
+    "accountLedgerId": accountLedgerId,
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        customerId,
-        placeOfSupply,
-        billingAddress,
-        shippingAddress,
-        creditNoteDate,
-        creditNoteNo,
-        dueDate,
-        reason,
-        reverseCharge,
-        sez,
-        paymentReminder,
-        productType,
-        productDetails,
-        additionalCharges,
-        termsAndConditionIds,
-        notes,
-        shippingDetails,
-        summary,
-        status,
-        createdAt,
-        updatedAt,
-        salesManId,
-        salesId,
-        accountLedgerId,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    customerId,
+    placeOfSupply,
+    billingAddress,
+    shippingAddress,
+    creditNoteDate,
+    creditNoteNo,
+    dueDate,
+    reason,
+    reverseCharge,
+    sez,
+    paymentReminder,
+    productType,
+    productDetails,
+    additionalCharges,
+    termsAndConditionIds,
+    notes,
+    shippingDetails,
+    summary,
+    status,
+    createdAt,
+    updatedAt,
+    salesManId,
+    salesId,
+    accountLedgerId,
+  ];
 
   @override
   bool get stringify => true;
@@ -334,10 +356,13 @@ class SalesCreditNoteAddress extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNoteAddress.fromMap(Map<String, dynamic> map) => SalesCreditNoteAddress(
+  factory SalesCreditNoteAddress.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteAddress(
         addressLine1: map["addressLine1"]?.toString() ?? "",
         addressLine2: map["addressLine2"]?.toString(),
-        country: map["country"] == null ? null : IdNameModel.fromMap(map["country"]),
+        country: map["country"] == null
+            ? null
+            : IdNameModel.fromMap(map["country"]),
         state: map["state"] == null ? null : IdNameModel.fromMap(map["state"]),
         city: map["city"] == null ? null : IdNameModel.fromMap(map["city"]),
         pinCode: (map["pinCode"] as num? ?? 0).toInt(),
@@ -345,25 +370,25 @@ class SalesCreditNoteAddress extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "addressLine1": addressLine1,
-        "addressLine2": addressLine2,
-        "country": country?.toMap(),
-        "state": state?.toMap(),
-        "city": city?.toMap(),
-        "pinCode": pinCode,
-        "_id": id,
-      };
+    "addressLine1": addressLine1,
+    "addressLine2": addressLine2,
+    "country": country?.toMap(),
+    "state": state?.toMap(),
+    "city": city?.toMap(),
+    "pinCode": pinCode,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [
-        addressLine1,
-        addressLine2,
-        country,
-        state,
-        city,
-        pinCode,
-        id,
-      ];
+    addressLine1,
+    addressLine2,
+    country,
+    state,
+    city,
+    pinCode,
+    id,
+  ];
 
   @override
   bool get stringify => true;
@@ -393,7 +418,9 @@ class SalesCreditNoteCreatedBy extends Equatable {
   }
 
   factory SalesCreditNoteCreatedBy.fromJson(String json) =>
-      SalesCreditNoteCreatedBy.fromMap(jsonDecode(json) as Map<String, dynamic>);
+      SalesCreditNoteCreatedBy.fromMap(
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 
@@ -405,10 +432,10 @@ class SalesCreditNoteCreatedBy extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -457,30 +484,34 @@ class SalesCreditNoteCustomer extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNoteCustomer.fromMap(Map<String, dynamic> map) => SalesCreditNoteCustomer(
+  factory SalesCreditNoteCustomer.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteCustomer(
         id: map["_id"]?.toString() ?? "",
         firstName: map["firstName"]?.toString() ?? "",
         lastName: map["lastName"]?.toString() ?? "",
         email: map["email"]?.toString(),
         phoneNo: map["phoneNo"] == null
             ? null
-            : SalesCreditNotePhone.fromMap(map["phoneNo"] as Map<String, dynamic>),
+            : SalesCreditNotePhone.fromMap(
+                map["phoneNo"] as Map<String, dynamic>,
+              ),
         address: List<SalesCreditNoteAddress>.from(
           (map["address"] as List<dynamic>?)?.map(
-                (x) => SalesCreditNoteAddress.fromMap(x as Map<String, dynamic>),
+                (x) =>
+                    SalesCreditNoteAddress.fromMap(x as Map<String, dynamic>),
               ) ??
               [],
         ),
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "phoneNo": phoneNo?.toMap(),
-        "address": address.map((x) => x.toMap()).toList(),
-      };
+    "_id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "email": email,
+    "phoneNo": phoneNo?.toMap(),
+    "address": address.map((x) => x.toMap()).toList(),
+  };
 
   @override
   List<Object?> get props => [id, firstName, lastName, email, phoneNo, address];
@@ -493,7 +524,10 @@ class SalesCreditNotePhone extends Equatable {
   final String countryCode;
   final int phoneNo;
 
-  const SalesCreditNotePhone({required this.countryCode, required this.phoneNo});
+  const SalesCreditNotePhone({
+    required this.countryCode,
+    required this.phoneNo,
+  });
 
   SalesCreditNotePhone copyWith({String? countryCode, int? phoneNo}) {
     return SalesCreditNotePhone(
@@ -507,15 +541,16 @@ class SalesCreditNotePhone extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNotePhone.fromMap(Map<String, dynamic> map) => SalesCreditNotePhone(
+  factory SalesCreditNotePhone.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNotePhone(
         countryCode: map["countryCode"]?.toString() ?? "91",
         phoneNo: (map["phoneNo"] as num? ?? 0).toInt(),
       );
 
   Map<String, dynamic> toMap() => {
-        "countryCode": countryCode,
-        "phoneNo": phoneNo,
-      };
+    "countryCode": countryCode,
+    "phoneNo": phoneNo,
+  };
 
   @override
   List<Object?> get props => [countryCode, phoneNo];
@@ -594,29 +629,29 @@ class SalesCreditNoteShipping extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "shippingType": shippingType,
-        "shippingDate": shippingDate?.toIso8601String(),
-        "referenceNo": referenceNo,
-        "transportDate": transportDate?.toIso8601String(),
-        "modeOfTransport": modeOfTransport,
-        "vehicleNo": vehicleNo,
-        "weight": weight,
-        "_id": id,
-        "transporterId": transporterId,
-      };
+    "shippingType": shippingType,
+    "shippingDate": shippingDate?.toIso8601String(),
+    "referenceNo": referenceNo,
+    "transportDate": transportDate?.toIso8601String(),
+    "modeOfTransport": modeOfTransport,
+    "vehicleNo": vehicleNo,
+    "weight": weight,
+    "_id": id,
+    "transporterId": transporterId,
+  };
 
   @override
   List<Object?> get props => [
-        shippingType,
-        shippingDate,
-        referenceNo,
-        transportDate,
-        modeOfTransport,
-        vehicleNo,
-        weight,
-        id,
-        transporterId,
-      ];
+    shippingType,
+    shippingDate,
+    referenceNo,
+    transportDate,
+    modeOfTransport,
+    vehicleNo,
+    weight,
+    id,
+    transporterId,
+  ];
 
   @override
   bool get stringify => true;
@@ -640,15 +675,13 @@ class SalesCreditNoteTerms extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNoteTerms.fromMap(Map<String, dynamic> map) => SalesCreditNoteTerms(
+  factory SalesCreditNoteTerms.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteTerms(
         id: map["_id"]?.toString() ?? "",
         termsCondition: map["termsCondition"]?.toString(),
       );
 
-  Map<String, dynamic> toMap() => {
-        "_id": id,
-        "termsCondition": termsCondition,
-      };
+  Map<String, dynamic> toMap() => {"_id": id, "termsCondition": termsCondition};
 
   @override
   List<Object?> get props => [id, termsCondition];
@@ -705,7 +738,8 @@ class SalesCreditNoteSummary extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNoteSummary.fromMap(Map<String, dynamic> map) => SalesCreditNoteSummary(
+  factory SalesCreditNoteSummary.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteSummary(
         flatDiscount: (map["flatDiscount"] as num? ?? 0).toDouble(),
         grossAmount: (map["grossAmount"] as num? ?? 0).toDouble(),
         discountAmount: (map["discountAmount"] as num? ?? 0).toDouble(),
@@ -717,27 +751,27 @@ class SalesCreditNoteSummary extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "flatDiscount": flatDiscount,
-        "grossAmount": grossAmount,
-        "discountAmount": discountAmount,
-        "taxableAmount": taxableAmount,
-        "taxAmount": taxAmount,
-        "roundOff": roundOff,
-        "netAmount": netAmount,
-        "_id": id,
-      };
+    "flatDiscount": flatDiscount,
+    "grossAmount": grossAmount,
+    "discountAmount": discountAmount,
+    "taxableAmount": taxableAmount,
+    "taxAmount": taxAmount,
+    "roundOff": roundOff,
+    "netAmount": netAmount,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [
-        flatDiscount,
-        grossAmount,
-        discountAmount,
-        taxableAmount,
-        taxAmount,
-        roundOff,
-        netAmount,
-        id,
-      ];
+    flatDiscount,
+    grossAmount,
+    discountAmount,
+    taxableAmount,
+    taxAmount,
+    roundOff,
+    netAmount,
+    id,
+  ];
 
   @override
   bool get stringify => true;
@@ -807,7 +841,8 @@ class SalesCreditNoteItem extends Equatable {
 
   String toJson() => jsonEncode(toMap());
 
-  factory SalesCreditNoteItem.fromMap(Map<String, dynamic> map) => SalesCreditNoteItem(
+  factory SalesCreditNoteItem.fromMap(Map<String, dynamic> map) =>
+      SalesCreditNoteItem(
         productId: map["productId"] == null
             ? null
             : IdNameModel.fromMap(map["productId"]),
@@ -827,35 +862,35 @@ class SalesCreditNoteItem extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId?.toMap(),
-        "qty": qty,
-        "freeQty": freeQty,
-        "uomId": uomId?.toMap(),
-        "price": price,
-        "discount1": discount1,
-        "taxId": taxId?.toMap(),
-        "taxableAmount": taxableAmount,
-        "totalAmount": totalAmount,
-        "_id": id,
-        "unit": unit,
-        "tax": tax,
-      };
+    "productId": productId?.toMap(),
+    "qty": qty,
+    "freeQty": freeQty,
+    "uomId": uomId?.toMap(),
+    "price": price,
+    "discount1": discount1,
+    "taxId": taxId?.toMap(),
+    "taxableAmount": taxableAmount,
+    "totalAmount": totalAmount,
+    "_id": id,
+    "unit": unit,
+    "tax": tax,
+  };
 
   @override
   List<Object?> get props => [
-        productId,
-        qty,
-        freeQty,
-        uomId,
-        price,
-        discount1,
-        taxId,
-        taxableAmount,
-        totalAmount,
-        id,
-        unit,
-        tax,
-      ];
+    productId,
+    qty,
+    freeQty,
+    uomId,
+    price,
+    discount1,
+    taxId,
+    taxableAmount,
+    totalAmount,
+    id,
+    unit,
+    tax,
+  ];
 
   @override
   bool get stringify => true;
@@ -894,7 +929,8 @@ class SalesCreditNoteAdditionalCharge extends Equatable {
 
   factory SalesCreditNoteAdditionalCharge.fromJson(String json) =>
       SalesCreditNoteAdditionalCharge.fromMap(
-          jsonDecode(json) as Map<String, dynamic>);
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 
@@ -912,12 +948,12 @@ class SalesCreditNoteAdditionalCharge extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "chargeId": chargeId,
-        "taxId": taxId,
-        "amount": amount,
-        "totalAmount": totalAmount,
-        "_id": id,
-      };
+    "chargeId": chargeId,
+    "taxId": taxId,
+    "amount": amount,
+    "totalAmount": totalAmount,
+    "_id": id,
+  };
 
   @override
   List<Object?> get props => [chargeId, taxId, amount, totalAmount, id];
@@ -958,10 +994,10 @@ class SalesCreditNoteTax extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "name": name,
-        "percentage": percentage,
-      };
+    "_id": id,
+    "name": name,
+    "percentage": percentage,
+  };
 
   @override
   List<Object?> get props => [id, name, percentage];

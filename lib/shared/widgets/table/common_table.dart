@@ -25,6 +25,22 @@ class TableColumn<T> {
   });
 }
 
+class TableAction<T> {
+  final IconData icon;
+  final Color? color;
+  final Function(T item) onTap;
+  final String tooltip;
+  final bool Function(T item)? isVisible;
+
+  TableAction({
+    required this.icon,
+    this.color,
+    required this.onTap,
+    required this.tooltip,
+    this.isVisible,
+  });
+}
+
 class CommonTable<T> extends StatelessWidget {
   final List<T> items;
   final List<TableColumn<T>> columns;
@@ -41,6 +57,7 @@ class CommonTable<T> extends StatelessWidget {
   final bool isLoading;
   final double? rowPadding;
   final GlobalKey? showcaseKey;
+  final List<TableAction<T>>? customActions;
 
   // Pagination params
   final int? currentPage;
@@ -80,10 +97,20 @@ class CommonTable<T> extends StatelessWidget {
     this.deleteTitle,
     this.deleteMessage,
     this.route,
+    this.customActions,
   });
 
   static const double _colSerial = 40;
-  static const double _colActions = 90;
+
+  double get _actionColumnWidth {
+    int maxButtons = 0;
+    if (onEditItem != null) maxButtons++;
+    if (onRemoveItem != null) maxButtons++;
+    maxButtons += (customActions?.length ?? 0);
+    if (maxButtons == 0) return 0;
+
+    return 30.0 + (maxButtons * 35.0);
+  }
 
   double get _totalTableWidth {
     double width = Sizes.paddingS * 2;
@@ -91,7 +118,7 @@ class CommonTable<T> extends StatelessWidget {
     for (var col in columns) {
       width += col.width;
     }
-    if (onRemoveItem != null || onEditItem != null) width += _colActions;
+    width += _actionColumnWidth;
     return width;
   }
 
@@ -195,7 +222,7 @@ class CommonTable<T> extends StatelessWidget {
       columnWidths: [
         if (showSerial) _colSerial,
         ...columns.map((c) => c.width),
-        if (onRemoveItem != null || onEditItem != null) _colActions,
+        if (_actionColumnWidth > 0) _actionColumnWidth,
       ],
     );
   }
@@ -269,8 +296,12 @@ class CommonTable<T> extends StatelessWidget {
             (col) =>
                 _headerCell(col.title, width: col.width, align: col.alignment),
           ),
-          if (onRemoveItem != null || onEditItem != null)
-            _headerCell('Actions', width: _colActions, align: TextAlign.center),
+          if (_actionColumnWidth > 0)
+            _headerCell(
+              'Actions',
+              width: _actionColumnWidth,
+              align: TextAlign.center,
+            ),
         ],
       ),
     );
@@ -348,7 +379,7 @@ class CommonTable<T> extends StatelessWidget {
             ),
 
             // Actions
-            if (onRemoveItem != null || onEditItem != null)
+            if (_actionColumnWidth > 0)
               Builder(
                 builder: (context) {
                   final hasEditPermission =
@@ -365,15 +396,32 @@ class CommonTable<T> extends StatelessWidget {
                       (canDelete?.call(item) ?? true) &&
                       hasDeletePermission;
 
-                  if (!showEdit && !showDelete) {
-                    return const SizedBox(width: _colActions);
-                  }
-
                   return SizedBox(
-                    width: _colActions,
+                    width: _actionColumnWidth,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Custom Actions
+                        if (customActions != null) ...[
+                          ...customActions!.map((action) {
+                            if (action.isVisible != null &&
+                                !action.isVisible!(item)) {
+                              return const SizedBox.shrink();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: _buildActionIcon(
+                                context,
+                                icon: action.icon,
+                                color:
+                                    action.color ?? context.appColors.primary,
+                                onTap: () => action.onTap(item),
+                                tooltip: action.tooltip,
+                              ),
+                            );
+                          }),
+                        ],
+
                         if (showEdit)
                           _buildActionIcon(
                             context,

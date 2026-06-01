@@ -1,5 +1,6 @@
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
+import 'package:ai_setu/data/model/bank_cash/payment_dropdown_model.dart';
 import 'package:ai_setu/data/model/bank_cash/pos_payment_model.dart';
 import 'package:ai_setu/data/model/contact_model/customer_pos_details_model.dart';
 import 'package:ai_setu/data/model/pagination_model.dart';
@@ -88,5 +89,93 @@ class PaymentRepository {
 
   Future<ResModel> deleteVoucher(String id) async {
     return await _api.delete(ApiConstants.deleteVoucher(id));
+  }
+
+  Future<List<PendingPaymentDropdownModel>> getPendingPaymentDropDown({
+    String? customerId,
+    String? includeId,
+  }) async {
+    final ResModel res = await _api.get(
+      ApiConstants.pendingPaymentDropdown(
+        customerId: customerId,
+        includeId: includeId,
+      ),
+    );
+    if (res.status == 200 && res.data != null) {
+      final List dataList = res.data is List
+          ? res.data
+          : res.data['pendingPayment_data'];
+      return dataList
+          .map(
+            (e) =>
+                PendingPaymentDropdownModel.fromMap(e as Map<String, dynamic>),
+          )
+          .toList();
+    }
+    throw Exception(res.message ?? 'Failed to fetch pending payment');
+  }
+
+  Future<List<PendingCreditDropdownModel>> getPendingCreditDropDown({
+    String? customerId,
+    String? includeId,
+    String? search,
+  }) async {
+    final ResModel res = await _api.get(
+      ApiConstants.pendingCreditDropdown(
+        customerId: customerId,
+        includeId: includeId,
+        search: search,
+      ),
+    );
+    if (res.status == 200 && res.data != null) {
+      final List dataList = res.data is List
+          ? res.data
+          : res.data['pendingCredit_data'];
+      return dataList
+          .map(
+            (e) =>
+                PendingCreditDropdownModel.fromMap(e as Map<String, dynamic>),
+          )
+          .toList();
+    }
+    throw Exception(res.message ?? 'Failed to fetch pending credit');
+  }
+
+  Future<List<PendingPaymentDropdownModel>> getSupplierBillDropdown({
+    String? supplierId,
+    String? includeId,
+  }) async {
+    final ResModel res = await _api.get(
+      ApiConstants.supplierBillDropdown(
+        supplierId: supplierId,
+        includeId: includeId,
+      ),
+    );
+    if (res.status == 200 && res.data != null) {
+      final List dataList = res.data is List
+          ? res.data
+          : res.data['supplierBill_data'];
+      return dataList.map((e) {
+        final map = e as Map<String, dynamic>;
+        final double balance = (map["balanceAmount"] as num? ?? 0).toDouble();
+        final double netAmount =
+            (map["netAmount"] as num? ?? map["totalAmount"] as num? ?? 0)
+                .toDouble();
+        final double paid = (map["paidAmount"] as num? ?? (netAmount - balance))
+            .toDouble()
+            .clamp(0, double.infinity);
+
+        return PendingPaymentDropdownModel(
+          id: map["_id"]?.toString() ?? "",
+          name: map["name"]?.toString() ?? "",
+          docNo: map["supplierBillNo"]?.toString() ?? "",
+          docType: "SUPPLIER_BILL",
+          paidAmount: paid,
+          balanceAmount: balance,
+          customerId: supplierId ?? "",
+        );
+      }).toList();
+    }
+    throw Exception(res.message ?? 'Failed to fetch supplier bill');
   }
 }

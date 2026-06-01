@@ -51,6 +51,7 @@ class ProductTable extends StatelessWidget {
                 ),
               Gap(Sizes.defHorizontalSpace),
               RangedDatePicker(
+                showcaseKey: ShowcaseService.to.dateRangeKey,
                 initialDateRange: controller.selectedDateRange.value,
                 onChanged: (range) =>
                     controller.selectedDateRange.value = range,

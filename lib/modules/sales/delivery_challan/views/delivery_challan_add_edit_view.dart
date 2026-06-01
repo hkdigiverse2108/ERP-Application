@@ -154,16 +154,22 @@ class DeliveryChallanAddEditView
           ),
           const Gap(Sizes.paddingM),
           Obx(() {
+            final isCustomerNull = controller.selectedCustomer.value == null;
             if (controller.createdFrom.value == 'sales-order') {
               return Column(
                 children: [
                   if (!controller.isEdit.value)
                     CustomDropdown(
-                      label: "Add Sales Order",
+                      label: isCustomerNull
+                          ? "Add Sales Order (Select Customer First)"
+                          : "Add Sales Order",
                       value: null,
-                      items: controller.availableSalesOrders
-                          .map((e) => e.name)
-                          .toList(),
+                      readOnly: isCustomerNull,
+                      items: isCustomerNull
+                          ? const <String>[]
+                          : controller.availableSalesOrders
+                                .map((e) => e.name)
+                                .toList(),
                       searchable: true,
                       onChanged: (v) {
                         final order = controller.availableSalesOrders
@@ -214,11 +220,16 @@ class DeliveryChallanAddEditView
                 children: [
                   if (!controller.isEdit.value)
                     CustomDropdown(
-                      label: "Reference Invoice",
+                      label: isCustomerNull
+                          ? "Reference Invoice (Select Customer First)"
+                          : "Reference Invoice",
                       value: null,
-                      items: controller.availableInvoices
-                          .map((e) => e.name)
-                          .toList(),
+                      readOnly: isCustomerNull,
+                      items: isCustomerNull
+                          ? const <String>[]
+                          : controller.availableInvoices
+                                .map((e) => e.name)
+                                .toList(),
                       searchable: true,
                       onChanged: (v) {
                         final invoice = controller.availableInvoices

@@ -162,14 +162,20 @@ class InvoiceAddEditView extends GetView<InvoiceAddEditController> {
               return const SizedBox();
             }
             if (controller.invoiceSource.value == 'salesOrder') {
+              final isCustomerNull = controller.selectedCustomer.value == null;
               return Column(
                 children: [
                   if (!controller.isEdit.value)
                     CustomDropdown(
-                      label: "Add Sales Order",
+                      label: isCustomerNull
+                          ? "Add Sales Order (Select Customer First)"
+                          : "Add Sales Order",
                       value: null,
-                      items: controller.salesOrders.map((e) => e.name).toList(),
+                      items: isCustomerNull
+                          ? const <String>[]
+                          : controller.salesOrders.map((e) => e.name).toList(),
                       searchable: true,
+                      readOnly: isCustomerNull,
                       onChanged: (v) {
                         final order = controller.salesOrders.firstWhereOrNull(
                           (e) => e.name == v,
@@ -194,16 +200,22 @@ class InvoiceAddEditView extends GetView<InvoiceAddEditController> {
               );
             }
             if (controller.invoiceSource.value == 'deliveryChallan') {
+              final isCustomerNull = controller.selectedCustomer.value == null;
               return Column(
                 children: [
                   if (!controller.isEdit.value)
                     CustomDropdown(
-                      label: "Add Delivery Challan",
+                      label: isCustomerNull
+                          ? "Add Delivery Challan (Select Customer First)"
+                          : "Add Delivery Challan",
                       value: null,
-                      items: controller.deliveryChallans
-                          .map((e) => e.name)
-                          .toList(),
+                      items: isCustomerNull
+                          ? const <String>[]
+                          : controller.deliveryChallans
+                                .map((e) => e.name)
+                                .toList(),
                       searchable: true,
+                      readOnly: isCustomerNull,
                       onChanged: (v) {
                         final challan = controller.deliveryChallans
                             .firstWhereOrNull((e) => e.name == v);

@@ -7,6 +7,7 @@ import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/core/services/permission_service.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
+import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/data/repositories/auth/auth_repository.dart';
 import 'package:ai_setu/data/repositories/settings/company_repository.dart';
 
@@ -43,8 +44,17 @@ class SignInController extends GetxController {
         result.user.toMap(),
       );
 
+      // Determine and save isMainBranch status
+      final isHeadBranch = result.user.branchId != null && result.user.branchId?.isHeadBranch == true;
+      await StorageService.instance.write(StorageKeys.isMainBranch, isHeadBranch);
+
       // Fetch permissions
       await PermissionService.to.fetchPermissions(result.user.id);
+
+      // Load branch data
+      if (Get.isRegistered<BranchController>()) {
+        await BranchController.to.onUserLogin();
+      }
 
       // Fetch Company Details for Financial Year
       try {

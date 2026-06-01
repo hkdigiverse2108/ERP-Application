@@ -38,6 +38,8 @@ class _ProductBodyState extends State<_ProductBody> {
   void initState() {
     super.initState();
 
+    ShowcaseService.to.resetKeys();
+
     ShowcaseView.register(
       scope: ShowcaseService.inventoryScope,
       onFinish: () {

@@ -190,7 +190,11 @@ class _CircularRevealWidgetState extends State<_CircularRevealWidget>
 class _RevealPainter extends CustomPainter {
   final ui.Image image;
   final Offset origin;
-  final double fraction; // 1.0 = old screen visible, 0.0 = new theme revealed
+  final double fraction; // 1.0 = o
+
+  static final _paint = Paint()
+    ..filterQuality =
+        ui.FilterQuality.medium; // ld screen visible, 0.0 = new theme revealed
 
   const _RevealPainter({
     required this.image,
@@ -213,7 +217,7 @@ class _RevealPainter extends CustomPainter {
       image,
       Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
       Offset.zero & size,
-      Paint(),
+      _paint,
     );
     canvas.restore();
   }
