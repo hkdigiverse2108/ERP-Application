@@ -225,7 +225,7 @@ class ProductAddEditController extends GetxController {
   // Expiry Logic
   void syncExpiryDaysToDate(String days) {
     if (days.isEmpty) return;
-    int? d = int.tryParse(days);
+    final int? d = int.tryParse(days);
     if (d != null) {
       expiryReferenceDate.value = DateTime.now().add(Duration(days: d));
     }

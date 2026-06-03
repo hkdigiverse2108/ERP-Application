@@ -119,7 +119,7 @@ class ProductController extends GetxController {
     }
   }
 
-  void _loadFilterData() async {
+  Future<void> _loadFilterData() async {
     try {
       final results = await Future.wait([
         _categoryRepo.getCategories(), // root categories
@@ -228,4 +228,3 @@ class ProductController extends GetxController {
     }
   }
 }
-

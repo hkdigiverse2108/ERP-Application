@@ -94,7 +94,7 @@ class ApiService extends GetxService {
       headers['authorization'] = "Bearer $token";
     }
 
-    Uri url = Uri.parse('$baseUrl$endpoint');
+    final url = Uri.parse('$baseUrl$endpoint');
 
     final http.Response response;
     try {
@@ -128,7 +128,7 @@ class ApiService extends GetxService {
       headers['authorization'] = "Bearer $token";
     }
 
-    Uri url = Uri.parse('$baseUrl$endpoint');
+    final Uri url = Uri.parse('$baseUrl$endpoint');
 
     log(url.toString());
 
@@ -168,7 +168,7 @@ class ApiService extends GetxService {
       headers['authorization'] = "Bearer $token";
     }
 
-    Uri url = Uri.parse('$baseUrl$endpoint');
+    final Uri url = Uri.parse('$baseUrl$endpoint');
     final http.Response response;
     try {
       response = await http
@@ -208,8 +208,8 @@ class ApiService extends GetxService {
     // IMPORTANT: Flutter MultipartRequest does NOT set these by default
     headers['Accept'] = 'application/json';
 
-    var url = Uri.parse('$baseUrl$endpoint');
-    var request = http.MultipartRequest('POST', url);
+    final url = Uri.parse('$baseUrl$endpoint');
+    final request = http.MultipartRequest('POST', url);
 
     request.headers.addAll(headers);
 
@@ -257,7 +257,7 @@ class ApiService extends GetxService {
       headers['authorization'] = "Bearer $token";
     }
 
-    Uri url = Uri.parse('$baseUrl$endpoint');
+    final Uri url = Uri.parse('$baseUrl$endpoint');
     final http.Response response;
 
     log("Delete Request: $url");

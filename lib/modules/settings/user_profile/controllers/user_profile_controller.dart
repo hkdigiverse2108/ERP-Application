@@ -60,7 +60,7 @@ class UserProfileController extends GetxController {
     if (user.value == null) return 0;
 
     final u = user.value!;
-    int totalFields = 15;
+    final totalFields = 15;
     int completedFields = 0;
 
     // Basic
@@ -97,4 +97,3 @@ class UserProfileController extends GetxController {
     }
   }
 }
-

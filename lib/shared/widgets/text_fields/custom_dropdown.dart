@@ -79,7 +79,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
   }
 
   OverlayEntry _createOverlay() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     final availableHeightBelow =
@@ -90,10 +90,10 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     final availableHeightAbove = offset.dy;
 
     // Choose direction and max height
-    bool showAbove =
+    final bool showAbove =
         availableHeightBelow < 300 &&
         availableHeightAbove > availableHeightBelow;
-    double maxHeight = showAbove
+    final double maxHeight = showAbove
         ? (availableHeightAbove > 300 ? 300 : availableHeightAbove - 10)
         : (availableHeightBelow > 300 ? 300 : availableHeightBelow - 10);
 

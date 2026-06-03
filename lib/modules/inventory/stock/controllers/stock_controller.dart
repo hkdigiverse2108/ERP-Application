@@ -75,7 +75,7 @@ class StockController extends GetxController {
     getStockList();
   }
 
-  void _loadFilterData() async {
+  Future<void> _loadFilterData() async {
     try {
       final results = await Future.wait([
         _categoryRepo.getCategories(), // root categories
@@ -232,4 +232,3 @@ class StockController extends GetxController {
     }
   }
 }
-

@@ -422,7 +422,7 @@ class SalesOrderAddEditController extends GetxController {
   }
 
   // Item Management
-  void addItem(ProductDropdownModel product) async {
+  Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
         product.id,

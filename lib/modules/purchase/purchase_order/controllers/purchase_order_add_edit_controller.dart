@@ -273,7 +273,7 @@ class PurchaseOrderAddEditController extends GetxController {
   }
 
   // Item Management
-  void addOrderItem(ProductDropdownModel product) async {
+  Future<void> addOrderItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
         product.id,
@@ -389,7 +389,7 @@ class PurchaseOrderAddEditController extends GetxController {
   void calculateTotals() {
     double gross = 0;
     double tax = 0;
-    double discount = 0;
+    final double discount = 0;
 
     for (var item in orderItems) {
       final lineTotal = item.qty * item.unitCost;

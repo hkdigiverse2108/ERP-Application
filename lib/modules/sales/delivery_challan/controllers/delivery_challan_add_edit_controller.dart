@@ -569,7 +569,9 @@ class DeliveryChallanAddEditController extends GetxController {
           if (shipping.shippingDate is DateTime) {
             shippingDate.value = shipping.shippingDate;
           } else {
-            shippingDate.value = DateTime.tryParse(shipping.shippingDate.toString());
+            shippingDate.value = DateTime.tryParse(
+              shipping.shippingDate.toString(),
+            );
           }
         }
         weight.value = (shipping.weight as num?)?.toDouble() ?? 0.0;
@@ -683,7 +685,10 @@ class DeliveryChallanAddEditController extends GetxController {
         "items": items.map((e) => e.toMap()).toList(),
         if (additionalCharges.isNotEmpty)
           "additionalCharges": additionalCharges
-              .where((e) => e.chargeId.value != null && e.chargeId.value!.id.isNotEmpty)
+              .where(
+                (e) =>
+                    e.chargeId.value != null && e.chargeId.value!.id.isNotEmpty,
+              )
               .map((e) => e.toMap())
               .toList(),
         "shippingDetails": {
@@ -821,8 +826,8 @@ class DeliveryChallanItemState {
   }
 
   void calculate() {
-    double base = qty.value * price.value;
-    double discounted = base - discount1.value;
+    final double base = qty.value * price.value;
+    final double discounted = base - discount1.value;
     taxableAmount.value = discounted;
 
     if (taxId.value != null) {
@@ -842,7 +847,9 @@ class DeliveryChallanItemState {
       "price": price.value,
       "uomId": uomId.value,
       "unit": unit.value,
-      "taxId": (taxId.value == null || taxId.value!.id.isEmpty) ? null : taxId.value!.id,
+      "taxId": (taxId.value == null || taxId.value!.id.isEmpty)
+          ? null
+          : taxId.value!.id,
       "discount1": discount1.value,
       "freeQty": freeQty.value,
       "tax": taxAmount.value,
@@ -877,7 +884,9 @@ class DeliveryChallanAdditionalChargeState {
     return {
       "chargeId": chargeId.value?.id,
       "amount": amount.value,
-      "taxId": (taxId.value == null || taxId.value!.isEmpty) ? null : taxId.value,
+      "taxId": (taxId.value == null || taxId.value!.isEmpty)
+          ? null
+          : taxId.value,
       "totalAmount": totalAmount.value,
     };
   }

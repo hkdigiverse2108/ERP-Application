@@ -977,7 +977,7 @@ class PosNewController extends GetxController {
   void updateQuantity(int index, double delta) {
     final item = cartItems[index];
     final step = _getQtyStep(item['uom'] ?? "");
-    double newQty = (item['qty'] as double) + (delta * step);
+    final double newQty = (item['qty'] as double) + (delta * step);
     if (newQty > 0) {
       item['qty'] = newQty;
       cartItems[index] = Map<String, dynamic>.from(item);
@@ -1028,14 +1028,14 @@ class PosNewController extends GetxController {
       final isTaxIncluding = item['isTaxIncluding'] as bool? ?? false;
 
       // Individual item calculations
-      double itemDiscAmount = itemDiscount + itemAdditionalDisc;
+      final double itemDiscAmount = itemDiscount + itemAdditionalDisc;
       double taxableValue;
       double itemTax;
 
       if (isTaxIncluding) {
         // Reverse calculation for inclusive tax
         // taxable = (mrp - discount) / (1 + taxRate)
-        double inclusiveBase = itemMrp - itemDiscAmount;
+        final double inclusiveBase = itemMrp - itemDiscAmount;
         taxableValue = inclusiveBase / (1 + (taxPercent / 100));
         itemTax = inclusiveBase - taxableValue;
       } else {
@@ -1044,8 +1044,8 @@ class PosNewController extends GetxController {
         itemTax = taxableValue * (taxPercent / 100);
       }
 
-      double sellingPrice = taxableValue + itemTax;
-      double netAmount = itemQty * sellingPrice;
+      final double sellingPrice = taxableValue + itemTax;
+      final double netAmount = itemQty * sellingPrice;
 
       // Update item in cart for UI consistency
       item['unitCost'] = sellingPrice;
@@ -1438,10 +1438,10 @@ class PosNewController extends GetxController {
           final itemAdditionalDisc = (item['additionalDisc'] as num).toDouble();
           final taxPercent = (item['taxPercentage'] as num).toDouble();
 
-          double totalDiscount = itemDiscount + itemAdditionalDisc;
-          double taxableValue = itemMrp - totalDiscount;
-          double itemTax = taxableValue * (taxPercent / 100);
-          double sellingPrice = taxableValue + itemTax;
+          final double totalDiscount = itemDiscount + itemAdditionalDisc;
+          final double taxableValue = itemMrp - totalDiscount;
+          final double itemTax = taxableValue * (taxPercent / 100);
+          final double sellingPrice = taxableValue + itemTax;
           currentNetTotal += itemQty * sellingPrice;
         }
         final finalRoundOff = double.tryParse(roundOffController.text) ?? 0.0;

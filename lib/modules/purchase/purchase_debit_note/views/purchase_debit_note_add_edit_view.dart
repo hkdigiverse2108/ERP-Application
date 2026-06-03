@@ -400,7 +400,7 @@ class PurchaseDebitNoteAddEditView
     );
   }
 
-  void _selectDate(BuildContext context, Rx<DateTime> date) async {
+  Future<void> _selectDate(BuildContext context, Rx<DateTime> date) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: date.value,

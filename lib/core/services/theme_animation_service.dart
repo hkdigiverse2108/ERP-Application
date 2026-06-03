@@ -150,15 +150,17 @@ class _CircularRevealWidgetState extends State<_CircularRevealWidget>
 
     // Orchestration:
     // 1. The overlay renders its first frame (frozen old-theme screenshot).
-    // 2. We then trigger the theme switch — a heavy rebuild of the whole tree.
-    // 3. We wait one extra frame so that rebuild is fully painted underneath.
-    // 4. Only then do we start the reveal animation — guaranteeing smooth frames.
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    // 2. We trigger the theme switch — scheduling a rebuild of the widget tree.
+    // 3. We use a nested post-frame callback to wait exactly until the theme-switched
+    //    frame is fully rebuilt and painted underneath.
+    // 4. Then we start the reveal animation on a static background, ensuring 60/120 FPS.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onSwitch();
-      await Future.delayed(const Duration(milliseconds: 50));
-      if (mounted) {
-        _ctrl.forward().then((_) => widget.onComplete());
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _ctrl.forward().then((_) => widget.onComplete());
+        }
+      });
     });
   }
 
@@ -173,12 +175,14 @@ class _CircularRevealWidgetState extends State<_CircularRevealWidget>
     final size = MediaQuery.of(context).size;
     return AnimatedBuilder(
       animation: _fraction,
-      builder: (_, _) => CustomPaint(
-        size: size,
-        painter: _RevealPainter(
-          image: widget.image,
-          origin: widget.origin,
-          fraction: _fraction.value,
+      builder: (_, _) => RepaintBoundary(
+        child: CustomPaint(
+          size: size,
+          painter: _RevealPainter(
+            image: widget.image,
+            origin: widget.origin,
+            fraction: _fraction.value,
+          ),
         ),
       ),
     );
@@ -193,8 +197,9 @@ class _RevealPainter extends CustomPainter {
   final double fraction; // 1.0 = o
 
   static final _paint = Paint()
-    ..filterQuality =
-        ui.FilterQuality.medium; // ld screen visible, 0.0 = new theme revealed
+    ..filterQuality = ui
+        .FilterQuality
+        .none; // 1.0 = old screen visible, 0.0 = new theme revealed
 
   const _RevealPainter({
     required this.image,

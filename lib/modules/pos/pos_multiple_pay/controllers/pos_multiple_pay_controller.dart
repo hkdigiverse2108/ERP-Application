@@ -108,7 +108,7 @@ class PosMultiplePayController extends GetxController {
   void addPaymentLine() {
     if (paymentLines.isNotEmpty && balanceAmount.value <= 0) return;
 
-    double amount = balanceAmount.value > 0 ? balanceAmount.value : 0.0;
+    final double amount = balanceAmount.value > 0 ? balanceAmount.value : 0.0;
     final line = PaymentLine(method: availableMethods[0], amount: amount);
     paymentLines.add(line);
     calculateTotals();

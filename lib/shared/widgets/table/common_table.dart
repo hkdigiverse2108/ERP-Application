@@ -344,7 +344,7 @@ class CommonTable<T> extends StatelessWidget {
     Color borderColor,
   ) {
     final item = items[index];
-    Widget rowContent = InkWell(
+    final Widget rowContent = InkWell(
       onTap: onRowTap != null ? () => onRowTap!(item) : null,
       child: Container(
         padding: EdgeInsets.symmetric(

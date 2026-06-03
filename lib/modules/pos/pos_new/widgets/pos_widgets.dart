@@ -33,7 +33,7 @@ class PosToggle extends StatelessWidget {
   }
 
   Widget _buildToggleItem(int index, String label, BuildContext context) {
-    bool isActive = selectedIndex == index;
+    final bool isActive = selectedIndex == index;
     return Expanded(
       child: GestureDetector(
         onTap: () => onSelected(index),

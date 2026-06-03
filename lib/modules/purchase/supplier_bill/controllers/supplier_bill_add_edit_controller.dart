@@ -354,7 +354,7 @@ class SupplierBillAddEditController extends GetxController {
   }
 
   // Item Management
-  void addBillItem(ProductDropdownModel product) async {
+  Future<void> addBillItem(ProductDropdownModel product) async {
     // Prevent adding the same product multiple times if needed,
     // or just allow multiple entries of the same product.
     // For now, let's allow it as it's common in purchase bills.
@@ -403,7 +403,7 @@ class SupplierBillAddEditController extends GetxController {
   }
 
   // Return Item Management
-  void addReturnItem(ProductDropdownModel product) async {
+  Future<void> addReturnItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
         product.id,
@@ -619,8 +619,8 @@ class SupplierBillAddEditController extends GetxController {
     returnTotalTaxAmount.value = retTax;
     returnNetAmount.value = retTaxable + retTax;
 
-    double returnTaxable = retTaxable;
-    double returnTax = retTax;
+    final double returnTaxable = retTaxable;
+    final double returnTax = retTax;
 
     grossAmount.value = gross;
     totalDiscount.value = discount;

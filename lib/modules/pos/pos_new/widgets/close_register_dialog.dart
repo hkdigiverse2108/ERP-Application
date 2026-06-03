@@ -80,7 +80,7 @@ class _CloseRegisterDialogState extends State<CloseRegisterDialog> {
   }
 
   double get totalCashLeftInDrawer {
-    double calculated = totalCashInDrawer - bankTransferAmount;
+    final double calculated = totalCashInDrawer - bankTransferAmount;
     return calculated < 0 ? 0.0 : calculated;
   }
 
@@ -109,7 +109,7 @@ class _CloseRegisterDialogState extends State<CloseRegisterDialog> {
     }
 
     // Prepare Denominations Payload
-    List<Map<String, dynamic>> denominationsPayload = [];
+    final List<Map<String, dynamic>> denominationsPayload = [];
     counts.forEach((currency, count) {
       if (count > 0) {
         denominationsPayload.add({
@@ -175,11 +175,13 @@ class _CloseRegisterDialogState extends State<CloseRegisterDialog> {
     final registerNo = widget.registerData['registerNo'] ?? 'N/A';
 
     // Parse Dates
-    DateTime openTime =
+    final DateTime openTime =
         DateTime.tryParse(widget.registerData['createdAt']?.toString() ?? '') ??
         DateTime.now();
-    String openTimeStr = DateFormat('dd/MM/yyyy hh:mm a').format(openTime);
-    String currTimeStr = DateFormat(
+    final String openTimeStr = DateFormat(
+      'dd/MM/yyyy hh:mm a',
+    ).format(openTime);
+    final String currTimeStr = DateFormat(
       'dd/MM/yyyy hh:mm a',
     ).format(DateTime.now());
 

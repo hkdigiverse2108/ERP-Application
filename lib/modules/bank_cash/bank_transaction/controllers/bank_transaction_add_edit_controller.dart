@@ -71,7 +71,8 @@ class BankTransactionAddEditController extends GetxController {
       dateController.text = DateFormat(
         'dd-MM-yyyy',
       ).format(transactionDate.value);
-      transactionType.value = transaction!.transactionType.capitalizeFirst ??
+      transactionType.value =
+          transaction!.transactionType.capitalizeFirst ??
           transaction!.transactionType;
       fromAccount.value = transaction!.fromAccount;
       toAccount.value = transaction!.toAccount;
@@ -137,7 +138,7 @@ class BankTransactionAddEditController extends GetxController {
     Get.back();
   }
 
-  void selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: transactionDate.value,
@@ -159,4 +160,3 @@ class BankTransactionAddEditController extends GetxController {
     super.onClose();
   }
 }
-

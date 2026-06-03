@@ -791,7 +791,7 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
     return "${addr.addressLine1}, ${addr.city?.name}";
   }
 
-  void _selectDate(BuildContext context, Rx<DateTime> date) async {
+  Future<void> _selectDate(BuildContext context, Rx<DateTime> date) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: date.value,

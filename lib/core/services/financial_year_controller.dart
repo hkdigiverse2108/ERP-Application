@@ -34,18 +34,21 @@ class FinancialYearController extends GetxService {
       companyJson = rawData;
     } else if (rawData is String) {
       try {
-        companyJson = Map<String, dynamic>.from(
-          jsonDecode(rawData) as Map,
-        );
+        companyJson = Map<String, dynamic>.from(jsonDecode(rawData) as Map);
       } catch (e) {
-        Log.e("FinancialYearController: Failed to decode companyInfo string", e);
+        Log.e(
+          "FinancialYearController: Failed to decode companyInfo string",
+          e,
+        );
       }
     }
     DateTime? startDate;
     int? parsedStartYear;
 
     if (companyJson != null) {
-    Log.d("FinancialYearController: Found companyInfo in storage: ${companyJson.keys.toList()}");
+      Log.d(
+        "FinancialYearController: Found companyInfo in storage: ${companyJson.keys.toList()}",
+      );
       final company = CompanyModel.fromMap(companyJson);
 
       // 1. Detection from createdAt
@@ -57,11 +60,15 @@ class FinancialYearController extends GetxService {
         final yearMatch = RegExp(r'(\d{4})').firstMatch(company.financialYear);
         if (yearMatch != null) {
           parsedStartYear = int.parse(yearMatch.group(1)!);
-    Log.d("FinancialYearController: Parsed start year from metadata string: $parsedStartYear");
+          Log.d(
+            "FinancialYearController: Parsed start year from metadata string: $parsedStartYear",
+          );
         }
       }
     } else {
-    Log.d("FinancialYearController: companyInfo IS NULL in storage. Please log out and log in again.");
+      Log.d(
+        "FinancialYearController: companyInfo IS NULL in storage. Please log out and log in again.",
+      );
     }
 
     // Default to today if no dates found
@@ -72,7 +79,7 @@ class FinancialYearController extends GetxService {
     // Financial year logic:
     // If created in Jan-Mar (month < 4), the financial year started the year before.
     // Otherwise, it started this year.
-    int startFYFromDate = startDate.month < 4
+    final startFYFromDate = startDate.month < 4
         ? startDate.year - 1
         : startDate.year;
 
@@ -80,15 +87,17 @@ class FinancialYearController extends GetxService {
     int startFY = startFYFromDate;
     if (parsedStartYear != null && parsedStartYear < startFY) {
       startFY = parsedStartYear;
-    Log.d("FinancialYearController: Overriding startFY with earlier metadata year: $startFY");
+      Log.d(
+        "FinancialYearController: Overriding startFY with earlier metadata year: $startFY",
+      );
     }
 
-    int currentFY = now.month < 4 ? now.year - 1 : now.year;
+    final int currentFY = now.month < 4 ? now.year - 1 : now.year;
 
     // Safety: Ensure we show at least the current year
     if (startFY > currentFY) startFY = currentFY;
 
-    List<YearModel> generated = [];
+    final List<YearModel> generated = [];
 
     // Generate from the company's start year up to the current active financial year
     for (int y = startFY; y <= currentFY; y++) {
@@ -108,7 +117,9 @@ class FinancialYearController extends GetxService {
     }
 
     availableYears.assignAll(generated.reversed.toList()); // Latest year first
-    Log.d("FinancialYearController: Generated ${availableYears.length} financial years.");
+    Log.d(
+      "FinancialYearController: Generated ${availableYears.length} financial years.",
+    );
   }
 
   void _loadSelectedYear() {
