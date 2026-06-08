@@ -62,9 +62,9 @@ class ProductTable extends StatelessWidget {
                   isLoading: controller.isLodding.value,
                   items: controller.products,
                   route: Routes.product,
-                  onEditItem: (item) =>
-                      Get.toNamed(Routes.addUpdateProduct, arguments: item),
-                  onRemoveItem: (item) => controller.deleteProduct(item.id),
+                  // onEditItem: (item) =>
+                  //     Get.toNamed(Routes.addUpdateProduct, arguments: item),
+                  // onRemoveItem: (item) => controller.deleteProduct(item.id),
                   deleteTitle: "Delete Product",
                   deleteMessage: (item) =>
                       "Are you sure you want to delete '${item.name}'? This action cannot be undone.",

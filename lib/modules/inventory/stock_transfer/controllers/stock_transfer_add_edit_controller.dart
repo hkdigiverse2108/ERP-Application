@@ -19,6 +19,7 @@ class StockTransferAddEditController extends GetxController {
 
   final Rxn<StockTransferModel> existingTransfer = Rxn<StockTransferModel>();
   final RxBool isLoading = false.obs;
+  final RxBool isProductLoading = false.obs;
   final RxBool isSaving = false.obs;
 
   // Form Fields
@@ -49,7 +50,6 @@ class StockTransferAddEditController extends GetxController {
       isLoading.value = true;
       final results = await Future.wait([
         _branchRepository.getBranchesDropdown(),
-        _productRepository.getProductDropdown(),
       ]);
 
       // Get current branch ID to exclude it
@@ -70,24 +70,53 @@ class StockTransferAddEditController extends GetxController {
         }
       }
 
-      final allBranches = results[0] as List<BranchDropdownModel>;
+      final allBranches = results[0];
       branches.value = allBranches
           .where((b) => b.id != currentBranchId)
           .toList();
-      products.value = results[1] as List<ProductDropdownModel>;
 
       if (isEdit) {
-        _populateFields();
-        if (branches.isNotEmpty) {
-          selectedToBranch.value = branches.firstWhereOrNull(
-            (b) => b.id == existingTransfer.value?.requestedToBranchId?.id,
-          );
+        final toBranchId = existingTransfer.value?.requestedToBranchId?.id;
+        if (toBranchId != null) {
+          final branch = branches.firstWhereOrNull((b) => b.id == toBranchId);
+          selectedToBranch.value = branch;
+          if (branch != null) {
+            await fetchProductsForBranch(branch.id);
+          }
         }
+        _populateFields();
       }
     } catch (e) {
       Log.e("Error loading dropdown data", e);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchProductsForBranch(String branchId) async {
+    try {
+      isProductLoading.value = true;
+      final res = await _productRepository.getProductDropdown(
+        branchFilter: branchId,
+      );
+      products.assignAll(res);
+    } catch (e) {
+      Log.e("Error fetching products for branch", e);
+    } finally {
+      isProductLoading.value = false;
+    }
+  }
+
+  Future<void> onBranchSelected(BranchDropdownModel? branch) async {
+    if (selectedToBranch.value?.id == branch?.id) return;
+
+    selectedToBranch.value = branch;
+    items.clear();
+
+    if (branch != null) {
+      await fetchProductsForBranch(branch.id);
+    } else {
+      products.clear();
     }
   }
 
@@ -108,6 +137,7 @@ class StockTransferAddEditController extends GetxController {
         qty: item.requestedQty,
         price: item.price,
         availableQty: product?.qty ?? item.requestedQty,
+        variantId: item.variantId,
       );
     }).toList();
   }
@@ -122,10 +152,11 @@ class StockTransferAddEditController extends GetxController {
 
   void updateItemProduct(int index, ProductDropdownModel product) {
     items[index] = items[index].copyWith(
-      productId: product.id,
+      productId: product.hasVariant ? product.productId! : product.id,
       productName: product.name,
       price: product.sellingPrice, // Use selling price by default
       availableQty: product.qty,
+      variantId: product.hasVariant ? product.id : null,
     );
   }
 
@@ -141,6 +172,7 @@ class StockTransferAddEditController extends GetxController {
     }
 
     for (var item in items) {
+      debugPrint('item: ${item.productId} - ${item.variantId}');
       if (item.productId.isEmpty) {
         AppSnackbar.error("Please select a product for all items");
         return;
@@ -205,10 +237,9 @@ class StockTransferAddEditController extends GetxController {
   }
 
   Future<void> _refreshAndBack() async {
-    final stockTransferController =
-        Get.isRegistered<StockTransferController>()
-            ? Get.find<StockTransferController>()
-            : null;
+    final stockTransferController = Get.isRegistered<StockTransferController>()
+        ? Get.find<StockTransferController>()
+        : null;
 
     if (stockTransferController != null) {
       await stockTransferController.refreshData();
@@ -223,6 +254,7 @@ class StockTransferFormItem {
   final double qty;
   final double price;
   final double availableQty;
+  final String? variantId;
 
   StockTransferFormItem({
     this.productId = '',
@@ -230,6 +262,7 @@ class StockTransferFormItem {
     this.qty = 1.0,
     this.price = 0.0,
     this.availableQty = 0.0,
+    this.variantId,
   });
 
   StockTransferFormItem copyWith({
@@ -238,6 +271,7 @@ class StockTransferFormItem {
     double? qty,
     double? price,
     double? availableQty,
+    String? variantId,
   }) {
     return StockTransferFormItem(
       productId: productId ?? this.productId,
@@ -245,6 +279,7 @@ class StockTransferFormItem {
       qty: qty ?? this.qty,
       price: price ?? this.price,
       availableQty: availableQty ?? this.availableQty,
+      variantId: variantId ?? this.variantId,
     );
   }
 }

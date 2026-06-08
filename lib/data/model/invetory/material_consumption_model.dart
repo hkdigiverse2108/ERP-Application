@@ -85,7 +85,8 @@ class MaterialConsumptionModel extends Equatable {
 
   factory MaterialConsumptionModel.fromJson(String json) =>
       MaterialConsumptionModel.fromMap(
-          jsonDecode(json) as Map<String, dynamic>);
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 
@@ -97,7 +98,8 @@ class MaterialConsumptionModel extends Equatable {
         createdBy: map["createdBy"] == null
             ? null
             : MaterialConsumptionCreatedBy.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
+                map["createdBy"] as Map<String, dynamic>,
+              ),
         updatedBy: map["updatedBy"]?.toString() ?? "",
         companyId: map["companyId"] == null
             ? null
@@ -115,7 +117,8 @@ class MaterialConsumptionModel extends Equatable {
         type: map["type"]?.toString(),
         items: List<MaterialConsumptionItem>.from(
           (map["items"] as List<dynamic>?)?.map(
-                (x) => MaterialConsumptionItem.fromMap(x as Map<String, dynamic>),
+                (x) =>
+                    MaterialConsumptionItem.fromMap(x as Map<String, dynamic>),
               ) ??
               [],
         ),
@@ -131,45 +134,45 @@ class MaterialConsumptionModel extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "branchId": branchId?.toMap(),
-        "number": number,
-        "date": date.toIso8601String(),
-        "consumptionTypeId": consumptionTypeId?.toMap(),
-        "type": type,
-        "items": items.map((x) => x.toMap()).toList(),
-        "totalQty": totalQty,
-        "totalAmount": totalAmount,
-        "remark": remark,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "branchId": branchId?.toMap(),
+    "number": number,
+    "date": date.toIso8601String(),
+    "consumptionTypeId": consumptionTypeId?.toMap(),
+    "type": type,
+    "items": items.map((x) => x.toMap()).toList(),
+    "totalQty": totalQty,
+    "totalAmount": totalAmount,
+    "remark": remark,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        branchId,
-        number,
-        date,
-        consumptionTypeId,
-        type,
-        items,
-        totalQty,
-        totalAmount,
-        remark,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    branchId,
+    number,
+    date,
+    consumptionTypeId,
+    type,
+    items,
+    totalQty,
+    totalAmount,
+    remark,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -200,7 +203,8 @@ class MaterialConsumptionCreatedBy extends Equatable {
 
   factory MaterialConsumptionCreatedBy.fromJson(String json) =>
       MaterialConsumptionCreatedBy.fromMap(
-          jsonDecode(json) as Map<String, dynamic>);
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 
@@ -212,10 +216,10 @@ class MaterialConsumptionCreatedBy extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -229,12 +233,14 @@ class MaterialConsumptionItem extends Equatable {
   final double qty;
   final double price;
   final double totalPrice;
+  final String? variantId;
 
   const MaterialConsumptionItem({
     required this.productId,
     required this.qty,
     required this.price,
     required this.totalPrice,
+    this.variantId,
   });
 
   MaterialConsumptionItem copyWith({
@@ -242,12 +248,14 @@ class MaterialConsumptionItem extends Equatable {
     double? qty,
     double? price,
     double? totalPrice,
+    String? variantId,
   }) {
     return MaterialConsumptionItem(
       productId: productId ?? this.productId,
       qty: qty ?? this.qty,
       price: price ?? this.price,
       totalPrice: totalPrice ?? this.totalPrice,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -262,17 +270,19 @@ class MaterialConsumptionItem extends Equatable {
         qty: (map["qty"] as num? ?? 0).toDouble(),
         price: (map["price"] as num? ?? 0).toDouble(),
         totalPrice: (map["totalPrice"] as num? ?? 0).toDouble(),
+        variantId: map["variantId"]?.toString(),
       );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId.toMap(),
-        "qty": qty,
-        "price": price,
-        "totalPrice": totalPrice,
-      };
+    "productId": productId.toMap(),
+    "qty": qty,
+    "price": price,
+    "totalPrice": totalPrice,
+    "variantId": variantId,
+  };
 
   @override
-  List<Object?> get props => [productId, qty, price, totalPrice];
+  List<Object?> get props => [productId, qty, price, totalPrice, variantId];
 
   @override
   bool get stringify => true;

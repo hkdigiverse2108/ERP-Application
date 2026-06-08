@@ -80,8 +80,9 @@ class StockVerificationRepository {
   }
 
   Future<bool> deleteStockVerification(String id) async {
-    final ResModel response =
-        await _api.delete(ApiConstants.deleteStockVerification(id));
+    final ResModel response = await _api.delete(
+      ApiConstants.deleteStockVerification(id),
+    );
     return response.status == 200;
   }
 }

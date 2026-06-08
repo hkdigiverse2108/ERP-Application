@@ -167,6 +167,7 @@ class StockTransferItem extends Equatable {
   final double requestedQty;
   final double approvedQty;
   final double receivedQty;
+  final String? variantId;
 
   const StockTransferItem({
     this.productId,
@@ -174,6 +175,7 @@ class StockTransferItem extends Equatable {
     required this.requestedQty,
     required this.approvedQty,
     required this.receivedQty,
+    this.variantId,
   });
 
   factory StockTransferItem.fromMap(Map<String, dynamic> map) =>
@@ -185,6 +187,7 @@ class StockTransferItem extends Equatable {
         requestedQty: (map["requestedQty"] as num? ?? 0).toDouble(),
         approvedQty: (map["approvedQty"] as num? ?? 0).toDouble(),
         receivedQty: (map["receivedQty"] as num? ?? 0).toDouble(),
+        variantId: map["variantId"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -193,6 +196,7 @@ class StockTransferItem extends Equatable {
     "requestedQty": requestedQty,
     "approvedQty": approvedQty,
     "receivedQty": receivedQty,
+    if (variantId != null) "variantId": variantId,
   };
 
   @override
@@ -202,5 +206,6 @@ class StockTransferItem extends Equatable {
     requestedQty,
     approvedQty,
     receivedQty,
+    variantId,
   ];
 }

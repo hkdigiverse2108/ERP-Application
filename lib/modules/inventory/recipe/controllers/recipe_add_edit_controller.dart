@@ -29,6 +29,7 @@ class RecipeAddEditController extends GetxController {
   // Final Product
   final finalProductId = "".obs;
   final finalProductName = "".obs;
+  String? finalProductVariantId;
   final finalProductQtyController = TextEditingController(text: "0");
   final finalProductMrpController = TextEditingController(text: "0");
 
@@ -103,6 +104,7 @@ class RecipeAddEditController extends GetxController {
               productName: rp.productId?.name ?? "",
               qty: rp.useQty,
               mrp: rp.mrp,
+              variantId: rp.variantId,
             ),
           )
           .toList(),
@@ -116,10 +118,11 @@ class RecipeAddEditController extends GetxController {
     }
     rawProducts.add(
       RawProductItem(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: product.name,
         qty: 1,
         mrp: product.mrp,
+        variantId: product.hasVariant ? product.id : null,
       ),
     );
   }
@@ -134,8 +137,9 @@ class RecipeAddEditController extends GetxController {
   }
 
   void setFinalProduct(ProductDropdownModel product) {
-    finalProductId.value = product.id;
+    finalProductId.value = product.hasVariant ? product.productId! : product.id;
     finalProductName.value = product.name;
+    finalProductVariantId = product.hasVariant ? product.id : null;
     finalProductMrpController.text = "0"; // MRP not available
   }
 
@@ -163,10 +167,16 @@ class RecipeAddEditController extends GetxController {
           "productId": finalProductId.value,
           "qtyGenerate": double.tryParse(finalProductQtyController.text) ?? 0,
           "mrp": double.tryParse(finalProductMrpController.text) ?? 0,
+          "variantId": finalProductVariantId,
         },
         "rawProducts": rawProducts
             .map(
-              (e) => {"productId": e.productId, "useQty": e.qty, "mrp": e.mrp},
+              (e) => {
+                "productId": e.productId,
+                "useQty": e.qty,
+                "mrp": e.mrp,
+                "variantId": e.variantId,
+              },
             )
             .toList(),
       };
@@ -202,6 +212,7 @@ class RecipeAddEditController extends GetxController {
     numberController.dispose();
     finalProductQtyController.dispose();
     finalProductMrpController.dispose();
+    products.clear();
     super.onClose();
   }
 
@@ -223,6 +234,7 @@ class RawProductItem {
   final String productName;
   final double qty;
   final double mrp;
+  final String? variantId;
 
   RawProductItem({
     this.id = "",
@@ -230,6 +242,7 @@ class RawProductItem {
     required this.productName,
     required this.qty,
     required this.mrp,
+    this.variantId,
   });
 
   RawProductItem copyWith({
@@ -238,6 +251,7 @@ class RawProductItem {
     String? productName,
     double? qty,
     double? mrp,
+    String? variantId,
   }) {
     return RawProductItem(
       id: id ?? this.id,
@@ -245,6 +259,7 @@ class RawProductItem {
       productName: productName ?? this.productName,
       qty: qty ?? this.qty,
       mrp: mrp ?? this.mrp,
+      variantId: variantId ?? this.variantId,
     );
   }
 }

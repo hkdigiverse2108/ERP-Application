@@ -1,6 +1,7 @@
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/helper/text_helper.dart';
 import 'package:ai_setu/core/services/theme_service.dart';
+import 'package:ai_setu/core/utils/app_snackbar.dart';
 import 'package:ai_setu/modules/inventory/stock_transfer/controllers/stock_transfer_add_edit_controller.dart';
 import 'package:ai_setu/modules/inventory/stock_transfer/widgets/stock_transfer_item_card.dart';
 import 'package:ai_setu/shared/quick_action/views/quick_action.dart';
@@ -109,8 +110,10 @@ class StockTransferAddEditView extends GetView<StockTransferAddEditController> {
             items: controller.branches.map((e) => e.name).toList(),
             searchable: true,
             onChanged: (v) {
-              controller.selectedToBranch.value = controller.branches
-                  .firstWhereOrNull((e) => e.name == v);
+              final branch = controller.branches.firstWhereOrNull(
+                (e) => e.name == v,
+              );
+              controller.onBranchSelected(branch);
             },
           ),
           const Gap(Sizes.paddingM),
@@ -131,23 +134,89 @@ class StockTransferAddEditView extends GetView<StockTransferAddEditController> {
       icon: PhosphorIconsLight.package,
       child: Column(
         children: [
-          CustomDropdown(
-            label: "Search & Add Product",
-            searchable: true,
-            items: controller.products.map((e) => e.name).toList(),
-            onChanged: (v) {
-              final product = controller.products.firstWhereOrNull(
-                (e) => e.name == v,
+          Obx(() {
+            if (controller.isProductLoading.value) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Search & Add Product",
+                    style: TextHelper.bodySmallStyle(
+                      context,
+                    ).copyWith(color: context.appColors.textSecondary),
+                  ),
+                  const Gap(8),
+                  Container(
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusM),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Loading products...",
+                          style: TextHelper.bodyMediumStyle(
+                            context,
+                          ).copyWith(color: context.appColors.textSecondary),
+                        ),
+                        SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: context.appColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               );
-              if (product != null) {
-                controller.addItem();
-                controller.updateItemProduct(
-                  controller.items.length - 1,
-                  product,
+            }
+
+            return CustomDropdown(
+              label: "Search & Add Product",
+              readOnly: controller.selectedToBranch.value == null,
+              searchable: true,
+              items: controller.products.map((e) => e.name).toList(),
+              onChanged: (v) {
+                final product = controller.products.firstWhereOrNull(
+                  (e) => e.name == v,
                 );
-              }
-            },
-          ),
+                if (product != null) {
+                  if (product.hasVariant) {
+                    if (controller.items.any(
+                      (i) => i.variantId == product.id,
+                    )) {
+                      AppSnackbar.warning("Product already added");
+                    } else {
+                      controller.addItem();
+                      controller.updateItemProduct(
+                        controller.items.length - 1,
+                        product,
+                      );
+                    }
+                  } else {
+                    if (controller.items.any(
+                      (i) => i.productId == product.id,
+                    )) {
+                      AppSnackbar.warning("Product already added");
+                    } else {
+                      controller.addItem();
+                      controller.updateItemProduct(
+                        controller.items.length - 1,
+                        product,
+                      );
+                    }
+                  }
+                }
+              },
+            );
+          }),
           const Gap(Sizes.paddingM),
           if (controller.items.isEmpty)
             Center(

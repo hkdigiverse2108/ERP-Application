@@ -96,8 +96,7 @@ class AddItem extends GetView<AddItemController> {
                           final prod = controller.products.firstWhere(
                             (e) => e.name == val,
                           );
-                          controller.productId.value = prod.id;
-                          controller.productName.value = prod.name;
+                          controller.onProductSelected(prod);
                         },
                       ),
                       const Gap(Sizes.defVerticalSpace),
@@ -271,6 +270,15 @@ class AddItem extends GetView<AddItemController> {
                             ),
                           ),
                         ],
+                      ),
+                      const Gap(Sizes.defVerticalSpace),
+                      CheckboxListTile(
+                        title: const Text("Enable Quick Picking"),
+                        value: controller.enableQuickPicking.value,
+                        onChanged: (value) {
+                          controller.enableQuickPicking.value = value ?? false;
+                        },
+                        contentPadding: EdgeInsets.zero,
                       ),
                       const Gap(Sizes.paddingL),
 

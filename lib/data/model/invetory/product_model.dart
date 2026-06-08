@@ -780,6 +780,7 @@ class ProductDropdownModel extends Equatable {
   final String id;
   final String name;
   final ProductType productType;
+  final String? productId;
   final double qty;
   final double purchasePrice;
   final double landingCost;
@@ -802,10 +803,13 @@ class ProductDropdownModel extends Equatable {
     required this.sellingPrice,
     required this.sellingDiscount,
     required this.sellingMargin,
+    this.productId,
     this.purchaseTaxId,
     this.salesTaxId,
     this.uomId,
   });
+
+  bool get hasVariant => productId != null && productId!.isNotEmpty;
 
   ProductDropdownModel copyWith({
     String? id,
@@ -818,6 +822,7 @@ class ProductDropdownModel extends Equatable {
     double? sellingPrice,
     double? sellingDiscount,
     double? sellingMargin,
+    String? productId,
     TaxId? purchaseTaxId,
     TaxId? salesTaxId,
     UomId? uomId,
@@ -836,6 +841,7 @@ class ProductDropdownModel extends Equatable {
       purchaseTaxId: purchaseTaxId ?? this.purchaseTaxId,
       salesTaxId: salesTaxId ?? this.salesTaxId,
       uomId: uomId ?? this.uomId,
+      productId: productId ?? this.productId,
     );
   }
 
@@ -865,6 +871,7 @@ class ProductDropdownModel extends Equatable {
             ? null
             : TaxId.fromMap(map["salesTaxId"]),
         uomId: map["uomId"] == null ? null : UomId.fromMap(map["uomId"]),
+        productId: map["productId"] ?? '',
       );
 
   Map<String, dynamic> toMap() => {
@@ -881,6 +888,7 @@ class ProductDropdownModel extends Equatable {
     "purchaseTaxId": purchaseTaxId?.toMap(),
     "salesTaxId": salesTaxId?.toMap(),
     "uomId": uomId?.toMap(),
+    "productId": productId,
   };
 
   @override
@@ -898,7 +906,169 @@ class ProductDropdownModel extends Equatable {
     purchaseTaxId,
     salesTaxId,
     uomId,
+    productId,
   ];
+
+  @override
+  bool get stringify => true;
+}
+
+class VariantModel extends Equatable {
+  final String id;
+  final String barcode;
+  final String barcodeType;
+  final IdNameModel? branchId;
+  final bool isActive;
+  final bool isPurchaseTaxIncluding;
+  final bool isSalesTaxIncluding;
+  final int landingCost;
+  final int mrp;
+  final String name;
+  final int purchasePrice;
+  final TaxId? purchaseTaxId;
+  final int qty;
+  final TaxId? salesTaxId;
+  final int sellingDiscount;
+  final int sellingMargin;
+  final int sellingPrice;
+  final String sku;
+  final UomId? uomId;
+  final List<Attributes>? attributes;
+
+  const VariantModel({
+    required this.id,
+    required this.barcode,
+    required this.barcodeType,
+    this.branchId,
+    required this.isActive,
+    required this.isPurchaseTaxIncluding,
+    required this.isSalesTaxIncluding,
+    required this.landingCost,
+    required this.mrp,
+    required this.name,
+    required this.purchasePrice,
+    this.purchaseTaxId,
+    required this.qty,
+    this.salesTaxId,
+    required this.sellingDiscount,
+    required this.sellingMargin,
+    required this.sellingPrice,
+    required this.sku,
+    this.uomId,
+    this.attributes,
+  });
+
+  factory VariantModel.fromJson(String json) =>
+      VariantModel.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory VariantModel.fromMap(Map<String, dynamic> map) => VariantModel(
+    id: map["_id"] ?? '',
+    barcode: map["barcode"] ?? '',
+    barcodeType: map["barcodeType"] ?? '',
+    branchId: map["branchId"] == null
+        ? null
+        : IdNameModel.fromMap(map["branchId"]),
+    isActive: map["isActive"] ?? true,
+    isPurchaseTaxIncluding: map["isPurchaseTaxIncluding"] ?? true,
+    isSalesTaxIncluding: map["isSalesTaxIncluding"] ?? true,
+    landingCost: map["landingCost"]?.toDouble() ?? 0.0,
+    mrp: map["mrp"]?.toDouble() ?? 0.0,
+    name: map["name"] ?? '',
+    purchasePrice: map["purchasePrice"]?.toDouble() ?? 0.0,
+    purchaseTaxId: map["purchaseTaxId"] == null
+        ? null
+        : TaxId.fromMap(map["purchaseTaxId"]),
+    qty: map["qty"]?.toDouble() ?? 0.0,
+    salesTaxId: map["salesTaxId"] == null
+        ? null
+        : TaxId.fromMap(map["salesTaxId"]),
+    sellingDiscount: map["sellingDiscount"]?.toDouble() ?? 0.0,
+    sellingMargin: map["sellingMargin"]?.toDouble() ?? 0.0,
+    sellingPrice: map["sellingPrice"]?.toDouble() ?? 0.0,
+    sku: map["sku"] ?? '',
+    uomId: map["uomId"] == null ? null : UomId.fromMap(map["uomId"]),
+    attributes: map["attributes"] == null
+        ? null
+        : List<Attributes>.from(
+            map["attributes"]?.map((x) => Attributes.fromMap(x)),
+          ),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "_id": id,
+    "barcode": barcode,
+    "barcodeType": barcodeType,
+    "branchId": branchId,
+    "isActive": isActive,
+    "isPurchaseTaxIncluding": isPurchaseTaxIncluding,
+    "isSalesTaxIncluding": isSalesTaxIncluding,
+    "landingCost": landingCost,
+    "mrp": mrp,
+    "name": name,
+    "purchasePrice": purchasePrice,
+    "purchaseTaxId": purchaseTaxId,
+    "qty": qty,
+    "salesTaxId": salesTaxId,
+    "sellingDiscount": sellingDiscount,
+    "sellingMargin": sellingMargin,
+    "sellingPrice": sellingPrice,
+    "sku": sku,
+    "uomId": uomId,
+    "attributes": attributes?.map((x) => x.toMap()).toList(),
+  };
+
+  @override
+  List<Object?> get props => [
+    id,
+    barcode,
+    barcodeType,
+    branchId,
+    isActive,
+    isPurchaseTaxIncluding,
+    isSalesTaxIncluding,
+    landingCost,
+    mrp,
+    name,
+    purchasePrice,
+    purchaseTaxId,
+    qty,
+    salesTaxId,
+    sellingDiscount,
+    sellingMargin,
+    sellingPrice,
+    sku,
+    uomId,
+    attributes,
+  ];
+
+  @override
+  bool get stringify => true;
+}
+
+class Attributes extends Equatable {
+  final String id;
+  final String key;
+  final String value;
+
+  const Attributes({required this.id, required this.key, required this.value});
+
+  factory Attributes.fromJson(String json) =>
+      Attributes.fromMap(jsonDecode(json) as Map<String, dynamic>);
+
+  String toJson() => jsonEncode(toMap());
+
+  factory Attributes.fromMap(Map<String, dynamic> map) => Attributes(
+    id: map["_id"] ?? '',
+    key: map["key"] ?? '',
+    value: map["value"] ?? '',
+  );
+
+  Map<String, dynamic> toMap() => {"_id": id, "key": key, "value": value};
+
+  @override
+  List<Object?> get props => [id, key, value];
 
   @override
   bool get stringify => true;

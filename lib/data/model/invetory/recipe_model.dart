@@ -223,12 +223,14 @@ class RawProduct extends Equatable {
   final double mrp;
   final double useQty;
   final String id;
+  final String? variantId;
 
   const RawProduct({
     required this.productId,
     required this.mrp,
     required this.useQty,
     required this.id,
+    this.variantId,
   });
 
   factory RawProduct.fromMap(Map<String, dynamic> map) => RawProduct(
@@ -238,6 +240,7 @@ class RawProduct extends Equatable {
     mrp: (map["mrp"] as num? ?? 0).toDouble(),
     useQty: (map["useQty"] as num? ?? 0).toDouble(),
     id: map["_id"] as String? ?? '',
+    variantId: map["variantId"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -245,8 +248,9 @@ class RawProduct extends Equatable {
     "mrp": mrp,
     "useQty": useQty,
     "_id": id,
+    "variantId": variantId,
   };
 
   @override
-  List<Object?> get props => [productId, mrp, useQty, id];
+  List<Object?> get props => [productId, mrp, useQty, id, variantId];
 }

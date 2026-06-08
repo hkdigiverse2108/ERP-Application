@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/data/model/invetory/product_model.dart';
@@ -33,9 +34,11 @@ class ProductRepository {
     );
 
     if (res.status == 200 && res.data != null) {
-      final items = (res.data['product_data'] as List)
-          .map((e) => ProductItemModel.fromMap(e))
-          .toList();
+      final items = await Isolate.run(() {
+        return (res.data['product_data'] as List)
+            .map((e) => ProductItemModel.fromMap(e))
+            .toList();
+      });
       return PaginationModel.fromMap(res.data, items);
     }
 
@@ -82,16 +85,21 @@ class ProductRepository {
 
   Future<List<ProductDropdownModel>> getProductDropdown({
     bool? isNewProduct,
+    String? branchFilter,
   }) async {
     final ResModel res = await _api.get(
-      ApiConstants.productDropdownNew(isNewProduct: isNewProduct),
+      ApiConstants.productDropdownNew(
+        isNewProduct: isNewProduct,
+        branchFilter: branchFilter,
+      ),
     );
 
-
     if (res.status == 200 && res.data != null) {
-      return (res.data as List)
-          .map((e) => ProductDropdownModel.fromMap(e))
-          .toList();
+      return await Isolate.run(
+        () => (res.data as List)
+            .map((e) => ProductDropdownModel.fromMap(e))
+            .toList(),
+      );
     }
 
     throw Exception(res.message ?? 'Failed to load product dropdown');

@@ -55,4 +55,17 @@ class StockRepository {
     final ResModel response = await _api.delete(ApiConstants.deleteStock(id));
     return response.status == 200;
   }
+
+  Future<bool> addStock(Map<String, dynamic> data) async {
+    final ResModel response = await _api.post(
+      ApiConstants.addStock,
+      body: data,
+    );
+
+    if (response.status == 200 || response.status == 201) {
+      return true;
+    }
+
+    throw Exception(response.message ?? 'Failed to add stock');
+  }
 }

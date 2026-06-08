@@ -148,11 +148,15 @@ class ApiConstants {
     "productTypeIdFilter": productTypeIdFilter,
   });
   static String getProductById(String id) => "/product/$id";
-  static String productDropdownNew({bool? isNewProduct, String? includeId}) =>
-      buildUrl("/product/dropdown", {
-        "isNewProduct": isNewProduct,
-        "includeId": includeId,
-      });
+  static String productDropdownNew({
+    bool? isNewProduct,
+    String? includeId,
+    String? branchFilter,
+  }) => buildUrl("/product/dropdown", {
+    "isNewProduct": isNewProduct,
+    "includeId": includeId,
+    "branchFilter": branchFilter,
+  });
 
   // Product Category
   static String getAllProductCategory({

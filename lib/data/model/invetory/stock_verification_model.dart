@@ -83,11 +83,13 @@ class StockVerificationModel extends Equatable {
         createdBy: map["createdBy"] == null
             ? null
             : StockVerificationCreatedBy.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
+                map["createdBy"] as Map<String, dynamic>,
+              ),
         updatedBy: map["updatedBy"] == null
             ? null
             : StockVerificationUpdatedBy.fromMap(
-                map["updatedBy"] as Map<String, dynamic>),
+                map["updatedBy"] as Map<String, dynamic>,
+              ),
         companyId: map["companyId"] == null
             ? null
             : IdNameModel.fromMap(map["companyId"]),
@@ -100,8 +102,8 @@ class StockVerificationModel extends Equatable {
         ),
         totalProducts: (map["totalProducts"] as num? ?? 0).toDouble(),
         totalPhysicalQty: (map["totalPhysicalQty"] as num? ?? 0).toDouble(),
-        totalDifferenceAmount:
-            (map["totalDifferenceAmount"] as num? ?? 0).toDouble(),
+        totalDifferenceAmount: (map["totalDifferenceAmount"] as num? ?? 0)
+            .toDouble(),
         status: map["status"]?.toString() ?? 'pending',
         createdAt: map["createdAt"] != null
             ? DateTime.parse(map["createdAt"].toString())
@@ -112,39 +114,39 @@ class StockVerificationModel extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy?.toMap(),
-        "companyId": companyId?.toMap(),
-        "stockVerificationNo": stockVerificationNo,
-        "items": items.map((x) => x.toMap()).toList(),
-        "totalProducts": totalProducts,
-        "totalPhysicalQty": totalPhysicalQty,
-        "totalDifferenceAmount": totalDifferenceAmount,
-        "status": status,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy?.toMap(),
+    "companyId": companyId?.toMap(),
+    "stockVerificationNo": stockVerificationNo,
+    "items": items.map((x) => x.toMap()).toList(),
+    "totalProducts": totalProducts,
+    "totalPhysicalQty": totalPhysicalQty,
+    "totalDifferenceAmount": totalDifferenceAmount,
+    "status": status,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        stockVerificationNo,
-        items,
-        totalProducts,
-        totalPhysicalQty,
-        totalDifferenceAmount,
-        status,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    stockVerificationNo,
+    items,
+    totalProducts,
+    totalPhysicalQty,
+    totalDifferenceAmount,
+    status,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -175,7 +177,8 @@ class StockVerificationCreatedBy extends Equatable {
 
   factory StockVerificationCreatedBy.fromJson(String json) =>
       StockVerificationCreatedBy.fromMap(
-          jsonDecode(json) as Map<String, dynamic>);
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 
@@ -187,10 +190,10 @@ class StockVerificationCreatedBy extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -209,6 +212,7 @@ class StockVerificationItem extends Equatable {
   final double physicalQty;
   final double differenceQty;
   final double differenceAmount;
+  final String? variantId;
 
   const StockVerificationItem({
     required this.productId,
@@ -220,6 +224,7 @@ class StockVerificationItem extends Equatable {
     required this.physicalQty,
     required this.differenceQty,
     required this.differenceAmount,
+    this.variantId,
   });
 
   StockVerificationItem copyWith({
@@ -232,6 +237,7 @@ class StockVerificationItem extends Equatable {
     double? physicalQty,
     double? differenceQty,
     double? differenceAmount,
+    String? variantId,
   }) {
     return StockVerificationItem(
       productId: productId ?? this.productId,
@@ -243,6 +249,7 @@ class StockVerificationItem extends Equatable {
       physicalQty: physicalQty ?? this.physicalQty,
       differenceQty: differenceQty ?? this.differenceQty,
       differenceAmount: differenceAmount ?? this.differenceAmount,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -262,32 +269,35 @@ class StockVerificationItem extends Equatable {
         physicalQty: (map["physicalQty"] as num? ?? 0).toDouble(),
         differenceQty: (map["differenceQty"] as num? ?? 0).toDouble(),
         differenceAmount: (map["differenceAmount"] as num? ?? 0).toDouble(),
+        variantId: map["variantId"]?.toString(),
       );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId.toMap(),
-        "landingCost": landingCost,
-        "price": price,
-        "mrp": mrp,
-        "sellingPrice": sellingPrice,
-        "systemQty": systemQty,
-        "physicalQty": physicalQty,
-        "differenceQty": differenceQty,
-        "differenceAmount": differenceAmount,
-      };
+    "productId": productId.toMap(),
+    "landingCost": landingCost,
+    "price": price,
+    "mrp": mrp,
+    "sellingPrice": sellingPrice,
+    "systemQty": systemQty,
+    "physicalQty": physicalQty,
+    "differenceQty": differenceQty,
+    "differenceAmount": differenceAmount,
+    "variantId": variantId,
+  };
 
   @override
   List<Object?> get props => [
-        productId,
-        landingCost,
-        price,
-        mrp,
-        sellingPrice,
-        systemQty,
-        physicalQty,
-        differenceQty,
-        differenceAmount,
-      ];
+    productId,
+    landingCost,
+    price,
+    mrp,
+    sellingPrice,
+    systemQty,
+    physicalQty,
+    differenceQty,
+    differenceAmount,
+    variantId,
+  ];
 
   @override
   bool get stringify => true;
@@ -308,7 +318,8 @@ class StockVerificationUpdatedBy extends Equatable {
 
   factory StockVerificationUpdatedBy.fromJson(String json) =>
       StockVerificationUpdatedBy.fromMap(
-          jsonDecode(json) as Map<String, dynamic>);
+        jsonDecode(json) as Map<String, dynamic>,
+      );
 
   String toJson() => jsonEncode(toMap());
 

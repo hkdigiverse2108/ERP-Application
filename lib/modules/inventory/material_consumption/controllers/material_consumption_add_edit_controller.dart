@@ -91,16 +91,27 @@ class MaterialConsumptionAddEditController extends GetxController {
   }
 
   void addItem(ProductDropdownModel product) {
-    if (items.any((e) => e.productId.id == product.id)) {
-      AppSnackbar.warning("${product.name} is already added");
-      return;
+    if (product.hasVariant) {
+      if (items.any((e) => e.variantId == product.id)) {
+        AppSnackbar.warning("${product.name} is already added");
+        return;
+      }
+    } else {
+      if (items.any((e) => e.productId.id == product.id)) {
+        AppSnackbar.warning("${product.name} is already added");
+        return;
+      }
     }
     items.add(
       MaterialConsumptionItem(
-        productId: IdNameModel(id: product.id, name: product.name),
+        productId: IdNameModel(
+          id: product.hasVariant ? product.productId! : product.id,
+          name: product.name,
+        ),
         qty: 1,
         price: product.mrp,
         totalPrice: product.mrp,
+        variantId: product.hasVariant ? product.id : null,
       ),
     );
   }
@@ -150,6 +161,7 @@ class MaterialConsumptionAddEditController extends GetxController {
                 "qty": e.qty,
                 "price": e.price,
                 "totalPrice": e.totalPrice,
+                if (e.variantId != null) "variantId": e.variantId,
               },
             )
             .toList(),
@@ -187,8 +199,8 @@ class MaterialConsumptionAddEditController extends GetxController {
   Future<void> _refreshAndBack() async {
     final materialConsumptionController =
         Get.isRegistered<MaterialConsumptionController>()
-            ? Get.find<MaterialConsumptionController>()
-            : null;
+        ? Get.find<MaterialConsumptionController>()
+        : null;
 
     if (materialConsumptionController != null) {
       await materialConsumptionController.refreshData();
@@ -196,4 +208,3 @@ class MaterialConsumptionAddEditController extends GetxController {
     Get.back(result: true);
   }
 }
-

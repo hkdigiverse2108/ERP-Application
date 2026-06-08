@@ -59,13 +59,23 @@ class StockVerificationAddEditController extends GetxController {
 
   void addProduct(ProductDropdownModel product) {
     // Check if product already exists
-    if (items.any((item) => item.productId.id == product.id)) {
-      AppSnackbar.warning("Product already added");
-      return;
+    if (product.hasVariant) {
+      if (items.any((item) => item.variantId == product.id)) {
+        AppSnackbar.warning("Product already added");
+        return;
+      }
+    } else {
+      if (items.any((item) => item.productId.id == product.id)) {
+        AppSnackbar.warning("Product already added");
+        return;
+      }
     }
 
     final newItem = StockVerificationItem(
-      productId: IdNameModel(id: product.id, name: product.name),
+      productId: IdNameModel(
+        id: product.hasVariant ? product.productId! : product.id,
+        name: product.name,
+      ),
       landingCost: product.landingCost,
       price: product.purchasePrice.toDouble(),
       mrp: product.mrp,
@@ -74,6 +84,7 @@ class StockVerificationAddEditController extends GetxController {
       physicalQty: product.qty, // Default to system qty
       differenceQty: 0.0,
       differenceAmount: 0.0,
+      variantId: product.hasVariant ? product.id : null,
     );
 
     items.add(newItem);
@@ -135,6 +146,7 @@ class StockVerificationAddEditController extends GetxController {
                 "physicalQty": item.physicalQty,
                 "differenceQty": item.differenceQty,
                 "differenceAmount": item.differenceAmount,
+                "variantId": item.variantId,
               },
             )
             .toList(),
@@ -146,7 +158,7 @@ class StockVerificationAddEditController extends GetxController {
 
       bool success;
       if (isEdit.value) {
-        data["_id"] = stockVerification!.id;
+        data["stockVerificationId"] = stockVerification!.id;
         success = await _repo.updateStockVerification(data);
       } else {
         success = await _repo.addStockVerification(data);

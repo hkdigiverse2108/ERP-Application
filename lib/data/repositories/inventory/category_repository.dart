@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/data/model/category/category_model.dart';
@@ -17,9 +19,11 @@ class CategoryRepository {
       ),
     );
     if (response.status == 200) {
-      return List<CategoryDropdownModel>.from(
-        (response.data as List).map((x) => CategoryDropdownModel.fromMap(x)),
-      );
+      return await Isolate.run(() {
+        return List<CategoryDropdownModel>.from(
+          (response.data as List).map((x) => CategoryDropdownModel.fromMap(x)),
+        );
+      });
     }
 
     throw Exception(response.message ?? "Failed to load categories");

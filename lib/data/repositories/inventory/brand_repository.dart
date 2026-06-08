@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/data/model/brand/brand_model.dart';
@@ -17,9 +18,11 @@ class BrandRepository {
       ),
     );
     if (response.status == 200) {
-      return List<BrandDropdownModel>.from(
-        (response.data as List).map((x) => BrandDropdownModel.fromMap(x)),
-      );
+      return await Isolate.run(() {
+        return List<BrandDropdownModel>.from(
+          (response.data as List).map((x) => BrandDropdownModel.fromMap(x)),
+        );
+      });
     }
 
     throw Exception(response.message ?? "Failed to load brands");

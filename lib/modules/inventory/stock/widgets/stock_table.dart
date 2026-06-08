@@ -36,7 +36,7 @@ class StockTable extends StatelessWidget {
               CommonTable<StockItemModel>(
                 isLoading: controller.isLoading.value,
                 items: controller.stocks,
-                onRemoveItem: (item) => controller.deleteStock(item.id),
+                // onRemoveItem: (item) => controller.deleteStock(item.id),
                 deleteTitle: "Delete Stock",
                 deleteMessage: (item) =>
                     "Are you sure you want to delete stock for '${item.name}'? This action cannot be undone.",
