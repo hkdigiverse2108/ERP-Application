@@ -612,6 +612,7 @@ class DeliveryChallanPhone extends Equatable {
 
 class DeliveryChallanItem extends Equatable {
   final IdNameModel? productId;
+  final String? variantId;
   final double qty;
   final double freeQty;
   final String? uomId;
@@ -626,6 +627,7 @@ class DeliveryChallanItem extends Equatable {
 
   const DeliveryChallanItem({
     this.productId,
+    this.variantId,
     required this.qty,
     required this.freeQty,
     this.uomId,
@@ -641,6 +643,7 @@ class DeliveryChallanItem extends Equatable {
 
   DeliveryChallanItem copyWith({
     IdNameModel? productId,
+    String? variantId,
     double? qty,
     double? freeQty,
     String? uomId,
@@ -655,6 +658,7 @@ class DeliveryChallanItem extends Equatable {
   }) {
     return DeliveryChallanItem(
       productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
       qty: qty ?? this.qty,
       freeQty: freeQty ?? this.freeQty,
       uomId: uomId ?? this.uomId,
@@ -678,6 +682,7 @@ class DeliveryChallanItem extends Equatable {
       DeliveryChallanItem(
         productId:
             map["productId"] == null ? null : IdNameModel.fromMap(map["productId"]),
+        variantId: map["variantId"]?.toString(),
         qty: (map["qty"] as num? ?? 0).toDouble(),
         freeQty: (map["freeQty"] as num? ?? 0).toDouble(),
         uomId: map["uomId"]?.toString(),
@@ -695,6 +700,7 @@ class DeliveryChallanItem extends Equatable {
 
   Map<String, dynamic> toMap() => {
         "productId": productId?.toMap(),
+        "variantId": variantId,
         "qty": qty,
         "freeQty": freeQty,
         "uomId": uomId,
@@ -711,6 +717,7 @@ class DeliveryChallanItem extends Equatable {
   @override
   List<Object?> get props => [
         productId,
+        variantId,
         qty,
         freeQty,
         uomId,

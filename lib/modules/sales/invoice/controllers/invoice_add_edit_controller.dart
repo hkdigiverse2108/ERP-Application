@@ -219,6 +219,7 @@ class InvoiceAddEditController extends GetxController {
         taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
         uomId: e.uomId?.id,
         unit: e.unit,
+        variantId: e.variantId,
       );
     }).toList();
 
@@ -409,7 +410,6 @@ class InvoiceAddEditController extends GetxController {
       notesController.text = notes;
     }
 
-    // Append items
     for (var e in itemsList) {
       String? prodId;
       String prodName = "Unknown";
@@ -421,6 +421,7 @@ class InvoiceAddEditController extends GetxController {
       double taxPercent = 0.0;
       String? uomId;
       String? unit;
+      String? variantId;
 
       if (e is SalesOrderItem) {
         prodId = e.productId?.id;
@@ -433,6 +434,7 @@ class InvoiceAddEditController extends GetxController {
         taxPercent = e.taxId?.percentage.toDouble() ?? 0.0;
         uomId = e.uomId?.id;
         unit = e.uomId?.name;
+        variantId = e.variantId;
       } else if (e is DeliveryChallanItem) {
         prodId = e.productId?.id;
         prodName = e.productId?.name ?? "Unknown";
@@ -444,6 +446,7 @@ class InvoiceAddEditController extends GetxController {
         taxPercent = e.taxId?.percentage.toDouble() ?? 0.0;
         uomId = e.uomId;
         unit = e.unit;
+        variantId = e.variantId;
       } else {
         try {
           prodId = e.productId?.id ?? "";
@@ -456,6 +459,7 @@ class InvoiceAddEditController extends GetxController {
           taxPercent = (e.taxId?.percentage as num?)?.toDouble() ?? 0.0;
           uomId = e.uomId is String ? e.uomId : e.uomId?.id;
           unit = e.uomId is String ? e.unit : e.uomId?.name;
+          variantId = e.variantId;
         } catch (_) {}
       }
 
@@ -471,6 +475,7 @@ class InvoiceAddEditController extends GetxController {
           taxPercent: taxPercent,
           uomId: uomId,
           unit: unit,
+          variantId: variantId,
         ),
       );
     }
@@ -521,11 +526,12 @@ class InvoiceAddEditController extends GetxController {
   Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
       items.add(
         InvoiceItemState(
-          productId: product.id,
+          productId: product.hasVariant ? product.productId! : product.id,
           productName: productDetails.name,
           qty: 1.0,
           freeQty: 0,
@@ -535,6 +541,7 @@ class InvoiceAddEditController extends GetxController {
           taxPercent: productDetails.salesTaxId?.percentage.toDouble() ?? 0.0,
           uomId: productDetails.uomId?.id,
           unit: productDetails.uomId?.name,
+          variantId: product.hasVariant ? product.id : null,
         ),
       );
       calculateTotals();
@@ -761,6 +768,7 @@ class InvoiceItemState {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   InvoiceItemState({
     required this.productId,
@@ -773,6 +781,7 @@ class InvoiceItemState {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * price) - discount1;
@@ -786,6 +795,7 @@ class InvoiceItemState {
     double? discount1,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return InvoiceItemState(
       productId: productId,
@@ -798,6 +808,7 @@ class InvoiceItemState {
       taxPercent: taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -814,6 +825,7 @@ class InvoiceItemState {
       'taxId': (taxId == null || taxId!.isEmpty) ? null : taxId,
       'taxableAmount': taxable,
       'totalAmount': total,
+      'variantId': variantId,
     };
   }
 }

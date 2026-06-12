@@ -41,30 +41,42 @@ class CreditNoteModel {
     required this.branchId,
   });
 
-  factory CreditNoteModel.fromRawJson(String str) => CreditNoteModel.fromJson(json.decode(str));
+  factory CreditNoteModel.fromRawJson(String str) =>
+      CreditNoteModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory CreditNoteModel.fromJson(Map<String, dynamic> json) => CreditNoteModel(
-    id: json["_id"]?.toString() ?? "",
-    creditNoteNo: json["creditNoteNo"]?.toString() ?? "",
-    customerId: CustomerId.fromJson(json["customerId"] ?? {}),
-    returnPosOrderId: ReturnPosOrderId.fromJson(json["returnPosOrderId"] ?? {}),
-    totalAmount: json["totalAmount"]?.toDouble() ?? 0.0,
-    creditsUsed: json["creditsUsed"]?.toDouble() ?? 0.0,
-    refundedAmount: int.tryParse(json["refundedAmount"]?.toString() ?? "0"),
-    creditsRemaining: json["creditsRemaining"]?.toDouble() ?? 0.0,
-    usedOnOrderIds: json["usedOnOrderIds"] == null ? [] : List<OrderId>.from(json["usedOnOrderIds"]!.map((x) => OrderId.fromJson(x))),
-    status: json["status"]?.toString() ?? "",
-    isDeleted: json["isDeleted"] ?? false,
-    isActive: json["isActive"] ?? true,
-    createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
-    updatedBy: json["updatedBy"]?.toString() ?? "",
-    companyId: CompanyId.fromJson(json["companyId"] ?? {}),
-    createdAt: DateTime.tryParse(json["createdAt"]?.toString() ?? "") ?? DateTime.now(),
-    updatedAt: DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ?? DateTime.now(),
-    branchId: json["branchId"]?.toString() ?? "",
-  );
+  factory CreditNoteModel.fromJson(Map<String, dynamic> json) =>
+      CreditNoteModel(
+        id: json["_id"]?.toString() ?? "",
+        creditNoteNo: json["creditNoteNo"]?.toString() ?? "",
+        customerId: CustomerId.fromJson(json["customerId"] ?? {}),
+        returnPosOrderId: ReturnPosOrderId.fromJson(
+          json["returnPosOrderId"] ?? {},
+        ),
+        totalAmount: json["totalAmount"]?.toDouble() ?? 0.0,
+        creditsUsed: json["creditsUsed"]?.toDouble() ?? 0.0,
+        refundedAmount: int.tryParse(json["refundedAmount"]?.toString() ?? "0"),
+        creditsRemaining: json["creditsRemaining"]?.toDouble() ?? 0.0,
+        usedOnOrderIds: json["usedOnOrderIds"] == null
+            ? []
+            : List<OrderId>.from(
+                json["usedOnOrderIds"]!.map((x) => OrderId.fromJson(x)),
+              ),
+        status: json["status"]?.toString() ?? "",
+        isDeleted: json["isDeleted"] ?? false,
+        isActive: json["isActive"] ?? true,
+        createdBy: CreatedBy.fromJson(json["createdBy"] ?? {}),
+        updatedBy: json["updatedBy"]?.toString() ?? "",
+        companyId: CompanyId.fromJson(json["companyId"] ?? {}),
+        createdAt:
+            DateTime.tryParse(json["createdAt"]?.toString() ?? "") ??
+            DateTime.now(),
+        updatedAt:
+            DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ??
+            DateTime.now(),
+        branchId: json["branchId"]?.toString() ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -75,7 +87,9 @@ class CreditNoteModel {
     "creditsUsed": creditsUsed,
     "refundedAmount": refundedAmount,
     "creditsRemaining": creditsRemaining,
-    "usedOnOrderIds": usedOnOrderIds == null ? [] : List<dynamic>.from(usedOnOrderIds!.map((x) => x.toJson())),
+    "usedOnOrderIds": usedOnOrderIds == null
+        ? []
+        : List<dynamic>.from(usedOnOrderIds!.map((x) => x.toJson())),
     "status": status,
     "isDeleted": isDeleted,
     "isActive": isActive,
@@ -92,20 +106,14 @@ class CompanyId {
   final String id;
   final String name;
 
-  CompanyId({
-    required this.id,
-    required this.name,
-  });
+  CompanyId({required this.id, required this.name});
 
   factory CompanyId.fromJson(Map<String, dynamic> json) => CompanyId(
     id: json["_id"]?.toString() ?? "",
     name: json["name"]?.toString() ?? "",
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-  };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class CreatedBy {
@@ -113,11 +121,7 @@ class CreatedBy {
   final String fullName;
   final String userType;
 
-  CreatedBy({
-    required this.id,
-    required this.fullName,
-    required this.userType,
-  });
+  CreatedBy({required this.id, required this.fullName, required this.userType});
 
   factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
     id: json["_id"]?.toString() ?? "",
@@ -168,10 +172,7 @@ class PhoneNo {
   final String countryCode;
   final int phoneNo;
 
-  PhoneNo({
-    required this.countryCode,
-    required this.phoneNo,
-  });
+  PhoneNo({required this.countryCode, required this.phoneNo});
 
   factory PhoneNo.fromJson(Map<String, dynamic> json) => PhoneNo(
     countryCode: json["countryCode"]?.toString() ?? "+91",
@@ -199,13 +200,16 @@ class ReturnPosOrderId {
     required this.total,
   });
 
-  factory ReturnPosOrderId.fromJson(Map<String, dynamic> json) => ReturnPosOrderId(
-    id: json["_id"]?.toString() ?? "",
-    returnOrderNo: json["returnOrderNo"]?.toString() ?? "",
-    posOrderId: OrderId.fromJson(json["posOrderId"] ?? {}),
-    items: json["items"] == null ? [] : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-    total: json["total"]?.toDouble() ?? 0.0,
-  );
+  factory ReturnPosOrderId.fromJson(Map<String, dynamic> json) =>
+      ReturnPosOrderId(
+        id: json["_id"]?.toString() ?? "",
+        returnOrderNo: json["returnOrderNo"]?.toString() ?? "",
+        posOrderId: OrderId.fromJson(json["posOrderId"] ?? {}),
+        items: json["items"] == null
+            ? []
+            : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        total: json["total"]?.toDouble() ?? 0.0,
+      );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
@@ -218,6 +222,7 @@ class ReturnPosOrderId {
 
 class Item {
   final ProductId productId;
+  final String? variantId;
   final int? qty;
   final int? mrp;
   final int? discountAmount;
@@ -231,6 +236,7 @@ class Item {
 
   Item({
     required this.productId,
+    this.variantId,
     this.qty,
     this.mrp,
     this.discountAmount,
@@ -245,10 +251,13 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     productId: ProductId.fromJson(json["productId"] ?? {}),
+    variantId: json["variantId"]?.toString(),
     qty: int.tryParse(json["qty"]?.toString() ?? "0"),
     mrp: int.tryParse(json["mrp"]?.toString() ?? "0"),
     discountAmount: int.tryParse(json["discountAmount"]?.toString() ?? "0"),
-    additionalDiscountAmount: int.tryParse(json["additionalDiscountAmount"]?.toString() ?? "0"),
+    additionalDiscountAmount: int.tryParse(
+      json["additionalDiscountAmount"]?.toString() ?? "0",
+    ),
     unitCost: json["unitCost"]?.toDouble(),
     netAmount: json["netAmount"]?.toDouble(),
     returnedQty: int.tryParse(json["returnedQty"]?.toString() ?? "0"),
@@ -259,6 +268,7 @@ class Item {
 
   Map<String, dynamic> toJson() => {
     "productId": productId.toJson(),
+    "variantId": variantId,
     "qty": qty,
     "mrp": mrp,
     "discountAmount": discountAmount,
@@ -270,6 +280,37 @@ class Item {
     "total": total,
     "quantity": quantity,
   };
+
+  Item copyWith({
+    ProductId? productId,
+    String? variantId,
+    int? qty,
+    int? mrp,
+    int? discountAmount,
+    int? additionalDiscountAmount,
+    double? unitCost,
+    double? netAmount,
+    int? returnedQty,
+    int? price,
+    int? total,
+    int? quantity,
+  }) {
+    return Item(
+      productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
+      qty: qty ?? this.qty,
+      mrp: mrp ?? this.mrp,
+      discountAmount: discountAmount ?? this.discountAmount,
+      additionalDiscountAmount:
+          additionalDiscountAmount ?? this.additionalDiscountAmount,
+      unitCost: unitCost ?? this.unitCost,
+      netAmount: netAmount ?? this.netAmount,
+      returnedQty: returnedQty ?? this.returnedQty,
+      price: price ?? this.price,
+      total: total ?? this.total,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 class ProductId {
@@ -277,11 +318,7 @@ class ProductId {
   final String name;
   final String? hsnCode;
 
-  ProductId({
-    required this.id,
-    required this.name,
-    this.hsnCode,
-  });
+  ProductId({required this.id, required this.name, this.hsnCode});
 
   factory ProductId.fromJson(Map<String, dynamic> json) => ProductId(
     id: json["_id"]?.toString() ?? "",
@@ -300,18 +337,12 @@ class OrderId {
   final String id;
   final String orderNo;
 
-  OrderId({
-    required this.id,
-    required this.orderNo,
-  });
+  OrderId({required this.id, required this.orderNo});
 
   factory OrderId.fromJson(Map<String, dynamic> json) => OrderId(
     id: json["_id"]?.toString() ?? "",
     orderNo: json["orderNo"]?.toString() ?? "",
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "orderNo": orderNo,
-  };
+  Map<String, dynamic> toJson() => {"_id": id, "orderNo": orderNo};
 }

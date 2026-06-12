@@ -118,13 +118,19 @@ class BillOfLiveProductAddEditController extends GetxController {
   }
 
   void addProduct(ProductDropdownModel product) {
-    if (productDetails.any((e) => e.productId == product.id)) {
+    final prodId = product.hasVariant ? product.productId! : product.id;
+    final varId = product.hasVariant ? product.id : null;
+
+    if (productDetails.any(
+      (e) => e.productId == prodId && e.variantId == varId,
+    )) {
       AppSnackbar.warning("${product.name} is already added");
       return;
     }
     productDetails.add(
       ProductDetailItem(
-        productId: product.id,
+        productId: prodId,
+        variantId: varId,
         productName: product.name,
         qty: 1,
         purchasePrice: product.purchasePrice,
@@ -161,7 +167,14 @@ class BillOfLiveProductAddEditController extends GetxController {
     ProductDropdownModel ingredient,
   ) {
     final product = productDetails[productIndex];
-    if (product.ingredients.any((e) => e.productId == ingredient.id)) {
+    final prodId = ingredient.hasVariant
+        ? ingredient.productId!
+        : ingredient.id;
+    final varId = ingredient.hasVariant ? ingredient.id : null;
+
+    if (product.ingredients.any(
+      (e) => e.productId == prodId && e.variantId == varId,
+    )) {
       AppSnackbar.warning(
         "${ingredient.name} is already added as an ingredient",
       );
@@ -170,7 +183,8 @@ class BillOfLiveProductAddEditController extends GetxController {
 
     product.ingredients.add(
       IngredientItem(
-        productId: ingredient.id,
+        productId: prodId,
+        variantId: varId,
         productName: ingredient.name,
         availableQty: 0, // Should be fetched or 0
         useQty: 1,
@@ -250,6 +264,7 @@ class BillOfLiveProductAddEditController extends GetxController {
 class ProductDetailItem {
   final String id;
   final String productId;
+  final String? variantId;
   final String productName;
   double qty;
   double purchasePrice;
@@ -263,6 +278,7 @@ class ProductDetailItem {
   ProductDetailItem({
     this.id = "",
     required this.productId,
+    this.variantId,
     required this.productName,
     required this.qty,
     required this.purchasePrice,
@@ -278,6 +294,7 @@ class ProductDetailItem {
     return ProductDetailItem(
       id: pd.id,
       productId: pd.productId.id,
+      variantId: pd.variantId,
       productName: pd.productId.name,
       qty: pd.qty,
       purchasePrice: pd.purchasePrice,
@@ -294,6 +311,7 @@ class ProductDetailItem {
 
   Map<String, dynamic> toMap() => {
     "productId": productId,
+    "variantId": variantId,
     "qty": qty,
     "purchasePrice": purchasePrice,
     "landingCost": landingCost,
@@ -308,6 +326,7 @@ class ProductDetailItem {
 class IngredientItem {
   final String id;
   final String productId;
+  final String? variantId;
   final String productName;
   double availableQty;
   double useQty;
@@ -315,6 +334,7 @@ class IngredientItem {
   IngredientItem({
     this.id = "",
     required this.productId,
+    this.variantId,
     required this.productName,
     required this.availableQty,
     required this.useQty,
@@ -324,6 +344,7 @@ class IngredientItem {
     return IngredientItem(
       id: i.id,
       productId: i.productId.id,
+      variantId: i.variantId,
       productName: i.productId.name,
       availableQty: i.availableQty,
       useQty: i.useQty,
@@ -332,6 +353,7 @@ class IngredientItem {
 
   Map<String, dynamic> toMap() => {
     "productId": productId,
+    "variantId": variantId,
     "availableQty": availableQty,
     "useQty": useQty,
   };

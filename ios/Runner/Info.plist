@@ -69,11 +69,9 @@
 
 	<!-- Image Picker Permissions -->
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to let you capture photos for uploading.</string>
+	<string>This app needs camera access to capture product and invoice photos for uploading and AI product detection.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photo library access to let you pick images for uploading.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app needs microphone access if you choose to record video.</string>
+	<string>This app needs photo library access to let you select product and invoice images for uploading.</string>
 
 </dict>
 </plist>

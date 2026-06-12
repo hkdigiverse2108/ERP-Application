@@ -51,14 +51,16 @@ class PosCreditNoteModel {
         id: json["_id"]?.toString() ?? "",
         creditNoteNo: json["creditNoteNo"]?.toString() ?? "",
         customerId: PosCustomerId.fromJson(json["customerId"] ?? {}),
-        returnPosOrderId:
-            PosReturnOrderId.fromJson(json["returnPosOrderId"] ?? {}),
+        returnPosOrderId: PosReturnOrderId.fromJson(
+          json["returnPosOrderId"] ?? {},
+        ),
         totalAmount: json["totalAmount"]?.toDouble() ?? 0.0,
         creditsUsed: json["creditsUsed"]?.toDouble() ?? 0.0,
         refundedAmount: json["refundedAmount"]?.toDouble() ?? 0.0,
         creditsRemaining: json["creditsRemaining"]?.toDouble() ?? 0.0,
-        usedOnOrderIds:
-            List<dynamic>.from(json["usedOnOrderIds"]?.map((x) => x) ?? []),
+        usedOnOrderIds: List<dynamic>.from(
+          json["usedOnOrderIds"]?.map((x) => x) ?? [],
+        ),
         status: json["status"]?.toString() ?? "",
         isDeleted: json["isDeleted"] ?? false,
         isActive: json["isActive"] ?? true,
@@ -66,72 +68,62 @@ class PosCreditNoteModel {
         updatedBy: json["updatedBy"]?.toString() ?? "",
         companyId: PosCompanyId.fromJson(json["companyId"] ?? {}),
         branchId: PosBranchId.fromJson(json["branchId"] ?? {}),
-        createdAt: DateTime.tryParse(json["createdAt"]?.toString() ?? "") ??
+        createdAt:
+            DateTime.tryParse(json["createdAt"]?.toString() ?? "") ??
             DateTime.now(),
-        updatedAt: DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ??
+        updatedAt:
+            DateTime.tryParse(json["updatedAt"]?.toString() ?? "") ??
             DateTime.now(),
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "creditNoteNo": creditNoteNo,
-        "customerId": customerId.toJson(),
-        "returnPosOrderId": returnPosOrderId.toJson(),
-        "totalAmount": totalAmount,
-        "creditsUsed": creditsUsed,
-        "refundedAmount": refundedAmount,
-        "creditsRemaining": creditsRemaining,
-        "usedOnOrderIds": List<dynamic>.from(usedOnOrderIds.map((x) => x)),
-        "status": status,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy.toJson(),
-        "updatedBy": updatedBy,
-        "companyId": companyId.toJson(),
-        "branchId": branchId.toJson(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "creditNoteNo": creditNoteNo,
+    "customerId": customerId.toJson(),
+    "returnPosOrderId": returnPosOrderId.toJson(),
+    "totalAmount": totalAmount,
+    "creditsUsed": creditsUsed,
+    "refundedAmount": refundedAmount,
+    "creditsRemaining": creditsRemaining,
+    "usedOnOrderIds": List<dynamic>.from(usedOnOrderIds.map((x) => x)),
+    "status": status,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy.toJson(),
+    "updatedBy": updatedBy,
+    "companyId": companyId.toJson(),
+    "branchId": branchId.toJson(),
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 }
 
 class PosBranchId {
   final String id;
   final String name;
 
-  PosBranchId({
-    required this.id,
-    required this.name,
-  });
+  PosBranchId({required this.id, required this.name});
 
   factory PosBranchId.fromJson(Map<String, dynamic> json) => PosBranchId(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-      );
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+  );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class PosCompanyId {
   final String id;
   final String name;
 
-  PosCompanyId({
-    required this.id,
-    required this.name,
-  });
+  PosCompanyId({required this.id, required this.name});
 
   factory PosCompanyId.fromJson(Map<String, dynamic> json) => PosCompanyId(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-      );
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "",
+  );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }
 
 class PosCreatedBy {
@@ -146,16 +138,16 @@ class PosCreatedBy {
   });
 
   factory PosCreatedBy.fromJson(Map<String, dynamic> json) => PosCreatedBy(
-        id: json["_id"]?.toString() ?? "",
-        fullName: json["fullName"]?.toString() ?? "User",
-        userType: json["userType"]?.toString() ?? "admin",
-      );
+    id: json["_id"]?.toString() ?? "",
+    fullName: json["fullName"]?.toString() ?? "User",
+    userType: json["userType"]?.toString() ?? "admin",
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 }
 
 class PosCustomerId {
@@ -172,38 +164,35 @@ class PosCustomerId {
   });
 
   factory PosCustomerId.fromJson(Map<String, dynamic> json) => PosCustomerId(
-        id: json["_id"]?.toString() ?? "",
-        firstName: json["firstName"]?.toString() ?? "",
-        lastName: json["lastName"]?.toString() ?? "",
-        phoneNo: PosPhoneNo.fromJson(json["phoneNo"] ?? {}),
-      );
+    id: json["_id"]?.toString() ?? "",
+    firstName: json["firstName"]?.toString() ?? "",
+    lastName: json["lastName"]?.toString() ?? "",
+    phoneNo: PosPhoneNo.fromJson(json["phoneNo"] ?? {}),
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "phoneNo": phoneNo.toJson(),
-      };
+    "_id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "phoneNo": phoneNo.toJson(),
+  };
 }
 
 class PosPhoneNo {
   final int phoneNo;
   final String countryCode;
 
-  PosPhoneNo({
-    required this.phoneNo,
-    required this.countryCode,
-  });
+  PosPhoneNo({required this.phoneNo, required this.countryCode});
 
   factory PosPhoneNo.fromJson(Map<String, dynamic> json) => PosPhoneNo(
-        phoneNo: int.tryParse(json["phoneNo"]?.toString() ?? "0") ?? 0,
-        countryCode: json["countryCode"]?.toString() ?? "91",
-      );
+    phoneNo: int.tryParse(json["phoneNo"]?.toString() ?? "0") ?? 0,
+    countryCode: json["countryCode"]?.toString() ?? "91",
+  );
 
   Map<String, dynamic> toJson() => {
-        "phoneNo": phoneNo,
-        "countryCode": countryCode,
-      };
+    "phoneNo": phoneNo,
+    "countryCode": countryCode,
+  };
 }
 
 class PosReturnOrderId {
@@ -227,21 +216,23 @@ class PosReturnOrderId {
         returnOrderNo: json["returnOrderNo"]?.toString() ?? "",
         posOrderId: PosOrderId.fromJson(json["posOrderId"] ?? {}),
         items: List<PosItem>.from(
-            json["items"]?.map((x) => PosItem.fromJson(x)) ?? []),
+          json["items"]?.map((x) => PosItem.fromJson(x)) ?? [],
+        ),
         total: json["total"]?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "returnOrderNo": returnOrderNo,
-        "posOrderId": posOrderId.toJson(),
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
-        "total": total,
-      };
+    "_id": id,
+    "returnOrderNo": returnOrderNo,
+    "posOrderId": posOrderId.toJson(),
+    "items": List<dynamic>.from(items.map((x) => x.toJson())),
+    "total": total,
+  };
 }
 
 class PosItem {
   final PosProductId productId;
+  final String? variantId;
   final double qty;
   final double mrp;
   final double discountAmount;
@@ -252,6 +243,7 @@ class PosItem {
 
   PosItem({
     required this.productId,
+    this.variantId,
     required this.qty,
     required this.mrp,
     required this.discountAmount,
@@ -262,65 +254,80 @@ class PosItem {
   });
 
   factory PosItem.fromJson(Map<String, dynamic> json) => PosItem(
-        productId: PosProductId.fromJson(json["productId"] ?? {}),
-        qty: json["qty"]?.toDouble() ?? 0.0,
-        mrp: json["mrp"]?.toDouble() ?? 0.0,
-        discountAmount: json["discountAmount"]?.toDouble() ?? 0.0,
-        additionalDiscountAmount:
-            json["additionalDiscountAmount"]?.toDouble() ?? 0.0,
-        unitCost: json["unitCost"]?.toDouble() ?? 0.0,
-        netAmount: json["netAmount"]?.toDouble() ?? 0.0,
-        returnedQty: json["returnedQty"]?.toDouble() ?? 0.0,
-      );
+    productId: PosProductId.fromJson(json["productId"] ?? {}),
+    variantId: json["variantId"]?.toString(),
+    qty: json["qty"]?.toDouble() ?? 0.0,
+    mrp: json["mrp"]?.toDouble() ?? 0.0,
+    discountAmount: json["discountAmount"]?.toDouble() ?? 0.0,
+    additionalDiscountAmount:
+        json["additionalDiscountAmount"]?.toDouble() ?? 0.0,
+    unitCost: json["unitCost"]?.toDouble() ?? 0.0,
+    netAmount: json["netAmount"]?.toDouble() ?? 0.0,
+    returnedQty: json["returnedQty"]?.toDouble() ?? 0.0,
+  );
 
   Map<String, dynamic> toJson() => {
-        "productId": productId.toJson(),
-        "qty": qty,
-        "mrp": mrp,
-        "discountAmount": discountAmount,
-        "additionalDiscountAmount": additionalDiscountAmount,
-        "unitCost": unitCost,
-        "netAmount": netAmount,
-        "returnedQty": returnedQty,
-      };
+    "productId": productId.toJson(),
+    "variantId": variantId,
+    "qty": qty,
+    "mrp": mrp,
+    "discountAmount": discountAmount,
+    "additionalDiscountAmount": additionalDiscountAmount,
+    "unitCost": unitCost,
+    "netAmount": netAmount,
+    "returnedQty": returnedQty,
+  };
+
+  PosItem copyWith({
+    PosProductId? productId,
+    String? variantId,
+    double? qty,
+    double? mrp,
+    double? discountAmount,
+    double? additionalDiscountAmount,
+    double? unitCost,
+    double? netAmount,
+    double? returnedQty,
+  }) {
+    return PosItem(
+      productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
+      qty: qty ?? this.qty,
+      mrp: mrp ?? this.mrp,
+      discountAmount: discountAmount ?? this.discountAmount,
+      additionalDiscountAmount:
+          additionalDiscountAmount ?? this.additionalDiscountAmount,
+      unitCost: unitCost ?? this.unitCost,
+      netAmount: netAmount ?? this.netAmount,
+      returnedQty: returnedQty ?? this.returnedQty,
+    );
+  }
 }
 
 class PosOrderId {
   final String id;
   final String orderNo;
 
-  PosOrderId({
-    required this.id,
-    required this.orderNo,
-  });
+  PosOrderId({required this.id, required this.orderNo});
 
   factory PosOrderId.fromJson(Map<String, dynamic> json) => PosOrderId(
-        id: json["_id"]?.toString() ?? "",
-        orderNo: json["orderNo"]?.toString() ?? "",
-      );
+    id: json["_id"]?.toString() ?? "",
+    orderNo: json["orderNo"]?.toString() ?? "",
+  );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "orderNo": orderNo,
-      };
+  Map<String, dynamic> toJson() => {"_id": id, "orderNo": orderNo};
 }
 
 class PosProductId {
   final String id;
   final String name;
 
-  PosProductId({
-    required this.id,
-    required this.name,
-  });
+  PosProductId({required this.id, required this.name});
 
   factory PosProductId.fromJson(Map<String, dynamic> json) => PosProductId(
-        id: json["_id"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "Product",
-      );
+    id: json["_id"]?.toString() ?? "",
+    name: json["name"]?.toString() ?? "Product",
+  );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
 }

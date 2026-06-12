@@ -124,6 +124,7 @@ class SalesOrderAddEditView extends GetView<SalesOrderAddEditController> {
               Expanded(
                 child: CustomDropdown(
                   label: "Select Estimate (Optional)",
+                  readOnly: controller.isEdit.value,
                   value: controller.selectedEstimate.value?.name,
                   items: controller.estimates.map((e) => e.name).toList(),
                   searchable: true,

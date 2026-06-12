@@ -21,15 +21,19 @@ class CouponPage extends StatelessWidget {
       child: Scaffold(
         appBar: DefAppBar(),
         drawer: const AppDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const QuickAction(),
-              _buildSectionTitle(controller),
-              const CouponTable(),
-            ],
+        body: RefreshIndicator(
+          onRefresh: () async => controller.refreshData(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const QuickAction(),
+                _buildSectionTitle(controller),
+                const CouponTable(),
+              ],
+            ),
           ),
         ),
       ),

@@ -58,8 +58,15 @@ class ProductModel extends Equatable {
   final String? hsnCode;
   final String? description;
   final String? shortDescription;
-  final int? netWeight;
+  final double? netWeight;
   final String? additionalInfo;
+  // Variant-related fields
+  final String? barcode;
+  final String? barcodeType;
+  final String? variantId;
+  final List<Attributes>? attributes;
+  final List<VariantModel>? variants;
+  final List<VariantModel>? variantsWithStock;
 
   const ProductModel({
     required this.id,
@@ -118,6 +125,12 @@ class ProductModel extends Equatable {
     this.shortDescription,
     this.netWeight,
     this.additionalInfo,
+    this.barcode,
+    this.barcodeType,
+    this.variantId,
+    this.attributes,
+    this.variants,
+    this.variantsWithStock,
   });
 
   ProductModel copyWith({
@@ -175,8 +188,14 @@ class ProductModel extends Equatable {
     String? hsnCode,
     String? description,
     String? shortDescription,
-    int? netWeight,
+    double? netWeight,
     String? additionalInfo,
+    String? barcode,
+    String? barcodeType,
+    String? variantId,
+    List<Attributes>? attributes,
+    List<VariantModel>? variants,
+    List<VariantModel>? variantsWithStock,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -237,6 +256,12 @@ class ProductModel extends Equatable {
       shortDescription: shortDescription ?? this.shortDescription,
       netWeight: netWeight ?? this.netWeight,
       additionalInfo: additionalInfo ?? this.additionalInfo,
+      barcode: barcode ?? this.barcode,
+      barcodeType: barcodeType ?? this.barcodeType,
+      variantId: variantId ?? this.variantId,
+      attributes: attributes ?? this.attributes,
+      variants: variants ?? this.variants,
+      variantsWithStock: variantsWithStock ?? this.variantsWithStock,
     );
   }
 
@@ -253,7 +278,9 @@ class ProductModel extends Equatable {
         ? null
         : CreatedBy.fromMap(map["createdBy"]),
     updatedBy: map["updatedBy"] ?? '',
-    companyId: map["companyId"],
+    companyId: map["companyId"] is Map
+        ? map["companyId"]["_id"]?.toString()
+        : map["companyId"]?.toString(),
     images: map["images"] != null
         ? List<String>.from(map["images"].map((x) => x))
         : [],
@@ -337,8 +364,30 @@ class ProductModel extends Equatable {
     hsnCode: map["hsnCode"],
     description: map["description"],
     shortDescription: map["shortDescription"],
-    netWeight: map["netWeight"],
+    netWeight: (map["netWeight"] as num?)?.toDouble(),
     additionalInfo: map["additionalInfo"],
+    barcode: map["barcode"]?.toString(),
+    barcodeType: map["barcodeType"]?.toString(),
+    variantId: map["variantId"] is Map
+        ? map["variantId"]["_id"]?.toString()
+        : map["variantId"]?.toString(),
+    attributes: map["attributes"] == null
+        ? null
+        : List<Attributes>.from(
+            (map["attributes"] as List).map((x) => Attributes.fromMap(x)),
+          ),
+    variants: map["variants"] == null
+        ? null
+        : List<VariantModel>.from(
+            (map["variants"] as List).map((x) => VariantModel.fromMap(x)),
+          ),
+    variantsWithStock: map["variantsWithStock"] == null
+        ? null
+        : List<VariantModel>.from(
+            (map["variantsWithStock"] as List).map(
+              (x) => VariantModel.fromMap(x),
+            ),
+          ),
   );
 
   Map<String, dynamic> toMap() => {
@@ -400,6 +449,12 @@ class ProductModel extends Equatable {
     "shortDescription": shortDescription,
     "netWeight": netWeight,
     "additionalInfo": additionalInfo,
+    "barcode": barcode,
+    "barcodeType": barcodeType,
+    "variantId": variantId,
+    "attributes": attributes?.map((x) => x.toMap()).toList(),
+    "variants": variants?.map((x) => x.toMap()).toList(),
+    "variantsWithStock": variantsWithStock?.map((x) => x.toMap()).toList(),
   };
 
   @override
@@ -460,6 +515,12 @@ class ProductModel extends Equatable {
     shortDescription,
     netWeight,
     additionalInfo,
+    barcode,
+    barcodeType,
+    variantId,
+    attributes,
+    variants,
+    variantsWithStock,
   ];
 
   @override
@@ -921,16 +982,16 @@ class VariantModel extends Equatable {
   final bool isActive;
   final bool isPurchaseTaxIncluding;
   final bool isSalesTaxIncluding;
-  final int landingCost;
-  final int mrp;
+  final double landingCost;
+  final double mrp;
   final String name;
-  final int purchasePrice;
+  final double purchasePrice;
   final TaxId? purchaseTaxId;
-  final int qty;
+  final double qty;
   final TaxId? salesTaxId;
-  final int sellingDiscount;
-  final int sellingMargin;
-  final int sellingPrice;
+  final double sellingDiscount;
+  final double sellingMargin;
+  final double sellingPrice;
   final String sku;
   final UomId? uomId;
   final List<Attributes>? attributes;

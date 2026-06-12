@@ -184,6 +184,11 @@ class StockController extends GetxController {
     currentPage.value = 1;
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getStockList();
+  }
+
   void onSearch(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {

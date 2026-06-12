@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:ai_setu/core/constants/enums.dart';
 import 'package:ai_setu/core/constants/sizes.dart';
 import 'package:ai_setu/core/services/storage_service.dart';
@@ -43,6 +44,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class RedemptionItem {
   final String id;
@@ -582,9 +584,12 @@ class PosNewController extends GetxController {
   }
 
   void addItemToCart(ProductDropdownModel product) {
+    final prodId = product.hasVariant ? product.productId! : product.id;
+    final varId = product.hasVariant ? product.id : null;
+
     // Check if item already exists in cart
     final existingIndex = cartItems.indexWhere(
-      (item) => item['id'] == product.id,
+      (item) => item['id'] == prodId && item['variantId'] == varId,
     );
 
     if (existingIndex != -1) {
@@ -595,7 +600,8 @@ class PosNewController extends GetxController {
     } else {
       // Add new item
       cartItems.add({
-        'id': product.id,
+        'id': prodId,
+        'variantId': varId,
         'name': product.name,
         'uom': product.uomId?.code ?? "",
         'availableQty': product.qty,
@@ -742,13 +748,16 @@ class PosNewController extends GetxController {
         final productData = item['productId'] as Map<String, dynamic>?;
         if (productData != null) {
           final prodId = productData['_id']?.toString() ?? "";
+          final variantId = item['variantId']?.toString();
+          final targetId = variantId ?? prodId;
           // Try to find current available qty from master list
           final masterProduct = products.firstWhereOrNull(
-            (p) => p.id == prodId,
+            (p) => p.id == targetId,
           );
 
           final cartItem = {
             'id': prodId,
+            'variantId': variantId,
             'name':
                 productData['name']?.toString() ?? masterProduct?.name ?? "",
             'uom': productData['uomId'] is Map
@@ -781,7 +790,7 @@ class PosNewController extends GetxController {
           // Initialize discount controller for this item
           getDiscountController(
             cartItems.length - 1,
-            prodId,
+            targetId,
             (item['discountAmount'] as num? ?? 0).toDouble(),
           );
         }
@@ -1952,6 +1961,7 @@ class PosNewController extends GetxController {
           .map(
             (item) => {
               "productId": item['id'],
+              "variantId": item['variantId'],
               "qty": item['qty'],
               "mrp": item['mrp'],
               "discountAmount": item['discount'],
@@ -2135,9 +2145,12 @@ class PosNewController extends GetxController {
               );
               if (item['productId'] is String) {
                 final prodId = item['productId'];
+                final variantId = item['variantId']?.toString();
                 // Try to find name in captured cart
                 final cartItem = currentCart.firstWhereOrNull(
-                  (element) => element['id'] == prodId,
+                  (element) =>
+                      element['id'] == prodId &&
+                      element['variantId'] == variantId,
                 );
                 item['productId'] = {
                   '_id': prodId,
@@ -2169,12 +2182,129 @@ class PosNewController extends GetxController {
         imageQuality: 80,
       );
       if (pickedFile != null) {
-        selectedImage.value = File(pickedFile.path);
+        final file = File(pickedFile.path);
+        selectedImage.value = file;
         AppSnackbar.success("Image selected successfully");
+        await detectProductFromImage(file);
       }
     } catch (e) {
       debugPrint("Error picking image: $e");
       AppSnackbar.error("Failed to pick image: $e");
+    }
+  }
+
+  Future<void> detectProductFromImage(File imageFile) async {
+    try {
+      // Show loading dialog that blocks interaction but keeps screen visible
+      Get.dialog(
+        const Center(
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text(
+                    "Detecting product...",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
+
+      final uri = Uri.parse("https://api.ai-setu.com/product/detect");
+      final request = http.MultipartRequest("POST", uri);
+
+      final token = Get.find<StorageService>().token;
+      if (token != null && token.isNotEmpty) {
+        request.headers['authorization'] = "Bearer $token";
+      }
+      request.headers['Accept'] = 'application/json';
+
+      request.files.add(
+        await http.MultipartFile.fromPath('images', imageFile.path),
+      );
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      // Dismiss the loading dialog
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        debugPrint("Detect product response: $body");
+
+        final data = body['data'];
+        if (data != null &&
+            data is Map &&
+            data['sku_matches_details'] != null) {
+          final matches = data['sku_matches_details'] as List;
+          if (matches.isEmpty) {
+            AppSnackbar.error("No products detected in the image.");
+            return;
+          }
+
+          int addedCount = 0;
+          for (var match in matches) {
+            if (match is Map) {
+              final matchedId =
+                  match['_id']?.toString() ?? match['id']?.toString();
+              if (matchedId != null && matchedId.isNotEmpty) {
+                // Find matching product in local products list
+                final product = products.firstWhereOrNull(
+                  (p) => p.id == matchedId || p.productId == matchedId,
+                );
+
+                if (product != null) {
+                  final qty = match['detect_qty'] is num
+                      ? (match['detect_qty'] as num).toInt()
+                      : 1;
+                  for (int i = 0; i < qty; i++) {
+                    addItemToCart(product);
+                  }
+                  addedCount++;
+                } else {
+                  debugPrint(
+                    "Product with ID $matchedId found in API response but not in local products list.",
+                  );
+                }
+              }
+            }
+          }
+
+          if (addedCount > 0) {
+            AppSnackbar.success(
+              "Detected products added to cart successfully.",
+            );
+          } else {
+            AppSnackbar.error(
+              "Detected product(s) not found in local catalog.",
+            );
+          }
+        } else {
+          AppSnackbar.error("No products detected in the image.");
+        }
+      } else {
+        AppSnackbar.error(
+          "Failed to detect product: Server returned status ${response.statusCode}",
+        );
+      }
+    } catch (e) {
+      // Dismiss the loading dialog if it's still open on error
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+      debugPrint("Error detecting product: $e");
+      AppSnackbar.error("Product detection failed: $e");
     }
   }
 

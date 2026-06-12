@@ -3,7 +3,7 @@ class Images {
   static const String darkAisetuLogo = "assets/images/aisetu_dark.png";
   static const String lightAiLogo = "assets/images/ai_light.png";
   static const String darkAiLogo = "assets/images/ai_dark.png";
-  static const String splashBg = "assets/images/splash_bg.jpg";
+  static const String splashBg = "assets/images/splash_bg.webp";
 }
 
 class AppIcons {

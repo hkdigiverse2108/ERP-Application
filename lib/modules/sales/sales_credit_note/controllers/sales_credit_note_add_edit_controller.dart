@@ -387,6 +387,7 @@ class SalesCreditNoteAddEditController extends GetxController {
           taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
           uomId: e.uomId?.id,
           unit: e.unit,
+          variantId: e.variantId,
         );
       }).toList(),
     );
@@ -451,11 +452,12 @@ class SalesCreditNoteAddEditController extends GetxController {
   Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
       items.add(
         SalesCreditNoteItemState(
-          productId: product.id,
+          productId: product.hasVariant ? product.productId! : product.id,
           productName: productDetails.name,
           qty: 1.0,
           freeQty: 0,
@@ -465,6 +467,7 @@ class SalesCreditNoteAddEditController extends GetxController {
           taxPercent: productDetails.salesTaxId?.percentage.toDouble() ?? 0.0,
           uomId: productDetails.uomId?.id,
           unit: productDetails.uomId?.name,
+          variantId: product.hasVariant ? product.id : null,
         ),
       );
       calculateSummary();
@@ -669,6 +672,7 @@ class SalesCreditNoteItemState {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   SalesCreditNoteItemState({
     required this.productId,
@@ -681,6 +685,7 @@ class SalesCreditNoteItemState {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * price) - discount1;
@@ -698,6 +703,7 @@ class SalesCreditNoteItemState {
     double? taxPercent,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return SalesCreditNoteItemState(
       productId: productId ?? this.productId,
@@ -710,6 +716,7 @@ class SalesCreditNoteItemState {
       taxPercent: taxPercent ?? this.taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -725,6 +732,7 @@ class SalesCreditNoteItemState {
       "uomId": uomId,
       "taxId": taxId ?? "",
       "unit": unit,
+      "variantId": variantId,
     };
   }
 }

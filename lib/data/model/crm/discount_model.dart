@@ -154,7 +154,7 @@ class DiscountModel {
       createdBy: json["createdBy"] != null
           ? DiscountUser.fromJson(json["createdBy"])
           : null,
-      updatedBy: json["updatedBy"] != null && json["updatedBy"] is Map
+      updatedBy: json["updatedBy"] != null
           ? DiscountUser.fromJson(json["updatedBy"])
           : null,
       companyId: json["companyId"] != null
@@ -238,12 +238,15 @@ class DiscountUser {
     required this.userType,
   });
 
-  factory DiscountUser.fromJson(Map<String, dynamic> json) {
-    return DiscountUser(
-      id: json["_id"] ?? '',
-      fullName: json["fullName"] ?? '',
-      userType: json["userType"] ?? '',
-    );
+  factory DiscountUser.fromJson(dynamic json) {
+    if (json is Map) {
+      return DiscountUser(
+        id: (json["_id"] ?? json["id"] ?? '').toString(),
+        fullName: json["fullName"]?.toString() ?? '',
+        userType: json["userType"]?.toString() ?? '',
+      );
+    }
+    return DiscountUser(id: json?.toString() ?? '', fullName: '', userType: '');
   }
 
   Map<String, dynamic> toMap() => {
@@ -261,8 +264,21 @@ class DiscountIdName {
 
   DiscountIdName({required this.id, required this.name});
 
-  factory DiscountIdName.fromJson(Map<String, dynamic> json) {
-    return DiscountIdName(id: json["_id"] ?? '', name: json["name"] ?? '');
+  factory DiscountIdName.fromJson(dynamic json) {
+    if (json == null) {
+      return DiscountIdName(id: '', name: '');
+    }
+    if (json is String) {
+      return DiscountIdName(id: json, name: '');
+    }
+    if (json is Map) {
+      final id = json["_id"] ?? json["variantId"] ?? json["productId"] ?? '';
+      return DiscountIdName(
+        id: id.toString(),
+        name: json["name"]?.toString() ?? '',
+      );
+    }
+    return DiscountIdName(id: json.toString(), name: '');
   }
 
   Map<String, dynamic> toMap() => {"_id": id, "name": name};
@@ -285,7 +301,16 @@ class BuyXGetY {
     required this.getProductIds,
   });
 
-  factory BuyXGetY.fromJson(Map<String, dynamic> json) {
+  factory BuyXGetY.fromJson(dynamic json) {
+    if (json is! Map) {
+      return BuyXGetY(
+        buyQty: 0,
+        getQty: 0,
+        getDiscountType: '',
+        getDiscountValue: 0,
+        getProductIds: [],
+      );
+    }
     return BuyXGetY(
       buyQty: json["buyQty"] ?? 0,
       getQty: json["getQty"] ?? 0,
@@ -323,7 +348,15 @@ class RangeWiseRule {
     required this.discountValue,
   });
 
-  factory RangeWiseRule.fromJson(Map<String, dynamic> json) {
+  factory RangeWiseRule.fromJson(dynamic json) {
+    if (json is! Map) {
+      return RangeWiseRule(
+        minQty: 0,
+        maxQty: 0,
+        discountType: '',
+        discountValue: 0,
+      );
+    }
     return RangeWiseRule(
       minQty: json["minQty"] ?? 0,
       maxQty: json["maxQty"] ?? 0,
@@ -367,7 +400,14 @@ class ProductAtFixAmount {
     this.freeQty = 1,
   });
 
-  factory ProductAtFixAmount.fromJson(Map<String, dynamic> json) {
+  factory ProductAtFixAmount.fromJson(dynamic json) {
+    if (json is! Map) {
+      return ProductAtFixAmount(
+        minimumAmount: 0,
+        freeProductIds: [],
+        freeQty: 1,
+      );
+    }
     return ProductAtFixAmount(
       minimumAmount: (json["minimumAmount"] ?? 0).toDouble(),
       freeProductIds:

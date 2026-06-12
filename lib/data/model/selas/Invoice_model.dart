@@ -682,6 +682,7 @@ class InvoiceItem extends Equatable {
   final String id;
   final String? unit;
   final double? tax;
+  final String? variantId;
 
   const InvoiceItem({
     this.productId,
@@ -697,6 +698,7 @@ class InvoiceItem extends Equatable {
     required this.id,
     this.unit,
     this.tax,
+    this.variantId,
   });
 
   InvoiceItem copyWith({
@@ -713,6 +715,7 @@ class InvoiceItem extends Equatable {
     String? id,
     String? unit,
     double? tax,
+    String? variantId,
   }) {
     return InvoiceItem(
       productId: productId ?? this.productId,
@@ -728,6 +731,7 @@ class InvoiceItem extends Equatable {
       id: id ?? this.id,
       unit: unit ?? this.unit,
       tax: tax ?? this.tax,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -754,6 +758,7 @@ class InvoiceItem extends Equatable {
     id: map["_id"]?.toString() ?? "",
     unit: map["unit"]?.toString(),
     tax: (map["tax"] as num? ?? 0).toDouble(),
+    variantId: map["variantId"]?.toString(),
   );
 
   Map<String, dynamic> toMap() => {
@@ -770,6 +775,7 @@ class InvoiceItem extends Equatable {
     "_id": id,
     "unit": unit,
     "tax": tax,
+    "variantId": variantId,
   };
 
   @override
@@ -787,6 +793,7 @@ class InvoiceItem extends Equatable {
     id,
     unit,
     tax,
+    variantId,
   ];
 
   @override

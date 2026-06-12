@@ -265,6 +265,7 @@ class PurchaseOrderAddEditController extends GetxController {
           sellingPrice: e.sellingPrice ?? 0.0,
           landingCost: double.tryParse(e.landingCost ?? '0') ?? 0.0,
           margin: double.tryParse(e.margin ?? '0') ?? 0.0,
+          variantId: e.variantId,
         );
       }).toList(),
     );
@@ -276,22 +277,24 @@ class PurchaseOrderAddEditController extends GetxController {
   Future<void> addOrderItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       final newItem = POItem(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: productDetails.name,
         qty: 1.0,
         unitCost: productDetails.purchasePrice.toDouble(),
         taxId: productDetails.purchaseTaxId?.id,
         taxPercent: productDetails.purchaseTaxId?.percentage.toDouble() ?? 0.0,
-        uomId: productDetails.uomId?.id,
-        unit: productDetails.uomId?.name,
+        uomId: product.uomId?.id,
+        unit: product.uomId?.name,
         mrp: productDetails.mrp.toDouble(),
         sellingPrice: productDetails.sellingPrice.toDouble(),
         landingCost: productDetails.landingCost.toDouble(),
         margin: productDetails.sellingMargin.toDouble(),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       orderItems.add(newItem);
@@ -460,7 +463,7 @@ class PurchaseOrderAddEditController extends GetxController {
         'taxType': taxTypeMap[taxType.value] ?? "tax_exclusive",
         'placeOfSupply': placeOfSupply.value,
         'billingAddress': selectedBillingAddress.value?.id,
-        'shippingAddress': selectedShippingAddress.value?.id,
+        // 'shippingAddress': selectedShippingAddress.value?.id,
         'notes': notesController.text,
         'items': orderItems.map((e) => e.toMap()).toList(),
         'termsAndConditionIds': selectedTerms.map((e) => e.id).toList(),
@@ -482,7 +485,7 @@ class PurchaseOrderAddEditController extends GetxController {
       if (purchaseOrder.value == null) {
         result = await _purchaseRepository.addPurchaseOrder(data);
       } else {
-        data['id'] = purchaseOrder.value!.id;
+        data['purchaseOrderId'] = purchaseOrder.value!.id;
         result = await _purchaseRepository.updatePurchaseOrder(data);
       }
 
@@ -533,6 +536,7 @@ class POItem {
   final double sellingPrice;
   final double landingCost;
   final double margin;
+  final String? variantId;
 
   POItem({
     required this.productId,
@@ -547,6 +551,7 @@ class POItem {
     this.sellingPrice = 0,
     this.landingCost = 0,
     this.margin = 0,
+    this.variantId,
   });
 
   double get taxable => qty * unitCost;
@@ -558,6 +563,7 @@ class POItem {
     double? unitCost,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return POItem(
       productId: productId,
@@ -572,6 +578,7 @@ class POItem {
       sellingPrice: sellingPrice,
       landingCost: landingCost,
       margin: margin,
+      variantId: variantId,
     );
   }
 
@@ -595,6 +602,7 @@ class POItem {
           ? margin.toInt().toString()
           : margin.toStringAsFixed(2),
       'total': total,
+      'variantId': variantId,
     };
   }
 }

@@ -134,14 +134,17 @@ class PurchaseOrderModel extends Equatable {
         createdBy: map["createdBy"] == null
             ? null
             : PurchaseOrderCreatedBy.fromMap(
-                map["createdBy"] as Map<String, dynamic>),
+                map["createdBy"] as Map<String, dynamic>,
+              ),
         updatedBy: map["updatedBy"]?.toString(),
-        companyId:
-            map["companyId"] == null ? null : IdNameModel.fromMap(map["companyId"]),
+        companyId: map["companyId"] == null
+            ? null
+            : IdNameModel.fromMap(map["companyId"]),
         supplierId: map["supplierId"] == null
             ? null
             : PurchaseOrderSupplier.fromMap(
-                map["supplierId"] as Map<String, dynamic>),
+                map["supplierId"] as Map<String, dynamic>,
+              ),
         orderDate: map["orderDate"] != null
             ? DateTime.parse(map["orderDate"].toString())
             : null,
@@ -150,11 +153,13 @@ class PurchaseOrderModel extends Equatable {
         billingAddress: map["billingAddress"] == null
             ? null
             : PurchaseOrderAddress.fromMap(
-                map["billingAddress"] as Map<String, dynamic>),
+                map["billingAddress"] as Map<String, dynamic>,
+              ),
         shippingAddress: map["shippingAddress"] == null
             ? null
             : PurchaseOrderAddress.fromMap(
-                map["shippingAddress"] as Map<String, dynamic>),
+                map["shippingAddress"] as Map<String, dynamic>,
+              ),
         shippingDate: map["shippingDate"] != null
             ? DateTime.parse(map["shippingDate"].toString())
             : null,
@@ -178,7 +183,9 @@ class PurchaseOrderModel extends Equatable {
         total: map["total"]?.toString(),
         summary: map["summary"] == null
             ? null
-            : PurchaseOrderSummary.fromMap(map["summary"] as Map<String, dynamic>),
+            : PurchaseOrderSummary.fromMap(
+                map["summary"] as Map<String, dynamic>,
+              ),
         status: map["status"]?.toString(),
         createdAt: map["createdAt"] != null
             ? DateTime.parse(map["createdAt"].toString())
@@ -186,71 +193,72 @@ class PurchaseOrderModel extends Equatable {
         updatedAt: map["updatedAt"] != null
             ? DateTime.parse(map["updatedAt"].toString())
             : null,
-        branchId:
-            map["branchId"] == null ? null : IdNameModel.fromMap(map["branchId"]),
+        branchId: map["branchId"] == null
+            ? null
+            : IdNameModel.fromMap(map["branchId"]),
         gstIn: map["gstIn"]?.toString(),
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "supplierId": supplierId?.toMap(),
-        "orderDate": orderDate?.toIso8601String(),
-        "orderNo": orderNo,
-        "placeOfSupply": placeOfSupply,
-        "billingAddress": billingAddress?.toMap(),
-        "shippingAddress": shippingAddress?.toMap(),
-        "shippingDate": shippingDate?.toIso8601String(),
-        "shippingNote": shippingNote,
-        "taxType": taxType,
-        "items": items.map((x) => x.toMap()).toList(),
-        "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
-        "notes": notes,
-        "totalQty": totalQty,
-        "totalTax": totalTax,
-        "total": total,
-        "summary": summary?.toMap(),
-        "status": status,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "branchId": branchId?.toMap(),
-        "gstIn": gstIn,
-      };
+    "_id": id,
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "supplierId": supplierId?.toMap(),
+    "orderDate": orderDate?.toIso8601String(),
+    "orderNo": orderNo,
+    "placeOfSupply": placeOfSupply,
+    "billingAddress": billingAddress?.toMap(),
+    "shippingAddress": shippingAddress?.toMap(),
+    "shippingDate": shippingDate?.toIso8601String(),
+    "shippingNote": shippingNote,
+    "taxType": taxType,
+    "items": items.map((x) => x.toMap()).toList(),
+    "termsAndConditionIds": termsAndConditionIds.map((x) => x.toMap()).toList(),
+    "notes": notes,
+    "totalQty": totalQty,
+    "totalTax": totalTax,
+    "total": total,
+    "summary": summary?.toMap(),
+    "status": status,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+    "branchId": branchId?.toMap(),
+    "gstIn": gstIn,
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        supplierId,
-        orderDate,
-        orderNo,
-        placeOfSupply,
-        billingAddress,
-        shippingAddress,
-        shippingDate,
-        shippingNote,
-        taxType,
-        items,
-        termsAndConditionIds,
-        notes,
-        totalQty,
-        totalTax,
-        total,
-        summary,
-        status,
-        createdAt,
-        updatedAt,
-        branchId,
-        gstIn,
-      ];
+    id,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    supplierId,
+    orderDate,
+    orderNo,
+    placeOfSupply,
+    billingAddress,
+    shippingAddress,
+    shippingDate,
+    shippingNote,
+    taxType,
+    items,
+    termsAndConditionIds,
+    notes,
+    totalQty,
+    totalTax,
+    total,
+    summary,
+    status,
+    createdAt,
+    updatedAt,
+    branchId,
+    gstIn,
+  ];
 
   @override
   bool get stringify => true;
@@ -304,7 +312,9 @@ class PurchaseOrderAddress extends Equatable {
       PurchaseOrderAddress(
         addressLine1: map["addressLine1"]?.toString() ?? "",
         addressLine2: map["addressLine2"]?.toString(),
-        country: map["country"] == null ? null : IdNameModel.fromMap(map["country"]),
+        country: map["country"] == null
+            ? null
+            : IdNameModel.fromMap(map["country"]),
         state: map["state"] == null ? null : IdNameModel.fromMap(map["state"]),
         city: map["city"] == null ? null : IdNameModel.fromMap(map["city"]),
         pinCode: map["pinCode"] as int?,
@@ -312,18 +322,25 @@ class PurchaseOrderAddress extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "addressLine1": addressLine1,
-        "addressLine2": addressLine2,
-        "country": country?.toMap(),
-        "state": state?.toMap(),
-        "city": city?.toMap(),
-        "pinCode": pinCode,
-        "_id": id,
-      };
+    "addressLine1": addressLine1,
+    "addressLine2": addressLine2,
+    "country": country?.toMap(),
+    "state": state?.toMap(),
+    "city": city?.toMap(),
+    "pinCode": pinCode,
+    "_id": id,
+  };
 
   @override
-  List<Object?> get props =>
-      [addressLine1, addressLine2, country, state, city, pinCode, id];
+  List<Object?> get props => [
+    addressLine1,
+    addressLine2,
+    country,
+    state,
+    city,
+    pinCode,
+    id,
+  ];
 
   @override
   bool get stringify => true;
@@ -360,10 +377,10 @@ class PurchaseOrderCreatedBy extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -385,6 +402,7 @@ class PurchaseOrderItem extends Equatable {
   final double? mrp;
   final double? sellingPrice;
   final double total;
+  final String? variantId;
 
   const PurchaseOrderItem({
     this.productId,
@@ -399,6 +417,7 @@ class PurchaseOrderItem extends Equatable {
     this.mrp,
     this.sellingPrice,
     required this.total,
+    this.variantId,
   });
 
   PurchaseOrderItem copyWith({
@@ -414,6 +433,7 @@ class PurchaseOrderItem extends Equatable {
     double? mrp,
     double? sellingPrice,
     double? total,
+    String? variantId,
   }) {
     return PurchaseOrderItem(
       productId: productId ?? this.productId,
@@ -428,12 +448,15 @@ class PurchaseOrderItem extends Equatable {
       mrp: mrp ?? this.mrp,
       sellingPrice: sellingPrice ?? this.sellingPrice,
       total: total ?? this.total,
+      variantId: variantId ?? this.variantId,
     );
   }
 
-  factory PurchaseOrderItem.fromMap(Map<String, dynamic> map) => PurchaseOrderItem(
-        productId:
-            map["productId"] == null ? null : IdNameModel.fromMap(map["productId"]),
+  factory PurchaseOrderItem.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderItem(
+        productId: map["productId"] == null
+            ? null
+            : IdNameModel.fromMap(map["productId"]),
         qty: (map["qty"] as num? ?? 0).toDouble(),
         uomId: map["uomId"],
         unit: map["unit"]?.toString(),
@@ -447,38 +470,41 @@ class PurchaseOrderItem extends Equatable {
         mrp: (map["mrp"] as num? ?? 0).toDouble(),
         sellingPrice: (map["sellingPrice"] as num? ?? 0).toDouble(),
         total: (map["total"] as num? ?? 0).toDouble(),
+        variantId: map['variantId'],
       );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId?.toMap(),
-        "qty": qty,
-        "uomId": uomId,
-        "unit": unit,
-        "unitCost": unitCost,
-        "taxId": taxId?.toMap(),
-        "tax": tax,
-        "landingCost": landingCost,
-        "margin": margin,
-        "mrp": mrp,
-        "sellingPrice": sellingPrice,
-        "total": total,
-      };
+    "productId": productId?.toMap(),
+    "qty": qty,
+    "uomId": uomId,
+    "unit": unit,
+    "unitCost": unitCost,
+    "taxId": taxId?.toMap(),
+    "tax": tax,
+    "landingCost": landingCost,
+    "margin": margin,
+    "mrp": mrp,
+    "sellingPrice": sellingPrice,
+    "total": total,
+    "variantId": variantId,
+  };
 
   @override
   List<Object?> get props => [
-        productId,
-        qty,
-        uomId,
-        unit,
-        unitCost,
-        taxId,
-        tax,
-        landingCost,
-        margin,
-        mrp,
-        sellingPrice,
-        total,
-      ];
+    productId,
+    qty,
+    uomId,
+    unit,
+    unitCost,
+    taxId,
+    tax,
+    landingCost,
+    margin,
+    mrp,
+    sellingPrice,
+    total,
+    variantId,
+  ];
 
   @override
   bool get stringify => true;
@@ -495,11 +521,7 @@ class PurchaseOrderTax extends Equatable {
     required this.percentage,
   });
 
-  PurchaseOrderTax copyWith({
-    String? id,
-    String? name,
-    double? percentage,
-  }) {
+  PurchaseOrderTax copyWith({String? id, String? name, double? percentage}) {
     return PurchaseOrderTax(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -507,17 +529,18 @@ class PurchaseOrderTax extends Equatable {
     );
   }
 
-  factory PurchaseOrderTax.fromMap(Map<String, dynamic> map) => PurchaseOrderTax(
+  factory PurchaseOrderTax.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderTax(
         id: map["_id"]?.toString() ?? "",
         name: map["name"]?.toString() ?? "",
         percentage: (map["percentage"] as num? ?? 0).toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "name": name,
-        "percentage": percentage,
-      };
+    "_id": id,
+    "name": name,
+    "percentage": percentage,
+  };
 
   @override
   List<Object?> get props => [id, name, percentage];
@@ -577,25 +600,25 @@ class PurchaseOrderSummary extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "flatDiscount": flatDiscount,
-        "grossAmount": grossAmount,
-        "discountAmount": discountAmount,
-        "taxableAmount": taxableAmount,
-        "taxAmount": taxAmount,
-        "roundOff": roundOff,
-        "netAmount": netAmount,
-      };
+    "flatDiscount": flatDiscount,
+    "grossAmount": grossAmount,
+    "discountAmount": discountAmount,
+    "taxableAmount": taxableAmount,
+    "taxAmount": taxAmount,
+    "roundOff": roundOff,
+    "netAmount": netAmount,
+  };
 
   @override
   List<Object?> get props => [
-        flatDiscount,
-        grossAmount,
-        discountAmount,
-        taxableAmount,
-        taxAmount,
-        roundOff,
-        netAmount,
-      ];
+    flatDiscount,
+    grossAmount,
+    discountAmount,
+    taxableAmount,
+    taxAmount,
+    roundOff,
+    netAmount,
+  ];
 
   @override
   bool get stringify => true;
@@ -653,7 +676,9 @@ class PurchaseOrderSupplier extends Equatable {
         email: map["email"]?.toString(),
         phoneNo: map["phoneNo"] == null
             ? null
-            : PurchaseOrderPhone.fromMap(map["phoneNo"] as Map<String, dynamic>),
+            : PurchaseOrderPhone.fromMap(
+                map["phoneNo"] as Map<String, dynamic>,
+              ),
         address: List<PurchaseOrderAddress>.from(
           (map["address"] as List<dynamic>?)?.map(
                 (x) => PurchaseOrderAddress.fromMap(x as Map<String, dynamic>),
@@ -664,27 +689,27 @@ class PurchaseOrderSupplier extends Equatable {
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "companyName": companyName,
-        "email": email,
-        "phoneNo": phoneNo?.toMap(),
-        "address": address.map((x) => x.toMap()).toList(),
-        "contactType": contactType,
-      };
+    "_id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "companyName": companyName,
+    "email": email,
+    "phoneNo": phoneNo?.toMap(),
+    "address": address.map((x) => x.toMap()).toList(),
+    "contactType": contactType,
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        firstName,
-        lastName,
-        companyName,
-        email,
-        phoneNo,
-        address,
-        contactType,
-      ];
+    id,
+    firstName,
+    lastName,
+    companyName,
+    email,
+    phoneNo,
+    address,
+    contactType,
+  ];
 
   @override
   bool get stringify => true;
@@ -703,15 +728,16 @@ class PurchaseOrderPhone extends Equatable {
     );
   }
 
-  factory PurchaseOrderPhone.fromMap(Map<String, dynamic> map) => PurchaseOrderPhone(
+  factory PurchaseOrderPhone.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderPhone(
         countryCode: map["countryCode"]?.toString() ?? "91",
         phoneNo: (map["phoneNo"] as num? ?? 0).toInt(),
       );
 
   Map<String, dynamic> toMap() => {
-        "countryCode": countryCode,
-        "phoneNo": phoneNo,
-      };
+    "countryCode": countryCode,
+    "phoneNo": phoneNo,
+  };
 
   @override
   List<Object?> get props => [countryCode, phoneNo];
@@ -729,9 +755,8 @@ class PurchaseOrderTerms extends Equatable {
     return PurchaseOrderTerms(id: id ?? this.id);
   }
 
-  factory PurchaseOrderTerms.fromMap(Map<String, dynamic> map) => PurchaseOrderTerms(
-        id: map["_id"]?.toString() ?? "",
-      );
+  factory PurchaseOrderTerms.fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderTerms(id: map["_id"]?.toString() ?? "");
 
   Map<String, dynamic> toMap() => {"_id": id};
 

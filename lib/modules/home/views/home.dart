@@ -160,62 +160,6 @@ class _HomeBodyState extends State<_HomeBody> {
                           child: BorderContainer(
                             child: Column(
                               children: [
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: Container(
-                                //         decoration: BoxDecoration(
-                                //           border: Border.all(color: Colors.grey),
-                                //           borderRadius: BorderRadius.circular(8),
-                                //         ),
-                                //         child: const Row(
-                                //           children: [
-                                //             Gap(10),
-                                //             Expanded(
-                                //               child: Text(
-                                //                 "Select Location",
-                                //                 overflow: TextOverflow.ellipsis,
-                                //               ),
-                                //             ),
-                                //             IconButton(
-                                //               onPressed: null,
-                                //               icon: Icon(
-                                //                 PhosphorIconsLight.caretDown,
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     ),
-                                //     Gap(Sizes.smallSpace),
-                                //     Expanded(
-                                //       child: Container(
-                                //         decoration: BoxDecoration(
-                                //           border: Border.all(color: Colors.grey),
-                                //           borderRadius: BorderRadius.circular(8),
-                                //         ),
-                                //         child: const Row(
-                                //           children: [
-                                //             Gap(10),
-                                //             Expanded(
-                                //               child: Text(
-                                //                 "Select Channel",
-                                //                 overflow: TextOverflow.ellipsis,
-                                //               ),
-                                //             ),
-                                //             IconButton(
-                                //               onPressed: null,
-                                //               icon: Icon(
-                                //                 PhosphorIconsLight.caretDown,
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                                // Gap(Sizes.defHorizontalSpace),
                                 Obx(
                                   () => RangedDatePicker(
                                     initialDateRange:
@@ -273,20 +217,9 @@ class _HomeBodyState extends State<_HomeBody> {
                                         Gap(Sizes.lgHorizontalSpace),
                                         AppBarChart(
                                           values: homeController
-                                              .salesAndPurchaseGraph
-                                              .map(
-                                                (e) => [
-                                                  e.sales,
-                                                  e.salesReturn,
-                                                  e.purchase,
-                                                  e.purchaseReturn,
-                                                ],
-                                              )
-                                              .toList(),
+                                              .salesAndPurchaseGraphValues,
                                           labels: homeController
-                                              .salesAndPurchaseGraph
-                                              .map((e) => e.date)
-                                              .toList(),
+                                              .salesAndPurchaseGraphLabels,
                                           labelFormatter: _formatChartDate,
                                           colors: [
                                             context.appColors.sectionSell,
@@ -360,22 +293,9 @@ class _HomeBodyState extends State<_HomeBody> {
                                         Gap(Sizes.lgHorizontalSpace),
                                         AppBarChart(
                                           values: homeController
-                                              .transactionGraph
-                                              .map(
-                                                (e) => [
-                                                  e.cash,
-                                                  e.upi,
-                                                  e.bank,
-                                                  e.card,
-                                                  e.cheque,
-                                                  e.other,
-                                                ],
-                                              )
-                                              .toList(),
+                                              .transactionGraphValues,
                                           labels: homeController
-                                              .transactionGraph
-                                              .map((e) => e.date)
-                                              .toList(),
+                                              .transactionGraphLabels,
                                           labelFormatter: _formatChartDate,
                                           colors: const [
                                             Colors.green,

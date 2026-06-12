@@ -237,6 +237,9 @@ class PurchaseDebitNoteAddEditController extends GetxController {
         final unitName = e['uomId'] is Map
             ? (e['uomId']['name']?.toString())
             : e['unit']?.toString();
+        final variantId = e['variantId'] is Map
+            ? (e['variantId']['_id']?.toString())
+            : e['variantId']?.toString();
 
         return DebitNoteItem(
           productId: prodId,
@@ -250,6 +253,7 @@ class PurchaseDebitNoteAddEditController extends GetxController {
           taxPercent: (e['taxPercent'] as num?)?.toDouble() ?? 0,
           uomId: uomId,
           unit: unitName,
+          variantId: variantId,
         );
       }).toList();
     }
@@ -330,11 +334,12 @@ class PurchaseDebitNoteAddEditController extends GetxController {
   Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       final newItem = DebitNoteItem(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: productDetails.name,
         qty: 1.0,
         unitCost: productDetails.purchasePrice.toDouble(),
@@ -345,6 +350,7 @@ class PurchaseDebitNoteAddEditController extends GetxController {
         taxPercent: productDetails.purchaseTaxId?.percentage.toDouble() ?? 0.0,
         uomId: productDetails.uomId?.id,
         unit: productDetails.uomId?.name,
+        variantId: product.hasVariant ? product.id : null,
       );
 
       items.add(newItem);
@@ -577,6 +583,7 @@ class DebitNoteItem {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   DebitNoteItem({
     required this.productId,
@@ -590,6 +597,7 @@ class DebitNoteItem {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * unitCost) - discount1;
@@ -606,6 +614,7 @@ class DebitNoteItem {
     double? discount1,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return DebitNoteItem(
       productId: productId,
@@ -619,6 +628,7 @@ class DebitNoteItem {
       taxPercent: taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -637,6 +647,7 @@ class DebitNoteItem {
       'landingCost': unitCost + tax,
       'margin': mrp - (unitCost + tax),
       'total': total,
+      'variantId': variantId,
     };
   }
 }

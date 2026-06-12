@@ -110,6 +110,11 @@ class PosCreditNoteController extends GetxController {
     }
   }
 
+  Future<void> refreshData() async {
+    currentPage.value = 1;
+    await fetchCreditNotes();
+  }
+
   @override
   void onClose() {
     _fyWorker?.dispose();

@@ -45,8 +45,10 @@ class ProductRepository {
     throw Exception(res.message ?? 'Failed to load products');
   }
 
-  Future<ProductModel> getProductById(String id) async {
-    final ResModel res = await _api.get(ApiConstants.getProductById(id));
+  Future<ProductModel> getProductById(String id, {String? variantId}) async {
+    final ResModel res = await _api.get(
+      ApiConstants.getProductById(id, variantId: variantId),
+    );
 
     if (res.status == 200 && res.data != null) {
       return ProductModel.fromMap(res.data);

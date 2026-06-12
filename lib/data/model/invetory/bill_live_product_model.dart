@@ -52,7 +52,8 @@ class BillOfLiveProductModel extends Equatable {
       date: date ?? this.date,
       number: number ?? this.number,
       recipeId: recipeId ?? this.recipeId,
-      allowReverseCalculation: allowReverseCalculation ?? this.allowReverseCalculation,
+      allowReverseCalculation:
+          allowReverseCalculation ?? this.allowReverseCalculation,
       productDetails: productDetails ?? this.productDetails,
       isDeleted: isDeleted ?? this.isDeleted,
       isActive: isActive ?? this.isActive,
@@ -77,12 +78,16 @@ class BillOfLiveProductModel extends Equatable {
         recipeId: map["recipeId"] == null
             ? []
             : List<BillIdName>.from(
-                (map["recipeId"] as List).map((x) => BillIdName.fromMap(x))),
-        allowReverseCalculation: map["allowReverseCalculation"] as bool? ?? false,
+                (map["recipeId"] as List).map((x) => BillIdName.fromMap(x)),
+              ),
+        allowReverseCalculation:
+            map["allowReverseCalculation"] as bool? ?? false,
         productDetails: map["productDetails"] == null
             ? []
             : List<ProductDetail>.from(
-                (map["productDetails"] as List).map((x) => ProductDetail.fromMap(x)),
+                (map["productDetails"] as List).map(
+                  (x) => ProductDetail.fromMap(x),
+                ),
               ),
         isDeleted: map["isDeleted"] as bool? ?? false,
         isActive: map["isActive"] as bool? ?? true,
@@ -104,37 +109,37 @@ class BillOfLiveProductModel extends Equatable {
   String toJson() => jsonEncode(toMap());
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "date": date.toIso8601String(),
-        "number": number,
-        "recipeId": List<dynamic>.from(recipeId.map((x) => x.toMap())),
-        "allowReverseCalculation": allowReverseCalculation,
-        "productDetails": List<dynamic>.from(productDetails.map((x) => x.toMap())),
-        "isDeleted": isDeleted,
-        "isActive": isActive,
-        "createdBy": createdBy?.toMap(),
-        "updatedBy": updatedBy,
-        "companyId": companyId?.toMap(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+    "_id": id,
+    "date": date.toIso8601String(),
+    "number": number,
+    "recipeId": List<dynamic>.from(recipeId.map((x) => x.toMap())),
+    "allowReverseCalculation": allowReverseCalculation,
+    "productDetails": List<dynamic>.from(productDetails.map((x) => x.toMap())),
+    "isDeleted": isDeleted,
+    "isActive": isActive,
+    "createdBy": createdBy?.toMap(),
+    "updatedBy": updatedBy,
+    "companyId": companyId?.toMap(),
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 
   @override
   List<Object?> get props => [
-        id,
-        date,
-        number,
-        recipeId,
-        allowReverseCalculation,
-        productDetails,
-        isDeleted,
-        isActive,
-        createdBy,
-        updatedBy,
-        companyId,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    date,
+    number,
+    recipeId,
+    allowReverseCalculation,
+    productDetails,
+    isDeleted,
+    isActive,
+    createdBy,
+    updatedBy,
+    companyId,
+    createdAt,
+    updatedAt,
+  ];
 
   @override
   bool get stringify => true;
@@ -172,16 +177,16 @@ class BillCreatedBy extends Equatable {
   });
 
   factory BillCreatedBy.fromMap(Map<String, dynamic> map) => BillCreatedBy(
-        id: map["_id"] as String? ?? '',
-        fullName: map["fullName"] as String? ?? '',
-        userType: map["userType"] as String? ?? '',
-      );
+    id: map["_id"] as String? ?? '',
+    fullName: map["fullName"] as String? ?? '',
+    userType: map["userType"] as String? ?? '',
+  );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "fullName": fullName,
-        "userType": userType,
-      };
+    "_id": id,
+    "fullName": fullName,
+    "userType": userType,
+  };
 
   @override
   List<Object?> get props => [id, fullName, userType];
@@ -189,6 +194,7 @@ class BillCreatedBy extends Equatable {
 
 class ProductDetail extends Equatable {
   final BillIdName productId;
+  final String? variantId;
   final double qty;
   final double purchasePrice;
   final double landingCost;
@@ -201,6 +207,7 @@ class ProductDetail extends Equatable {
 
   const ProductDetail({
     required this.productId,
+    this.variantId,
     required this.qty,
     required this.purchasePrice,
     required this.landingCost,
@@ -213,78 +220,130 @@ class ProductDetail extends Equatable {
   });
 
   factory ProductDetail.fromMap(Map<String, dynamic> map) => ProductDetail(
-        productId: BillIdName.fromMap(map["productId"]),
-        qty: (map["qty"] as num? ?? 0).toDouble(),
-        purchasePrice: (map["purchasePrice"] as num? ?? 0).toDouble(),
-        landingCost: (map["landingCost"] as num? ?? 0).toDouble(),
-        mrp: (map["mrp"] as num? ?? 0).toDouble(),
-        sellingPrice: (map["sellingPrice"] as num? ?? 0).toDouble(),
-        mfgDate: map["mfgDate"] == null
-            ? DateTime.now()
-            : DateTime.parse(map["mfgDate"] as String),
-        expiryDays: (map["expiryDays"] as num? ?? 0).toInt(),
-        ingredients: map["ingredients"] == null
-            ? []
-            : List<Ingredient>.from(
-                (map["ingredients"] as List).map((x) => Ingredient.fromMap(x))),
-        id: map["_id"] as String? ?? '',
-      );
+    productId: BillIdName.fromMap(map["productId"]),
+    variantId: map["variantId"] as String?,
+    qty: (map["qty"] as num? ?? 0).toDouble(),
+    purchasePrice: (map["purchasePrice"] as num? ?? 0).toDouble(),
+    landingCost: (map["landingCost"] as num? ?? 0).toDouble(),
+    mrp: (map["mrp"] as num? ?? 0).toDouble(),
+    sellingPrice: (map["sellingPrice"] as num? ?? 0).toDouble(),
+    mfgDate: map["mfgDate"] == null
+        ? DateTime.now()
+        : DateTime.parse(map["mfgDate"] as String),
+    expiryDays: (map["expiryDays"] as num? ?? 0).toInt(),
+    ingredients: map["ingredients"] == null
+        ? []
+        : List<Ingredient>.from(
+            (map["ingredients"] as List).map((x) => Ingredient.fromMap(x)),
+          ),
+    id: map["_id"] as String? ?? '',
+  );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId.toMap(),
-        "qty": qty,
-        "purchasePrice": purchasePrice,
-        "landingCost": landingCost,
-        "mrp": mrp,
-        "sellingPrice": sellingPrice,
-        "mfgDate": mfgDate.toIso8601String(),
-        "expiryDays": expiryDays,
-        "ingredients": List<dynamic>.from(ingredients.map((x) => x.toMap())),
-        "_id": id,
-      };
+    "productId": productId.toMap(),
+    "variantId": variantId,
+    "qty": qty,
+    "purchasePrice": purchasePrice,
+    "landingCost": landingCost,
+    "mrp": mrp,
+    "sellingPrice": sellingPrice,
+    "mfgDate": mfgDate.toIso8601String(),
+    "expiryDays": expiryDays,
+    "ingredients": List<dynamic>.from(ingredients.map((x) => x.toMap())),
+    "_id": id,
+  };
+
+  ProductDetail copyWith({
+    BillIdName? productId,
+    String? variantId,
+    double? qty,
+    double? purchasePrice,
+    double? landingCost,
+    double? mrp,
+    double? sellingPrice,
+    DateTime? mfgDate,
+    int? expiryDays,
+    List<Ingredient>? ingredients,
+    String? id,
+  }) {
+    return ProductDetail(
+      productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
+      qty: qty ?? this.qty,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      landingCost: landingCost ?? this.landingCost,
+      mrp: mrp ?? this.mrp,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      mfgDate: mfgDate ?? this.mfgDate,
+      expiryDays: expiryDays ?? this.expiryDays,
+      ingredients: ingredients ?? this.ingredients,
+      id: id ?? this.id,
+    );
+  }
 
   @override
   List<Object?> get props => [
-        productId,
-        qty,
-        purchasePrice,
-        landingCost,
-        mrp,
-        sellingPrice,
-        mfgDate,
-        expiryDays,
-        ingredients,
-        id,
-      ];
+    productId,
+    variantId,
+    qty,
+    purchasePrice,
+    landingCost,
+    mrp,
+    sellingPrice,
+    mfgDate,
+    expiryDays,
+    ingredients,
+    id,
+  ];
 }
 
 class Ingredient extends Equatable {
   final BillIdName productId;
+  final String? variantId;
   final double availableQty;
   final double useQty;
   final String id;
 
   const Ingredient({
     required this.productId,
+    this.variantId,
     required this.availableQty,
     required this.useQty,
     required this.id,
   });
 
   factory Ingredient.fromMap(Map<String, dynamic> map) => Ingredient(
-        productId: BillIdName.fromMap(map["productId"]),
-        availableQty: (map["availableQty"] as num? ?? 0).toDouble(),
-        useQty: (map["useQty"] as num? ?? 0).toDouble(),
-        id: map["_id"] as String? ?? '',
-      );
+    productId: BillIdName.fromMap(map["productId"]),
+    variantId: map["variantId"] as String?,
+    availableQty: (map["availableQty"] as num? ?? 0).toDouble(),
+    useQty: (map["useQty"] as num? ?? 0).toDouble(),
+    id: map["_id"] as String? ?? '',
+  );
 
   Map<String, dynamic> toMap() => {
-        "productId": productId.toMap(),
-        "availableQty": availableQty,
-        "useQty": useQty,
-        "_id": id,
-      };
+    "productId": productId.toMap(),
+    "variantId": variantId,
+    "availableQty": availableQty,
+    "useQty": useQty,
+    "_id": id,
+  };
+
+  Ingredient copyWith({
+    BillIdName? productId,
+    String? variantId,
+    double? availableQty,
+    double? useQty,
+    String? id,
+  }) {
+    return Ingredient(
+      productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
+      availableQty: availableQty ?? this.availableQty,
+      useQty: useQty ?? this.useQty,
+      id: id ?? this.id,
+    );
+  }
 
   @override
-  List<Object?> get props => [productId, availableQty, useQty, id];
+  List<Object?> get props => [productId, variantId, availableQty, useQty, id];
 }

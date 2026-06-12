@@ -79,15 +79,19 @@ class _ProductBodyState extends State<_ProductBody> {
       child: Scaffold(
         appBar: DefAppBar(),
         drawer: AppDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              QuickAction(),
-              _buildSectionTitle('Product List'),
-              ProductTable(),
-            ],
+        body: RefreshIndicator(
+          onRefresh: () async => widget.controller.refreshData(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                QuickAction(),
+                _buildSectionTitle('Product List'),
+                ProductTable(),
+              ],
+            ),
           ),
         ),
       ),

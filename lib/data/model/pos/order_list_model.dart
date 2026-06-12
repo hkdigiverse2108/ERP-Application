@@ -391,6 +391,7 @@ class PhoneNo {
 
 class Item {
   final ProductId productId;
+  final String? variantId;
   final int qty;
   final int mrp;
   final int discountAmount;
@@ -401,6 +402,7 @@ class Item {
 
   Item({
     required this.productId,
+    this.variantId,
     required this.qty,
     required this.mrp,
     required this.discountAmount,
@@ -412,6 +414,7 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     productId: ProductId.fromJson(json["productId"] ?? {}),
+    variantId: json["variantId"]?.toString(),
     qty: int.tryParse(json["qty"]?.toString() ?? "0") ?? 0,
     mrp: int.tryParse(json["mrp"]?.toString() ?? "0") ?? 0,
     discountAmount: int.tryParse(json["discountAmount"]?.toString() ?? "0") ?? 0,
@@ -423,6 +426,7 @@ class Item {
 
   Map<String, dynamic> toJson() => {
     "productId": productId.toJson(),
+    "variantId": variantId,
     "qty": qty,
     "mrp": mrp,
     "discountAmount": discountAmount,
@@ -431,6 +435,30 @@ class Item {
     "netAmount": netAmount,
     "returnedQty": returnedQty,
   };
+
+  Item copyWith({
+    ProductId? productId,
+    String? variantId,
+    int? qty,
+    int? mrp,
+    int? discountAmount,
+    int? additionalDiscountAmount,
+    double? unitCost,
+    double? netAmount,
+    int? returnedQty,
+  }) {
+    return Item(
+      productId: productId ?? this.productId,
+      variantId: variantId ?? this.variantId,
+      qty: qty ?? this.qty,
+      mrp: mrp ?? this.mrp,
+      discountAmount: discountAmount ?? this.discountAmount,
+      additionalDiscountAmount: additionalDiscountAmount ?? this.additionalDiscountAmount,
+      unitCost: unitCost ?? this.unitCost,
+      netAmount: netAmount ?? this.netAmount,
+      returnedQty: returnedQty ?? this.returnedQty,
+    );
+  }
 }
 
 class ProductId {

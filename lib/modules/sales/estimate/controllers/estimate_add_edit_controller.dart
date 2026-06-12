@@ -217,6 +217,7 @@ class EstimateAddEditController extends GetxController {
         taxPercent: e.taxId?.percentage ?? 0,
         uomId: e.uomId?.id,
         unit: e.unit,
+        variantId: e.variantId,
       );
     }).toList();
 
@@ -313,11 +314,12 @@ class EstimateAddEditController extends GetxController {
   Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       final newItem = EstimateItemState(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: productDetails.name,
         qty: 1.0,
         freeQty: 0,
@@ -327,6 +329,7 @@ class EstimateAddEditController extends GetxController {
         taxPercent: productDetails.salesTaxId?.percentage.toDouble() ?? 0.0,
         uomId: productDetails.uomId?.id,
         unit: productDetails.uomId?.name,
+        variantId: product.hasVariant ? product.id : null,
       );
 
       items.add(newItem);
@@ -541,6 +544,7 @@ class EstimateItemState {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   EstimateItemState({
     required this.productId,
@@ -553,6 +557,7 @@ class EstimateItemState {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * price) - discount1;
@@ -566,6 +571,7 @@ class EstimateItemState {
     double? discount1,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return EstimateItemState(
       productId: productId,
@@ -578,6 +584,7 @@ class EstimateItemState {
       taxPercent: taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -594,6 +601,7 @@ class EstimateItemState {
       'taxId': taxId ?? "",
       'taxableAmount': taxable,
       'totalAmount': total,
+      'variantId': variantId,
     };
   }
 }

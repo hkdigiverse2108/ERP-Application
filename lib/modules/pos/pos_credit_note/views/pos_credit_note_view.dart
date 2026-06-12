@@ -26,13 +26,17 @@ class PosCreditNoteView extends GetView<PosCreditNoteController> {
       child: Scaffold(
         appBar: DefAppBar(),
         drawer: const AppDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const QuickAction(),
-              _buildHeader(context),
-              _buildTable(context),
-            ],
+        body: RefreshIndicator(
+          onRefresh: () async => controller.refreshData(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                const QuickAction(),
+                _buildHeader(context),
+                _buildTable(context),
+              ],
+            ),
           ),
         ),
       ),

@@ -632,6 +632,7 @@ class EstimateItem extends Equatable {
   final double? tax;
   final double taxableAmount;
   final double totalAmount;
+  final String? variantId;
 
   const EstimateItem({
     this.productId,
@@ -646,6 +647,7 @@ class EstimateItem extends Equatable {
     this.tax,
     required this.taxableAmount,
     required this.totalAmount,
+    this.variantId,
   });
 
   EstimateItem copyWith({
@@ -661,6 +663,7 @@ class EstimateItem extends Equatable {
     double? tax,
     double? taxableAmount,
     double? totalAmount,
+    String? variantId,
   }) {
     return EstimateItem(
       productId: productId ?? this.productId,
@@ -675,6 +678,7 @@ class EstimateItem extends Equatable {
       tax: tax ?? this.tax,
       taxableAmount: taxableAmount ?? this.taxableAmount,
       totalAmount: totalAmount ?? this.totalAmount,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -699,6 +703,7 @@ class EstimateItem extends Equatable {
         tax: (map["tax"] as num? ?? 0).toDouble(),
         taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
         totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
+        variantId: map["variantId"]?.toString(),
       );
 
   Map<String, dynamic> toMap() => {
@@ -714,6 +719,7 @@ class EstimateItem extends Equatable {
         "tax": tax,
         "taxableAmount": taxableAmount,
         "totalAmount": totalAmount,
+        "variantId": variantId,
       };
 
   @override
@@ -730,6 +736,7 @@ class EstimateItem extends Equatable {
         tax,
         taxableAmount,
         totalAmount,
+        variantId,
       ];
 
   @override

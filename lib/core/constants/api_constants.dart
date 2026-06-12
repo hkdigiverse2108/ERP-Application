@@ -147,7 +147,13 @@ class ApiConstants {
     "productTypeFilter": productTypeFilter,
     "productTypeIdFilter": productTypeIdFilter,
   });
-  static String getProductById(String id) => "/product/$id";
+  static String getProductById(String id, {String? variantId}) {
+    if (variantId != null) {
+      return "/product/$id?variantId=$variantId";
+    }
+    return "/product/$id";
+  }
+
   static String productDropdownNew({
     bool? isNewProduct,
     String? includeId,

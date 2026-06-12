@@ -126,7 +126,9 @@ class SupplierBillController extends GetxController {
     try {
       final res = await _repository.deleteSupplierBill(id);
       if (res.status == 200) {
-        AppSnackbar.success(res.message ?? "Supplier bill deleted successfully");
+        AppSnackbar.success(
+          res.message ?? "Supplier bill deleted successfully",
+        );
         await refreshData();
       } else {
         AppSnackbar.error(res.message ?? "Failed to delete supplier bill");

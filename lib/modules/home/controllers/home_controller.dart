@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'package:ai_setu/core/services/logger_service.dart';
 import 'package:ai_setu/core/services/branch_controller.dart';
 import 'package:ai_setu/core/services/financial_year_controller.dart';
@@ -41,6 +42,12 @@ class HomeController extends GetxController {
   final transactionGraphTypes = ['sales', 'purchase'];
   final salesAndPurchaseGraph = <SalesAndPurchaseGraphModel>[].obs;
   final transactionGraph = <TransactionGraphModel>[].obs;
+
+  // Pre-calculated graph values and labels
+  final salesAndPurchaseGraphValues = <List<double>>[].obs;
+  final salesAndPurchaseGraphLabels = <String>[].obs;
+  final transactionGraphValues = <List<double>>[].obs;
+  final transactionGraphLabels = <String>[].obs;
 
   // ── Section 3: Customers ──
   final customersLoaded = false.obs;
@@ -166,6 +173,17 @@ class HomeController extends GetxController {
         branchId: BranchController.to.selectedBranch.value?.id,
       );
       salesAndPurchaseGraph.value = response;
+
+      // Map graph data in Isolate
+      final parsed = await Isolate.run(() {
+        final values = response
+            .map((e) => [e.sales, e.salesReturn, e.purchase, e.purchaseReturn])
+            .toList();
+        final labels = response.map((e) => e.date).toList();
+        return (values: values, labels: labels);
+      });
+      salesAndPurchaseGraphValues.value = parsed.values;
+      salesAndPurchaseGraphLabels.value = parsed.labels;
     } catch (e) {
       Log.e("Home Module Error", e);
     } finally {
@@ -183,6 +201,17 @@ class HomeController extends GetxController {
         typeFilter: transactionGraphType.value,
       );
       transactionGraph.value = response;
+
+      // Map graph data in Isolate
+      final parsed = await Isolate.run(() {
+        final values = response
+            .map((e) => [e.cash, e.upi, e.bank, e.card, e.cheque, e.other])
+            .toList();
+        final labels = response.map((e) => e.date).toList();
+        return (values: values, labels: labels);
+      });
+      transactionGraphValues.value = parsed.values;
+      transactionGraphLabels.value = parsed.labels;
     } catch (e) {
       Log.e("Home Module Error", e);
     } finally {

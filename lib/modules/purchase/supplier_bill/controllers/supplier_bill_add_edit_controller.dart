@@ -297,6 +297,7 @@ class SupplierBillAddEditController extends GetxController {
           final prodName = e['productId'] is Map
               ? (e['productId']['name'] ?? '')
               : (e['productName'] ?? '');
+          final variantId = e['variantId'];
           return SupplierBillItem(
             productId: prodId,
             productName: prodName,
@@ -310,6 +311,7 @@ class SupplierBillAddEditController extends GetxController {
             taxPercent: (e['taxPercentage'] ?? 0).toDouble(),
             uomId: e['uomId'] is Map ? e['uomId']['_id'] : e['uomId'],
             unit: e['uomId'] is Map ? e['uomId']['name'] : e['unit'],
+            variantId: variantId,
           );
         }).toList(),
       );
@@ -361,11 +363,12 @@ class SupplierBillAddEditController extends GetxController {
 
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       final newItem = SupplierBillItem(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: productDetails.name,
         qty: 1.0,
         unitCost: productDetails.purchasePrice.toDouble(),
@@ -373,8 +376,9 @@ class SupplierBillAddEditController extends GetxController {
         sellingPrice: productDetails.sellingPrice.toDouble(),
         taxId: productDetails.purchaseTaxId?.id,
         taxPercent: productDetails.purchaseTaxId?.percentage.toDouble() ?? 0.0,
-        uomId: productDetails.uomId?.id,
-        unit: productDetails.uomId?.name,
+        uomId: product.uomId?.id,
+        unit: product.uomId?.name,
+        variantId: product.hasVariant ? product.id : null,
       );
 
       billItems.add(newItem);
@@ -383,7 +387,7 @@ class SupplierBillAddEditController extends GetxController {
       debugPrint('Error adding item: $e');
       // Fallback if full details fail but we have dropdown info
       final newItem = SupplierBillItem(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: product.name,
         qty: 1.0,
         unitCost: product.purchasePrice,
@@ -391,6 +395,9 @@ class SupplierBillAddEditController extends GetxController {
         sellingPrice: product.sellingPrice,
         taxId: product.purchaseTaxId?.id,
         taxPercent: product.purchaseTaxId?.percentage.toDouble() ?? 0.0,
+        uomId: product.uomId?.id,
+        unit: product.uomId?.name,
+        variantId: product.hasVariant ? product.id : null,
       );
       billItems.add(newItem);
       calculateTotals();
@@ -678,7 +685,7 @@ class SupplierBillAddEditController extends GetxController {
           'shippingDate': shippingDate.value!.toIso8601String(),
         'paymentTermsId': selectedPaymentTerm.value?.id,
         'billingAddress': selectedBillingAddress.value?.id,
-        'shippingAddress': selectedShippingAddress.value?.id,
+        // 'shippingAddress': selectedShippingAddress.value?.id,
         'reverseCharge': (reverseCharge.value == "Yes").toString(),
         'taxType': taxTypeMap[taxType.value] ?? "tax_exclusive",
         'placeOfSupply': placeOfSupply.value,
@@ -716,7 +723,7 @@ class SupplierBillAddEditController extends GetxController {
       if (supplierBill.value == null) {
         result = await _purchaseRepository.addSupplierBill(data);
       } else {
-        data['id'] = supplierBill.value!.id;
+        data['supplierBillId'] = supplierBill.value!.id;
         result = await _purchaseRepository.updateSupplierBill(data);
       }
 
@@ -756,6 +763,7 @@ class SupplierBillItem {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   SupplierBillItem({
     required this.productId,
@@ -770,6 +778,7 @@ class SupplierBillItem {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * unitCost) - discountAmount;
@@ -777,6 +786,7 @@ class SupplierBillItem {
   double get landingPrice => (taxable + tax) / (qty > 0 ? qty : 1);
   double get margin => sellingPrice - landingPrice;
   double get total => taxable + tax;
+  bool get isVarient => variantId != null;
 
   SupplierBillItem copyWith({
     double? qty,
@@ -787,6 +797,7 @@ class SupplierBillItem {
     double? discountAmount,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return SupplierBillItem(
       productId: productId,
@@ -801,6 +812,7 @@ class SupplierBillItem {
       taxPercent: taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId,
     );
   }
 
@@ -821,6 +833,7 @@ class SupplierBillItem {
       'landingCost': landingPrice,
       'margin': margin,
       'total': total,
+      'variantId': variantId,
     };
   }
 }

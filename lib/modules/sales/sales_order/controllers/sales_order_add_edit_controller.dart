@@ -114,7 +114,9 @@ class SalesOrderAddEditController extends GetxController {
     ever(selectedCustomer, (customer) {
       if (customer != null) {
         _fetchCustomerDetails(customer.id);
-        _fetchEstimateDropdown(customerId: customer.id);
+        if (!isEdit.value) {
+          _fetchEstimateDropdown(customerId: customer.id);
+        }
         if (customer.address.isNotEmpty) {
           selectedBillingAddress.value = customer.address.first;
           selectedShippingAddress.value = customer.address.first;
@@ -123,14 +125,16 @@ class SalesOrderAddEditController extends GetxController {
           selectedShippingAddress.value = null;
         }
       } else {
-        // Optionally fetch all estimates if no customer is selected
-        _fetchEstimateDropdown();
+        if (!isEdit.value) {
+          // Optionally fetch all estimates if no customer is selected
+          _fetchEstimateDropdown();
+        }
       }
     });
 
     // Listener for estimate selection
     ever(selectedEstimate, (estimate) {
-      if (estimate != null) {
+      if (estimate != null && !isEdit.value) {
         _fetchEstimateDetails(estimate.id);
       }
     });
@@ -192,7 +196,15 @@ class SalesOrderAddEditController extends GetxController {
       availableAdditionalCharges.value = chargesRes.items;
       transporters.value = results[6] as List<ContactDropdownModel>;
       salesmen.value = results[7] as List<UserDropDownModel>;
-      estimates.value = results[8] as List<IdNameModel>;
+
+      final loadedEstimates = results[8] as List<IdNameModel>;
+      if (isEdit.value && salesOrder.value?.selectedEstimateId != null) {
+        final selectedEst = salesOrder.value!.selectedEstimateId!;
+        if (!loadedEstimates.any((e) => e.id == selectedEst.id)) {
+          loadedEstimates.add(selectedEst);
+        }
+      }
+      estimates.value = loadedEstimates;
     } catch (e) {
       debugPrint('Error loading initial data: $e');
     } finally {
@@ -234,6 +246,11 @@ class SalesOrderAddEditController extends GetxController {
     });
 
     if (order.selectedEstimateId != null) {
+      if (estimates.isNotEmpty) {
+        selectedEstimate.value = estimates.firstWhereOrNull(
+          (e) => e.id == order.selectedEstimateId?.id,
+        );
+      }
       ever(estimates, (allEstimates) {
         selectedEstimate.value = allEstimates.firstWhereOrNull(
           (e) => e.id == order.selectedEstimateId?.id,
@@ -254,6 +271,7 @@ class SalesOrderAddEditController extends GetxController {
         taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
         uomId: e.uomId?.id,
         unit: e.uomId?.name,
+        variantId: e.variantId,
       );
     }).toList();
 
@@ -369,6 +387,7 @@ class SalesOrderAddEditController extends GetxController {
           taxPercent: e.taxId?.percentage.toDouble() ?? 0.0,
           uomId: e.uomId?.id,
           unit: e.unit,
+          variantId: e.variantId,
         );
       }).toList();
 
@@ -425,11 +444,12 @@ class SalesOrderAddEditController extends GetxController {
   Future<void> addItem(ProductDropdownModel product) async {
     try {
       final productDetails = await _productRepository.getProductById(
-        product.id,
+        (product.hasVariant ? product.productId! : product.id),
+        variantId: product.hasVariant ? product.id : null,
       );
 
       final newItem = SalesOrderItemState(
-        productId: product.id,
+        productId: product.hasVariant ? product.productId! : product.id,
         productName: productDetails.name,
         qty: 1.0,
         freeQty: 0,
@@ -439,6 +459,7 @@ class SalesOrderAddEditController extends GetxController {
         taxPercent: productDetails.salesTaxId?.percentage.toDouble() ?? 0.0,
         uomId: productDetails.uomId?.id,
         unit: productDetails.uomId?.name,
+        variantId: product.hasVariant ? product.id : null,
       );
 
       items.add(newItem);
@@ -657,6 +678,7 @@ class SalesOrderItemState {
   final double taxPercent;
   final String? uomId;
   final String? unit;
+  final String? variantId;
 
   SalesOrderItemState({
     required this.productId,
@@ -669,6 +691,7 @@ class SalesOrderItemState {
     this.taxPercent = 0,
     this.uomId,
     this.unit,
+    this.variantId,
   });
 
   double get taxable => (qty * price) - discount1;
@@ -682,6 +705,7 @@ class SalesOrderItemState {
     double? discount1,
     String? uomId,
     String? unit,
+    String? variantId,
   }) {
     return SalesOrderItemState(
       productId: productId,
@@ -694,6 +718,7 @@ class SalesOrderItemState {
       taxPercent: taxPercent,
       uomId: uomId ?? this.uomId,
       unit: unit ?? this.unit,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -710,6 +735,7 @@ class SalesOrderItemState {
       'taxId': taxId ?? "",
       'taxableAmount': taxable,
       'totalAmount': total,
+      'variantId': variantId,
     };
   }
 }

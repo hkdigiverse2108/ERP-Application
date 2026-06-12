@@ -20,15 +20,19 @@ class ReceiptPage extends StatelessWidget {
     return Scaffold(
       appBar: DefAppBar(),
       drawer: const AppDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const QuickAction(),
-            _buildSection(controller),
-            PaymentTable(controller: controller),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async => controller.refreshData(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const QuickAction(),
+              _buildSection(controller),
+              PaymentTable(controller: controller),
+            ],
+          ),
         ),
       ),
     );

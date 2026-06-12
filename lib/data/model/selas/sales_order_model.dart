@@ -650,6 +650,7 @@ class SalesOrderItem extends Equatable {
   final double taxableAmount;
   final double totalAmount;
   final String id;
+  final String? variantId;
 
   const SalesOrderItem({
     this.refId,
@@ -664,6 +665,7 @@ class SalesOrderItem extends Equatable {
     required this.taxableAmount,
     required this.totalAmount,
     required this.id,
+    this.variantId,
   });
 
   SalesOrderItem copyWith({
@@ -679,6 +681,7 @@ class SalesOrderItem extends Equatable {
     double? taxableAmount,
     double? totalAmount,
     String? id,
+    String? variantId,
   }) {
     return SalesOrderItem(
       refId: refId ?? this.refId,
@@ -693,6 +696,7 @@ class SalesOrderItem extends Equatable {
       taxableAmount: taxableAmount ?? this.taxableAmount,
       totalAmount: totalAmount ?? this.totalAmount,
       id: id ?? this.id,
+      variantId: variantId ?? this.variantId,
     );
   }
 
@@ -718,6 +722,7 @@ class SalesOrderItem extends Equatable {
     taxableAmount: (map["taxableAmount"] as num? ?? 0).toDouble(),
     totalAmount: (map["totalAmount"] as num? ?? 0).toDouble(),
     id: map["_id"]?.toString() ?? "",
+    variantId: map["variantId"]?.toString(),
   );
 
   Map<String, dynamic> toMap() => {
@@ -733,6 +738,7 @@ class SalesOrderItem extends Equatable {
     "taxableAmount": taxableAmount,
     "totalAmount": totalAmount,
     "_id": id,
+    "variantId": variantId,
   };
 
   @override
@@ -749,6 +755,7 @@ class SalesOrderItem extends Equatable {
     taxableAmount,
     totalAmount,
     id,
+    variantId,
   ];
 
   @override

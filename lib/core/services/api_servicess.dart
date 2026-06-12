@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:gap/gap.dart';
@@ -110,6 +111,68 @@ class ApiService extends GetxService {
       throw Exception("Connection failed. Please check your internet.");
     }
     return _handleResponse(response);
+  }
+
+  // GET Raw response
+  Future<http.Response> getRaw(
+    String endpoint, {
+    Map<String, String>? headers,
+  }) async {
+    if (!await _checkAndHandleConnectivity()) {
+      throw Exception("No internet");
+    }
+
+    headers ??= {};
+    final token = _getToken();
+    if (token != null && token.isNotEmpty) {
+      headers['authorization'] = "Bearer $token";
+    }
+
+    final url = Uri.parse('$baseUrl$endpoint');
+
+    try {
+      return await http
+          .get(url, headers: headers)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw TimeoutException("Request timeout"),
+          );
+    } catch (e) {
+      log("GET error: $e");
+      if (e is TimeoutException) throw Exception("Request timeout");
+      throw Exception("Connection failed. Please check your internet.");
+    }
+  }
+
+  // GET Parsed response in Isolate
+  Future<T> getParsed<T>(
+    String endpoint,
+    T Function(dynamic data) parser, {
+    Map<String, String>? headers,
+  }) async {
+    final response = await getRaw(endpoint, headers: headers);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final String bodyStr = response.body;
+      return await Isolate.run(() {
+        final body = jsonDecode(bodyStr);
+        final res = ResModel.fromJson(body);
+        if (res.status == 200 && res.data != null) {
+          return parser(res.data);
+        }
+        throw Exception(res.message ?? 'Failed to parse response');
+      });
+    } else if (response.statusCode == 401) {
+      Get.find<StorageService>().clearSession();
+      throw Exception("Token expired");
+    } else {
+      final String bodyStr = response.body;
+      final resModel = await Isolate.run(() {
+        final body = jsonDecode(bodyStr);
+        return ResModel.fromJson(body);
+      });
+      throw Exception(resModel.message);
+    }
   }
 
   // POST request

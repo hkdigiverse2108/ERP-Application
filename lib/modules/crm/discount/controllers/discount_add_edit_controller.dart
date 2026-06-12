@@ -268,6 +268,18 @@ class DiscountAddEditController extends GetxController {
     rangeRules.removeAt(index);
   }
 
+  Map<String, dynamic> _mapProductPayload(String id) {
+    final product = products.firstWhereOrNull((p) => p.id == id);
+    if (product != null) {
+      if (product.hasVariant) {
+        return {"productId": product.productId, "variantId": product.id};
+      } else {
+        return {"productId": product.id, "variantId": null};
+      }
+    }
+    return {"productId": id, "variantId": null};
+  }
+
   Future<void> save() async {
     if (!formKey.currentState!.validate()) return;
 
@@ -383,10 +395,14 @@ class DiscountAddEditController extends GetxController {
           "brandIds": selectedBrands.toList(),
         if (discountApplicable.value == 'product_wise' &&
             selectedProducts.isNotEmpty)
-          "productIds": selectedProducts.toList(),
+          "productIds": selectedProducts
+              .map((id) => _mapProductPayload(id))
+              .toList(),
         if (discountApplicable.value == 'product_wise' &&
             excludeProducts.isNotEmpty)
-          "excludedProductIds": excludeProducts.toList(),
+          "excludedProductIds": excludeProducts
+              .map((id) => _mapProductPayload(id))
+              .toList(),
         "minimumRequirement": minimumRequirement.value,
         // only add minimumQuantity if minimumRequirement is 'quantity'
         if (minimumRequirement.value == 'min_quantity')
@@ -421,12 +437,16 @@ class DiscountAddEditController extends GetxController {
           "getDiscountType": getDiscountType.value,
           "getDiscountValue":
               double.tryParse(getDiscountValueController.text) ?? 0,
-          "getProductIds": getProductIds.toList(),
+          "getProductIds": getProductIds
+              .map((id) => _mapProductPayload(id))
+              .toList(),
         };
       } else if (discountMode.value == 'product_at_fix_amount') {
         payload["productAtFixAmount"] = {
           "minimumAmount": double.tryParse(minAmountController.text) ?? 0,
-          "freeProductIds": freeProductIds.toList(),
+          "freeProductIds": freeProductIds
+              .map((id) => _mapProductPayload(id))
+              .toList(),
           "freeQty": int.tryParse(freeQtyController.text) ?? 1,
         };
       }

@@ -126,6 +126,11 @@ class CreditNoteController extends GetxController {
     getCreditNoteData();
   }
 
+  Future<void> refreshData() async {
+    _clearCache();
+    await getCreditNoteData();
+  }
+
   @override
   void onClose() {
     _fyWorker?.dispose();

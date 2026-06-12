@@ -19,13 +19,17 @@ class PrefixPage extends GetView<PrefixController> {
       child: Scaffold(
         appBar: DefAppBar(),
         drawer: AppDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              QuickAction(),
-              _buildSectionTitle(context),
-              const PrefixTable(),
-            ],
+        body: RefreshIndicator(
+          onRefresh: () async => controller.refreshData(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                QuickAction(),
+                _buildSectionTitle(context),
+                const PrefixTable(),
+              ],
+            ),
           ),
         ),
       ),

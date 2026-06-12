@@ -203,16 +203,12 @@ class PosNewPage extends GetView<PosNewController> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Obx(() {
-              final imageFile = controller.selectedImage.value;
-              return _buildCircularIcon(
-                context,
-                imageFile == null ? Icons.add_a_photo : null,
-                context.appColors.success,
-                imageFile: imageFile,
-                onTap: () => controller.showImageOptions(context),
-              );
-            }),
+            _buildCircularIcon(
+              context,
+              Icons.add_a_photo,
+              context.appColors.success,
+              onTap: () => controller.showImageOptions(context),
+            ),
             _buildCircularIcon(
               context,
               Icons.print_outlined,

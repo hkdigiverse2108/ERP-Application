@@ -1,4 +1,3 @@
-import 'dart:isolate';
 import 'package:ai_setu/core/constants/api_constants.dart';
 import 'package:ai_setu/core/services/api_servicess.dart';
 import 'package:ai_setu/data/model/dashboard/category_sales_model.dart';
@@ -32,7 +31,7 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() => TransactionsModel.fromJson(res.data));
+      return TransactionsModel.fromJson(res.data);
     }
 
     throw Exception(res.message ?? 'Failed to fetch transactions');
@@ -51,11 +50,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => TopCustomerModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => TopCustomerModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch top customers');
@@ -74,11 +71,7 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => SellingsModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List).map((e) => SellingsModel.fromJson(e)).toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch best selling products');
@@ -98,11 +91,7 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => SellingsModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List).map((e) => SellingsModel.fromJson(e)).toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch least selling products');
@@ -124,11 +113,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => CategoryWiseCustomersModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => CategoryWiseCustomersModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch category wise customers');
@@ -148,11 +135,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => CategoryWiseCustomersCountModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => CategoryWiseCustomersCountModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(
@@ -172,17 +157,11 @@ class DashboardRepository {
       'branchFilter': branchId ?? 'all',
       'typeFilter': typeFilter,
     });
-    final ResModel res = await _api.get(url);
-
-    if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => TransactionGraphModel.fromJson(e))
-            .toList();
-      });
-    }
-
-    throw Exception(res.message ?? 'Failed to fetch transaction graph');
+    return _api.getParsed(
+      url,
+      (data) =>
+          (data as List).map((e) => TransactionGraphModel.fromJson(e)).toList(),
+    );
   }
 
   Future<List<SalesAndPurchaseGraphModel>> getSalesAndPurchaseGraph({
@@ -196,17 +175,12 @@ class DashboardRepository {
           if (endDate != null) 'endDate': endDate.toIso8601String(),
           'branchFilter': branchId ?? 'all',
         });
-    final ResModel res = await _api.get(url);
-
-    if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => SalesAndPurchaseGraphModel.fromJson(e))
-            .toList();
-      });
-    }
-
-    throw Exception(res.message ?? 'Failed to fetch sales and purchase graph');
+    return _api.getParsed(
+      url,
+      (data) => (data as List)
+          .map((e) => SalesAndPurchaseGraphModel.fromJson(e))
+          .toList(),
+    );
   }
 
   Future<List<CategorySalesModel>> getCategorySales({
@@ -222,11 +196,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => CategorySalesModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => CategorySalesModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch category sales');
@@ -245,11 +217,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => TopExpensesModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => TopExpensesModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch top expenses');
@@ -268,11 +238,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => TopCouponsModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => TopCouponsModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch top coupons');
@@ -291,11 +259,9 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List)
-            .map((e) => ReceivableModel.fromJson(e))
-            .toList();
-      });
+      return (res.data as List)
+          .map((e) => ReceivableModel.fromJson(e))
+          .toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch receivables');
@@ -314,9 +280,7 @@ class DashboardRepository {
     final ResModel res = await _api.get(url);
 
     if (res.status == 200 && res.data != null) {
-      return await Isolate.run(() {
-        return (res.data as List).map((e) => PayableModel.fromJson(e)).toList();
-      });
+      return (res.data as List).map((e) => PayableModel.fromJson(e)).toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch payables');
@@ -336,13 +300,11 @@ class DashboardRepository {
 
     if (res.status == 200 && res.data != null) {
       final rawData = res.data;
-      return await Isolate.run(() {
-        final List dataList =
-            (rawData is Map && rawData.containsKey('loginLog_data'))
-            ? (rawData['loginLog_data'] as List)
-            : (rawData is List ? rawData : []);
-        return dataList.map((e) => LoginLogModel.fromJson(e)).toList();
-      });
+      final List dataList =
+          (rawData is Map && rawData.containsKey('loginLog_data'))
+          ? (rawData['loginLog_data'] as List)
+          : (rawData is List ? rawData : []);
+      return dataList.map((e) => LoginLogModel.fromJson(e)).toList();
     }
 
     throw Exception(res.message ?? 'Failed to fetch login logs');

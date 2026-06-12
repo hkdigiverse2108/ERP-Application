@@ -283,10 +283,12 @@ class DeliveryChallanAddEditController extends GetxController {
           availableTaxes: availableTaxes,
         );
         if (e.productId != null) {
+          final targetId = e.variantId ?? e.productId!.id;
           state.productId.value = availableProducts.firstWhereOrNull(
-            (p) => p.id == e.productId!.id,
+            (p) => p.id == targetId,
           );
         }
+        state.variantId.value = e.variantId;
         state.qty.value = e.qty;
         state.qtyController.text = e.qty.toString();
         state.price.value = e.price;
@@ -454,6 +456,7 @@ class DeliveryChallanAddEditController extends GetxController {
       );
 
       String? prodId;
+      String? variantId;
       double qty = 0.0;
       double freeQty = 0.0;
       double price = 0.0;
@@ -464,6 +467,7 @@ class DeliveryChallanAddEditController extends GetxController {
 
       if (e is SalesOrderItem) {
         prodId = e.productId?.id;
+        variantId = e.variantId;
         qty = e.qty;
         freeQty = e.freeQty;
         price = e.price;
@@ -473,6 +477,7 @@ class DeliveryChallanAddEditController extends GetxController {
         unit = e.uomId?.name;
       } else if (e is InvoiceItem) {
         prodId = e.productId?.id;
+        variantId = e.variantId;
         qty = e.qty;
         freeQty = e.freeQty;
         price = e.price;
@@ -483,6 +488,7 @@ class DeliveryChallanAddEditController extends GetxController {
       } else {
         try {
           prodId = e.productId?.id ?? "";
+          variantId = e.variantId;
           qty = (e.qty as num?)?.toDouble() ?? 0.0;
           freeQty = (e.freeQty as num?)?.toDouble() ?? 0.0;
           price = (e.price as num?)?.toDouble() ?? 0.0;
@@ -494,10 +500,12 @@ class DeliveryChallanAddEditController extends GetxController {
       }
 
       if (prodId != null) {
+        final targetId = variantId ?? prodId;
         state.productId.value = availableProducts.firstWhereOrNull(
-          (p) => p.id == prodId,
+          (p) => p.id == targetId,
         );
       }
+      state.variantId.value = variantId;
       state.qty.value = qty;
       state.qtyController.text = qty.toString();
       state.price.value = price;
@@ -771,6 +779,7 @@ class DeliveryChallanAddEditController extends GetxController {
 
 class DeliveryChallanItemState {
   final productId = Rxn<ProductDropdownModel>();
+  final variantId = Rxn<String>();
   final qty = 1.0.obs;
   final price = 0.0.obs;
   final uomId = Rxn<String>();
@@ -813,6 +822,7 @@ class DeliveryChallanItemState {
     ever(taxId, (_) => calculate());
     ever(productId, (product) {
       if (product != null) {
+        variantId.value = product.hasVariant ? product.id : null;
         price.value = product.sellingPrice;
         priceController.text = product.sellingPrice.toString();
         if (product.salesTaxId != null) {
@@ -821,6 +831,8 @@ class DeliveryChallanItemState {
           );
         }
         calculate();
+      } else {
+        variantId.value = null;
       }
     });
   }
@@ -841,8 +853,10 @@ class DeliveryChallanItemState {
   }
 
   Map<String, dynamic> toMap() {
+    final hasVar = productId.value?.hasVariant ?? false;
     return {
-      "productId": productId.value?.id,
+      "productId": hasVar ? productId.value?.productId : productId.value?.id,
+      "variantId": variantId.value,
       "qty": qty.value,
       "price": price.value,
       "uomId": uomId.value,

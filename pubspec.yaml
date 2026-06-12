@@ -50,6 +50,15 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_icon.jpg"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#161950"
+  adaptive_icon_foreground: "assets/images/app_icon.jpg"
 
 flutter:
   uses-material-design: true

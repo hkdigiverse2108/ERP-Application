@@ -133,6 +133,8 @@ class SalesOrderTable extends StatelessWidget {
                 currentPage: controller.currentPage.value,
                 totalPages: controller.totalPages.value,
                 totalItems: controller.totalItems.value,
+                canEdit: (item) => item.status?.toLowerCase() == 'pending',
+                canDelete: (item) => item.status?.toLowerCase() == 'pending',
                 onEditItem: (item) async {
                   final result = await Get.toNamed(
                     Routes.salesOrderAddEdit,
