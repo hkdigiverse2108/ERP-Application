@@ -1,11 +1,11 @@
 {
-    "name": "ai_setu",
-    "short_name": "ai_setu",
+    "name": "AI Setu",
+    "short_name": "AI Setu",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "AI Setu ERP Application",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

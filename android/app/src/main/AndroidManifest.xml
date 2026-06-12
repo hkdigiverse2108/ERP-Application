@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:label="ai_setu"
+        android:label="AI Setu"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
