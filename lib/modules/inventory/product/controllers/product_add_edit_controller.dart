@@ -83,6 +83,21 @@ class ProductAddEditController extends GetxController {
   final ingredients = <String>[].obs;
   final nutritionList = <Nutrition>[].obs;
   final imageList = <String>[].obs;
+  final variantsList = <VariantModel>[].obs;
+
+  // Inline Variant form fields
+  final variantNameController = TextEditingController();
+  final variantSkuController = TextEditingController();
+  final variantMrpController = TextEditingController();
+  final variantCostController = TextEditingController();
+  final variantSalesPriceController = TextEditingController();
+  final variantIsActive = true.obs;
+
+  final tempAttributes = <Attributes>[].obs;
+  final variantAttrKeyController = TextEditingController();
+  final variantAttrValueController = TextEditingController();
+
+  final editingVariantIndex = RxnInt();
 
   // Dropdown Lists
   final categories = <CategoryDropdownModel>[].obs;
@@ -273,6 +288,129 @@ class ProductAddEditController extends GetxController {
     imageList.removeAt(index);
   }
 
+  // Variants management
+  void addVariant(VariantModel variant) {
+    variantsList.add(variant);
+  }
+
+  void updateVariant(int index, VariantModel variant) {
+    variantsList[index] = variant;
+  }
+
+  void removeVariant(int index) {
+    variantsList.removeAt(index);
+    if (editingVariantIndex.value == index) {
+      _clearVariantFields();
+    }
+  }
+
+  // Inline Variants Management
+  void addTempAttribute() {
+    if (variantAttrKeyController.text.isNotEmpty &&
+        variantAttrValueController.text.isNotEmpty) {
+      tempAttributes.add(Attributes(
+        id: "",
+        key: variantAttrKeyController.text.trim(),
+        value: variantAttrValueController.text.trim(),
+      ));
+      variantAttrKeyController.clear();
+      variantAttrValueController.clear();
+    }
+  }
+
+  void removeTempAttribute(int index) {
+    tempAttributes.removeAt(index);
+  }
+
+  void addVariantFromFields() {
+    if (variantNameController.text.isEmpty) {
+      AppSnackbar.error("Variant name is required");
+      return;
+    }
+
+    final newVariant = VariantModel(
+      id: "",
+      barcode: "",
+      barcodeType: "",
+      isActive: variantIsActive.value,
+      isPurchaseTaxIncluding: true,
+      isSalesTaxIncluding: true,
+      landingCost: 0.0,
+      mrp: double.tryParse(variantMrpController.text) ?? 0.0,
+      name: variantNameController.text.trim(),
+      purchasePrice: double.tryParse(variantCostController.text) ?? 0.0,
+      qty: 0.0,
+      sellingDiscount: 0.0,
+      sellingMargin: 0.0,
+      sellingPrice: double.tryParse(variantSalesPriceController.text) ?? 0.0,
+      sku: variantSkuController.text.trim(),
+      attributes: List<Attributes>.from(tempAttributes),
+    );
+
+    variantsList.add(newVariant);
+    _clearVariantFields();
+  }
+
+  void editVariantInline(int index) {
+    editingVariantIndex.value = index;
+    final v = variantsList[index];
+    variantNameController.text = v.name;
+    variantSkuController.text = v.sku;
+    variantMrpController.text = v.mrp.toString();
+    variantCostController.text = v.purchasePrice.toString();
+    variantSalesPriceController.text = v.sellingPrice.toString();
+    variantIsActive.value = v.isActive;
+    tempAttributes.assignAll(v.attributes ?? []);
+  }
+
+  void updateVariantFromFields() {
+    final idx = editingVariantIndex.value;
+    if (idx == null) return;
+
+    if (variantNameController.text.isEmpty) {
+      AppSnackbar.error("Variant name is required");
+      return;
+    }
+
+    final old = variantsList[idx];
+    final updatedVariant = VariantModel(
+      id: old.id,
+      barcode: old.barcode,
+      barcodeType: old.barcodeType,
+      isActive: variantIsActive.value,
+      isPurchaseTaxIncluding: old.isPurchaseTaxIncluding,
+      isSalesTaxIncluding: old.isSalesTaxIncluding,
+      landingCost: old.landingCost,
+      mrp: double.tryParse(variantMrpController.text) ?? 0.0,
+      name: variantNameController.text.trim(),
+      purchasePrice: double.tryParse(variantCostController.text) ?? 0.0,
+      qty: old.qty,
+      sellingDiscount: old.sellingDiscount,
+      sellingMargin: old.sellingMargin,
+      sellingPrice: double.tryParse(variantSalesPriceController.text) ?? 0.0,
+      sku: variantSkuController.text.trim(),
+      attributes: List<Attributes>.from(tempAttributes),
+    );
+
+    variantsList[idx] = updatedVariant;
+    _clearVariantFields();
+  }
+
+  void cancelVariantEdit() {
+    _clearVariantFields();
+  }
+
+  void _clearVariantFields() {
+    variantNameController.clear();
+    variantSkuController.clear();
+    variantMrpController.clear();
+    variantCostController.clear();
+    variantSalesPriceController.clear();
+    variantIsActive.value = true;
+    tempAttributes.clear();
+    editingVariantIndex.value = null;
+  }
+
   void _populateFields(ProductModel p) {
     nameController.text = p.name;
     codeController.text = p.sku ?? ""; // Assuming SKU for code if not present
@@ -290,6 +428,7 @@ class ProductAddEditController extends GetxController {
     masterQtyController.text = p.masterQty?.toString() ?? "";
     ingredients.assignAll(p.ingredients.map((e) => e.toString()).toList());
     shortDescriptionController.text = p.shortDescription ?? "";
+    variantsList.assignAll(p.variants ?? []);
 
     // Quill population - assuming p.description is HTML or JSON
     // If it's plain text, we might need to convert it
@@ -374,6 +513,24 @@ class ProductAddEditController extends GetxController {
         "masterQty": int.tryParse(masterQtyController.text),
         "nutrition": nutritionList.map((e) => e.toMap()).toList(),
         "productImages": imageList,
+        "variants": variantsList.map((v) {
+          final map = <String, dynamic>{
+            "name": v.name,
+            "sku": v.sku,
+            "mrp": v.mrp,
+            "purchasePrice": v.purchasePrice,
+            "sellingPrice": v.sellingPrice,
+            "isActive": v.isActive,
+            "attributes": v.attributes?.map((a) => {
+              "key": a.key,
+              "value": a.value,
+            }).toList() ?? [],
+          };
+          if (v.id.isNotEmpty) {
+            map["_id"] = v.id;
+          }
+          return map;
+        }).toList(),
       };
 
       if (isEdit.value && product != null) {
@@ -425,6 +582,15 @@ class ProductAddEditController extends GetxController {
     nutritionNameController.dispose();
     nutritionValueController.dispose();
     quillController.dispose();
+    
+    variantNameController.dispose();
+    variantSkuController.dispose();
+    variantMrpController.dispose();
+    variantCostController.dispose();
+    variantSalesPriceController.dispose();
+    variantAttrKeyController.dispose();
+    variantAttrValueController.dispose();
+    
     super.onClose();
   }
 }

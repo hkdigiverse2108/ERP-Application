@@ -629,6 +629,331 @@ class ProductAddEditView extends GetView<ProductAddEditController> {
                         ),
                       ),
 
+                      // --- VARIANTS ---
+                      Obx(() {
+                        final isEditing =
+                            controller.editingVariantIndex.value != null;
+                        return EditSection(
+                          title: "Variants",
+                          icon: PhosphorIconsLight.gitFork,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Variant Name
+                              EditTextField(
+                                label: "Variant Name",
+                                controller: controller.variantNameController,
+                              ),
+                              const Gap(Sizes.defVerticalSpace),
+                              // SKU & Active Status
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: EditTextField(
+                                      label: "SKU / Code",
+                                      controller:
+                                          controller.variantSkuController,
+                                    ),
+                                  ),
+                                  const Gap(Sizes.paddingM),
+                                  Expanded(
+                                    child: SwitchListTile(
+                                      title: const Text(
+                                        "Active",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      value: controller.variantIsActive.value,
+                                      onChanged: (v) =>
+                                          controller.variantIsActive.value = v,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Gap(Sizes.defVerticalSpace),
+                              // MRP & Cost Price
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: EditTextField(
+                                      label: "MRP",
+                                      controller:
+                                          controller.variantMrpController,
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ),
+                                  const Gap(Sizes.paddingM),
+                                  Expanded(
+                                    child: EditTextField(
+                                      label: "Cost Price",
+                                      controller:
+                                          controller.variantCostController,
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Gap(Sizes.defVerticalSpace),
+                              // Sales Price
+                              EditTextField(
+                                label: "Sales Price",
+                                controller:
+                                    controller.variantSalesPriceController,
+                                keyboardType: TextInputType.number,
+                              ),
+                              const Gap(Sizes.defVerticalSpace),
+
+                              // Attributes Entry
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: context.appColors.border,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadiusM,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Variant Attributes",
+                                      style: TextHelper.h6Style(
+                                        context,
+                                      ).copyWith(fontWeight: FontWeight.bold),
+                                    ),
+                                    const Gap(Sizes.paddingS),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: EditTextField(
+                                            label: "Key",
+                                            controller: controller
+                                                .variantAttrKeyController,
+                                            hintText: "e.g., price, size",
+                                          ),
+                                        ),
+                                        const Gap(Sizes.paddingM),
+                                        Expanded(
+                                          child: EditTextField(
+                                            label: "Value",
+                                            controller: controller
+                                                .variantAttrValueController,
+                                            hintText: "e.g., 20, M",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(Sizes.paddingM),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: OutlinedButton.icon(
+                                        onPressed: () =>
+                                            controller.addTempAttribute(),
+                                        icon: const Icon(Icons.add, size: 16),
+                                        label: const Text("ADD ATTRIBUTE"),
+                                      ),
+                                    ),
+                                    // Added attributes list
+                                    if (controller
+                                        .tempAttributes
+                                        .isNotEmpty) ...[
+                                      const Gap(Sizes.paddingM),
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 8,
+                                        children: List.generate(
+                                          controller.tempAttributes.length,
+                                          (idx) {
+                                            final attr =
+                                                controller.tempAttributes[idx];
+                                            return Chip(
+                                              label: Text(
+                                                "${attr.key}: ${attr.value}",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              onDeleted: () => controller
+                                                  .removeTempAttribute(idx),
+                                              deleteIconColor: Colors.red,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              const Gap(Sizes.defVerticalSpace),
+
+                              // Variant Action Buttons (Add / Update / Cancel)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        if (isEditing) {
+                                          controller.updateVariantFromFields();
+                                        } else {
+                                          controller.addVariantFromFields();
+                                        }
+                                      },
+                                      icon: Icon(
+                                        isEditing ? Icons.check : Icons.add,
+                                      ),
+                                      label: Text(
+                                        isEditing
+                                            ? "UPDATE VARIANT"
+                                            : "ADD VARIANT",
+                                      ),
+                                    ),
+                                  ),
+                                  if (isEditing) ...[
+                                    const Gap(Sizes.paddingM),
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        onPressed: () =>
+                                            controller.cancelVariantEdit(),
+                                        child: const Text("CANCEL"),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+
+                              // List of added variants
+                              if (controller.variantsList.isNotEmpty) ...[
+                                const Gap(Sizes.paddingL),
+                                const Divider(),
+                                const Gap(Sizes.paddingM),
+                                Text(
+                                  "Configured Variants (${controller.variantsList.length})",
+                                  style: TextHelper.h6Style(
+                                    context,
+                                  ).copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                const Gap(Sizes.paddingS),
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: controller.variantsList.length,
+                                  separatorBuilder: (context, index) =>
+                                      const Gap(8),
+                                  itemBuilder: (context, index) {
+                                    final item = controller.variantsList[index];
+                                    final isCurrentlyEditingThis =
+                                        controller.editingVariantIndex.value ==
+                                        index;
+                                    return Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: isCurrentlyEditingThis
+                                            ? context.appColors.primary
+                                                  .withValues(alpha: 0.1)
+                                            : Theme.of(context)
+                                                  .colorScheme
+                                                  .surfaceContainerHighest
+                                                  .withValues(alpha: 0.3),
+                                        border: isCurrentlyEditingThis
+                                            ? Border.all(
+                                                color:
+                                                    context.appColors.primary,
+                                              )
+                                            : null,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  item.name,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        isCurrentlyEditingThis
+                                                        ? context
+                                                              .appColors
+                                                              .primary
+                                                        : null,
+                                                  ),
+                                                ),
+                                                const Gap(4),
+                                                Text(
+                                                  "SKU: ${item.sku} | MRP: ${item.mrp} | Cost: ${item.purchasePrice} | Sales: ${item.sellingPrice}",
+                                                  style:
+                                                      TextHelper.captionStyle(
+                                                        context,
+                                                      ).copyWith(
+                                                        color: context
+                                                            .appColors
+                                                            .textSecondary,
+                                                      ),
+                                                ),
+                                                if (item.attributes != null &&
+                                                    item
+                                                        .attributes!
+                                                        .isNotEmpty) ...[
+                                                  const Gap(4),
+                                                  Wrap(
+                                                    spacing: 6,
+                                                    runSpacing: 4,
+                                                    children: item.attributes!
+                                                        .map(
+                                                          (a) => Chip(
+                                                            label: Text(
+                                                              "${a.key}: ${a.value}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                  ),
+                                                            ),
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            materialTapTargetSize:
+                                                                MaterialTapTargetSize
+                                                                    .shrinkWrap,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () => controller
+                                                .editVariantInline(index),
+                                            icon: const Icon(
+                                              Icons.edit_outlined,
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () =>
+                                                controller.removeVariant(index),
+                                            icon: const Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ],
+                          ),
+                        );
+                      }),
+
                       // --- PRODUCT IMAGES ---
                       EditSection(
                         title: "Product Images",
